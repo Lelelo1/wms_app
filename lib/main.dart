@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'stores/test.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -57,6 +59,8 @@ class _MyHomePageState extends State<MyHomePage> {
       // called again, and so nothing would appear to happen.
       _counter++;
     });
+
+    Products.get().forEach((p) => print(p.name));
   }
 
   @override
