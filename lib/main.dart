@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wms_app/pages/plock.dart';
 
 import 'stores/test.dart';
 
@@ -14,26 +15,28 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: appName, // does not do anything inside the app
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-      ),
-      home:
-          MyHomePage(title: appName), // title is wthat is displayed on app bar
-    );
+        title: appName, // does not do anything inside the app
+        theme: ThemeData(
+          // This is the theme of your application.
+          //
+          // Try running your application with "flutter run". You'll see the
+          // application has a blue toolbar. Then, without quitting the app, try
+          // changing the primarySwatch below to Colors.green and then invoke
+          // "hot reload" (press "r" in the console where you ran "flutter run",
+          // or simply save your changes to "hot reload" in a Flutter IDE).
+          // Notice that the counter didn't reset back to zero; the application
+          // is not restarted.
+          primarySwatch: Colors.blue,
+        ),
+        home:
+            // make home page eventually where the worker can go different areas, functionality described in 'Trello' eg
+            //MyHomePage(title: appName), // title is wthat is displayed on app bar
+            PlockPage());
   }
 }
 
 class MyHomePage extends StatefulWidget {
+  // make this a test view, to manually test things
   // stateless widgets
   MyHomePage({Key key, this.title}) : super(key: key);
   final String title;
