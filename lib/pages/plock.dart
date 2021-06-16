@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wms_app/models/product.dart';
+import 'package:wms_app/pages/productView.dart';
 import 'package:wms_app/stores/test.dart';
-import 'package:collection/collection.dart';
 
 class PlockPage extends StatefulWidget {
   @override
@@ -44,16 +44,10 @@ class _State extends State<PlockPage> {
   }
 
   Widget renderDetails() {
-    /*r
-    var highlightedProdtuctItem =
-        productItems.firstWhere((pi) => pi.isHighlighted);
+    return ProductView(productItems.first.product);
+  }
 
-    if (highlightedProdtuctItem == null) {
-      print(
-          "There was no highlighted, details of product in 'plock' will not show");
-      return null;
-    }
-  */
+  Widget renderBottom() {
     return FloatingActionButton(
         // needs to be separated out
         onPressed: () {
@@ -67,8 +61,8 @@ class _State extends State<PlockPage> {
   void nextItem() {
     print("nextItem");
 
-    // if no highlighted product && 
-    
+    // if no highlighted product &&
+    /*
     ProductItem currentProductItem =
         productItems.firstWhereOrNull((pi) => pi.isHighlighted);
     if (currentProductItem == null) {
