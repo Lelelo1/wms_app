@@ -16,7 +16,7 @@ class _State extends State<PlockPage> {
   void initState() {
     super.initState();
 
-    productItems.last.isHighlighted =
+    productItems.first.isHighlighted =
         true; // starting with first product in 'plocklista'
   }
 
@@ -27,15 +27,18 @@ class _State extends State<PlockPage> {
         appBar: AppBar(
           title: Text("Plock"),
         ),
-        body: Column(children: <Widget>[renderList(), renderDetails()]));
+        body: Column(
+            children: <Widget>[renderList(), renderDetails()],
+            mainAxisAlignment: MainAxisAlignment.start));
   }
 
   // ListView needs a fixed height, when put into column..
+  // fix https://stackoverflow.com/questions/51266307/listview-inside-the-scroll-view-in-flutter
   Widget renderList() {
     return Container(
-      child: ListView(children: List.from(productItems.map(renderItem))),
-      height: 400,
-    );
+        child: ListView(
+            children: List.from(productItems.map(renderItem)),
+            shrinkWrap: true));
   }
 
   Widget renderItem(ProductItem productItem) {
