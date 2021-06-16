@@ -9,15 +9,22 @@ class PlockPage extends StatefulWidget {
 }
 
 class _State extends State<PlockPage> {
-  List<ProductItem> productItems =
-      List.from(Products.get().map((p) => ProductItem(p)));
+  List<Product> productItems;
+
+  Iterator<Product> collect;
+
+  // starting with first product in 'plocklista'
+  // init state if needed
 
   @override
   void initState() {
     super.initState();
+    productItems = Products.get();
+    // list always retrurn a new iterator: https://stackoverflow.com/questions/65659282/iterator-current-is-null-but-why
+    // so nade to create on once and save it
+    collect = productItems.iterator; // to make first item the one to collect
 
-    productItems.first.isHighlighted =
-        true; // starting with first product in 'plocklista'
+    collect.moveNext(); // to start at the first item
   }
 
   @override
@@ -29,7 +36,8 @@ class _State extends State<PlockPage> {
         ),
         body: Column(
             children: <Widget>[renderList(), renderDetails()],
-            mainAxisAlignment: MainAxisAlignment.start));
+            mainAxisAlignment: MainAxisAlignment.start),
+        floatingActionButton: collectButton());
   }
 
   // ListView needs a fixed height, when put into column..
@@ -41,61 +49,46 @@ class _State extends State<PlockPage> {
             shrinkWrap: true));
   }
 
-  Widget renderItem(ProductItem productItem) {
-    var color = productItem.isHighlighted ? Colors.amber : Colors.white;
-    return Card(child: Text(productItem.product.name), color: color);
+  Widget renderItem(Product product) {
+    var color = product == collect.current ? Colors.amber : Colors.white;
+
+    return Card(child: Text(product.name), color: color);
   }
 
   Widget renderDetails() {
-    return ProductView(productItems.first.product);
+    print("collectProduct is: " + collect.current.toString());
+
+    return ProductView(collect.current);
   }
 
+/*
   Widget renderBottom() {
+    return Column(
+        children: [
+          
+        ],
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.end);
+  }
+*/
+
+  bool collectionCompleted = false; // does not help crash on last iteration..
+  Widget collectButton() {
+    // 'plockad'
     return FloatingActionButton(
         // needs to be separated out
         onPressed: () {
-          nextItem();
+          if (collectionCompleted) {
+            print("collection was completed");
+            return;
+          }
+
+          setState(() {
+            // when next is false, there no further elements: https://api.dart.dev/stable/2.12.1/dart-core/Iterator/moveNext.html
+            // '!' anoying, rename bool..
+            collectionCompleted = !collect.moveNext();
+          });
         },
         child: Icon(Icons.arrow_upward));
-  }
-
-  // create a 'current' product to bind to, remove higlighted boolean
-  // productItems.iterator.current.
-  void nextItem() {
-    print("nextItem");
-
-    // if no highlighted product &&
-    /*
-    ProductItem currentProductItem =
-        productItems.firstWhereOrNull((pi) => pi.isHighlighted);
-    if (currentProductItem == null) {
-      print("completed, there was no next product");
-      return;
-    }
-    currentProductItem.isHighlighted = false;
-    
-    var isLastProduct =
-
-    if () {
-      print("end of list reached, final prodict was " +
-          currentProductItem.product.name);
-      return;
-    }
-
-    var nextItem = productItems[index];
-    nextItem.isHighlighted = true;
-    */
-  }
-}
-
-// for list
-class ProductItem {
-  Product product; // the magento database product
-  bool isHighlighted;
-
-  ProductItem(Product product) {
-    this.product = product;
-    isHighlighted =
-        false; // higlighted is the next product that shoul be 'plockad'
   }
 }
