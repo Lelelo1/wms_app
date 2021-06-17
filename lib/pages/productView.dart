@@ -65,6 +65,15 @@ class ProductView extends StatelessWidget {
         decoration: boxDecoration);
   }
 
+/*
+  Widget thirdRow() {
+    return Container(
+      child: Row(children: [
+        Icon(Icons.)
+      ],),
+    )
+  }
+*/
   // methods given in 'Product's class order
   Widget nameWidget() {
     return Text("Namn: " + product?.name);

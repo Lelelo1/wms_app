@@ -19,12 +19,11 @@ class _State extends State<PlockPage> {
   @override
   void initState() {
     super.initState();
-    productItems = Products.get();
-    // list always retrurn a new iterator: https://stackoverflow.com/questions/65659282/iterator-current-is-null-but-why
-    // so nade to create on once and save it
-    collect = productItems.iterator; // to make first item the one to collect
+    productItems = Products.get().reversed.toList();
 
-    collect.moveNext(); // to start at the first item
+    collect = productItems.iterator; // creates an iterator
+    // to make first item the one to collect
+    collect.moveNext();
   }
 
   @override
@@ -56,8 +55,11 @@ class _State extends State<PlockPage> {
   }
 
   Widget renderDetails() {
-    print("collectProduct is: " + collect.current.toString());
-
+    if (collect.current == null) {
+      // show something somwhere to indicate that plock is done
+      // return null; can't return null in flutter, atleast not in 'Column'
+      return SizedBox();
+    }
     return ProductView(collect.current);
   }
 
@@ -72,21 +74,17 @@ class _State extends State<PlockPage> {
   }
 */
 
-  bool collectionCompleted = false; // does not help crash on last iteration..
   Widget collectButton() {
     // 'plockad'
     return FloatingActionButton(
         // needs to be separated out
         onPressed: () {
-          if (collectionCompleted) {
-            print("collection was completed");
+          if (collect.current == null) {
+            print("ignore, have finished collecting items");
             return;
           }
-
           setState(() {
-            // when next is false, there no further elements: https://api.dart.dev/stable/2.12.1/dart-core/Iterator/moveNext.html
-            // '!' anoying, rename bool..
-            collectionCompleted = !collect.moveNext();
+            collect.moveNext();
           });
         },
         child: Icon(Icons.arrow_upward));
