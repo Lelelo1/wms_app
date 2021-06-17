@@ -19,9 +19,9 @@ class _State extends State<PlockPage> {
   @override
   void initState() {
     super.initState();
-    productItems = Products.get().reversed.toList();
+    productItems = Products.get();
 
-    collect = productItems.iterator; // creates an iterator
+    collect = productItems.reversed.iterator; // creates an iterator
     // to make first item the one to collect
     collect.moveNext();
   }
@@ -87,6 +87,7 @@ class _State extends State<PlockPage> {
             collect.moveNext();
           });
         },
-        child: Icon(Icons.arrow_upward));
+        child: Icon(Icons.arrow_upward),
+        backgroundColor: Colors.green);
   }
 }

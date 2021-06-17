@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wms_app/models/product.dart';
+import 'package:wms_app/utils.dart';
 
 // needs proper sizing for mulitple screen sizes !!
 
@@ -24,7 +25,7 @@ class ProductView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         child: Column(
-          children: [firstRow(), secondRow()],
+          children: [firstRow(), secondRow(), thirdRow()],
         ),
         color: Colors.grey.withOpacity(0.6));
   }
@@ -65,15 +66,14 @@ class ProductView extends StatelessWidget {
         decoration: boxDecoration);
   }
 
-/*
   Widget thirdRow() {
     return Container(
-      child: Row(children: [
-        Icon(Icons.)
-      ],),
-    )
+        child: Row(
+            children: [imageWidget(), barcodeWidget()],
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly),
+        margin: rowInsets);
   }
-*/
+
   // methods given in 'Product's class order
   Widget nameWidget() {
     return Text("Namn: " + product?.name);
@@ -89,5 +89,22 @@ class ProductView extends StatelessWidget {
 
   Widget boxWidget() {
     return Text("Boxnummer: " + product?.box.toString());
+  }
+
+  Widget imageWidget() {
+    // string uri, url
+    return Icon(
+      Icons.book,
+      size: 120,
+    );
+  }
+
+  Widget barcodeWidget() {
+    var streckod = Utils.hasValue(product?.barcode)
+        ? product?.barcode.toString()
+        : "Saknas";
+
+    print("Streckkod: " + streckod);
+    return Text("Streckkod: " + streckod);
   }
 }
