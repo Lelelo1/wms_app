@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:wms_app/models/product.dart';
 import 'package:wms_app/utils.dart';
@@ -25,7 +27,7 @@ class ProductView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         child: Column(
-          children: [firstRow(), secondRow(), thirdRow()],
+          children: [topDetails(), thirdRow()],
         ),
         color: Colors.grey.withOpacity(0.6));
   }
@@ -35,35 +37,45 @@ class ProductView extends StatelessWidget {
 
   static BorderRadiusGeometry borderRadiusGeometry = BorderRadius.circular(35);
 
+  /*
   static List<BoxShadow> boxShadow = [
     BoxShadow(color: Color.fromARGB(130, 154, 119, 209), spreadRadius: 3)
   ];
-
+  */
   static BoxDecoration boxDecoration = BoxDecoration(
       /*border: Border.all(color: Colors.blueAccent),*/ // looks extremely ugly, needs more borderWidth probably
-      borderRadius: borderRadiusGeometry,
-      boxShadow: boxShadow);
+      borderRadius: borderRadiusGeometry);
 
 // https://stackoverflow.com/questions/52774921/space-between-columns-children-in-flutter
   static SizedBox productPadding = SizedBox(width: 30);
 
+  Widget topDetails() {
+    return Card(
+        child: Column(children: [firstRow(), secondRow()]),
+        //decoration: boxDecoration,
+        color: Color.fromARGB(210, 209, 251, 255));
+  }
+
+  // potentially blur list and focus what product: https://stackoverflow.com/questions/60585494/i-cant-make-blurred-item-with-sharp-border
+
   Widget firstRow() {
     return Container(
-      child: Row(
-          children: [shelfWidget(), productPadding, numberWidget()],
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly),
-      margin: rowInsets,
-      decoration: boxDecoration,
-    );
+        child: Row(
+            children: [shelfWidget(), productPadding, numberWidget()],
+            mainAxisAlignment: MainAxisAlignment.spaceAround),
+        margin: rowInsets
+        /*decoration: boxDecoration,*/
+        );
   }
 
   Widget secondRow() {
     return Container(
-        child: Row(
-            children: [nameWidget(), productPadding, boxWidget()],
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly),
-        margin: rowInsets,
-        decoration: boxDecoration);
+      child: Row(
+          children: [nameWidget(), productPadding, boxWidget()],
+          mainAxisAlignment: MainAxisAlignment.spaceAround),
+      margin: rowInsets,
+      /*decoration: boxDecoration*/
+    );
   }
 
   Widget thirdRow() {
