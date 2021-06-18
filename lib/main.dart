@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:wms_app/pages/plock.dart';
 
 import 'stores/test.dart';
+import 'package:screen/screen.dart';
 
 void main() {
   runApp(MyApp());
+  Screen.keepOn(true);
 }
 
 class MyApp extends StatelessWidget {
