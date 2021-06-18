@@ -20,25 +20,29 @@ class Products {
 }
 
 // ui test, 'modePage', potentially use some dependency inject to keep pages, and mock it
-class Pages {
-  static List<Page> _pages = [
-    Page("Plock", PlockPage()),
-    Page("Inventering", Text("Inventering")),
-    Page("Tidsstatistik", Text("Tidsstatistik")),
-    Page("Mätning", Text("Mätning")),
-    Page("Mock1", Text("Mock1")),
-    Page("Mock2", Text("Mock2"))
+class Modes {
+  static List<Mode> _modes = [
+    Mode("Plock", PlockPage()),
+    Mode("Inventering"),
+    Mode("Tidsstatistik"),
+    Mode("Mätning"),
+    Mode("Mock1"),
+    Mode("Mock2")
   ];
-  static List<Page> get() {
-    return _pages;
+  static List<Mode> get() {
+    return _modes;
   }
 }
 
-class Page {
+class Mode {
   String name;
   Widget widget;
-  Page(String name, Widget widget) {
+  Mode(String name, [Widget widget]) {
     this.name = name;
-    this.widget = widget;
+    this.widget = widget == null ? defaultWidget(name) : widget;
+  }
+
+  Widget defaultWidget(String name) {
+    return Scaffold(body: Center(child: Text(name)));
   }
 }
