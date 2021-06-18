@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wms_app/pages/plock.dart';
+import 'package:wms_app/pages/modePage.dart';
 
 import 'stores/test.dart';
 import 'package:screen/screen.dart';
@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
         home:
             // make home page eventually where the worker can go different areas, functionality described in 'Trello' eg
             //MyHomePage(title: appName), // title is wthat is displayed on app bar
-            PlockPage());
+            ModePage());
   }
 }
 

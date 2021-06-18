@@ -1,5 +1,7 @@
 // varplocklista
+import 'package:flutter/material.dart';
 import 'package:wms_app/models/product.dart';
+import 'package:wms_app/pages/plockPage.dart';
 
 class Products {
   static List<Product> _products = [
@@ -14,5 +16,29 @@ class Products {
   ];
   static List<Product> get([int count]) {
     return _products;
+  }
+}
+
+// ui test, 'modePage', potentially use some dependency inject to keep pages, and mock it
+class Pages {
+  static List<Page> _pages = [
+    Page("Plock", PlockPage()),
+    Page("Inventering", Text("Inventering")),
+    Page("Tidsstatistik", Text("Tidsstatistik")),
+    Page("Mätning", Text("Mätning")),
+    Page("Mock1", Text("Mock1")),
+    Page("Mock2", Text("Mock2"))
+  ];
+  static List<Page> get() {
+    return _pages;
+  }
+}
+
+class Page {
+  String name;
+  Widget widget;
+  Page(String name, Widget widget) {
+    this.name = name;
+    this.widget = widget;
   }
 }
