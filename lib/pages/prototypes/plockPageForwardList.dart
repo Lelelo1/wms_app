@@ -3,12 +3,12 @@ import 'package:wms_app/models/product.dart';
 import 'package:wms_app/views/productView.dart';
 import 'package:wms_app/stores/test.dart';
 
-class PlockPage extends StatefulWidget {
+class PlockPageForwardList extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _State();
 }
 
-class _State extends State<PlockPage> {
+class _State extends State<PlockPageForwardList> {
   List<Product> productItems;
 
   Iterator<Product> collect;
