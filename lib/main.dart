@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:wms_app/pages/modePage.dart';
-
-import 'stores/test.dart';
+import 'package:wms_app/pages/featuresPage.dart';
 import 'package:screen/screen.dart';
+import 'package:flutter_simple_dependency_injection/injector.dart';
+import 'package:wms_app/stores/appStore.dart';
 
 void main() {
   runApp(MyApp());
   Screen.keepOn(true);
+
+  AppStore.injector = Module().initialise(Injector());
 }
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
 
-  String appName = "WMS App";
+  final String appName = "WMS App";
 
   @override
   Widget build(BuildContext context) {
@@ -33,42 +35,6 @@ class MyApp extends StatelessWidget {
         home:
             // make home page eventually where the worker can go different areas, functionality described in 'Trello' eg
             //MyHomePage(title: appName), // title is wthat is displayed on app bar
-            ModePage());
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  // make this a test view, to manually test things
-  // stateless widgets
-  MyHomePage({Key key, this.title}) : super(key: key);
-  final String title;
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  // test setState, maybe not use setState at all though, mobx reactive instead
-  /*
-  int _counter = 0;
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-   // Products.get().forEach((p) => print(p.name)); // <-- test print by press
-  }
-  */
-  @override
-  Widget build(BuildContext context) {
-    // This method is rerun every time setState is called
-
-    return Scaffold(
-        appBar: AppBar(
-          // Here we take the value from the MyHomePage object that was created by
-          // the App.build method, and use it to set our appbar title.
-          title: Text(widget.title),
-        ),
-        body: ListView(
-            children: List.from(Products.get().map((e) => Text(e.name)))));
+            FeaturesPage());
   }
 }

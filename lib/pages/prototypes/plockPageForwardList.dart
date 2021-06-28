@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:wms_app/models/product.dart';
+import 'package:wms_app/stores/appStore.dart';
+import 'package:wms_app/stores/plockStore.dart';
 import 'package:wms_app/views/productView.dart';
-import 'package:wms_app/stores/test.dart';
 
 class PlockPageForwardList extends StatefulWidget {
   @override
@@ -9,21 +10,18 @@ class PlockPageForwardList extends StatefulWidget {
 }
 
 class _State extends State<PlockPageForwardList> {
-  List<Product> productItems;
-
-  Iterator<Product> collect;
-
   // starting with first product in 'plocklista'
   // init state if needed
+
+  PlockStore plockStore = AppStore.injector.get<PlockStore>();
 
   @override
   void initState() {
     super.initState();
-    productItems = Products.get();
-
-    collect = productItems.reversed.iterator; // creates an iterator
+    // changing collect order of list, once
+    plockStore.collect = plockStore.productItems.reversed.iterator;
     // to make first item the one to collect
-    collect.moveNext();
+    plockStore.collect.moveNext();
   }
 
   @override
@@ -44,47 +42,37 @@ class _State extends State<PlockPageForwardList> {
   Widget renderList() {
     return Container(
         child: ListView(
-            children: List.from(productItems.map(renderItem)),
+            children: List.from(plockStore.productItems.map(renderItem)),
             shrinkWrap: true));
   }
 
   Widget renderItem(Product product) {
-    var color = product == collect.current ? Colors.amber : Colors.white;
+    var color =
+        product == plockStore.collect.current ? Colors.amber : Colors.white;
 
     return Card(child: Text(product.name), color: color);
   }
 
   Widget renderDetails() {
-    if (collect.current == null) {
+    if (plockStore.collect.current == null) {
       // show something somwhere to indicate that plock is done
       // return null; can't return null in flutter, atleast not in 'Column'
       return SizedBox();
     }
-    return ProductView(collect.current);
+    return ProductView(plockStore.collect.current);
   }
-
-/*
-  Widget renderBottom() {
-    return Column(
-        children: [
-          
-        ],
-        mainAxisAlignment: MainAxisAlignment.end,
-        crossAxisAlignment: CrossAxisAlignment.end);
-  }
-*/
 
   Widget collectButton() {
     // 'plockad'
     return FloatingActionButton(
         // needs to be separated out
         onPressed: () {
-          if (collect.current == null) {
+          if (plockStore.collect.current == null) {
             print("ignore, have finished collecting items");
             return;
           }
           setState(() {
-            collect.moveNext();
+            plockStore.collect.moveNext();
           });
         },
         child: Icon(Icons.arrow_upward),

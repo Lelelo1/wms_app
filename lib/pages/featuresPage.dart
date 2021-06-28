@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:wms_app/stores/test.dart';
+import 'package:wms_app/features/features.dart';
 
-class ModePage extends StatefulWidget {
+class FeaturesPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _State();
 }
 
-class _State extends State<ModePage> {
+class _State extends State<FeaturesPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -21,20 +21,20 @@ class _State extends State<ModePage> {
       // horizontal, this produces 2 rows.
       crossAxisCount: 2,
       // Generate 100 widgets that display their index in the List.
-      children: Modes.get().map(renderMode).toList(),
+      children: Features.get().map(renderMode).toList(),
     );
   }
 
-  Widget renderMode(Mode mode) {
+  Widget renderMode(Feature feature) {
     return GestureDetector(
         child: Card(
             child: Center(
           child: Text(
-            mode.name,
+            feature.name,
             style: Theme.of(context).textTheme.headline5,
           ),
         )),
-        onTap: () => tapMode(mode.widget));
+        onTap: () => tapMode(feature.widget));
   }
 
   void tapMode(Widget to) {
