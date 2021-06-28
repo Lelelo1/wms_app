@@ -37,12 +37,15 @@ class _State extends State<PlockPageIdeal> {
             child: MaterialButton(
                 child: Icon(Icons.qr_code),
                 onPressed: scan,
-                color: Color.fromARGB(180, 133, 57, 227)),
+                color: Color.fromARGB(180, 133, 57, 227),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
+                elevation: 0),
             width: buttonWidth,
             height: buttonHeight,
           ),
         ),
-        color: Colors.grey,
+        color: Colors.white,
         height: topHeight,
         margin: EdgeInsets.only(
             left: 0, top: statusBarHeight, right: 0, bottom: 0));
