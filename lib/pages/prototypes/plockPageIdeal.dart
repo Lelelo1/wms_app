@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:wms_app/stores/appStore.dart';
+import 'package:wms_app/stores/plockStore.dart';
+import 'package:wms_app/views/adaptiveProductView.dart';
 
 class PlockPageIdeal extends StatefulWidget {
   @override
@@ -6,10 +9,12 @@ class PlockPageIdeal extends StatefulWidget {
 }
 
 class _State extends State<PlockPageIdeal> {
+  PlockStore plockStore = AppStore.injector.get<PlockStore>();
   MediaQueryData mediaQueryData;
   @override
   void initState() {
     super.initState();
+    plockStore.collect.moveNext();
   }
 
   @override
@@ -17,13 +22,12 @@ class _State extends State<PlockPageIdeal> {
     if (mediaQueryData == null) {
       mediaQueryData = MediaQuery.of(context);
     }
-    return Container(child: Column(children: [top()]));
+    return Container(child: Column(children: [top(), productView()]));
   }
 
   Widget top() {
     var topHeightFactor = 0.31;
     var topHeight = mediaQueryData.size.height * topHeightFactor;
-    print("top is: " + mediaQueryData.padding.top.toString());
     var statusBarHeight = mediaQueryData.padding.top;
 
     var buttonWidthFactor = 0.65;
@@ -49,6 +53,11 @@ class _State extends State<PlockPageIdeal> {
         height: topHeight,
         margin: EdgeInsets.only(
             left: 0, top: statusBarHeight, right: 0, bottom: 0));
+  }
+
+  Widget productView() {
+    var collectProduct = plockStore.collect.current;
+    return AdaptiveProductView(); //ProductView(collectProduct);
   }
 
   void scan() {

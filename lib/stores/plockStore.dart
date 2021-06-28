@@ -13,6 +13,6 @@ class PlockStore {
   PlockStore() {
     productItems = productsSource.getProducts();
     collect = productItems.iterator;
-    //// create ISource and swap local mock, to remote mock and remote products, try catch
+    // create ISource and swap local mock, to remote mock and remote products, try catch
   }
 }

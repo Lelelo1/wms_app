@@ -35,6 +35,6 @@ class MyApp extends StatelessWidget {
         home:
             // make home page eventually where the worker can go different areas, functionality described in 'Trello' eg
             //MyHomePage(title: appName), // title is wthat is displayed on app bar
-            FeaturesPage());
+            Scaffold(body: FeaturesPage()));
   }
 }
