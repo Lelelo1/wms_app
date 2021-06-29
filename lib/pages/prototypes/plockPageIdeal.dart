@@ -14,7 +14,8 @@ class _State extends State<PlockPageIdeal> {
   @override
   void initState() {
     super.initState();
-    plockStore.collect.moveNext();
+    // restart collect iterarotor when entering protypes
+    plockStore.collect = plockStore.productItems.iterator;
   }
 
   @override
