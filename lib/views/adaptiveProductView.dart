@@ -9,10 +9,14 @@ class AdaptiveProductView extends StatelessWidget {
   Widget build(BuildContext context) {
     var product = plockStore.collect.current;
 
-    return Container(
-      child: Column(children: [shelf(product), number(product), name(product)]),
+    return Material(
+        child: Container(
+      child: Column(
+        children: [shelf(product), number(product), name(product)],
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      ),
       color: Colors.brown,
-    );
+    ));
   }
 
   Widget shelf(Product product) {
