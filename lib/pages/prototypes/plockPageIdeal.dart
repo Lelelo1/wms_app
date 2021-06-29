@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wms_app/stores/appStore.dart';
 import 'package:wms_app/stores/plockStore.dart';
-import 'package:wms_app/views/productView.dart';
+import 'package:wms_app/views/idealProductView.dart';
 
 class PlockPageIdeal extends StatefulWidget {
   @override
@@ -63,7 +63,7 @@ class _State extends State<PlockPageIdeal> {
 
   Widget productView() {
     var collectProduct = plockStore.collect.current;
-    return ProductView(collectProduct);
+    return IdealProductView(collectProduct);
   }
 
   void scan() {
