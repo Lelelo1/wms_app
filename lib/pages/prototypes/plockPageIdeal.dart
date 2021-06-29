@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wms_app/stores/appStore.dart';
 import 'package:wms_app/stores/plockStore.dart';
-import 'package:wms_app/views/adaptiveProductView.dart';
+import 'package:wms_app/views/productView.dart';
 
 class PlockPageIdeal extends StatefulWidget {
   @override
@@ -22,7 +22,11 @@ class _State extends State<PlockPageIdeal> {
     if (mediaQueryData == null) {
       mediaQueryData = MediaQuery.of(context);
     }
-    return Container(child: Column(children: [top(), productView()]));
+    return Container(
+        child: (Column(children: [
+      Expanded(child: top()),
+      Expanded(child: productView())
+    ])));
   }
 
   Widget top() {
@@ -52,12 +56,12 @@ class _State extends State<PlockPageIdeal> {
         color: Colors.white,
         height: topHeight,
         margin: EdgeInsets.only(
-            left: 0, top: statusBarHeight, right: 0, bottom: 0));
+            left: 0, top: 0 /*statusBarHeight*/, right: 0, bottom: 0));
   }
 
   Widget productView() {
     var collectProduct = plockStore.collect.current;
-    return AdaptiveProductView(); //ProductView(collectProduct);
+    return ProductView(collectProduct);
   }
 
   void scan() {

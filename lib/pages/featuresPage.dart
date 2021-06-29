@@ -21,11 +21,11 @@ class _State extends State<FeaturesPage> {
       // horizontal, this produces 2 rows.
       crossAxisCount: 2,
       // Generate 100 widgets that display their index in the List.
-      children: Features.get().map(renderMode).toList(),
+      children: Features.get().map(renderFeature).toList(),
     );
   }
 
-  Widget renderMode(Feature feature) {
+  Widget renderFeature(Feature feature) {
     return GestureDetector(
         child: Card(
             child: Center(
@@ -34,10 +34,10 @@ class _State extends State<FeaturesPage> {
             style: Theme.of(context).textTheme.headline5,
           ),
         )),
-        onTap: () => tapMode(feature.widget));
+        onTap: () => tapFeature(feature.widget));
   }
 
-  void tapMode(Widget to) {
+  void tapFeature(Widget to) {
     Navigator.push(this.context, MaterialPageRoute(builder: (context) => to));
   }
 }
