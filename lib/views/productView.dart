@@ -79,11 +79,12 @@ class ProductView extends StatelessWidget {
   }
 
   Widget thirdRow() {
-    return Container(
-        child: Row(
-            children: [imageWidget(), barcodeWidget()],
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly),
-        margin: rowInsets);
+    return Card(
+        child: Container(
+            child: Row(
+                children: [imageWidget(), barcodeWidget()],
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly),
+            margin: rowInsets));
   }
 
   // methods given in 'Product's class order
