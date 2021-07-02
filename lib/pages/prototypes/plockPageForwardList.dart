@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wms_app/models/product.dart';
 import 'package:wms_app/stores/appStore.dart';
 import 'package:wms_app/stores/plockStore.dart';
-import 'package:wms_app/views/productView.dart';
+import 'package:wms_app/views/prototype/prototypeProductView.dart';
 
 class PlockPageForwardList extends StatefulWidget {
   @override
@@ -59,7 +59,7 @@ class _State extends State<PlockPageForwardList> {
       // return null; can't return null in flutter, atleast not in 'Column'
       return SizedBox();
     }
-    return ProductView(plockStore.collect.current);
+    return PrototypeProductView(plockStore.collect.current);
   }
 
   Widget collectButton() {

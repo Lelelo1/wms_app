@@ -16,10 +16,12 @@ class MySQLConnector {
         db: "sakila");
   }
 
-  static void Test() {
+  static void test() {
     if (settings == null) {
       settings = createConnectionSettings();
       print("created database connection settings");
     }
   }
+
+  void printAllProducts() {}
 }

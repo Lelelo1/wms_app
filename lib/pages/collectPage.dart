@@ -2,17 +2,17 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:wms_app/stores/appStore.dart';
-import 'package:wms_app/stores/plockStore.dart';
-import 'package:wms_app/views/idealProductView.dart';
+import 'package:wms_app/stores/collectStore.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:wms_app/views/productView.dart';
 
-class PlockPageIdeal extends StatefulWidget {
+class CollectPage extends StatefulWidget {
   @override
   _State createState() => _State();
 }
 
-class _State extends State<PlockPageIdeal> {
-  PlockStore plockStore = AppStore.injector.get<PlockStore>();
+class _State extends State<CollectPage> {
+  CollectStore collectStore = AppStore.injector.get<CollectStore>();
   MediaQueryData mediaQueryData;
 
   Barcode result;
@@ -23,8 +23,8 @@ class _State extends State<PlockPageIdeal> {
   void initState() {
     super.initState();
     // restart collect iterarotor when entering protypes
-    plockStore.collect = plockStore.productItems.iterator;
-    plockStore.collect.moveNext();
+    collectStore.collect = collectStore.productItems.iterator;
+    collectStore.collect.moveNext();
   }
 
   @override
@@ -121,8 +121,8 @@ class _State extends State<PlockPageIdeal> {
   }
 
   Widget productView() {
-    var collectProduct = plockStore.collect.current;
-    return IdealProductView(collectProduct);
+    var collectProduct = collectStore.collect.current;
+    return ProductView(collectProduct);
   }
 
   void scan() {

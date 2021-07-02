@@ -1,17 +1,17 @@
 // ui test for 'featurePage', potentially use some dependency inject to keep pages, and mock it
 // features.. should given/registered, and not contain widget imports..
 import 'package:flutter/material.dart';
-import 'package:wms_app/pages/prototypes/plockPageForwardList.dart';
-import 'package:wms_app/pages/prototypes/plockPageIdeal.dart';
+import 'package:wms_app/pages/collectPage.dart';
 
 class Features {
   static List<Feature> _modes = [
-    Feature("Plock-FramåtLista", PlockPageForwardList()),
-    Feature("Plock-Ideal", PlockPageIdeal()),
+    /*Feature("Plock-FramåtLista", PlockPageForwardList()),*/
+    Feature("Plock", CollectPage()),
     Feature("Inventering"),
     Feature("Tidsstatistik"),
     Feature("Mätning"),
-    Feature("Mock1"),
+    Feature(
+        "Lägg in streckkoder"), // it should probably be renamed, as collecting also uses scanning. should probably be named 'register product'
     Feature("Mock2")
   ];
   static List<Feature> get() {

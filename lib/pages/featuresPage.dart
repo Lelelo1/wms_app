@@ -32,6 +32,7 @@ class _State extends State<FeaturesPage> {
           child: Text(
             feature.name,
             style: Theme.of(context).textTheme.headline5,
+            textAlign: TextAlign.center,
           ),
         )),
         onTap: () => tapFeature(feature.widget));

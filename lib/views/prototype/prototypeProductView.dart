@@ -14,10 +14,10 @@ import 'package:wms_app/utils.dart';
 
 // https://stackoverflow.com/questions/60133733/non-final-field-in-stateless-flutter-widget
 // ignore: must_be_immutable
-class IdealProductView extends StatelessWidget {
+class PrototypeProductView extends StatelessWidget {
   Product product;
 
-  IdealProductView(Product product) {
+  PrototypeProductView(Product product) {
     // asume as product, handle outside
     this.product = product;
   }
@@ -27,10 +27,13 @@ class IdealProductView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         child: Column(
-          children: [topDetails(), Expanded(child: thirdRow())],
+          children: [topDetails(), thirdRow()],
         ),
         color: Colors.grey.withOpacity(0.6));
   }
+
+  static EdgeInsets rowInsets =
+      EdgeInsets.only(left: 10, top: 20, right: 10, bottom: 20);
 
   static BorderRadiusGeometry borderRadiusGeometry = BorderRadius.circular(35);
 
@@ -43,32 +46,45 @@ class IdealProductView extends StatelessWidget {
       /*border: Border.all(color: Colors.blueAccent),*/ // looks extremely ugly, needs more borderWidth probably
       borderRadius: borderRadiusGeometry);
 
-// card has ineherent padding, but can't be set.. :https://stackoverflow.com/questions/57730800/how-to-remove-a-cards-inner-padding-in-flutter
+// https://stackoverflow.com/questions/52774921/space-between-columns-children-in-flutter
+  static SizedBox productPadding = SizedBox(width: 30);
 
   Widget topDetails() {
     return Card(
-        child: Container(
-            child: Column(children: [
-              shelfWidget(),
-              SizedBox(height: 10),
-              numberWidget()
-            ]),
-            padding: EdgeInsets.only(left: 10, top: 10, right: 10, bottom: 10)),
-        color: Color.fromARGB(210, 209, 251, 255),
-        margin: EdgeInsets.only(left: 10, top: 10, right: 10, bottom: 0));
+        child: Column(children: [firstRow(), secondRow()]),
+        //decoration: boxDecoration,
+        color: Color.fromARGB(210, 209, 251, 255));
   }
 
   // potentially blur list and focus what product: https://stackoverflow.com/questions/60585494/i-cant-make-blurred-item-with-sharp-border
 
+  Widget firstRow() {
+    return Container(
+        child: Row(
+            children: [shelfWidget(), productPadding, numberWidget()],
+            mainAxisAlignment: MainAxisAlignment.spaceAround),
+        margin: rowInsets
+        /*decoration: boxDecoration,*/
+        );
+  }
+
+  Widget secondRow() {
+    return Container(
+      child: Row(
+          children: [nameWidget(), productPadding, boxWidget()],
+          mainAxisAlignment: MainAxisAlignment.spaceAround),
+      margin: rowInsets,
+      /*decoration: boxDecoration*/
+    );
+  }
+
   Widget thirdRow() {
     return Card(
-      child: Container(
-          child: Row(children: [
-        Flexible(child: imageWidget()),
-      ], mainAxisAlignment: MainAxisAlignment.spaceEvenly)),
-      color: Color.fromARGB(210, 255, 255, 255),
-      margin: EdgeInsets.only(left: 10, top: 10, right: 10, bottom: 10),
-    );
+        child: Container(
+            child: Row(
+                children: [imageWidget(), barcodeWidget()],
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly),
+            margin: rowInsets));
   }
 
   // methods given in 'Product's class order
@@ -77,12 +93,11 @@ class IdealProductView extends StatelessWidget {
   }
 
   Widget shelfWidget() {
-    return Text(product?.shelf, style: TextStyle(fontSize: 22));
+    return Text("Hyllplats: " + product?.shelf);
   }
 
   Widget numberWidget() {
-    return Text(product?.number.toString(),
-        style: TextStyle(fontSize: 38), textAlign: TextAlign.center);
+    return Text("Artikelnummer: " + product?.number.toString());
   }
 
   Widget boxWidget() {
@@ -97,8 +112,6 @@ class IdealProductView extends StatelessWidget {
     );
   }
 
-  // I really don't understand why there should be a barcode value displayed..?
-  /* 
   Widget barcodeWidget() {
     var streckod = Utils.hasValue(product?.barcode)
         ? product?.barcode.toString()
@@ -107,5 +120,4 @@ class IdealProductView extends StatelessWidget {
     print("Streckkod: " + streckod);
     return Text("Streckkod: " + streckod);
   }
-  */
 }
