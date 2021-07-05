@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wms_app/models/product.dart';
 import 'package:wms_app/stores/appStore.dart';
-import 'package:wms_app/stores/plockStore.dart';
+import 'package:wms_app/stores/collectStore.dart';
 import 'package:wms_app/views/prototype/prototypeProductView.dart';
 
 class PlockPageForwardList extends StatefulWidget {

@@ -1,33 +1,56 @@
 // ui test for 'featurePage', potentially use some dependency inject to keep pages, and mock it
 // features.. should given/registered, and not contain widget imports..
 import 'package:flutter/material.dart';
+import 'package:wms_app/pages/AbstractPage.dart';
 import 'package:wms_app/pages/collectPage.dart';
+import 'package:wms_app/pages/productRegistrationPage.dart.dart';
 
 class Features {
-  static List<Feature> _modes = [
+  static List<AbstractPage> _features = [
     /*Feature("Plock-FramåtLista", PlockPageForwardList()),*/
-    Feature("Plock", CollectPage()),
-    Feature("Inventering"),
-    Feature("Tidsstatistik"),
-    Feature("Mätning"),
-    Feature(
-        "Lägg in streckkoder"), // it should probably be renamed, as collecting also uses scanning. should probably be named 'register product'
-    Feature("Mock2")
+    CollectPage("Plock"),
+    DefaultPage("Inventering"),
+    DefaultPage("Tidsstatistik"),
+    DefaultPage("Mätning"),
+    ProductRegistrationPage(
+        "Lägg in streckoder"), // it should probably be renamed, as collecting also uses scanning. should probably be named 'register product'
+    DefaultPage("Mock2")
   ];
-  static List<Feature> get() {
-    return _modes;
+  static List<AbstractPage> get() {
+    return _features;
+  }
+}
+/*
+how to create lambdas
+// https://stackoverflow.com/questions/63003864/lambda-expression-as-a-function-parameter-in-dart-language
+typedef CreateFeature = Widget Function();
+*/
+
+class Feature {
+  AbstractPage page;
+
+  Feature(String name, [Widget widget]) {
+    this.page = page == null ? defaultPageWidget(name) : page;
+  }
+
+  Widget defaultPageWidget(String name) {
+    return Center(child: Text(name));
   }
 }
 
-class Feature {
-  String name;
-  Widget widget;
-  Feature(String name, [Widget widget]) {
-    this.name = name;
-    this.widget = widget == null ? defaultWidget(name) : widget;
-  }
+class DefaultPage extends StatefulWidget implements AbstractPage {
+  @override
+  State<StatefulWidget> createState() => _State();
 
-  Widget defaultWidget(String name) {
-    return Scaffold(body: Center(child: Text(name)));
+  @override
+  final String name;
+
+  DefaultPage(this.name);
+}
+
+class _State extends State<DefaultPage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(body: Center(child: Text(this.widget.name)));
   }
 }

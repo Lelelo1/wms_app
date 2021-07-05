@@ -6,9 +6,15 @@ import 'package:wms_app/stores/collectStore.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:wms_app/views/productView.dart';
 
-class CollectPage extends StatefulWidget {
+import 'AbstractPage.dart';
+
+class CollectPage extends StatefulWidget implements AbstractPage {
   @override
   _State createState() => _State();
+
+  final String name;
+
+  CollectPage(this.name);
 }
 
 class _State extends State<CollectPage> {

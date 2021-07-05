@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:wms_app/features/features.dart';
+import 'package:wms_app/pages/AbstractPage.dart';
 
-class FeaturesPage extends StatefulWidget {
+class FeaturesPage extends StatefulWidget implements AbstractPage {
   @override
   State<StatefulWidget> createState() => _State();
+
+  @override
+  final String name;
+
+  FeaturesPage(this.name);
 }
 
 class _State extends State<FeaturesPage> {
@@ -25,7 +31,7 @@ class _State extends State<FeaturesPage> {
     );
   }
 
-  Widget renderFeature(Feature feature) {
+  Widget renderFeature(AbstractPage feature) {
     return GestureDetector(
         child: Card(
             child: Center(
@@ -35,7 +41,7 @@ class _State extends State<FeaturesPage> {
             textAlign: TextAlign.center,
           ),
         )),
-        onTap: () => tapFeature(feature.widget));
+        onTap: () => tapFeature(feature as Widget));
   }
 
   void tapFeature(Widget to) {
