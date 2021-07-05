@@ -20,23 +20,12 @@ class Features {
     return _features;
   }
 }
+
 /*
 how to create lambdas
 // https://stackoverflow.com/questions/63003864/lambda-expression-as-a-function-parameter-in-dart-language
 typedef CreateFeature = Widget Function();
 */
-
-class Feature {
-  AbstractPage page;
-
-  Feature(String name, [Widget widget]) {
-    this.page = page == null ? defaultPageWidget(name) : page;
-  }
-
-  Widget defaultPageWidget(String name) {
-    return Center(child: Text(name));
-  }
-}
 
 class DefaultPage extends StatefulWidget implements AbstractPage {
   @override

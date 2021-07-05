@@ -61,14 +61,12 @@ class ProductView extends StatelessWidget {
   // potentially blur list and focus what product: https://stackoverflow.com/questions/60585494/i-cant-make-blurred-item-with-sharp-border
 
   Widget thirdRow() {
-    return Card(
-      child: Container(
-          child: Row(children: [
-        Flexible(child: imageWidget()),
-      ], mainAxisAlignment: MainAxisAlignment.spaceEvenly)),
-      color: Color.fromARGB(210, 255, 255, 255),
-      margin: EdgeInsets.only(left: 10, top: 10, right: 10, bottom: 10),
-    );
+    return Container(
+        child: Row(children: [
+          Flexible(child: imageWidget()),
+        ], mainAxisAlignment: MainAxisAlignment.spaceEvenly),
+        color: Color.fromARGB(210, 255, 255, 255),
+        margin: EdgeInsets.only(left: 10, top: 10, right: 10, bottom: 10));
   }
 
   // methods given in 'Product's class order
