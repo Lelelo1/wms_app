@@ -3,7 +3,7 @@ import 'package:wms_app/stores/appStore.dart';
 import 'package:wms_app/stores/collectStore.dart';
 import 'package:wms_app/views/cameraView.dart';
 import 'package:wms_app/views/productView.dart';
-import 'package:wms_app/widgets/WMSAppBar.dart';
+import 'package:wms_app/widgets/wmsAppBar.dart';
 
 import 'AbstractPage.dart';
 
