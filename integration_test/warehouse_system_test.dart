@@ -7,9 +7,9 @@ import 'package:wms_app/database/mySQLConnector.dart';
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  test("my description", () {
+  test("wearehouse_system_connection_test", () {
     var connected = MySQLConnector.connect();
-    print("connected to warehouse system: " + connected.toString());
+    //print("connected to warehouse system: " + connected.toString());
     expect(true, connected);
   });
 
@@ -19,3 +19,5 @@ void main() {
   });
   */
 }
+
+// description in test methdo just logs to console. print logs red text outside the test methods
