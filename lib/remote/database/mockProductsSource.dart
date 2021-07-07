@@ -1,7 +1,8 @@
 // varplocklista
 
 import 'package:wms_app/models/product.dart';
-import 'package:wms_app/database/abstractProductsSource.dart';
+
+import 'abstractProductsSource.dart';
 
 class MockProductsSource implements AbstractProductsSource {
   /*

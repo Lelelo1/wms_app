@@ -1,29 +1,23 @@
 import 'package:mysql1/mysql1.dart';
-import 'dart:io' show Platform;
+
+import 'package:wms_app/secrets.dart';
 
 // https://pub.dev/packages/mysql1
 class MySQLConnector {
-  static ConnectionSettings settings;
+  static Future<MySqlConnection> connecting;
 
-  static ConnectionSettings createConnectionSettings() {
-    var password =
-        Platform.environment["WMSAppTestingSQLDatabseConnectionPassword"];
-    return new ConnectionSettings(
-        host: '127.0.0.1',
-        port: 3306,
-        user: "lelelo1",
-        password: password,
-        db: "sakila");
+  // needs internet permission android real device, otherwise: 'SocketException: OS Error: Connection refused'
+  // https://stackoverflow.com/questions/55785581/socketexception-os-error-connection-refused-errno-111-in-flutter-using-djan
+  // such permission is granted on install time: https://developer.android.com/training/basics/network-ops/connecting
+  static void connect() {
+    var dbSecret = Secrets.mySQL;
+    var settings = new ConnectionSettings(
+        host: dbSecret.url,
+        port: dbSecret.port,
+        user: dbSecret.user,
+        password: dbSecret.pass,
+        db: dbSecret.database);
+
+    connecting = MySqlConnection.connect(settings);
   }
-
-  static bool connect() {
-    if (settings == null) {
-      settings = createConnectionSettings();
-      print("created database connection settings");
-    }
-
-    return true; //settings != null;
-  }
-
-  void printAllProducts() {}
 }

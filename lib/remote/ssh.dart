@@ -1,12 +1,20 @@
 import 'package:ssh/ssh.dart';
-import '../../secrets'
-class SSH {
-  SSHClient client;
+import 'package:wms_app/secrets.dart';
 
-  Future<String> connecting;
+class SSH {
+  static SSHClient _client;
+
+  static Future<String> connecting;
   static void openConnection() {
-    Secrets
-    new SSHClient()
+    var sshSettings = Secrets.ssh;
+
+    _client = new SSHClient(
+        host: sshSettings.url,
+        port: sshSettings.port,
+        username: sshSettings.user,
+        passwordOrKey: sshSettings.pass);
+
+    connecting = _client.connect();
   }
 }
 
