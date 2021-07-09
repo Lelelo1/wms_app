@@ -89,10 +89,7 @@ class ProductView extends StatelessWidget {
 
   Widget imageWidget() {
     // string uri, url
-    return Icon(
-      Icons.book,
-      size: 120,
-    );
+    return Image.asset("assets/images/product_placeholder.png");
   }
 
   // I really don't understand why there should be a barcode value displayed..?
