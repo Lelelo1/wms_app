@@ -3,7 +3,7 @@ import 'package:mysql1/mysql1.dart';
 import 'package:wms_app/secrets.dart';
 
 // https://pub.dev/packages/mysql1
-class MySQLConnector {
+class ProductsSource {
   static Future<MySqlConnection> connecting;
 
   // needs internet permission android real device, otherwise: 'SocketException: OS Error: Connection refused'
@@ -20,4 +20,11 @@ class MySQLConnector {
 
     connecting = MySqlConnection.connect(settings);
   }
+}
+
+class SQLQuery {
+  // returns entity_id's aka product id
+  static String barcodeNeeded =
+      "SELECT DISTINCT `catalog_product_entity`.`entity_id` as 'entity_id' FROM `catalog_product_entity` WHERE `catalog_product_entity`.`entity_id` NOT IN (SELECT DISTINCT `entity_id` FROM `catalog_product_entity_varchar` WHERE `attribute_id` = '283') AND `catalog_product_entity`.`type_id` = 'simple' ORDER BY `catalog_product_entity`.`entity_id` DESC;";
+  String shelfBarcodeRegistration = "";
 }
