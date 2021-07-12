@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:wms_app/models/product.dart';
-import 'package:wms_app/utils.dart';
 
 // needs proper sizing for mulitple screen sizes !!
 
@@ -114,7 +113,8 @@ class ProductView extends StatelessWidget {
     return Image.asset("assets/images/product_placeholder.png");
   }
 
-  // I really don't understand why there should be a barcode value displayed..?
+  // I really don't understand why there should be a barcode value displayed..? (has not ben mentioned more times)
+
   /* 
   Widget barcodeWidget() {
     var streckod = Utils.hasValue(product?.barcode)
