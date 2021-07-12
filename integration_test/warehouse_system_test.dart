@@ -6,6 +6,7 @@ import 'package:integration_test/integration_test.dart';
 import 'package:wms_app/remote/database/productsSource.dart';
 import 'package:wms_app/remote/ssh.dart';
 
+
 // https://flutter.dev/docs/testing/integration-tests
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
