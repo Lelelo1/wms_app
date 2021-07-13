@@ -2,5 +2,6 @@
 import 'package:wms_app/models/product.dart';
 
 abstract class AbstractProductsSource {
-  List<Product> getProducts();
+  List<Product> _products;
+  Future<List<Product>> getProducts();
 }

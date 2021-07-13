@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:wms_app/models/product.dart';
+import 'package:wms_app/models/sequence.dart';
 import 'package:wms_app/pages/AbstractPage.dart';
 import 'package:wms_app/stores/appStore.dart';
-import 'package:wms_app/stores/collectStore.dart';
+import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/views/cameraView.dart';
 import 'package:wms_app/views/productView.dart';
 import 'package:wms_app/widgets/WmsAppBar.dart';
@@ -14,21 +16,37 @@ class ProductRegistrationPage extends StatefulWidget implements AbstractPage {
   final String name;
 
   ProductRegistrationPage(this.name);
-
-  // just to display an arbitary item
-  final testProduct = AppStore.injector.get<CollectStore>().productItems[0];
 }
 
 class _State extends State<ProductRegistrationPage> {
+  WorkStore workStore = AppStore.injector.get<WorkStore>();
+
+  Future<Sequence> futureSequence;
+
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
+    futureSequence = workStore.getCollection(); // later call 'getRegistration'
+  }
+
+  FutureBuilder futureBuilder() => FutureBuilder<Sequence>(
+      future: futureSequence,
+      builder: (BuildContext context, AsyncSnapshot snapshot) =>
+          page(snapshot.data));
+
+  Widget page(Sequence sequence) {
     return Scaffold(
         appBar: WMSAppBar(this.widget.name).get(),
         body: Container(
             child: (Column(children: [
           Expanded(child: CameraView() /*top()*/),
-          Expanded(child: ProductView(this.widget.testProduct))
+          Expanded(child: ProductView(sequence.iterator.current))
         ]))),
         extendBodyBehindAppBar: true);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return futureBuilder();
   }
 }

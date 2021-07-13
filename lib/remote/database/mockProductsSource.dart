@@ -36,8 +36,8 @@ class MockProductsSource implements AbstractProductsSource {
   }
 
   @override
-  List<Product> getProducts() {
-    return _products;
+  Future<List<Product>> getProducts() {
+    return Future.value(_products);
   }
 
   /*

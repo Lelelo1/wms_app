@@ -1,5 +1,5 @@
 import 'package:flutter_simple_dependency_injection/injector.dart';
-import 'package:wms_app/stores/collectStore.dart';
+import 'package:wms_app/stores/workStore.dart';
 
 class AppStore {
   static Injector injector;
@@ -10,7 +10,7 @@ class AppStore {
 // .. can create test, mock dep modules
 class Module {
   Injector initialise(Injector injector) {
-    injector.map((injector) => CollectStore(), isSingleton: true);
+    injector.map((injector) => WorkStore(), isSingleton: true);
     return injector;
   }
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:wms_app/models/product.dart';
+import 'package:wms_app/models/sequence.dart';
 import 'package:wms_app/stores/appStore.dart';
-import 'package:wms_app/stores/collectStore.dart';
+import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/views/cameraView.dart';
 import 'package:wms_app/views/productView.dart';
 import 'package:wms_app/widgets/wmsAppBar.dart';
@@ -10,39 +12,43 @@ import 'AbstractPage.dart';
 class CollectPage extends StatefulWidget implements AbstractPage {
   @override
   _State createState() => _State();
-
   final String name;
-
   CollectPage(this.name);
 }
 
 class _State extends State<CollectPage> {
-  CollectStore collectStore = AppStore.injector.get<CollectStore>();
+  WorkStore workStore = AppStore.injector.get<WorkStore>();
   MediaQueryData mediaQueryData;
+
+  Future<Sequence> futureSequence;
 
   @override
   void initState() {
     super.initState();
-    // restart collect iterarotor when entering protypes
-    collectStore.collect = collectStore.productItems.iterator;
-    collectStore.collect.moveNext();
+    futureSequence = workStore.getCollection();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    //print("barcode is: " + result?.)
+  // alls pages should have future builder, more or less
+  FutureBuilder futureBuilder() => FutureBuilder<Sequence>(
+      future: futureSequence,
+      builder: (BuildContext context, AsyncSnapshot<Sequence> snapshot) =>
+          page(snapshot.data));
 
-    if (mediaQueryData == null) {
-      mediaQueryData = MediaQuery.of(context);
-    }
+  // the future values needed for the page. add it to abstract page maybe
+  Widget page(Sequence sequence) {
     return Scaffold(
         appBar: WMSAppBar(this.widget.name).get(),
         body: Container(
             child: (Column(children: [
           Expanded(child: CameraView() /*top()*/),
-          Expanded(child: productView())
+          Expanded(child: productView(sequence.iterator.current))
         ]))),
         extendBodyBehindAppBar: true);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return futureBuilder();
   }
 
 /*
@@ -76,9 +82,8 @@ class _State extends State<CollectPage> {
             left: 0, top: 0 /*statusBarHeight*/, right: 0, bottom: 0));
   }
 */
-  Widget productView() {
-    var collectProduct = collectStore.collect.current;
-    return ProductView(collectProduct);
+  Widget productView(Product product) {
+    return ProductView(product);
   }
 
   void scan() {

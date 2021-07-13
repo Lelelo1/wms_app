@@ -1,3 +1,4 @@
+/*
 import 'package:flutter/material.dart';
 import 'package:wms_app/models/product.dart';
 import 'package:wms_app/stores/appStore.dart';
@@ -79,3 +80,4 @@ class _State extends State<PlockPageForwardList> {
         backgroundColor: Colors.green);
   }
 }
+*/

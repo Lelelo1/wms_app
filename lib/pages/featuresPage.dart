@@ -44,7 +44,7 @@ class _State extends State<FeaturesPage> {
         onTap: () => tapFeature(feature as Widget));
   }
 
-  void tapFeature(Widget to) {
+  void tapFeature(Widget to) async {
     Navigator.push(this.context, MaterialPageRoute(builder: (context) => to));
   }
 }

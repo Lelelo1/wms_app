@@ -4,15 +4,18 @@ import 'package:wms_app/remote/database/mockProductsSource.dart';
 
 // never interact directly with stores, services - always get them via dep
 
-class CollectStore {
+// consider having 'CollectStore' existing per
+
+class ProductRegistrationStore {
   List<Product> productItems;
-  Iterator<Product> collect;
 
   AbstractProductsSource productsSource = MockProductsSource();
 
-  CollectStore() {
-    productItems = productsSource.getProducts();
-    collect = productItems.iterator;
-    // create ISource and swap local mock, to remote mock and remote products, try catch
+  // sets up products for a new collection
+  Future<bool> setupCollection() async {
+    productItems = await productsSource.getProducts();
+    //collect = productItems.iterator;
+
+    return Future.value(null);
   }
 }
