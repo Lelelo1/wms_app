@@ -1,6 +1,6 @@
 import 'package:wms_app/models/sequence.dart';
-import 'package:wms_app/remote/database/abstractProductsSource.dart';
-import 'package:wms_app/remote/database/mockProductsSource.dart';
+import 'package:wms_app/remote/abstractProductsSource.dart';
+import 'package:wms_app/remote/mockProductsSource.dart';
 
 class WorkStore {
   AbstractProductsSource abstractSource = MockProductsSource();

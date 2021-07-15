@@ -1,6 +1,6 @@
 import 'package:mysql1/mysql1.dart';
 import 'package:wms_app/models/product.dart';
-import 'package:wms_app/remote/database/abstractProductsSource.dart';
+import 'package:wms_app/remote/abstractProductsSource.dart';
 import 'package:wms_app/secrets.dart';
 
 // https://pub.dev/packages/mysql1
@@ -50,4 +50,7 @@ class SQLQuery {
   static String barcodeNeeded =
       "SELECT DISTINCT `catalog_product_entity`.`entity_id` as 'entity_id' FROM `catalog_product_entity` WHERE `catalog_product_entity`.`entity_id` NOT IN (SELECT DISTINCT `entity_id` FROM `catalog_product_entity_varchar` WHERE `attribute_id` = '283') AND `catalog_product_entity`.`type_id` = 'simple' ORDER BY `catalog_product_entity`.`entity_id` DESC;";
   String shelfBarcodeRegistration = "";
+
+  static String productsFeminint =
+      "SELECT DISTINCT sku, ean_code, name, image FROM catalog_product_flat_14";
 }
