@@ -1,51 +1,38 @@
 //import 'package:flutter_test/flutter_test.dart';
-import 'dart:math';
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
+import 'package:mysql1/mysql1.dart';
 import 'package:wms_app/remote/productsSource.dart';
 
 // https://flutter.dev/docs/testing/integration-tests
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-/*
-  test("ssh_test_connection", () async {
-    SSH.openConnection();
-    var sshConnectionStatus = await SSH.connecting;
-    //print("connected to warehouse system: " + connected.toString());
-    expect(sshConnectionStatus, "session_connected");
-  });
-  */
+  MySqlConnection databaseConnection;
   test("database_test_connection", () async {
     //await SSH.connecting;
 
     ProductsSource.connect();
-    var databaseConnection = await ProductsSource.connecting;
-    var response = await databaseConnection.query(SQLQuery.productsFeminint);
-    print("recievied..");
-    print(response);
+    databaseConnection = await ProductsSource.connecting;
+    var result =
+        await databaseConnection.query("SELECT 'Something sweet'"); // do any
+    // Something sweet" is standard response (atleast in mysql): https://stackoverflow.com/questions/4957155/mysql-testing-connection-with-query
+    expect(result?.toList()[0]?.toList()[0] == "Something sweet", true);
+  });
 
+  test("database_test_products", () async {
+    //await SSH.connecting;
+    var response =
+        await databaseConnection.query(SQLQuery.productsFeminint); // do any
+    /*
     var results = response.toList();
     results.forEach((p) {
       print("name: " + p[2].toString());
     });
-
+    */
     expect(response != null, true);
   });
-/*
-  test("database_insert_barcode", () async {
-    //await SSH.connecting;
 
-    ProductsSource.connect();
-    var databaseConnection = await ProductsSource.connecting;
-
-    var results = await databaseConnection.query(SQLQuery.barcodeNeeded);
-    print("recievied..");
-    print(results);
-
-    expect(results != null, true);
-  });
-*/
+// "database_insert_barcode" eg
 
   /*
   testWidgets("failing test example", (WidgetTester tester) async {
@@ -54,4 +41,4 @@ void main() {
   */
 }
 
-// description in test methdo just logs to console. print logs red text outside the test methods
+// there is annoying red lines when starting VMServiceFlutterDriver and I have never understood how to get rid of them
