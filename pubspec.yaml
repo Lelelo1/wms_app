@@ -37,6 +37,7 @@ dependencies:
   flutter_simple_dependency_injection: ^1.0.4
   qr_code_scanner: ^0.3.5
   mysql1: ^0.17.1
+  reflectable: ^2.2.9
 
 dev_dependencies:
   flutter_test:
