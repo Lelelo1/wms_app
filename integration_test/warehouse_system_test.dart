@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mysql1/mysql1.dart';
 import 'package:wms_app/remote/productsSource.dart';
+import 'package:wms_app/remote/deserialization.dart';
 
 // https://flutter.dev/docs/testing/integration-tests
 void main() {
@@ -23,13 +24,11 @@ void main() {
     //await SSH.connecting;
     var response =
         await databaseConnection.query(SQLQuery.productsFeminint); // do any
-    /*
-    var results = response.toList();
-    results.forEach((p) {
-      print("name: " + p[2].toString());
-    });
-    */
-    expect(response != null, true);
+    var products = Deserialization.toProducts(response).take(80);
+
+    products.forEach((p) => print(p));
+
+    expect(products.length > 0, true);
   });
 
 // "database_insert_barcode" eg

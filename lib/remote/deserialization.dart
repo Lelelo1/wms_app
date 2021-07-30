@@ -1,20 +1,15 @@
-import 'package:flutter_driver/flutter_driver.dart';
+import 'package:mysql1/mysql1.dart';
 import 'package:wms_app/models/product.dart';
-import 'package:reflectable/reflectable.dart';
 
-class MyReflectable extends Reflectable {
-  const MyReflectable() : super(invokingCapability);
-}
+//
 
-const myReflectable = MyReflectable();
+class Deserialization {
+  static List<Product> toProducts(Results results) {
+    // I see no reason to error handle here, I'ts better if it crash so I get told directly
+    // when I (potentially) pass in wrong 'Results' object
 
-class deserialization {
-  static List<Product> ToProducts(Result result) {
-    var mirror = myReflectable.reflectType(Product);
-    print((Product).toString() +
-        " has " +
-        mirror.typeVariables.length.toString() +
-        " fields");
-    return null;
+    return results
+        .map((r) => new Product(r[0], r[1], r[2], r[3], r[4]))
+        .toList();
   }
 }

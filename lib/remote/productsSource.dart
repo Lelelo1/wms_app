@@ -50,7 +50,7 @@ class SQLQuery {
   static String barcodeNeeded =
       "SELECT DISTINCT `catalog_product_entity`.`entity_id` as 'entity_id' FROM `catalog_product_entity` WHERE `catalog_product_entity`.`entity_id` NOT IN (SELECT DISTINCT `entity_id` FROM `catalog_product_entity_varchar` WHERE `attribute_id` = '283') AND `catalog_product_entity`.`type_id` = 'simple' ORDER BY `catalog_product_entity`.`entity_id` DESC;";
   String shelfBarcodeRegistration = "";
-
+// int ean, int sku, String shelf, String name
   static String productsFeminint =
-      "SELECT DISTINCT sku, ean_code, name, image FROM catalog_product_flat_14";
+      "SELECT DISTINCT ean_code, sku, c2c_hyllplats, name, image FROM catalog_product_flat_14 LIMIT 28;";
 }
