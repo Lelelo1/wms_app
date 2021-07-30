@@ -24,9 +24,9 @@ void main() {
     //await SSH.connecting;
     var response =
         await databaseConnection.query(SQLQuery.productsFeminint); // do any
-    var products = Deserialization.toProducts(response).take(80);
+    var products = Deserialization.toProducts(response);
 
-    products.forEach((p) => print(p));
+    //products.forEach((p) => print(p));
 
     expect(products.length > 0, true);
   });
