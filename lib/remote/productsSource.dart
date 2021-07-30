@@ -1,6 +1,7 @@
 import 'package:mysql1/mysql1.dart';
 import 'package:wms_app/models/product.dart';
 import 'package:wms_app/remote/abstractProductsSource.dart';
+import 'package:wms_app/remote/deserialization.dart';
 import 'package:wms_app/secrets.dart';
 
 // https://pub.dev/packages/mysql1
@@ -21,23 +22,32 @@ class ProductsSource implements AbstractProductsSource {
         db: dbSecret.database);
 
     connecting = MySqlConnection.connect(settings);
-    connecting.whenComplete(() => connected = true);
+    // connecting.whenComplete(() => connected = true); ..?
   }
 
   @override
   Future<List<Product>> getProducts() async {
-    if (connected == false) {
-      print("You where trying to get products but " +
-          (ProductsSource).toString() +
-          " have not connected to warehouse system yet. Await the current " +
-          connecting.toString() +
-          " future first");
+    if (connecting == null) {
+      connect();
+    }
+    var connection = await connecting;
+
+    Results results;
+    try {
+      results = await connection.query(SQLQuery.productsFeminint);
+    } catch (exc) {
+      print("failed sql error of " +
+          SQLQuery.productsFeminint +
+          ". exc: " +
+          exc.toString());
+    }
+
+    if (results == null) {
       return null;
     }
 
-    var result = (await connecting).query(SQLQuery.barcodeNeeded);
-    // parse 'result' to products
-    return null;
+    // should result in empty products list when there are no items in the databse on that query
+    return Deserialization.toProducts(results);
   }
 }
 

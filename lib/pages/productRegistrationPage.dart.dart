@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:wms_app/models/product.dart';
 import 'package:wms_app/models/sequence.dart';
 import 'package:wms_app/pages/AbstractPage.dart';
+import 'package:wms_app/pages/loadingPage.dart';
 import 'package:wms_app/stores/appStore.dart';
 import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/views/cameraView.dart';
@@ -31,8 +31,12 @@ class _State extends State<ProductRegistrationPage> {
 
   FutureBuilder futureBuilder() => FutureBuilder<Sequence>(
       future: futureSequence,
-      builder: (BuildContext context, AsyncSnapshot snapshot) =>
-          page(snapshot.data));
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (snapshot.data == ConnectionState.waiting) {
+          return LoadingPage();
+        }
+        return page(snapshot.data);
+      });
 
   Widget page(Sequence sequence) {
     return Scaffold(

@@ -47,11 +47,8 @@ class ProductView extends StatelessWidget {
   Widget topDetails() {
     return Card(
         child: Container(
-            child: Column(children: [
-              shelfWidget(),
-              SizedBox(height: 10),
-              numberWidget()
-            ]),
+            child: Column(
+                children: [shelfWidget(), SizedBox(height: 10), skuWidget()]),
             padding: EdgeInsets.only(left: 10, top: 10, right: 10, bottom: 10)),
         color: Color.fromARGB(210, 209, 251, 255),
         margin: EdgeInsets.only(left: 10, top: 10, right: 10, bottom: 0));
@@ -99,8 +96,8 @@ class ProductView extends StatelessWidget {
     return Text(product?.shelf, style: TextStyle(fontSize: 22));
   }
 
-  Widget numberWidget() {
-    return Text(product?.number.toString(),
+  Widget skuWidget() {
+    return Text(product?.sku.toString(),
         style: TextStyle(fontSize: 38), textAlign: TextAlign.center);
   }
 

@@ -5,6 +5,7 @@ class Sequence {
   Iterator<Product> iterator;
 
   Sequence(List<Product> products) {
+    print("sequence produtcs: " + products.toString());
     iterator = products.iterator;
     iterator.moveNext();
   }

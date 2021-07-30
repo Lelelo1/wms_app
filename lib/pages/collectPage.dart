@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wms_app/models/product.dart';
 import 'package:wms_app/models/sequence.dart';
+import 'package:wms_app/pages/loadingPage.dart';
 import 'package:wms_app/stores/appStore.dart';
 import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/views/cameraView.dart';
@@ -31,8 +32,13 @@ class _State extends State<CollectPage> {
   // alls pages should have future builder, more or less
   FutureBuilder futureBuilder() => FutureBuilder<Sequence>(
       future: futureSequence,
-      builder: (BuildContext context, AsyncSnapshot<Sequence> snapshot) =>
-          page(snapshot.data));
+      builder: (BuildContext context, AsyncSnapshot<Sequence> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          // https://stackoverflow.com/questions/52847534/flutter-futurebuilder-returning-null-error-triggered
+          return LoadingPage();
+        }
+        return page(snapshot.data);
+      });
 
   // the future values needed for the page. add it to abstract page maybe
   Widget page(Sequence sequence) {

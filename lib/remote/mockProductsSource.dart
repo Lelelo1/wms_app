@@ -23,6 +23,7 @@ class MockProductsSource implements AbstractProductsSource {
 
   MockProductsSource() {
     // private/protected: MockProductsSource._()
+    /*
     _products = [
       Product("Fantasie Swim", "A8", 19282718, 3, 12),
       Product("Fantasy baddräckt", "A9", 3923181, 3, 35),
@@ -33,6 +34,7 @@ class MockProductsSource implements AbstractProductsSource {
       Product("Palm Vally", "D1", 1223874, 2, null),
       Product("Mönstrad överdel", "D3", 1236483, 2, 21)
     ];
+    */
   }
 
   @override
