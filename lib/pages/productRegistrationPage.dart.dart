@@ -32,7 +32,7 @@ class _State extends State<ProductRegistrationPage> {
   FutureBuilder futureBuilder() => FutureBuilder<Sequence>(
       future: futureSequence,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
-        if (snapshot.data == ConnectionState.waiting) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
           return LoadingPage();
         }
         return page(snapshot.data);
