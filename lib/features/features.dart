@@ -1,15 +1,16 @@
 // ui test for 'featurePage', potentially use some dependency inject to keep pages, and mock it
 // features.. should given/registered, and not contain widget imports..
 import 'package:flutter/material.dart';
-import 'package:wms_app/pages/AbstractPage.dart';
+import 'package:wms_app/pages/abstractPage.dart';
 import 'package:wms_app/pages/collectPage.dart';
+import 'package:wms_app/pages/countingPage.dart';
 import 'package:wms_app/pages/productRegistrationPage.dart.dart';
 
 class Features {
   static List<AbstractPage> _features = [
     /*Feature("Plock-FramåtLista", PlockPageForwardList()),*/
     CollectPage("Plock"),
-    DefaultPage("Inventering"),
+    CountingPage("Inventering"),
     DefaultPage("Tidsstatistik"),
     DefaultPage("Mätning"),
     ProductRegistrationPage(

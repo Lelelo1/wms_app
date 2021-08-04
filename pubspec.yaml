@@ -37,6 +37,10 @@ dependencies:
   flutter_simple_dependency_injection: ^1.0.4
   qr_code_scanner: ^0.3.5
   mysql1: ^0.17.1
+  flutter_beep: ^0.3.0
+  flutter_vibrate: ^1.1.0
+  audioplayers: ^0.17.4
+
 
 dev_dependencies:
   flutter_test:
@@ -49,7 +53,7 @@ dev_dependencies:
 flutter: 
   assets: 
   - assets/images/
-  
+  - assets/sounds/
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

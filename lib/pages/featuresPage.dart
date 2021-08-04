@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wms_app/features/features.dart';
-import 'package:wms_app/pages/AbstractPage.dart';
+import 'package:wms_app/pages/abstractPage.dart';
 
 class FeaturesPage extends StatefulWidget implements AbstractPage {
   @override
