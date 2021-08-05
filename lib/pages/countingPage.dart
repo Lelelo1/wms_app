@@ -10,14 +10,14 @@ import 'package:wms_app/widgets/wmsAppBar.dart';
 
 import 'abstractPage.dart';
 
-class CollectPage extends StatefulWidget implements AbstractPage {
+class CountingPage extends StatefulWidget implements AbstractPage {
   @override
   _State createState() => _State();
   final String name;
-  CollectPage(this.name);
+  CountingPage(this.name);
 }
 
-class _State extends State<CollectPage> {
+class _State extends State<CountingPage> {
   WorkStore workStore = AppStore.injector.get<WorkStore>();
   MediaQueryData mediaQueryData;
 

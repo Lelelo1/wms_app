@@ -2,6 +2,7 @@
     package="com.example.wms_app">
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
    <application
         android:label="WMS App"
         android:icon="@mipmap/ic_launcher">
