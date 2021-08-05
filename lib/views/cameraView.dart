@@ -58,19 +58,23 @@ class _State extends State<CameraView> {
     });
     controller.scannedDataStream.listen((scanData) async {
       if (this.ean != scanData?.code) {
-        // the 'false' has double pip
         bool canVibrate = await Vibrate.canVibrate;
-        if (canVibrate) {
-          Vibrate.feedback(FeedbackType.success);
-        }
-        //FlutterBeep.beep(); // (bad sounds)
 
-        // home driectory is 'assets/' for some reason despite having 'assets/sounds/' in pubspec.yaml
-        // it is not the same as with the images
         audioCache.play(
             "sounds/scanner_beep.mp3"); // (should be able to use waw also)
         this.ean = scanData?.code;
         print("scanData: " + this.ean);
+
+        if (canVibrate) {
+          Vibrate.feedback(FeedbackType
+              .success); // vibration is made first despite called, but feels ok
+        }
+
+        //FlutterBeep.beep(); // (bad sounds)
+
+        // home driectory is 'assets/' for some reason despite having 'assets/sounds/' in pubspec.yaml
+        // it is not the same as with the images
+
       }
 
       /*
