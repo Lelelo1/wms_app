@@ -37,6 +37,11 @@ class _State extends State<CountingPage> {
           // https://stackoverflow.com/questions/52847534/flutter-futurebuilder-returning-null-error-triggered
           return LoadingPage();
         }
+
+        if (this.mediaQueryData == null) {
+          this.mediaQueryData = MediaQuery.of(context);
+        }
+
         return page(snapshot.data);
       });
 
@@ -46,8 +51,8 @@ class _State extends State<CountingPage> {
         appBar: WMSAppBar(this.widget.name).get(),
         body: Container(
             child: (Column(children: [
-          Expanded(child: CameraView() /*top()*/),
-          Expanded(child: productView(sequence.iterator.current))
+          Expanded(child: CameraView()),
+          Expanded(child: header())
         ]))),
         extendBodyBehindAppBar: true);
   }
@@ -57,37 +62,14 @@ class _State extends State<CountingPage> {
     return futureBuilder();
   }
 
-/*
-  Widget top() {
-    var topHeightFactor = 0.31;
-    var topHeight = mediaQueryData.size.height * topHeightFactor;
-    var statusBarHeight = mediaQueryData.padding.top;
-
-    var buttonWidthFactor = 0.65;
-    var buttonWidth = mediaQueryData.size.width * buttonWidthFactor;
-    var buttonHeightFactor = 0.08;
-    var buttonHeight = mediaQueryData.size.height * buttonHeightFactor;
-
+  Widget header([String shelf = "D-3-2-C"]) {
     return Container(
-        child: Center(
-          child: SizedBox(
-            child: MaterialButton(
-                child: Icon(Icons.qr_code),
-                onPressed: scan,
-                color: Color.fromARGB(180, 133, 57, 227),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)),
-                elevation: 0),
-            width: buttonWidth,
-            height: buttonHeight,
-          ),
-        ),
-        color: Colors.white,
-        height: topHeight,
-        margin: EdgeInsets.only(
-            left: 0, top: 0 /*statusBarHeight*/, right: 0, bottom: 0));
+        child: Center(child: Text(shelf, style: TextStyle(fontSize: 30))),
+        color: Colors.white);
   }
-*/
+
+  // some sort of view that shows db sku suggestions, from image local sku.
+
   Widget productView(Product product) {
     return ProductView(product);
   }
