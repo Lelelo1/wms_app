@@ -1,11 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:flutter_beep/flutter_beep.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:audioplayers/audioplayers.dart';
-
+import 'package:qr_code_scanner/qr_code_scanner.dart';
 // both unfortunetly uses deprecated api underneath
 // https://pub.dev/packages/flutter_beep
 // https://pub.dev/packages/flutter_vibrate
@@ -38,6 +37,7 @@ class _State extends State<CameraView> {
         : 300.0;
     // To ensure the Scanner view is properly sizes after rotation
     // we need to listen for Flutter SizeChanged notification and update controller
+
     return QRView(
       key: qrKey,
       onQRViewCreated: _onQRViewCreated,
@@ -85,6 +85,7 @@ class _State extends State<CameraView> {
   }
 
   // to get hot reload to work
+
   @override
   void reassemble() {
     super.reassemble();
