@@ -7,6 +7,7 @@ import 'package:wms_app/remote/deserialization.dart';
 
 // https://flutter.dev/docs/testing/integration-tests
 void main() {
+  // from deprecated package: https://pub.dev/packages/integration_test
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   MySqlConnection databaseConnection;
   test("database_test_connection", () async {

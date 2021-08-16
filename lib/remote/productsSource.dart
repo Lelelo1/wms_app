@@ -13,13 +13,12 @@ class ProductsSource implements AbstractProductsSource {
   // https://stackoverflow.com/questions/55785581/socketexception-os-error-connection-refused-errno-111-in-flutter-using-djan
   // such permission is granted on install time: https://developer.android.com/training/basics/network-ops/connecting
   static void connect() {
-    var dbSecret = Secrets.mySQL;
     var settings = new ConnectionSettings(
-        host: dbSecret.url,
-        port: dbSecret.port,
-        user: dbSecret.user,
-        password: dbSecret.pass,
-        db: dbSecret.database);
+        host: MySql.host,
+        port: MySql.port,
+        user: MySql.user,
+        password: MySql.pass,
+        db: MySql.db);
 
     connecting = MySqlConnection.connect(settings);
     // connecting.whenComplete(() => connected = true); ..?
