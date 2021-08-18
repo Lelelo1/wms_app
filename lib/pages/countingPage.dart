@@ -19,7 +19,8 @@ class CountingPage extends StatefulWidget implements AbstractPage {
 
 class _State extends State<CountingPage> {
   WorkStore workStore = AppStore.injector.get<WorkStore>();
-  MediaQueryData mediaQueryData;
+  //MediaQueryData mediaQueryData;
+  Size cameraViewSize;
 
   Future<Sequence> futureSequence;
 
@@ -27,6 +28,12 @@ class _State extends State<CountingPage> {
   void initState() {
     super.initState();
     futureSequence = workStore.getCollection();
+  }
+
+  void setSizes(BuildContext context) {
+    var screenSize = MediaQuery.of(this.context).size;
+    var cameraViewHeight = screenSize.height * 0.5;
+    this.cameraViewSize = Size(screenSize.width, cameraViewHeight);
   }
 
   // alls pages should have future builder, more or less
@@ -38,8 +45,8 @@ class _State extends State<CountingPage> {
           return LoadingPage();
         }
 
-        if (this.mediaQueryData == null) {
-          this.mediaQueryData = MediaQuery.of(context);
+        if (this.cameraViewSize == null) {
+          this.cameraViewSize = MediaQuery.of(context).size;
         }
 
         return page(snapshot.data);
@@ -50,10 +57,8 @@ class _State extends State<CountingPage> {
     return Scaffold(
         appBar: WMSAppBar(this.widget.name).get(),
         body: Container(
-            child: (Column(children: [
-          Expanded(child: CameraView()),
-          Expanded(child: header())
-        ]))),
+            child:
+                (Column(children: [CameraView(), Expanded(child: header())]))),
         extendBodyBehindAppBar: true);
   }
 

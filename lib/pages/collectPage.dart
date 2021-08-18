@@ -19,7 +19,6 @@ class CollectPage extends StatefulWidget implements AbstractPage {
 
 class _State extends State<CollectPage> {
   WorkStore workStore = AppStore.injector.get<WorkStore>();
-  MediaQueryData mediaQueryData;
 
   Future<Sequence> futureSequence;
 
@@ -37,6 +36,7 @@ class _State extends State<CollectPage> {
           // https://stackoverflow.com/questions/52847534/flutter-futurebuilder-returning-null-error-triggered
           return LoadingPage();
         }
+
         return page(snapshot.data);
       });
 
@@ -46,7 +46,7 @@ class _State extends State<CollectPage> {
         appBar: WMSAppBar(this.widget.name).get(),
         body: Container(
             child: (Column(children: [
-          Expanded(child: CameraView() /*top()*/),
+          CameraView(),
           Expanded(child: productView(sequence.iterator.current))
         ]))),
         extendBodyBehindAppBar: true);
