@@ -12,7 +12,13 @@ import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class CameraView extends StatefulWidget {
   final Size size;
-  CameraView([this.size]);
+  void Function(String barcode) onScanned;
+  bool _isScanning;
+  CameraView(this.onScanned, [this.size]);
+
+  void startScan() {
+    this._isScanning = true;
+  }
 
   @override
   State<StatefulWidget> createState() => _State(this.size);
@@ -22,7 +28,6 @@ class _State extends State<CameraView> {
   Size size;
   _State([this.size]);
 
-  Barcode result;
   QRViewController controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
 
@@ -72,41 +77,30 @@ class _State extends State<CameraView> {
         height: this.size.height);
   }
 
-  String ean;
+  String barcode;
   void _onQRViewCreated(QRViewController controller) {
-    setState(() {
-      controller = controller;
-    });
-    controller.scannedDataStream.listen((Barcode data) async {
-      bool nullNotChanged = this.ean == null && data?.code == null;
-      bool valueNotChanged = this.ean == data?.code;
-      print("scanData: " + data?.code);
-      //controller.flipCamera();
+    if (this.controller == null) {
+      this.controller = controller;
+    }
 
-      /*
-      if (nullNotChanged || valueNotChanged) {
-        if (!valueNotChanged) {
-          this.ean = data?.code;
-        }
+    controller.scannedDataStream.listen((Barcode data) async {
+      if (this.widget._isScanning == false) {
         return;
       }
 
-      this.ean = data?.code;
-
-      bool canVibrate = await Vibrate.canVibrate;
-      audioCache
-          .play("sounds/scanner_beep.mp3"); // (should be able to use waw also)
-      print("newScanData: " + this.ean);
-      if (canVibrate) {
-        Vibrate.feedback(FeedbackType
-            .success); // vibration is made first despite called, but feels ok
+      if (this.barcode != data?.code) {
+        bool canVibrate = await Vibrate.canVibrate;
+        audioCache.play(
+            "sounds/scanner_beep.mp3"); // (should be able to use waw also)
+        print("newScanData: " + this.barcode);
+        if (canVibrate) {
+          Vibrate.feedback(FeedbackType
+              .success); // vibration is made first despite called, but feels ok
+        }
+        this.widget.onScanned(data?.code);
+        this.widget._isScanning = false;
+        this.barcode = null;
       }
-      /*
-      setState(() {
-        this.widget.result = scanData;
-      });
-      */
-      */
     });
   }
 

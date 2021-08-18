@@ -46,7 +46,7 @@ class _State extends State<CollectPage> {
         appBar: WMSAppBar(this.widget.name).get(),
         body: Container(
             child: (Column(children: [
-          CameraView(),
+          CameraView(null),
           Expanded(child: productView(sequence.iterator.current))
         ]))),
         extendBodyBehindAppBar: true);

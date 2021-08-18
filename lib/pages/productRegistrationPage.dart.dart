@@ -43,7 +43,7 @@ class _State extends State<ProductRegistrationPage> {
         appBar: WMSAppBar(this.widget.name).get(),
         body: Container(
             child: (Column(children: [
-          CameraView(),
+          CameraView(null),
           Expanded(child: ProductView(sequence.iterator.current))
         ]))),
         extendBodyBehindAppBar: true);

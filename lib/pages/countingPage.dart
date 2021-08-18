@@ -32,7 +32,7 @@ class _State extends State<CountingPage> {
 
   void setSizes(BuildContext context) {
     var screenSize = MediaQuery.of(this.context).size;
-    var cameraViewHeight = screenSize.height * 0.5;
+    var cameraViewHeight = screenSize.height * 0.2;
     this.cameraViewSize = Size(screenSize.width, cameraViewHeight);
   }
 
@@ -52,13 +52,19 @@ class _State extends State<CountingPage> {
         return page(snapshot.data);
       });
 
+  CameraView cameraView;
+
   // the future values needed for the page. add it to abstract page maybe
   Widget page(Sequence sequence) {
+    var zise = this.cameraViewSize;
+    print("zise: " + zise.toString());
+    cameraView = CameraView((String barcode) {
+      print("Received barcode from scan: " + barcode);
+    }, zise);
     return Scaffold(
         appBar: WMSAppBar(this.widget.name).get(),
         body: Container(
-            child:
-                (Column(children: [CameraView(), Expanded(child: header())]))),
+            child: (Column(children: [cameraView, header(), scanButton()]))),
         extendBodyBehindAppBar: true);
   }
 
@@ -71,6 +77,15 @@ class _State extends State<CountingPage> {
     return Container(
         child: Center(child: Text(shelf, style: TextStyle(fontSize: 30))),
         color: Colors.white);
+  }
+
+  Widget scanButton() {
+    return ElevatedButton(onPressed: pressedScanButton, child: Text("Scanna"));
+  }
+
+  void pressedScanButton() {
+    print("started scan");
+    cameraView?.startScan();
   }
 
   // some sort of view that shows db sku suggestions, from image local sku.
