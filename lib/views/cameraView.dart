@@ -36,7 +36,6 @@ class _State extends State<CameraView> {
   void setSizes(BuildContext context) {
     var screenSize = MediaQuery.of(context).size;
     var cameraDefaultProportionSize = 0.5;
-    print("screenSizeWidth: " + screenSize.width.toString());
     this.size =
         Size(screenSize.width, screenSize.height * cameraDefaultProportionSize);
   }

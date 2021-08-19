@@ -32,7 +32,7 @@ class _State extends State<CountingPage> {
 
   void setSizes(BuildContext context) {
     var screenSize = MediaQuery.of(this.context).size;
-    var cameraViewHeight = screenSize.height * 0.2;
+    var cameraViewHeight = screenSize.height * 0.5;
     this.cameraViewSize = Size(screenSize.width, cameraViewHeight);
   }
 
@@ -46,7 +46,7 @@ class _State extends State<CountingPage> {
         }
 
         if (this.cameraViewSize == null) {
-          this.cameraViewSize = MediaQuery.of(context).size;
+          setSizes(context);
         }
 
         return page(snapshot.data);
@@ -56,11 +56,9 @@ class _State extends State<CountingPage> {
 
   // the future values needed for the page. add it to abstract page maybe
   Widget page(Sequence sequence) {
-    var zise = this.cameraViewSize;
-    print("zise: " + zise.toString());
     cameraView = CameraView((String barcode) {
       print("Received barcode from scan: " + barcode);
-    }, zise);
+    }, this.cameraViewSize);
     return Scaffold(
         appBar: WMSAppBar(this.widget.name).get(),
         body: Container(
