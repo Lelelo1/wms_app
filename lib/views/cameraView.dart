@@ -13,11 +13,11 @@ import 'package:qr_code_scanner/qr_code_scanner.dart';
 class CameraView extends StatefulWidget {
   final Size size;
   void Function(String barcode) onScanned;
-  bool _isScanning;
+  String barcode;
   CameraView(this.onScanned, [this.size]);
 
   void startScan() {
-    this._isScanning = true;
+    this.barcode = null;
   }
 
   @override
@@ -76,29 +76,27 @@ class _State extends State<CameraView> {
         height: this.size.height);
   }
 
-  String barcode;
   void _onQRViewCreated(QRViewController controller) {
     if (this.controller == null) {
       this.controller = controller;
     }
 
     controller.scannedDataStream.listen((Barcode data) async {
-      if (this.widget._isScanning == false) {
-        return;
+      bool isSameItem = this.widget.barcode == data?.code;
+      bool isScanRequested = this.widget.barcode == null;
+      if (isSameItem || isScanRequested == false) {
+        return; // manual button tap required always to scan new items
       }
+      this.widget.barcode = data?.code;
 
-      if (this.barcode != data?.code) {
-        bool canVibrate = await Vibrate.canVibrate;
-        audioCache.play(
-            "sounds/scanner_beep.mp3"); // (should be able to use waw also)
-        print("newScanData: " + this.barcode);
-        if (canVibrate) {
-          Vibrate.feedback(FeedbackType
-              .success); // vibration is made first despite called, but feels ok
-        }
-        this.widget.onScanned(data?.code);
-        this.widget._isScanning = false;
-        this.barcode = null;
+      this.widget.onScanned(this.widget.barcode);
+      bool canVibrate = await Vibrate.canVibrate;
+      audioCache
+          .play("sounds/scanner_beep.mp3"); // (should be able to use waw also)
+      print("newScanData: " + this.widget.barcode);
+      if (canVibrate) {
+        Vibrate.feedback(FeedbackType
+            .success); // vibration is made first despite called, but feels ok
       }
     });
   }
