@@ -55,9 +55,14 @@ class _State extends State<CountingPage> {
   CameraView cameraView;
 
   // the future values needed for the page. add it to abstract page maybe
+  int count = 0;
   Widget page(Sequence sequence) {
     cameraView = CameraView((String barcode) {
-      print("Received barcode from scan: " + barcode);
+      this.count++;
+      print("Received barcode from scan: " +
+          barcode +
+          ". times total scanned: " +
+          this.count.toString());
     }, this.cameraViewSize);
     return Scaffold(
         appBar: WMSAppBar(this.widget.name).get(),
@@ -81,9 +86,17 @@ class _State extends State<CountingPage> {
     return ElevatedButton(onPressed: pressedScanButton, child: Text("Scanna"));
   }
 
-  void pressedScanButton() {
+  bool cooldown = false;
+  void pressedScanButton() async {
+    if (this.cooldown) {
+      return;
+    }
+    this.cooldown = true;
     print("started scan");
     cameraView?.startScan();
+    Future.delayed(Duration(milliseconds: 1000), () {
+      this.cooldown = false;
+    });
   }
 
   // some sort of view that shows db sku suggestions, from image local sku.
