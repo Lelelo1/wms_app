@@ -24,6 +24,8 @@ class _State extends State<CountingPage> {
 
   Future<Sequence> futureSequence;
 
+  List<String> scannedBarcodes = [];
+
   @override
   void initState() {
     super.initState();
@@ -56,18 +58,45 @@ class _State extends State<CountingPage> {
   int totalTimesScanned = 0;
   // the future values needed for the page. add it to abstract page maybe
   Widget page(Sequence sequence) {
-    cameraView = CameraView((String barcode) {
-      totalTimesScanned++;
-      print("scanned: " +
-          barcode +
-          ", totalTimesScanned: " +
-          totalTimesScanned.toString());
-    }, this.cameraViewSize);
+    cameraView = CameraView(this.cameraViewSize);
     return Scaffold(
         appBar: WMSAppBar(this.widget.name).get(),
         body: Container(
-            child: (Column(children: [cameraView, header(), scanButton()]))),
+            child: (Column(children: [
+          cameraView,
+          header(),
+          scanButton(),
+          Column(
+            children: this.scannedProducts(),
+          )
+        ]))),
         extendBodyBehindAppBar: true);
+  }
+
+  void setScannedBarcodesState(String barcode) {
+    print("huehuehue");
+    this.scannedBarcodes.add(barcode);
+    setState(() {
+      print("scannedBarcodes count: " + scannedBarcodes?.length.toString());
+    });
+  }
+
+  List<Widget> scannedProducts() {
+    if (this.scannedBarcodes?.length == 0) {
+      return [Container()];
+    }
+    var occurrences = occurence(this.scannedBarcodes);
+    return occurence(this.scannedBarcodes)
+        .keys
+        .map((b) => Text(b + ": " + occurrences[b].toString()))
+        .toList();
+  }
+
+  // https://stackoverflow.com/questions/55579906/how-to-count-items-occurence-in-a-list
+  Map occurence<T>(List<T> list) {
+    var map = Map();
+    list.forEach((x) => map[x] = !map.containsKey(x) ? (1) : (map[x] + 1));
+    return map;
   }
 
   @override
@@ -91,7 +120,20 @@ class _State extends State<CountingPage> {
     return ProductView(product);
   }
 
+  int barcodes = 0;
   void scan() {
-    cameraView?.startScan();
+    //barcodes++;
+    // this.recieveBarcode(barcodes.toString()); // works
+    //cameraView?.startScan();
+  }
+
+  void recieveBarcode(String barcode) {
+    print("received barcode: " + barcode);
+    totalTimesScanned++;
+    print("scanned: " +
+        barcode +
+        ", totalTimesScanned: " +
+        totalTimesScanned.toString());
+    setScannedBarcodesState(barcode);
   }
 }
