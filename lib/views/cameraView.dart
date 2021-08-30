@@ -12,14 +12,20 @@ class CameraView extends StatefulWidget {
   CameraView(this.size);
   @override
   _State createState() => _State();
+  Future<CameraController> futureController;
+
+  CameraImage currentImage;
+  CameraImage takePhoto() => this.currentImage;
+
+  void imageStream(CameraImage image) {}
 }
 
 class _State extends State<CameraView> {
   @override
   void initState() {
     super.initState();
-    if (this.futureController == null) {
-      this.futureController = setController();
+    if (this.widget.futureController == null) {
+      this.widget.futureController = setController();
     }
   }
 
@@ -32,6 +38,7 @@ class _State extends State<CameraView> {
 
     var controller = CameraController(cameras[0], ResolutionPreset.max);
     await controller.initialize();
+    controller.startImageStream(this.widget.imageStream);
     return controller;
   }
 
@@ -68,9 +75,8 @@ class _State extends State<CameraView> {
   @override
   Widget build(BuildContext context) => futureBuilder();
 
-  Future<CameraController> futureController;
   FutureBuilder futureBuilder() => FutureBuilder<CameraController>(
-      future: futureController,
+      future: this.widget.futureController,
       builder:
           (BuildContext context, AsyncSnapshot<CameraController> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {

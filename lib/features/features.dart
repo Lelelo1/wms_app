@@ -6,6 +6,7 @@ import 'package:wms_app/pages/collectPage.dart';
 import 'package:wms_app/pages/countingPage.dart';
 import 'package:wms_app/pages/productRegistrationPage.dart.dart';
 
+// move out, and remove featre folder..
 class Features {
   static List<AbstractPage> _features = [
     /*Feature("Plock-FramåtLista", PlockPageForwardList()),*/
