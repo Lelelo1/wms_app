@@ -14,10 +14,13 @@ class CameraView extends StatefulWidget {
   _State createState() => _State();
   Future<CameraController> futureController;
 
-  CameraImage currentImage;
-  CameraImage takePhoto() => this.currentImage;
+  CameraImage _currentImage;
+  CameraImage takePhoto() => this._currentImage;
 
-  void imageStream(CameraImage image) {}
+  void imageStream(CameraImage image) {
+    //print("imageStream format: " + image?.format.toString());
+    this._currentImage = image;
+  }
 }
 
 class _State extends State<CameraView> {

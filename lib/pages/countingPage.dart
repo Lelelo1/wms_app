@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wms_app/models/product.dart';
 import 'package:wms_app/models/sequence.dart';
 import 'package:wms_app/pages/loadingPage.dart';
+import 'package:wms_app/services/visionService.dart';
 import 'package:wms_app/stores/appStore.dart';
 import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/views/cameraView.dart';
@@ -25,6 +26,7 @@ class _State extends State<CountingPage> {
   Future<Sequence> futureSequence;
 
   List<String> scannedBarcodes = [];
+  bool showDialog = false;
 
   @override
   void initState() {
@@ -61,16 +63,24 @@ class _State extends State<CountingPage> {
     cameraView = CameraView(this.cameraViewSize);
     return Scaffold(
         appBar: WMSAppBar(this.widget.name).get(),
-        body: Container(
-            child: (Column(children: [
-          cameraView,
-          header(),
-          scanButton(),
-          Column(
-            children: this.scannedProducts(),
-          )
-        ]))),
+        body: this.showDialog ? dialog() : content(),
         extendBodyBehindAppBar: true);
+  }
+
+  Widget content() {
+    return Container(
+        child: (Column(children: [
+      cameraView,
+      header(),
+      scanButton(),
+      Column(
+        children: this.scannedProducts(),
+      )
+    ])));
+  }
+
+  Widget dialog() {
+    return AlertDialog(title: Text("this is title text"));
   }
 
   void setScannedBarcodesState(String barcode) {
@@ -120,11 +130,27 @@ class _State extends State<CountingPage> {
     return ProductView(product);
   }
 
-  int barcodes = 0;
-  void scan() {
-    //barcodes++;
-    // this.recieveBarcode(barcodes.toString()); // works
-    //cameraView?.startScan();
+  void scan() async {
+    var image = this.cameraView.takePhoto();
+    setState(() {
+      this.showDialog = true;
+    });
+    /*
+    if (image == null) {
+      // something might have gone in the image stream inside 'CameraVew'
+      print("can't 'takePhoto' image was null");
+      return;
+    }
+
+    String barcode;
+    try {
+      barcode = await VisionService.getInstance().analyzeBarcode(image, 0);
+    }
+    on Exception catch(e) {
+      
+    }
+    print("scanned barcode: " + barcode.toString());
+    */
   }
 
   void recieveBarcode(String barcode) {
