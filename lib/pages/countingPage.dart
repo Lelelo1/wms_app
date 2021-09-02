@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:wms_app/models/product.dart';
 import 'package:wms_app/models/sequence.dart';
 import 'package:wms_app/pages/loadingPage.dart';
 import 'package:wms_app/services/visionService.dart';
 import 'package:wms_app/stores/appStore.dart';
 import 'package:wms_app/stores/workStore.dart';
+import 'package:wms_app/utils.dart';
 import 'package:wms_app/views/cameraView.dart';
 import 'package:wms_app/views/productView.dart';
 import 'package:wms_app/widgets/wmsAppBar.dart';
-
 import 'abstractPage.dart';
 
 class CountingPage extends StatefulWidget implements AbstractPage {
@@ -26,7 +27,6 @@ class _State extends State<CountingPage> {
   Future<Sequence> futureSequence;
 
   List<String> scannedBarcodes = [];
-  bool showDialog = false;
 
   @override
   void initState() {
@@ -63,7 +63,7 @@ class _State extends State<CountingPage> {
     cameraView = CameraView(this.cameraViewSize);
     return Scaffold(
         appBar: WMSAppBar(this.widget.name).get(),
-        body: this.showDialog ? dialog() : content(),
+        body: content(),
         extendBodyBehindAppBar: true);
   }
 
@@ -77,18 +77,6 @@ class _State extends State<CountingPage> {
         children: this.scannedProducts(),
       )
     ])));
-  }
-
-  Widget dialog() {
-    return AlertDialog(title: Text("this is title text"));
-  }
-
-  void setScannedBarcodesState(String barcode) {
-    print("huehuehue");
-    this.scannedBarcodes.add(barcode);
-    setState(() {
-      print("scannedBarcodes count: " + scannedBarcodes?.length.toString());
-    });
   }
 
   List<Widget> scannedProducts() {
@@ -132,9 +120,11 @@ class _State extends State<CountingPage> {
 
   void scan() async {
     var image = this.cameraView.takePhoto();
-    setState(() {
-      this.showDialog = true;
-    });
+    var barcode = await VisionService.getInstance()
+        .analyzeBarcode(ImageUtils.toAbstractImage(image));
+
+    print("got barcode: " + barcode);
+
     /*
     if (image == null) {
       // something might have gone in the image stream inside 'CameraVew'
@@ -151,15 +141,5 @@ class _State extends State<CountingPage> {
     }
     print("scanned barcode: " + barcode.toString());
     */
-  }
-
-  void recieveBarcode(String barcode) {
-    print("received barcode: " + barcode);
-    totalTimesScanned++;
-    print("scanned: " +
-        barcode +
-        ", totalTimesScanned: " +
-        totalTimesScanned.toString());
-    setScannedBarcodesState(barcode);
   }
 }
