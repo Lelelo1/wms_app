@@ -14,6 +14,8 @@ class Utils {
   static bool hasValue<T>(T value) {
     return value != null;
   }
+
+  static bool isNullOrEmpty(String text) => text == null || text == "";
 }
 
 class ImageUtils {

@@ -70,7 +70,7 @@ class _State extends State<CountingPage> {
   Widget content() {
     return Container(
         child: (Column(children: [
-      cameraView,
+      cameraView, // camera view part of page and recontructed on 'scannedProducts' state change
       header(),
       scanButton(),
       Column(
@@ -83,6 +83,7 @@ class _State extends State<CountingPage> {
     if (this.scannedBarcodes?.length == 0) {
       return [Container()];
     }
+
     var occurrences = occurence(this.scannedBarcodes);
     return occurence(this.scannedBarcodes)
         .keys
@@ -119,27 +120,27 @@ class _State extends State<CountingPage> {
   }
 
   void scan() async {
-    var image = this.cameraView.takePhoto();
+    var image = CameraViewController.currentImage;
+    if (image == null) {
+      print(
+          "image was null, maybe it is not possible to take images this fast!");
+      return;
+    }
     var barcode = await VisionService.getInstance()
         .analyzeBarcode(ImageUtils.toAbstractImage(image));
 
-    print("got barcode: " + barcode);
-
-    /*
-    if (image == null) {
-      // something might have gone in the image stream inside 'CameraVew'
-      print("can't 'takePhoto' image was null");
+    if (Utils.isNullOrEmpty(barcode)) {
       return;
     }
 
-    String barcode;
-    try {
-      barcode = await VisionService.getInstance().analyzeBarcode(image, 0);
-    }
-    on Exception catch(e) {
-      
-    }
-    print("scanned barcode: " + barcode.toString());
-    */
+    print("got barcode: " + barcode);
+
+    CameraViewController.scanningSuccessfull();
+
+    setState(() {
+      this.scannedBarcodes = [...this.scannedBarcodes, barcode];
+    });
+
+    // need error handling...
   }
 }
