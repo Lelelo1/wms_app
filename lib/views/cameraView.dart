@@ -44,10 +44,11 @@ class CameraViewController {
 
   static AudioCache _audioCache;
   static bool _canVibrate;
-  static void scanningSuccessfull() async {
+  static Future<void> scanningSuccessfull() async {
     if (_audioCache == null) {
       _audioCache = AudioCache();
-      _audioCache.fixedPlayer = AudioPlayer();
+      // low latency mode allows fast and immedite beeps: https://stackoverflow.com/questions/59610504/flutter-audioplayers-delay
+      _audioCache.fixedPlayer = AudioPlayer(mode: PlayerMode.LOW_LATENCY);
       _audioCache.fixedPlayer.setVolume(0);
     }
 
@@ -55,9 +56,11 @@ class CameraViewController {
       _canVibrate = await Vibrate.canVibrate;
     }
 
+    /*
     if (_canVibrate) {
       Vibrate.feedback(FeedbackType.success);
     } // vibration is made first despite called, but feels ok
+    */
 
     _audioCache
         .play("sounds/scanner_beep.mp3"); // (should be able to use waw also)

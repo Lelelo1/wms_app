@@ -9,6 +9,7 @@ import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/utils.dart';
 import 'package:wms_app/views/cameraView.dart';
 import 'package:wms_app/views/productView.dart';
+import 'package:wms_app/views/scanView.dart';
 import 'package:wms_app/widgets/wmsAppBar.dart';
 import 'abstractPage.dart';
 
@@ -25,8 +26,6 @@ class _State extends State<CountingPage> {
   Size cameraViewSize;
 
   Future<Sequence> futureSequence;
-
-  List<String> scannedBarcodes = [];
 
   @override
   void initState() {
@@ -70,32 +69,9 @@ class _State extends State<CountingPage> {
   Widget content() {
     return Container(
         child: (Column(children: [
-      cameraView, // camera view part of page and recontructed on 'scannedProducts' state change
-      header(),
-      scanButton(),
-      Column(
-        children: this.scannedProducts(),
-      )
+      cameraView,
+      ScanView() // camera view part of page and recontructed on 'scannedProducts' state change
     ])));
-  }
-
-  List<Widget> scannedProducts() {
-    if (this.scannedBarcodes?.length == 0) {
-      return [Container()];
-    }
-
-    var occurrences = occurence(this.scannedBarcodes);
-    return occurence(this.scannedBarcodes)
-        .keys
-        .map((b) => Text(b + ": " + occurrences[b].toString()))
-        .toList();
-  }
-
-  // https://stackoverflow.com/questions/55579906/how-to-count-items-occurence-in-a-list
-  Map occurence<T>(List<T> list) {
-    var map = Map();
-    list.forEach((x) => map[x] = !map.containsKey(x) ? (1) : (map[x] + 1));
-    return map;
   }
 
   @override
@@ -103,44 +79,9 @@ class _State extends State<CountingPage> {
     return futureBuilder();
   }
 
-  Widget header([String shelf = "D-3-2-C"]) {
-    return Container(
-        child: Center(child: Text(shelf, style: TextStyle(fontSize: 30))),
-        color: Colors.white);
-  }
-
-  Widget scanButton() {
-    return ElevatedButton(onPressed: scan, child: Text("Scanna"));
-  }
-
   // some sort of view that shows db sku suggestions, from image local sku.
 
   Widget productView(Product product) {
     return ProductView(product);
-  }
-
-  void scan() async {
-    var image = CameraViewController.currentImage;
-    if (image == null) {
-      print(
-          "image was null, maybe it is not possible to take images this fast!");
-      return;
-    }
-    var barcode = await VisionService.getInstance()
-        .analyzeBarcode(ImageUtils.toAbstractImage(image));
-
-    if (Utils.isNullOrEmpty(barcode)) {
-      return;
-    }
-
-    print("got barcode: " + barcode);
-
-    CameraViewController.scanningSuccessfull();
-
-    setState(() {
-      this.scannedBarcodes = [...this.scannedBarcodes, barcode];
-    });
-
-    // need error handling...
   }
 }

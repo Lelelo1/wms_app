@@ -16,6 +16,13 @@ class Utils {
   }
 
   static bool isNullOrEmpty(String text) => text == null || text == "";
+
+  // https://stackoverflow.com/questions/55579906/how-to-count-items-occurence-in-a-list
+  static Map occurence<T>(List<T> list) {
+    var map = Map();
+    list.forEach((x) => map[x] = !map.containsKey(x) ? (1) : (map[x] + 1));
+    return map;
+  }
 }
 
 class ImageUtils {
