@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:wms_app/models/product.dart';
 import 'package:wms_app/models/sequence.dart';
 import 'package:wms_app/pages/loadingPage.dart';
+import 'package:wms_app/services/visionService.dart';
 import 'package:wms_app/stores/appStore.dart';
 import 'package:wms_app/stores/workStore.dart';
+import 'package:wms_app/utils.dart';
 import 'package:wms_app/views/cameraView.dart';
 import 'package:wms_app/views/productView.dart';
+import 'package:wms_app/views/scanView.dart';
 import 'package:wms_app/widgets/wmsAppBar.dart';
-
 import 'abstractPage.dart';
 
 class CountingPage extends StatefulWidget implements AbstractPage {
@@ -56,18 +59,19 @@ class _State extends State<CountingPage> {
   int totalTimesScanned = 0;
   // the future values needed for the page. add it to abstract page maybe
   Widget page(Sequence sequence) {
-    cameraView = CameraView((String barcode) {
-      totalTimesScanned++;
-      print("scanned: " +
-          barcode +
-          ", totalTimesScanned: " +
-          totalTimesScanned.toString());
-    }, this.cameraViewSize);
+    cameraView = CameraView(this.cameraViewSize);
     return Scaffold(
         appBar: WMSAppBar(this.widget.name).get(),
-        body: Container(
-            child: (Column(children: [cameraView, header(), scanButton()]))),
+        body: content(),
         extendBodyBehindAppBar: true);
+  }
+
+  Widget content() {
+    return Container(
+        child: (Column(children: [
+      cameraView,
+      ScanView() // camera view part of page and recontructed on 'scannedProducts' state change
+    ])));
   }
 
   @override
@@ -75,23 +79,9 @@ class _State extends State<CountingPage> {
     return futureBuilder();
   }
 
-  Widget header([String shelf = "D-3-2-C"]) {
-    return Container(
-        child: Center(child: Text(shelf, style: TextStyle(fontSize: 30))),
-        color: Colors.white);
-  }
-
-  Widget scanButton() {
-    return ElevatedButton(onPressed: scan, child: Text("Scanna"));
-  }
-
   // some sort of view that shows db sku suggestions, from image local sku.
 
   Widget productView(Product product) {
     return ProductView(product);
-  }
-
-  void scan() {
-    cameraView?.startScan();
   }
 }
