@@ -38,6 +38,7 @@ class CameraViewController {
       await _cameraController.initialize();
       _cameraController.startImageStream(updateCurrentImage);
     }
+    // need a new controller each time rerendered
 
     return _cameraController;
   }
@@ -74,7 +75,30 @@ class CameraView extends StatefulWidget {
   _State createState() => _State();
 }
 
-class _State extends State<CameraView> {
+// WidgetsBindingObserver
+// needed to to detect app lifecycle events: https://medium.com/pharos-production/flutter-app-lifecycle-4b0ab4a4211a
+class _State extends State<CameraView> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    WidgetsBinding.instance.addObserver(this);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    if (state == AppLifecycleState.resumed) {
+      print("resumed");
+      var controller = await CameraViewController.getCameraControllerInstance();
+      await controller.initialize();
+    }
+  }
+
   FutureBuilder futureBuilder() => FutureBuilder<CameraController>(
       future: CameraViewController.getCameraControllerInstance(), // <--!!!
       builder:
@@ -88,6 +112,7 @@ class _State extends State<CameraView> {
       });
 
   Widget content(CameraController controller) {
+    print("render content");
     var size = MediaQuery.of(context).size;
     var aspectRatio = size.width / size.height;
     var width = this.widget.size.width;
@@ -109,26 +134,7 @@ class _State extends State<CameraView> {
       ),
     );
   }
-  /*
-  @override
-  void dispose() {
-    controller?.dispose();
-    super.dispose();
-  }
-  */
 
   @override
   Widget build(BuildContext context) => futureBuilder();
-
-/*
-  @override
-  Widget build(BuildContext context) {
-    if (!controller.value.isInitialized) {
-      return Container();
-    }
-    return MaterialApp(
-      home: CameraPreview(controller),
-    );
-  }
-  */
 }
