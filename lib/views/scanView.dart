@@ -40,19 +40,28 @@ class _State extends State<ScanView> {
   }
 
   void scan() async {
-    var image = CameraViewController.currentImage;
-    if (image == null) {
-      print(
-          "image was null, maybe it is not possible to take images this fast!");
-      return;
+    var visionSevice = await VisionService.getInstance();
+
+    String barcode;
+    var streamImage = CameraViewController.streamImage;
+    if (Utils.hasValue(streamImage)) {
+      barcode = await visionSevice.analyzeBarcodeFromBytes(
+          ImageUtils.concatenatePlanes(streamImage.planes),
+          ImageUtils.imageData(streamImage));
+    } else {
+      barcode = await visionSevice.analyzeBarcodeFromFilePath(
+          (await CameraViewController.takePhoto()).path);
     }
-    var barcode = await VisionService.getInstance()
-        .analyzeBarcode(ImageUtils.toAbstractImage(image));
 
     if (Utils.isNullOrEmpty(barcode)) {
       return;
     }
 
+    gotBarcode(barcode);
+    // need error handling...
+  }
+
+  void gotBarcode(String barcode) {
     print("got barcode: " + barcode);
 
     CameraViewController.scanningSuccessfull();
@@ -60,6 +69,5 @@ class _State extends State<ScanView> {
     setState(() {
       this.scannedBarcodes = [...this.scannedBarcodes, barcode];
     });
-    // need error handling...
   }
 }

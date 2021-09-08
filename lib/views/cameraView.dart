@@ -12,10 +12,10 @@ import 'package:wms_app/pages/loadingPage.dart';
 // this shoudld pe put into the dependency injector
 class CameraViewController {
   // rename to 'scanning controll'?
-  static CameraImage currentImage;
-
-  static void updateCurrentImage(CameraImage image) {
-    currentImage = image;
+  static CameraImage streamImage;
+  //static XFile photoFile;
+  static void updateCurrentImage(CameraImage img) {
+    streamImage = img;
   }
 
   static void pauseImageStream() {
@@ -36,7 +36,8 @@ class CameraViewController {
       }
       _cameraController = CameraController(cameras[0], ResolutionPreset.max);
       await _cameraController.initialize();
-      _cameraController.startImageStream(updateCurrentImage);
+      // use stream image, or when commented out take ordinary photo to file and use
+      //_cameraController.startImageStream(updateCurrentImage);
     }
     // need a new controller each time rerendered
 
@@ -66,6 +67,9 @@ class CameraViewController {
     _audioCache
         .play("sounds/scanner_beep.mp3"); // (should be able to use waw also)
   }
+
+  static Future<XFile> takePhoto() async =>
+      (await getCameraControllerInstance()).takePicture();
 }
 
 class CameraView extends StatefulWidget {
