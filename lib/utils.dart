@@ -10,6 +10,9 @@ class Utils {
   // library I forgot the name of, that contains
   // these small methods, have not found one for flutter (yet)
   static bool hasValue<T>(T value) {
+    if (value is T) {
+      return !isNullOrEmpty(value as String);
+    }
     return value != null;
   }
 
@@ -21,6 +24,10 @@ class Utils {
     list.forEach((x) => map[x] = !map.containsKey(x) ? (1) : (map[x] + 1));
     return map;
   }
+
+  // same of primitive types in other programming languages
+  static double defaultZero<T extends double>(T value) =>
+      value == null ? 0 : value;
 }
 
 class ImageUtils {

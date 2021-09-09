@@ -36,6 +36,8 @@ class CameraViewController {
       }
       _cameraController = CameraController(cameras[0], ResolutionPreset.max);
       await _cameraController.initialize();
+      //_cameraController.setFlashMode(FlashMode.always); // null crash...
+
       // use stream image, or when commented out take ordinary photo to file and use
       //_cameraController.startImageStream(updateCurrentImage);
     }
