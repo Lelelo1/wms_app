@@ -10,9 +10,6 @@ class Utils {
   // library I forgot the name of, that contains
   // these small methods, have not found one for flutter (yet)
   static bool hasValue<T>(T value) {
-    if (value is T) {
-      return !isNullOrEmpty(value as String);
-    }
     return value != null;
   }
 

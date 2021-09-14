@@ -35,6 +35,7 @@ class VisionService {
           GoogleVisionImage.fromBytes(concatenatedPlanes, imageMetaData));
 
   Future<String> extractBarcode(GoogleVisionImage googleImage) async {
+    /*
     VisionText visionText;
     try {
       visionText = await _textDetector.processImage(googleImage);
@@ -45,11 +46,11 @@ class VisionService {
     }
 
     String barcode = extractBarcodeFromText(visionText);
-
+    
     if (Utils.hasValue(barcode)) {
       return barcode;
     }
-
+    */
     return (toBarcodeString(await _barcodeDetector.detectInImage(googleImage)));
   }
 

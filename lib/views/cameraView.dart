@@ -16,6 +16,8 @@ class CameraViewController {
   //static XFile photoFile;
   static void updateCurrentImage(CameraImage img) {
     streamImage = img;
+
+    //print("imageStream");
   }
 
   static void pauseImageStream() {
@@ -39,7 +41,7 @@ class CameraViewController {
       //_cameraController.setFlashMode(FlashMode.always); // null crash...
 
       // use stream image, or when commented out take ordinary photo to file and use
-      //_cameraController.startImageStream(updateCurrentImage);
+      _cameraController.startImageStream(updateCurrentImage);
     }
     // need a new controller each time rerendered
 
