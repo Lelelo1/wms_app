@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "419846545769",
+    "project_id": "wmsapp-dce75",
+    "storage_bucket": "wmsapp-dce75.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:419846545769:android:8140af26da4ca064a19df8",
+        "android_client_info": {
+          "package_name": "com.wetterek.wms_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "419846545769-gtrfjll8t37cnndjbu2783frsf4fv6uq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBasL3MdQ756DY-oLkFB2FIJl4H4Os7h4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "419846545769-gtrfjll8t37cnndjbu2783frsf4fv6uq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
