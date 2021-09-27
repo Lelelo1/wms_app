@@ -8,13 +8,10 @@ import 'package:wms_app/secrets.dart';
 
 // https://pub.dev/packages/mysql1
 class ProductsSource implements AbstractProductsSource {
-  static bool connected = false;
-  static Future<MySqlConnection> connecting;
-
   // needs internet permission android real device, otherwise: 'SocketException: OS Error: Connection refused'
   // https://stackoverflow.com/questions/55785581/socketexception-os-error-connection-refused-errno-111-in-flutter-using-djan
   // such permission is granted on install time: https://developer.android.com/training/basics/network-ops/connecting
-  static void connect() {
+  Future<MySqlConnection> connect() async {
     var settings = new ConnectionSettings(
         host: MySql.host,
         port: MySql.port,
@@ -22,13 +19,12 @@ class ProductsSource implements AbstractProductsSource {
         password: MySql.pass,
         db: MySql.db);
 
-    connecting = MySqlConnection.connect(settings);
+    return await MySqlConnection.connect(settings);
   }
 
   @override
-  Future<List<Product>> getProducts() async {
+  Future<List<Product>> getProducts(MySqlConnection connection) async {
     // assume any response is given with internet connection
-    MySqlConnection connection = await connecting;
 
     print("connected to warehouse system");
 
@@ -51,6 +47,8 @@ class ProductsSource implements AbstractProductsSource {
     // should result in empty products list when there are no items in the databse on that query
     return Deserialization.toProducts(results);
   }
+
+  Future<void> disconnect(MySqlConnection connection) => connection.close();
 }
 
 class SQLQuery {

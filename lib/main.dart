@@ -62,7 +62,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
     // AppLifecycleState.paused<-when leaving app
     var cameraController =
         await CameraViewController.getCameraControllerInstance();
-    print("uhuhuh" + state.toString());
+    print("lifecyclestate: " + state.toString());
     if (state == AppLifecycleState.paused) {
       // cannot stop java.lang.IllegalStateException to happen when app
       // with camera when app is put to foreground
