@@ -3,23 +3,41 @@ import 'package:wms_app/pages/featuresPage.dart';
 import 'package:screen/screen.dart';
 import 'package:flutter_simple_dependency_injection/injector.dart';
 import 'package:wms_app/stores/appStore.dart';
+import 'package:wms_app/views/cameraView.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(App());
   Screen.keepOn(true);
 
   AppStore.injector = Module().initialise(Injector());
 }
 
-class MyApp extends StatelessWidget {
+class App extends StatefulWidget {
   // This widget is the root of your application.
 
   final String appName = "WMS App";
 
   @override
+  State<StatefulWidget> createState() => _AppState();
+}
+
+class _AppState extends State<App> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    WidgetsBinding.instance.addObserver(this);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: appName, // does not do anything inside the app
+        title: this.widget.appName, // does not do anything inside the app
         theme: ThemeData(
           // This is the theme of your application.
           //
@@ -37,8 +55,29 @@ class MyApp extends StatelessWidget {
             //MyHomePage(title: appName), // title is wthat is displayed on app bar
             Scaffold(body: FeaturesPage("Features")));
   }
-}
 
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    // AppLifecycleState.resumed
+    // AppLifecycleState.paused<-when leaving app
+    var cameraController =
+        await CameraViewController.getCameraControllerInstance();
+    print("uhuhuh" + state.toString());
+    if (state == AppLifecycleState.paused) {
+      // cannot stop java.lang.IllegalStateException to happen when app
+      // with camera when app is put to foreground
+      // cameraController.dispose();
+      // CameraViewController.pauseImageStream();
+    } else if (state == AppLifecycleState.resumed) {
+      CameraViewController.resumeImageStream(); // needed!
+      cameraController.initialize();
+    }
+  }
+}
+// pause camera when leaving app: 
+// > java.lang.IllegalStateException: Handler (android.os.Handler) {8cf3bbf} sending message to a Handler on a dead thread
+// connect and reconnect
+// remove potential other WidgetsBinding
 
 
 // use of barcode scanning, the 'qr_code_scanner: ^0.3.5' dependency: https://pub.dev/packages/qr_code_scanner/license

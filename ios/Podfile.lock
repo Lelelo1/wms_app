@@ -47,7 +47,7 @@ PODS:
     - Flutter
   - flutter_vibrate (0.0.1):
     - Flutter
-  - google_ml_vision (0.0.6):
+  - google_ml_vision (0.0.7):
     - Flutter
     - GoogleMLKit/BarcodeScanning (~> 2.2.0)
     - GoogleMLKit/FaceDetection (~> 2.2.0)
@@ -162,7 +162,6 @@ PODS:
     - MLKitImageLabelingCommon (~> 1.3)
     - MLKitObjectDetectionCommon (~> 1.3)
     - MLKitVision (~> 1.3)
-  - MTBBarcodeScanner (5.0.11)
   - nanopb (2.30908.0):
     - nanopb/decode (= 2.30908.0)
     - nanopb/encode (= 2.30908.0)
@@ -172,9 +171,6 @@ PODS:
     - Flutter
   - PromisesObjC (2.0.0)
   - Protobuf (3.17.0)
-  - qr_code_scanner (0.2.0):
-    - Flutter
-    - MTBBarcodeScanner
   - screen (0.0.1):
     - Flutter
 
@@ -188,7 +184,6 @@ DEPENDENCIES:
   - google_ml_vision (from `.symlinks/plugins/google_ml_vision/ios`)
   - integration_test (from `.symlinks/plugins/integration_test/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
-  - qr_code_scanner (from `.symlinks/plugins/qr_code_scanner/ios`)
   - screen (from `.symlinks/plugins/screen/ios`)
 
 SPEC REPOS:
@@ -215,7 +210,6 @@ SPEC REPOS:
     - MLKitTextRecognition
     - MLKitVision
     - MLKitVisionKit
-    - MTBBarcodeScanner
     - nanopb
     - PromisesObjC
     - Protobuf
@@ -237,8 +231,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/integration_test/ios"
   path_provider:
     :path: ".symlinks/plugins/path_provider/ios"
-  qr_code_scanner:
-    :path: ".symlinks/plugins/qr_code_scanner/ios"
   screen:
     :path: ".symlinks/plugins/screen/ios"
 
@@ -253,7 +245,7 @@ SPEC CHECKSUMS:
   Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
   flutter_beep: 54fb393b22dfa0f0e4573c81b1c74dd71c4e5af8
   flutter_vibrate: c0ca4ac994ff97c3f147f69865458bbc0cc3508b
-  google_ml_vision: 3d1e02342d58810f267a2de18c20c30c4e43e5a8
+  google_ml_vision: d16cd76617b3260c4283a28843555a8c6253a171
   GoogleAppMeasurement: 2be61ce546ad074dbe4dd545f222ac6033bb1d9e
   GoogleDataTransport: 85fd18ff3019bb85d3f2c551d04c481dedf71fc9
   GoogleMLKit: 85ffdc9641d05311c76dbba5bbf93059087be12f
@@ -272,12 +264,10 @@ SPEC CHECKSUMS:
   MLKitTextRecognition: fd52b7b3cef00751c202475f5a147e9752130767
   MLKitVision: 26da299aef93291f24f5200e8372919f73abf3b5
   MLKitVisionKit: 226bac429eda1d84285409e31ce9da72606850fb
-  MTBBarcodeScanner: f453b33c4b7dfe545d8c6484ed744d55671788cb
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   PromisesObjC: 68159ce6952d93e17b2dfe273b8c40907db5ba58
   Protobuf: 7327d4444215b5f18e560a97f879ff5503c4581c
-  qr_code_scanner: bb67d64904c3b9658ada8c402e8b4d406d5d796e
   screen: abd91ca7bf3426e1cc3646d27e9b2358d6bf07b0
 
 PODFILE CHECKSUM: fdb6ba93535814655b3aaee4c307f0c1628981c4

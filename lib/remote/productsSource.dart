@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:mysql1/mysql1.dart';
 import 'package:wms_app/models/product.dart';
 import 'package:wms_app/remote/abstractProductsSource.dart';
@@ -21,15 +23,14 @@ class ProductsSource implements AbstractProductsSource {
         db: MySql.db);
 
     connecting = MySqlConnection.connect(settings);
-    // connecting.whenComplete(() => connected = true); ..?
   }
 
   @override
   Future<List<Product>> getProducts() async {
-    if (connecting == null) {
-      connect();
-    }
-    var connection = await connecting;
+    // assume any response is given with internet connection
+    MySqlConnection connection = await connecting;
+
+    print("connected to warehouse system");
 
     Results results;
     try {
@@ -40,6 +41,8 @@ class ProductsSource implements AbstractProductsSource {
           ". exc: " +
           exc.toString());
     }
+
+    print("got results from warehouse system: " + results.length.toString());
 
     if (results == null) {
       return null;
