@@ -39,7 +39,6 @@ class ProductsSource implements AbstractProductsSource {
     }
 
     print("got results from warehouse system: " + results.length.toString());
-
     if (results == null) {
       return null;
     }

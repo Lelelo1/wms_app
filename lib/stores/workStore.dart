@@ -19,6 +19,11 @@ class WorkStore {
       // not on wifi
       print("you have to be connected to wifi!!");
     }
+
+    products.forEach((element) {
+      print(element.name);
+    });
+
     return Sequence(products);
   }
 
