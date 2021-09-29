@@ -8,7 +8,7 @@ import 'package:wms_app/remote/productsSource.dart';
 
 class WorkStore {
   WarehouseSystem warehouseSystem = WarehouseSystem();
-
+  
   // how to interact with ui error message?
 
   Future<Sequence> getCollection() async {

@@ -78,7 +78,7 @@ class CameraViewController {
 
 class CameraView extends StatefulWidget {
   Size size;
-  CameraView(this.size);
+  CameraView([this.size]);
   @override
   _State createState() => _State();
 }
@@ -105,12 +105,15 @@ class _State extends State<CameraView> {
               child: Text("something went wrong with the CameraController")));
     }
     print("render content");
+
     var size = MediaQuery.of(context).size;
     var aspectRatio = size.width / size.height;
-    var width = this.widget.size.width;
-    return Container(
+    var width = size.width; //this.widget.size.width;
+
+    return Flexible(
+        child: Container(
       width: width,
-      height: width,
+      height: size.height,
       child: ClipRect(
         child: OverflowBox(
           alignment: Alignment.center,
@@ -124,9 +127,23 @@ class _State extends State<CameraView> {
           ),
         ),
       ),
-    );
+    ));
+
+    //return camera(controller);
   }
 
+  /*
+  Widget camera(CameraController controller) {
+    return Expanded(
+      child: Center(
+        child: AspectRatio(
+          aspectRatio: 1 / controller.value.aspectRatio,
+          child: CameraPreview(controller),
+        ),
+      ),
+    );
+  }
+  */
   @override
   Widget build(BuildContext context) => futureBuilder();
 }
