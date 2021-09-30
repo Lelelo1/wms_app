@@ -19,7 +19,6 @@ class CountingPage extends StatefulWidget implements AbstractPage {
 class _State extends State<CountingPage> {
   WorkStore workStore = AppStore.injector.get<WorkStore>();
   //MediaQueryData mediaQueryData;
-  Size scanViewSize;
 
   Future<Sequence> futureSequence;
 
@@ -29,12 +28,6 @@ class _State extends State<CountingPage> {
     futureSequence = workStore.getCollection();
   }
 
-  void setSizes(BuildContext context) {
-    var screenSize = MediaQuery.of(this.context).size;
-    var cameraViewHeight = screenSize.height * 0.5;
-    this.scanViewSize = Size(screenSize.width, cameraViewHeight);
-  }
-
   // alls pages should have future builder, more or less
   FutureBuilder futureBuilder() => FutureBuilder<Sequence>(
       future: futureSequence,
@@ -42,10 +35,6 @@ class _State extends State<CountingPage> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           // https://stackoverflow.com/questions/52847534/flutter-futurebuilder-returning-null-error-triggered
           return LoadingPage();
-        }
-
-        if (this.scanViewSize == null) {
-          setSizes(context);
         }
 
         return page(snapshot.data);
@@ -65,9 +54,12 @@ class _State extends State<CountingPage> {
     return Container(
         child: (Column(children: [
       CameraView(), //,
-      ScanView() // camera view part of page and recontructed on 'scannedProducts' state change
+      ScanView(0.44,
+          0.85) // camera view part of page and recontructed on 'scannedProducts' state change
     ])));
   }
+
+  // animate scanview height changes..?
 
   @override
   Widget build(BuildContext context) {

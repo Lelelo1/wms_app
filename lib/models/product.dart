@@ -9,8 +9,8 @@ class Product {
   String shelf; // hyllplats
   String name; // namn
   String image; // image
-  int box; // låda, does not exist in databse is created
-
+  int box; // låda, does not exist in database is created
+  // entity_id to get all atributes with
   Product(String ean, String sku, String shelf, String name,
       [String image, int box]) {
     this.ean = ean;

@@ -6,16 +6,38 @@ import 'package:wms_app/views/cameraView.dart';
 import '../utils.dart';
 
 class ScanView extends StatefulWidget {
+  ScanView(this.defaultRatio, this.enlargedRatio);
+
   @override
   State<StatefulWidget> createState() => _State();
+
+  double defaultRatio;
+  double enlargedRatio;
 }
 
 class _State extends State<ScanView> {
   List<String> scannedBarcodes = [];
+  Size currentSize;
+
+  bool isEnlarged = false;
+
+  Size defaultSize;
+  Size enlargedSize;
 
   @override
-  Widget build(BuildContext context) =>
-      Column(children: [header(), scanButton(), ...scannedProducts()]);
+  Widget build(BuildContext context) {
+    if (!hasCalculatedSizes()) {
+      calculateSizes();
+    }
+    var size = getSize();
+    print("siiize: " + size.toString());
+
+    return Container(child: column(), width: size.width, height: size.height);
+  }
+
+  Widget column() {
+    return Column(children: [header(), scanButton(), ...scannedProducts()]);
+  }
 
   Widget header([String shelf = "D-3-2-C"]) {
     return Container(
@@ -40,7 +62,7 @@ class _State extends State<ScanView> {
   }
 
   void scan() async {
-    var visionSevice = await VisionService.getInstance();
+    var visionSevice = VisionService.getInstance();
 
     String barcode;
     var streamImage = CameraViewController.streamImage;
@@ -69,5 +91,22 @@ class _State extends State<ScanView> {
     setState(() {
       this.scannedBarcodes = [...this.scannedBarcodes, barcode];
     });
+
+    setState(() {
+      this.isEnlarged = !this.isEnlarged;
+    });
   }
+
+  bool hasCalculatedSizes() =>
+      Utils.hasValue(this.defaultSize) && Utils.hasValue(this.enlargedSize);
+
+  void calculateSizes() {
+    var screenSize = MediaQuery.of(this.context).size;
+    this.defaultSize =
+        Size(screenSize.width, screenSize.height * this.widget.defaultRatio);
+    this.enlargedSize =
+        Size(screenSize.width, screenSize.height * this.widget.enlargedRatio);
+  }
+
+  Size getSize() => this.isEnlarged ? this.enlargedSize : this.defaultSize;
 }
