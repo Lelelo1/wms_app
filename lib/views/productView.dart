@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:wms_app/models/archivedProduct.dart';
 import 'package:wms_app/models/product.dart';
 
 // needs proper sizing for mulitple screen sizes !!
@@ -87,22 +88,22 @@ class ProductView extends StatelessWidget {
   // methods given in 'Product's class order
   Widget nameWidget() {
     return Text(
-      product?.name,
+      product?.getName(),
       style: TextStyle(fontSize: 20),
     );
   }
 
   Widget shelfWidget() {
-    return Text(product?.shelf, style: TextStyle(fontSize: 22));
+    return Text(product?.getShelf(), style: TextStyle(fontSize: 22));
   }
 
   Widget skuWidget() {
-    return Text(product?.sku.toString(),
+    return Text(product?.getSKU().toString(),
         style: TextStyle(fontSize: 38), textAlign: TextAlign.center);
   }
 
   Widget boxWidget() {
-    return Text("Boxnummer: " + product?.box.toString());
+    return Text("Boxnummer: " + "some box (not implemented)");
   }
 
   Widget imageWidget() {

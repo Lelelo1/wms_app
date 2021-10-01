@@ -1,14 +1,14 @@
 import 'dart:io';
 
+import 'package:wms_app/models/archivedProduct.dart';
 import 'package:wms_app/models/product.dart';
 import 'package:wms_app/models/sequence.dart';
-import 'package:wms_app/remote/WarehouseSystem.dart';
-import 'package:wms_app/remote/abstractProductsSource.dart';
+import 'package:wms_app/remote/warehouseSystem.dart';
 import 'package:wms_app/remote/productsSource.dart';
 
 class WorkStore {
   WarehouseSystem warehouseSystem = WarehouseSystem();
-  
+
   // how to interact with ui error message?
 
   Future<Sequence> getCollection() async {
@@ -21,7 +21,7 @@ class WorkStore {
     }
 
     products.forEach((element) {
-      print(element.name);
+      print(element.getName());
     });
 
     return Sequence(products);

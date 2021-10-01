@@ -1,3 +1,8 @@
+
+// might not need this, the jobs are not completely generic 
+
+/*
+
 abstract class Job {
   String scanned(String ean);
 
@@ -5,3 +10,4 @@ abstract class Job {
 }
 
 // 
+*/

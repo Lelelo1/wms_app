@@ -1,7 +1,9 @@
 // varplocklista
 
-import 'package:wms_app/models/product.dart';
+// potentially create a mock, when showing to people and not being connected, to pin pointing problems
+// etc
 
+/*
 import 'abstractProductsSource.dart';
 
 class MockProductsSource implements AbstractProductsSource {
@@ -48,3 +50,5 @@ class MockProductsSource implements AbstractProductsSource {
   }
   */
 }
+
+*/

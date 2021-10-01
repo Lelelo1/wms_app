@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wms_app/models/archivedProduct.dart';
 import 'package:wms_app/models/product.dart';
 import 'package:wms_app/models/sequence.dart';
 import 'package:wms_app/pages/loadingPage.dart';
@@ -47,7 +48,9 @@ class _State extends State<CountingPage> {
     return Scaffold(
         //appBar: WMSAppBar(this.widget.name).get(),
         body: content(),
-        extendBodyBehindAppBar: true);
+        extendBodyBehindAppBar: true,
+        resizeToAvoidBottomInset:
+            false); // https://stackoverflow.com/questions/49840074/keyboard-pushes-the-content-up-resizes-the-screen
   }
 
   Widget content() {
