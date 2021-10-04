@@ -53,7 +53,9 @@ class _AppState extends State<App> with WidgetsBindingObserver {
         home:
             // make home page eventually where the worker can go different areas, functionality described in 'Trello' eg
             //MyHomePage(title: appName), // title is wthat is displayed on app bar
-            Scaffold(body: FeaturesPage("Features")));
+            Scaffold(
+          body: FeaturesPage("Features"),
+        ));
     // 'resizeToAvoidBottomInset' prevent keyobard from pushing textfield, casuing BOTTOM OVERFLOWED BY x amount pixels by setting to false
   }
 

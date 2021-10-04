@@ -4,17 +4,20 @@ import 'package:wms_app/jobs/identify.dart';
 import 'package:wms_app/models/product.dart';
 import 'package:wms_app/services/visionService.dart';
 import 'package:wms_app/views/cameraView.dart';
+import 'package:wms_app/views/searchView.dart';
 
 import '../utils.dart';
 
 class ScanView extends StatefulWidget {
-  ScanView(this.defaultRatio, this.enlargedRatio);
+  double defaultRatio;
+  double enlargedRatio;
+
+  void Function() scanned;
+
+  ScanView(this.defaultRatio, this.enlargedRatio, this.scanned);
 
   @override
   State<StatefulWidget> createState() => _State();
-
-  double defaultRatio;
-  double enlargedRatio;
 }
 
 class _State extends State<ScanView> {
@@ -36,23 +39,33 @@ class _State extends State<ScanView> {
     var size = getSize();
     print("siiize: " + size.toString());
 
-    return Container(child: column(), width: size.width, height: size.height);
+    return Container(child: scanContent(), height: 320);
   }
 
-  Widget column() {
-    return Column(children: this.isEnlarged ? searchContent() : scanContent());
-  }
-
-  List<Widget> scanContent() => [header(), scanButton(), ...scannedProducts()];
-
+  Column scanContent() =>
+      Column(children: [/*header(),*/ scanButton(), ...scannedProducts()]);
+  /*
   Widget header([String shelf = "D-3-2-C"]) {
     return Container(
         child: Center(child: Text(shelf, style: TextStyle(fontSize: 30))),
         color: Colors.white);
   }
-
+  */
   Widget scanButton() {
-    return ElevatedButton(onPressed: scan, child: Text("Scanna"));
+    return Padding(
+        child: Container(
+            child: ElevatedButton(
+              style: ButtonStyle(
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0))),
+              ),
+              child: Text('Scanna'),
+              onPressed: () {},
+            ),
+            width: 170,
+            height: 65),
+        padding: EdgeInsets.all(30));
   }
 
   List<Widget> scannedProducts() {
@@ -65,44 +78,6 @@ class _State extends State<ScanView> {
         .keys
         .map((b) => Text(b + ": " + occurrences[b].toString()))
         .toList();
-  }
-
-  List<Widget> searchContent() => [searchTitleArea(), textField()];
-
-  Widget searchTitleArea() {
-    return Stack(children: [closeButton(), stack()]);
-  }
-
-  double titleHeight = 80;
-  Widget stack() {
-    return Container(
-        child: Row(
-            children: [Text("10982782753", style: TextStyle(fontSize: 28))],
-            mainAxisAlignment: MainAxisAlignment.center),
-        height: this.titleHeight);
-  }
-
-  Widget closeButton() {
-    return Container(
-        child: Row(children: [
-          MaterialButton(
-              onPressed: () {
-                setState(() {
-                  this.isEnlarged = false;
-                });
-              },
-              child: Icon(Icons.close),
-              minWidth: 40)
-        ], mainAxisAlignment: MainAxisAlignment.start),
-        height: this.titleHeight);
-  }
-
-  // enter to sku to match it with the ean code that where scanned, select item in the list
-  // TextFormField...?
-  Widget textField() {
-    return TextField(
-        decoration: InputDecoration(
-            border: InputBorder.none, hintText: 'Ange artikelnummer'));
   }
 
   void scan() async {
@@ -137,6 +112,8 @@ class _State extends State<ScanView> {
       this.scannedBarcodes = [...this.scannedBarcodes, barcode];
       this.isEnlarged = !Utils.hasValue(this.scannedProduct);
     });
+
+    // what should be shown in the scanview, what should be gotten, depending on which Job
   }
 
   bool hasCalculatedSizes() =>

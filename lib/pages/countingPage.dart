@@ -47,19 +47,18 @@ class _State extends State<CountingPage> {
   Widget page(Sequence sequence) {
     return Scaffold(
         //appBar: WMSAppBar(this.widget.name).get(),
-        body: content(),
-        extendBodyBehindAppBar: true,
-        resizeToAvoidBottomInset:
-            false); // https://stackoverflow.com/questions/49840074/keyboard-pushes-the-content-up-resizes-the-screen
+        body: Flexible(child: content()),
+        extendBodyBehindAppBar:
+            true); // https://stackoverflow.com/questions/49840074/keyboard-pushes-the-content-up-resizes-the-screen
   }
 
+  // conditional renderering, searchView
   Widget content() {
-    return Container(
-        child: (Column(children: [
-      CameraView(), //,
-      ScanView(0.44,
-          0.85) // camera view part of page and recontructed on 'scannedProducts' state change
-    ])));
+    return Column(children: [
+      CameraView(),
+      ScanView(0.44, 0.85,
+          () {}) // camera view part of page and recontructed on 'scannedProducts' state change
+    ]);
   }
 
   // animate scanview height changes..?
