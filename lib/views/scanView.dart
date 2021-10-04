@@ -61,7 +61,7 @@ class _State extends State<ScanView> {
                         borderRadius: BorderRadius.circular(18.0))),
               ),
               child: Text('Scanna'),
-              onPressed: () {},
+              onPressed: scan,
             ),
             width: 170,
             height: 65),

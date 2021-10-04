@@ -47,7 +47,7 @@ class _State extends State<CountingPage> {
   Widget page(Sequence sequence) {
     return Scaffold(
         //appBar: WMSAppBar(this.widget.name).get(),
-        body: Flexible(child: content()),
+        body: content(),
         extendBodyBehindAppBar:
             true); // https://stackoverflow.com/questions/49840074/keyboard-pushes-the-content-up-resizes-the-screen
   }
