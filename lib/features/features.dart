@@ -5,7 +5,7 @@ import 'package:wms_app/pages/abstractPage.dart';
 import 'package:wms_app/pages/collectPage.dart';
 import 'package:wms_app/pages/countingPage.dart';
 import 'package:wms_app/pages/productRegistrationPage.dart.dart';
-
+/*
 // move out, and remove featre folder..
 class Features {
   static List<AbstractPage> _features = [
@@ -22,13 +22,13 @@ class Features {
     return _features;
   }
 }
-
+*/
 /*
 how to create lambdas
 // https://stackoverflow.com/questions/63003864/lambda-expression-as-a-function-parameter-in-dart-language
 typedef CreateFeature = Widget Function();
 */
-
+/*
 class DefaultPage extends StatefulWidget implements AbstractPage {
   @override
   State<StatefulWidget> createState() => _State();
@@ -45,3 +45,4 @@ class _State extends State<DefaultPage> {
     return Scaffold(body: Center(child: Text(this.widget.name)));
   }
 }
+*/

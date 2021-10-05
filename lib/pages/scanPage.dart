@@ -1,4 +1,3 @@
-/*
 import 'package:flutter/material.dart';
 import 'package:wms_app/models/archivedProduct.dart';
 import 'package:wms_app/models/product.dart';
@@ -11,14 +10,16 @@ import 'package:wms_app/views/productView.dart';
 import 'package:wms_app/views/scanView.dart';
 import 'abstractPage.dart';
 
-class CountingPage extends StatefulWidget implements AbstractPage {
+class ScanPage extends StatefulWidget {
+  final String name;
+  final void Function(String product) onSuccesfullScan;
+  ScanPage(this.name, this.onSuccesfullScan);
+
   @override
   _State createState() => _State();
-  final String name;
-  CountingPage(this.name);
 }
 
-class _State extends State<CountingPage> {
+class _State extends State<ScanPage> {
   WorkStore workStore = AppStore.injector.get<WorkStore>();
   //MediaQueryData mediaQueryData;
 
@@ -57,9 +58,9 @@ class _State extends State<CountingPage> {
   Widget content() {
     return Column(children: [
       CameraView(),
-      ScanView(
-          this.widget.on) // camera view part of page and recontructed on 'scannedProducts' state change
-    ]);
+      ScanView(0.44, this.widget.onSuccesfullScan)
+    ] // camera view part of page and recontructed on 'scannedProducts' state change
+        );
   }
 
   // animate scanview height changes..?
@@ -70,9 +71,9 @@ class _State extends State<CountingPage> {
   }
 
   // some sort of view that shows db sku suggestions, from image local sku.
-
+  /*
   Widget productView(Product product) {
     return ProductView(product);
   }
+  */
 }
-*/

@@ -1,3 +1,4 @@
+/*
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -86,9 +87,9 @@ class ProductView extends StatelessWidget {
   }
 
   // methods given in 'Product's class order
-  Widget nameWidget() {
+  Future<Widget> nameWidget() async {
     return Text(
-      product?.getName(),
+      await product?.getName(),
       style: TextStyle(fontSize: 20),
     );
   }
@@ -124,3 +125,4 @@ class ProductView extends StatelessWidget {
   }
   */
 }
+*/

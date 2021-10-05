@@ -9,12 +9,11 @@ import 'package:wms_app/views/searchView.dart';
 import '../utils.dart';
 
 class ScanView extends StatefulWidget {
-  double defaultRatio;
-  double enlargedRatio;
+  double ratio;
 
-  void Function() scanned;
+  void Function(String barcode) scanned;
 
-  ScanView(this.defaultRatio, this.enlargedRatio, this.scanned);
+  ScanView(this.ratio, this.scanned);
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -24,21 +23,14 @@ class _State extends State<ScanView> {
   List<String> scannedBarcodes = [];
   Size currentSize;
 
-  bool isEnlarged = false;
-
   Size defaultSize;
   Size enlargedSize;
-
-  Product scannedProduct;
 
   @override
   Widget build(BuildContext context) {
     if (!hasCalculatedSizes()) {
       calculateSizes();
     }
-    var size = getSize();
-    print("siiize: " + size.toString());
-
     return Container(child: scanContent(), height: 320);
   }
 
@@ -106,13 +98,12 @@ class _State extends State<ScanView> {
     print("got barcode: " + barcode);
 
     CameraViewController.scanningSuccessfull();
-    this.scannedProduct = await IdentifyJob.scanned(barcode);
 
     setState(() {
       this.scannedBarcodes = [...this.scannedBarcodes, barcode];
-      this.isEnlarged = !Utils.hasValue(this.scannedProduct);
     });
 
+    this.widget.scanned(barcode);
     // what should be shown in the scanview, what should be gotten, depending on which Job
   }
 
@@ -122,10 +113,8 @@ class _State extends State<ScanView> {
   void calculateSizes() {
     var screenSize = MediaQuery.of(this.context).size;
     this.defaultSize =
-        Size(screenSize.width, screenSize.height * this.widget.defaultRatio);
-    this.enlargedSize =
-        Size(screenSize.width, screenSize.height * this.widget.enlargedRatio);
+        Size(screenSize.width, screenSize.height * this.widget.ratio);
   }
 
-  Size getSize() => this.isEnlarged ? this.enlargedSize : this.defaultSize;
+  Size getSize() => this.defaultSize;
 }

@@ -6,6 +6,6 @@ class Product {
   String getEAN() {}
   String getSKU() {}
   String getShelf() {}
-  String getName() {}
+  Future<String> getName() {}
   String getImage() {}
 }
