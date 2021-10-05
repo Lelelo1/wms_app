@@ -20,9 +20,10 @@ class _State extends State<JobPage> {
 
   @override
   Widget build(BuildContext context) => Utils.hasValue(this.identifyEAN)
-      ? SearchView(closeSearchView, preformJob)
+      ? SearchView(this.identifyEAN, closeSearchView, preformJob)
       : ScanPage(this.widget.job.name, this.successfullScan);
-
+  // probably need to make fade and do transperency within SearchView component to make it
+  // appear/dissapear and use Stack here oustide of it
   void successfullScan(String ean) {
     setState(() {
       identifyEAN = ean;
