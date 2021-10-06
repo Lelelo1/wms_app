@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:wms_app/jobs/identify.dart';
 import 'package:wms_app/models/product.dart';
@@ -17,34 +18,28 @@ class JobPage extends StatefulWidget implements AbstractPage {
 
 class _State extends State<JobPage> {
   //String identifyEAN;
-  Widget currentView;
 
   @override
-  void initState() {
-    currentView = getScanPage();
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) => Container(
-      child: AnimatedSwitcher(
-          child: this.currentView, duration: Duration(milliseconds: 520)));
+  Widget build(BuildContext context) =>
+      ScanPage(this.widget.job.name, this.successfullScan);
   // probably need to make fade and do transperency within SearchView component to make it
   // appear/dissapear and use Stack here oustide of it
 
-  Widget getScanPage() => ScanPage(this.widget.job.name, this.successfullScan);
-
   void successfullScan(String ean) {
     print("Successfull scaaaan!: " + ean);
-    setState(() {
-      this.currentView = SearchView(ean, closeSearchView, preformJob);
-    });
+    Navigator.push(
+        this.context,
+        MaterialPageRoute(
+            builder: (context) =>
+                SearchView(ean, closeSearchView, preformJob)));
   }
 
   void closeSearchView() {
+    /*
     setState(() {
       this.currentView = getScanPage();
     });
+    */
   }
 
   void preformJob(Product product) async {

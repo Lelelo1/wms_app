@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wms_app/models/product.dart';
+import 'package:wms_app/widgets/wmsAppBar.dart';
 import 'package:wms_app/widgets/wmsTitleArea.dart';
 
 class SearchView extends StatefulWidget {
@@ -16,17 +17,25 @@ class SearchView extends StatefulWidget {
 class _State extends State<SearchView> {
   @override
   Widget build(BuildContext context) {
+    /*
     var titleArea =
         WMSTitleArea(this.widget.ean, 80, this.widget.pressedClose).get();
+    */
 
     return Scaffold(
         //appBar: WMSAppBar(this.widget.name).get(),
-        body: Padding(
-            child: Container(
-                child: (Column(children: [titleArea, textField()])),
-                decoration:
-                    BoxDecoration(color: Color.fromARGB(90, 255, 255, 255))),
-            padding: EdgeInsets.all(20)));
+        body: SafeArea(
+            child: Padding(
+                child: Container(
+                    child: (Column(children: [
+                      Text(this.widget.ean,
+                          style: TextStyle(fontSize: 28),
+                          textAlign: TextAlign.center),
+                      textField(),
+                    ])),
+                    decoration: BoxDecoration(
+                        color: Color.fromARGB(90, 255, 255, 255))),
+                padding: EdgeInsets.all(1))));
   }
 
   // enter to sku to match it with the ean code that where scanned, select item in the list
