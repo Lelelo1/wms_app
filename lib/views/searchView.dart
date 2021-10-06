@@ -23,8 +23,7 @@ class _State extends State<SearchView> {
         //appBar: WMSAppBar(this.widget.name).get(),
         body: Padding(
             child: Container(
-                child: (Flexible(
-                    child: Column(children: [titleArea, textField()]))),
+                child: (Column(children: [titleArea, textField()])),
                 decoration:
                     BoxDecoration(color: Color.fromARGB(90, 255, 255, 255))),
             padding: EdgeInsets.all(20)));
