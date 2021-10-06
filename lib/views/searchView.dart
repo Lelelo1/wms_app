@@ -32,17 +32,25 @@ class _State extends State<SearchView> {
   // enter to sku to match it with the ean code that where scanned, select item in the list
   // TextFormField...?
 
-  // seems like textfield can't be shadowed using container or maerial widget, and having radius corner....
+  Color textFieldColor() => Color.fromARGB(255, 242, 233, 206);
+  BorderRadius textFieldBorderRadius() => BorderRadius.circular(25.0);
+  InputBorder inputBorder() => OutlineInputBorder(
+      borderRadius: textFieldBorderRadius(),
+      borderSide: BorderSide(color: textFieldColor(), width: 3.0));
   Widget textField() {
-    return TextField(
-        autofocus: false,
-        decoration: InputDecoration(
-            hintText: 'Ange artikelnummer',
-            fillColor: Colors.white,
-            filled: true,
-            contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-            enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(45.0),
-                borderSide: BorderSide(color: Colors.black, width: 3.0))));
+    return Material(
+        child: TextFormField(
+            autofocus: false,
+            decoration: InputDecoration(
+                hintText: 'Ange Artikelnummer',
+                fillColor: textFieldColor(),
+                filled: true,
+                contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                enabledBorder: inputBorder(),
+                focusedBorder:
+                    inputBorder())), // it can maybe look abit different, as you understand that you have focused/selected the textfield
+        elevation: 16,
+        color: Colors.transparent,
+        borderRadius: textFieldBorderRadius());
   }
 }
