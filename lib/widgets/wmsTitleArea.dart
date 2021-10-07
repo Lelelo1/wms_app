@@ -6,7 +6,7 @@ class WMSTitleArea {
   final void Function() pressedClose;
   WMSTitleArea(this.title, this.height, this.pressedClose);
 
-  Widget get() => Stack(children: [_closeButton(), _title()]);
+  //Widget get() => Stack(children: [closeButton(), _title()]);
 
   Widget _title() {
     return Container(
@@ -16,14 +16,12 @@ class WMSTitleArea {
         height: this.height);
   }
 
-  Widget _closeButton() {
+  static Widget closeButton(void Function() pressedClose, double height) {
     return Container(
         child: Row(children: [
           MaterialButton(
-              onPressed: this.pressedClose,
-              child: Icon(Icons.close),
-              minWidth: 40)
+              onPressed: pressedClose, child: Icon(Icons.close), minWidth: 40)
         ], mainAxisAlignment: MainAxisAlignment.start),
-        height: this.height);
+        height: height);
   }
 }

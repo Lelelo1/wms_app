@@ -17,29 +17,36 @@ class JobPage extends StatefulWidget implements AbstractPage {
 }
 
 class _State extends State<JobPage> {
-  //String identifyEAN;
+  Widget view;
 
   @override
-  Widget build(BuildContext context) =>
-      ScanPage(this.widget.job.name, this.successfullScan);
+  Widget build(BuildContext context) => getCurrentView(this.view);
   // probably need to make fade and do transperency within SearchView component to make it
   // appear/dissapear and use Stack here oustide of it
 
+  Widget getCurrentView(Widget view) =>
+      AnimatedSwitcher(child: view, duration: Duration(milliseconds: 200));
+
+  Widget getScanPage() => ScanPage(this.widget.job.name, this.successfullScan);
+
   void successfullScan(String ean) {
     print("Successfull scaaaan!: " + ean);
+    setState(() {
+      this.view = SearchView(ean, closeSearchView, preformJob);
+    });
+    /*
     Navigator.push(
         this.context,
         MaterialPageRoute(
             builder: (context) =>
-                SearchView(ean, closeSearchView, preformJob)));
+                ;
+                */
   }
 
   void closeSearchView() {
-    /*
     setState(() {
-      this.currentView = getScanPage();
+      this.view = getScanPage();
     });
-    */
   }
 
   void preformJob(Product product) async {

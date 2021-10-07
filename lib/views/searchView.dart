@@ -32,11 +32,14 @@ class _State extends State<SearchView> {
                           style: TextStyle(fontSize: 28),
                           textAlign: TextAlign.center),
                       textField(),
+                      WMSTitleArea.closeButton(this.widget.pressedClose, 80)
                     ])),
                     decoration: BoxDecoration(
                         color: Color.fromARGB(90, 255, 255, 255))),
                 padding: EdgeInsets.all(1))));
   }
+
+// there is a flutter closebutton already
 
   // enter to sku to match it with the ean code that where scanned, select item in the list
   // TextFormField...?
