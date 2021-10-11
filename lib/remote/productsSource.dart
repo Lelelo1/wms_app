@@ -50,7 +50,7 @@ class ProductsSource /*implements AbstractProductsSource */ {
 */
   Future<Product> getProduct(MySqlConnection connection, String ean) async {
     Results results;
-    var sql = SQLQuery.product(ean);
+    var sql = SQLQuery.getProduct(ean);
     try {
       results = await connection.query(sql);
     } catch (exc) {
@@ -58,6 +58,13 @@ class ProductsSource /*implements AbstractProductsSource */ {
     }
 
     return Deserialization.toProduct(results);
+  }
+
+  Future<List<String>> getSKUSuggestions(
+      MySqlConnection connection, String sku) async {
+    var results = await connection.query(SQLQuery.getSKUSuggestions(sku));
+
+    return Deserialization.toSkus(results);
   }
 
   Future<void> disconnect(MySqlConnection connection) => connection.close();
@@ -79,8 +86,10 @@ class SQLQuery {
   static String productsFeminint =
       "SELECT DISTINCT ean_code, sku, c2c_hyllplats, name, image FROM catalog_product_flat_14 LIMIT 28;";
 
-  static String product(String ean) =>
+  static String getProduct(String ean) =>
       "SELECT `catalog_product_entity`.`entity_id` FROM `catalog_product_entity` WHERE `catalog_product_entity`.`entity_id` IN (SELECT `entity_id` FROM `catalog_product_entity_varchar` WHERE `attribute_id` = '283' AND `value` = '" +
       ean +
       "') ORDER BY `entity_id` DESC LIMIT 1;";
+  static String getSKUSuggestions(String sku) =>
+      "SELECT `sku` FROM `catalog_product_entity` WHERE `sku` LIKE '%[sku_variable]%'";
 }

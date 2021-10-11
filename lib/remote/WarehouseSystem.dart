@@ -36,5 +36,20 @@ class WarehouseSystem {
     await _productsSource.disconnect(connection);
     return product;
   }
-  //Future<Int>
+
+  Future<List<String>> getSKUSuggestions(String text) async {
+    var connection = await _productsSource.connect();
+
+    if (connection == null) {
+      print("did not get a connection to warehousesystem, timed out");
+      return null;
+    }
+
+    var skuSuggestions =
+        await this._productsSource.getSKUSuggestions(connection, text);
+
+    await _productsSource.disconnect(connection);
+
+    return skuSuggestions;
+  }
 }

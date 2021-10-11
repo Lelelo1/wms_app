@@ -20,6 +20,12 @@ class _State extends State<JobPage> {
   Widget view;
 
   @override
+  void initState() {
+    view = getScanPage();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) => getCurrentView(this.view);
   // probably need to make fade and do transperency within SearchView component to make it
   // appear/dissapear and use Stack here oustide of it
@@ -29,11 +35,19 @@ class _State extends State<JobPage> {
 
   Widget getScanPage() => ScanPage(this.widget.job.name, this.successfullScan);
 
-  void successfullScan(String ean) {
-    print("Successfull scaaaan!: " + ean);
+  void successfullScan(String barcode) async {
+    print("Successfull scaaaan!: " + barcode);
+
+    var product = await this.widget.job.identify(barcode);
+    if (Utils.hasValue(product)) {
+      // preform other job
+      return;
+    }
+
     setState(() {
-      this.view = SearchView(ean, closeSearchView, preformJob);
+      this.view = SearchView(barcode, closeSearchView, preformJob);
     });
+
     /*
     Navigator.push(
         this.context,

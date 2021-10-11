@@ -3,9 +3,19 @@
 class Product {
   int id;
   Product(int id);
-  String getEAN() {}
-  String getSKU() {}
-  String getShelf() {}
-  Future<String> getName() {}
-  String getImage() {}
+  String getEAN() {
+
+  }
+  String getSKU() {
+
+  }
+  String getShelf() {
+
+  }
+  Future<String> getName() {
+
+  }
+  String getImage() {
+    
+  }
 }

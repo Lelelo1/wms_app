@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:wms_app/models/product.dart';
+import 'package:wms_app/models/sequence.dart';
+import 'package:wms_app/pages/loadingPage.dart';
+import 'package:wms_app/stores/appStore.dart';
+import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/widgets/wmsAppBar.dart';
 import 'package:wms_app/widgets/wmsTitleArea.dart';
 
+import '../utils.dart';
+
 class SearchView extends StatefulWidget {
+  final WorkStore workStore = AppStore.injector.get<WorkStore>();
   final String ean;
   final void Function() pressedClose;
   final void Function(Product) pressedSubmit;
@@ -15,13 +22,27 @@ class SearchView extends StatefulWidget {
 }
 
 class _State extends State<SearchView> {
+  String inputText;
+  Future<List<String>> skuSuggestions;
+  FutureBuilder futureBuilder() => FutureBuilder<List<String>>(
+      future: this.skuSuggestions,
+      builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          // https://stackoverflow.com/questions/52847534/flutter-futurebuilder-returning-null-error-triggered
+          return LoadingPage();
+        }
+
+        return content(snapshot.data);
+      });
+
   @override
   Widget build(BuildContext context) {
-    /*
-    var titleArea =
-        WMSTitleArea(this.widget.ean, 80, this.widget.pressedClose).get();
-    */
+    this.skuSuggestions =
+        this.widget.workStore.warehouseSystem.getSKUSuggestions(this.inputText);
+    return futureBuilder();
+  }
 
+  Widget content(List<String> skuSuggestions) {
     return Scaffold(
         //appBar: WMSAppBar(this.widget.name).get(),
         body: SafeArea(
@@ -31,14 +52,20 @@ class _State extends State<SearchView> {
                       Text(this.widget.ean,
                           style: TextStyle(fontSize: 28),
                           textAlign: TextAlign.center),
-                      textField(),
-                      WMSTitleArea.closeButton(this.widget.pressedClose, 80)
+                      Row(children: [
+                        WMSTitleArea.closeButton(this.widget.pressedClose, 80),
+                      ], mainAxisAlignment: MainAxisAlignment.center),
+                      Stack(
+                        children: [
+                          renderTextField(),
+                          renderSuggestions(skuSuggestions)
+                        ],
+                      ),
                     ])),
                     decoration: BoxDecoration(
                         color: Color.fromARGB(90, 255, 255, 255))),
-                padding: EdgeInsets.all(1))));
+                padding: EdgeInsets.all(18))));
   }
-
 // there is a flutter closebutton already
 
   // enter to sku to match it with the ean code that where scanned, select item in the list
@@ -49,9 +76,10 @@ class _State extends State<SearchView> {
   InputBorder inputBorder() => OutlineInputBorder(
       borderRadius: textFieldBorderRadius(),
       borderSide: BorderSide(color: textFieldColor(), width: 3.0));
-  Widget textField() {
-    return Material(
+
+  Widget renderTextField() => Material(
         child: TextFormField(
+            onChanged: setInputTextState,
             autofocus: false,
             decoration: InputDecoration(
                 hintText: 'Ange Artikelnummer',
@@ -63,6 +91,21 @@ class _State extends State<SearchView> {
                     inputBorder())), // it can maybe look abit different, as you understand that you have focused/selected the textfield
         elevation: 16,
         color: Colors.transparent,
-        borderRadius: textFieldBorderRadius());
+        borderRadius: textFieldBorderRadius(),
+      );
+
+  void setInputTextState(String text) {
+    setState(() {
+      this.skuSuggestions = null;
+      this.inputText = text;
+    });
+  }
+
+  Widget renderSuggestions(List<String> skuSuggestions) {
+    if (skuSuggestions == null || skuSuggestions.length == 0) {
+      return Container();
+    }
+    return Container(
+        child: Column(children: (skuSuggestions).map((e) => Text(e)).toList()));
   }
 }
