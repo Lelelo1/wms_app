@@ -4,6 +4,8 @@ import 'package:wms_app/models/product.dart';
 import 'package:wms_app/remote/productsSource.dart';
 import 'package:wms_app/views/productView.dart';
 
+import '../utils.dart';
+
 // how to connect and disconnect in each method, without writing it in each
 
 class WarehouseSystem {
@@ -38,6 +40,10 @@ class WarehouseSystem {
   }
 
   Future<List<String>> getSKUSuggestions(String text) async {
+    if (Utils.isNullOrEmpty(text)) {
+      return null;
+    }
+
     var connection = await _productsSource.connect();
 
     if (connection == null) {

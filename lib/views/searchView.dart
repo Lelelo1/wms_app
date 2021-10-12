@@ -15,6 +15,9 @@ class SearchView extends StatefulWidget {
   final void Function() pressedClose;
   final void Function(Product) pressedSubmit;
 
+  final Stream<List<String>> skuSuggestionsStream =
+      Stream<List<String>>.empty();
+
   SearchView(this.ean, this.pressedClose, this.pressedSubmit);
 
   @override
@@ -22,8 +25,8 @@ class SearchView extends StatefulWidget {
 }
 
 class _State extends State<SearchView> {
-  String inputText;
-  Future<List<String>> skuSuggestions;
+  List<String> skuSuggestions;
+  /*
   FutureBuilder futureBuilder() => FutureBuilder<List<String>>(
       future: this.skuSuggestions,
       builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
@@ -34,37 +37,34 @@ class _State extends State<SearchView> {
 
         return content(snapshot.data);
       });
+  */
 
   @override
   Widget build(BuildContext context) {
-    this.skuSuggestions =
-        this.widget.workStore.warehouseSystem.getSKUSuggestions(this.inputText);
-    return futureBuilder();
+    return content();
   }
 
-  Widget content(List<String> skuSuggestions) {
+  Widget content() {
     return Scaffold(
         //appBar: WMSAppBar(this.widget.name).get(),
         body: SafeArea(
-            child: Padding(
-                child: Container(
-                    child: (Column(children: [
-                      Text(this.widget.ean,
-                          style: TextStyle(fontSize: 28),
-                          textAlign: TextAlign.center),
-                      Row(children: [
-                        WMSTitleArea.closeButton(this.widget.pressedClose, 80),
-                      ], mainAxisAlignment: MainAxisAlignment.center),
-                      Stack(
-                        children: [
-                          renderTextField(),
-                          renderSuggestions(skuSuggestions)
-                        ],
-                      ),
-                    ])),
-                    decoration: BoxDecoration(
-                        color: Color.fromARGB(90, 255, 255, 255))),
-                padding: EdgeInsets.all(18))));
+          child: Container(
+              child: (Column(children: [
+                Text(this.widget.ean,
+                    style: TextStyle(fontSize: 28),
+                    textAlign: TextAlign.center),
+                Row(children: [
+                  WMSTitleArea.closeButton(this.widget.pressedClose, 80),
+                ], mainAxisAlignment: MainAxisAlignment.center),
+                renderTextField(),
+                SingleChildScrollView(
+                    child: renderSuggestions(this.skuSuggestions),
+                    physics: const NeverScrollableScrollPhysics())
+              ])),
+              decoration:
+                  BoxDecoration(color: Color.fromARGB(90, 255, 255, 255))),
+        ),
+        resizeToAvoidBottomInset: false);
   }
 // there is a flutter closebutton already
 
@@ -76,7 +76,7 @@ class _State extends State<SearchView> {
   InputBorder inputBorder() => OutlineInputBorder(
       borderRadius: textFieldBorderRadius(),
       borderSide: BorderSide(color: textFieldColor(), width: 3.0));
-
+  double textFieldHeight = 40;
   Widget renderTextField() => Material(
         child: TextFormField(
             onChanged: setInputTextState,
@@ -94,10 +94,11 @@ class _State extends State<SearchView> {
         borderRadius: textFieldBorderRadius(),
       );
 
-  void setInputTextState(String text) {
+  void setInputTextState(String text) async {
+    var suggestions =
+        await this.widget.workStore.warehouseSystem.getSKUSuggestions(text);
     setState(() {
-      this.skuSuggestions = null;
-      this.inputText = text;
+      this.skuSuggestions = suggestions;
     });
   }
 
@@ -105,7 +106,36 @@ class _State extends State<SearchView> {
     if (skuSuggestions == null || skuSuggestions.length == 0) {
       return Container();
     }
+
     return Container(
-        child: Column(children: (skuSuggestions).map((e) => Text(e)).toList()));
+        child: Column(
+            children:
+                (skuSuggestions).map((e) => renderSuggestion(e)).toList()),
+        color: Color.fromARGB(255, 240, 227, 213));
+  }
+
+  Widget renderSuggestion(String sku) {
+    return Container(
+        child: Card(
+            child: ListTile(
+                title: Text(sku),
+                onTap: () {
+                  print("pressed " + sku);
+                }),
+            color: Color.fromARGB(120, 255, 255, 255),
+            elevation: 20,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15))),
+        height: 50);
+
+    /*
+    return Padding(
+        child: Text(sku,
+            textAlign: TextAlign.left,
+            style: TextStyle(
+                backgroundColor: Color.fromARGB(255, 240, 240, 240),
+                fontSize: 18)),
+        padding: EdgeInsets.all(2));
+        */
   }
 }

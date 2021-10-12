@@ -90,6 +90,10 @@ class SQLQuery {
       "SELECT `catalog_product_entity`.`entity_id` FROM `catalog_product_entity` WHERE `catalog_product_entity`.`entity_id` IN (SELECT `entity_id` FROM `catalog_product_entity_varchar` WHERE `attribute_id` = '283' AND `value` = '" +
       ean +
       "') ORDER BY `entity_id` DESC LIMIT 1;";
-  static String getSKUSuggestions(String sku) =>
-      "SELECT `sku` FROM `catalog_product_entity` WHERE `sku` LIKE '%[sku_variable]%'";
+  static String getSKUSuggestions(String sku) {
+    // LIMIT 10
+    return "SELECT `sku` FROM `catalog_product_entity` WHERE `sku` LIKE '%" +
+        sku +
+        "%' LIMIT 20";
+  }
 }

@@ -31,6 +31,7 @@ class Deserialization {
     if (results == null || results.isEmpty) {
       return null;
     }
-    return results.map((e) => e[0]).toList();
+    var suggestions = results.map<String>((e) => e[0]).toList();
+    return suggestions;
   }
 }
