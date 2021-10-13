@@ -172,7 +172,7 @@ packages:
       name: google_ml_vision
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.6"
+    version: "0.0.7"
   http:
     dependency: transitive
     description:
@@ -304,13 +304,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.2.1"
-  qr_code_scanner:
-    dependency: "direct main"
-    description:
-      name: qr_code_scanner
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.3.5"
   quiver:
     dependency: transitive
     description:

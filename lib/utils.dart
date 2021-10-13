@@ -5,8 +5,6 @@ import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_ml_vision/google_ml_vision.dart';
 
-import 'models/image.dart';
-
 class Utils {
   // for better readability, there is a javascript
   // library I forgot the name of, that contains
@@ -23,13 +21,14 @@ class Utils {
     list.forEach((x) => map[x] = !map.containsKey(x) ? (1) : (map[x] + 1));
     return map;
   }
+
+  // same of primitive types in other programming languages
+  static double defaultZero<T extends double>(T value) =>
+      value == null ? 0 : value;
 }
 
 class ImageUtils {
-  static AbstractImage toAbstractImage(CameraImage image) =>
-      AbstractImage(_imageData(image), _concatenatePlanes(image.planes));
-
-  static GoogleVisionImageMetadata _imageData(CameraImage image) =>
+  static GoogleVisionImageMetadata imageData(CameraImage image) =>
       GoogleVisionImageMetadata(
         rawFormat: image.format.raw,
         size: Size(image.width.toDouble(), image.height.toDouble()),
@@ -43,7 +42,7 @@ class ImageUtils {
             .toList(),
       );
 
-  static Uint8List _concatenatePlanes(List<Plane> planes) {
+  static Uint8List concatenatePlanes(List<Plane> planes) {
     final WriteBuffer allBytes = WriteBuffer();
     planes.forEach((Plane plane) => allBytes.putUint8List(plane.bytes));
     return allBytes.done().buffer.asUint8List();

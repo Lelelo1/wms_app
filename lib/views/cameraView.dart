@@ -12,10 +12,12 @@ import 'package:wms_app/pages/loadingPage.dart';
 // this shoudld pe put into the dependency injector
 class CameraViewController {
   // rename to 'scanning controll'?
-  static CameraImage currentImage;
+  static CameraImage streamImage;
+  //static XFile photoFile;
+  static void updateCurrentImage(CameraImage img) {
+    streamImage = img;
 
-  static void updateCurrentImage(CameraImage image) {
-    currentImage = image;
+    //print("imageStream");
   }
 
   static void pauseImageStream() {
@@ -36,8 +38,12 @@ class CameraViewController {
       }
       _cameraController = CameraController(cameras[0], ResolutionPreset.max);
       await _cameraController.initialize();
+      //_cameraController.setFlashMode(FlashMode.always); // null crash...
+
+      // use stream image, or when commented out take ordinary photo to file and use
       _cameraController.startImageStream(updateCurrentImage);
     }
+    // need a new controller each time rerendered
 
     return _cameraController;
   }
@@ -65,15 +71,20 @@ class CameraViewController {
     _audioCache
         .play("sounds/scanner_beep.mp3"); // (should be able to use waw also)
   }
+
+  static Future<XFile> takePhoto() async =>
+      (await getCameraControllerInstance()).takePicture();
 }
 
 class CameraView extends StatefulWidget {
   Size size;
-  CameraView(this.size);
+  CameraView([this.size]);
   @override
   _State createState() => _State();
 }
 
+// WidgetsBindingObserver
+// needed to to detect app lifecycle events: https://medium.com/pharos-production/flutter-app-lifecycle-4b0ab4a4211a
 class _State extends State<CameraView> {
   FutureBuilder futureBuilder() => FutureBuilder<CameraController>(
       future: CameraViewController.getCameraControllerInstance(), // <--!!!
@@ -88,12 +99,21 @@ class _State extends State<CameraView> {
       });
 
   Widget content(CameraController controller) {
+    if (controller == null) {
+      return Container(
+          child: Center(
+              child: Text("something went wrong with the CameraController")));
+    }
+    print("render content");
+
     var size = MediaQuery.of(context).size;
     var aspectRatio = size.width / size.height;
-    var width = this.widget.size.width;
-    return Container(
+    var width = size.width; //this.widget.size.width;
+
+    return Flexible(
+        child: Container(
       width: width,
-      height: width,
+      height: size.height,
       child: ClipRect(
         child: OverflowBox(
           alignment: Alignment.center,
@@ -107,28 +127,23 @@ class _State extends State<CameraView> {
           ),
         ),
       ),
+    ));
+
+    //return camera(controller);
+  }
+
+  /*
+  Widget camera(CameraController controller) {
+    return Expanded(
+      child: Center(
+        child: AspectRatio(
+          aspectRatio: 1 / controller.value.aspectRatio,
+          child: CameraPreview(controller),
+        ),
+      ),
     );
   }
-  /*
-  @override
-  void dispose() {
-    controller?.dispose();
-    super.dispose();
-  }
   */
-
   @override
   Widget build(BuildContext context) => futureBuilder();
-
-/*
-  @override
-  Widget build(BuildContext context) {
-    if (!controller.value.isInitialized) {
-      return Container();
-    }
-    return MaterialApp(
-      home: CameraPreview(controller),
-    );
-  }
-  */
 }

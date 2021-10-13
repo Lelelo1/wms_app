@@ -1,3 +1,4 @@
+/*
 import 'package:flutter/material.dart';
 import 'package:wms_app/models/sequence.dart';
 import 'package:wms_app/pages/abstractPage.dart';
@@ -54,3 +55,4 @@ class _State extends State<ProductRegistrationPage> {
     return futureBuilder();
   }
 }
+*/
