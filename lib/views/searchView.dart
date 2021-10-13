@@ -57,9 +57,7 @@ class _State extends State<SearchView> {
                   WMSTitleArea.closeButton(this.widget.pressedClose, 80),
                 ], mainAxisAlignment: MainAxisAlignment.center),
                 renderTextField(),
-                SingleChildScrollView(
-                    child: renderSuggestions(this.skuSuggestions),
-                    physics: const NeverScrollableScrollPhysics())
+                Flexible(child: renderSuggestions(this.skuSuggestions))
               ])),
               decoration:
                   BoxDecoration(color: Color.fromARGB(90, 255, 255, 255))),
@@ -107,11 +105,27 @@ class _State extends State<SearchView> {
       return Container();
     }
 
+    return ListView(
+        children: (skuSuggestions).map((e) => renderSuggestion(e)).toList(),
+        shrinkWrap: true);
+    /*
+    return ListView.builder(
+        padding: const EdgeInsets.all(8),
+        shrinkWrap:
+            true, // https://stackoverflow.com/questions/50688970/cant-add-a-listview-in-flutter
+        itemCount: skuSuggestions.length,
+        
+        itemBuilder: (BuildContext context, int index) {
+          return renderSuggestion(skuSuggestions[index]);
+        });
+    */
+    /*
     return Container(
         child: Column(
             children:
                 (skuSuggestions).map((e) => renderSuggestion(e)).toList()),
         color: Color.fromARGB(255, 240, 227, 213));
+        */
   }
 
   Widget renderSuggestion(String sku) {
