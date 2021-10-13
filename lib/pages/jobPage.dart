@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:wms_app/jobs/identify.dart';
@@ -45,7 +47,17 @@ class _State extends State<JobPage> {
     }
 
     setState(() {
-      this.view = SearchView(barcode, closeSearchView, preformJob);
+      this.view = Stack(children: [
+        getScanPage(),
+        BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 0.7, sigmaY: 0.7),
+            child: Container(
+              width: double.infinity,
+              height: double.infinity,
+              decoration: BoxDecoration(color: Colors.purple.withOpacity(0.02)),
+            )),
+        SearchView(barcode, closeSearchView, preformJob)
+      ]);
     });
 
     /*

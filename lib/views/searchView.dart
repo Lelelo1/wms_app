@@ -62,7 +62,8 @@ class _State extends State<SearchView> {
               decoration:
                   BoxDecoration(color: Color.fromARGB(90, 255, 255, 255))),
         ),
-        resizeToAvoidBottomInset: false);
+        resizeToAvoidBottomInset: false,
+        backgroundColor: Color.fromARGB(190, 255, 255, 255));
   }
 // there is a flutter closebutton already
 
@@ -131,12 +132,13 @@ class _State extends State<SearchView> {
   Widget renderSuggestion(String sku) {
     return Container(
         child: Card(
-            child: ListTile(
-                title: Text(sku),
-                onTap: () {
-                  print("pressed " + sku);
-                }),
-            color: Color.fromARGB(120, 255, 255, 255),
+            child: Padding(
+              child: Align(
+                  child: Text(sku, style: TextStyle(fontSize: 17)),
+                  alignment: Alignment.centerLeft),
+              padding: EdgeInsets.only(left: 10, right: 10),
+            ),
+            color: Color.fromARGB(135, 255, 255, 255),
             elevation: 20,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15))),
