@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:wms_app/jobs/identify.dart';
 import 'package:wms_app/models/product.dart';
 import 'package:wms_app/models/sequence.dart';
+import 'package:wms_app/pages/AbstractPage.dart';
 import 'package:wms_app/pages/loadingPage.dart';
 import 'package:wms_app/stores/appStore.dart';
 import 'package:wms_app/stores/workStore.dart';
@@ -9,7 +11,8 @@ import 'package:wms_app/widgets/wmsTitleArea.dart';
 
 import '../utils.dart';
 
-class SearchView extends StatefulWidget {
+class SearchPage extends StatefulWidget implements AbstractPage {
+  final String name;
   final WorkStore workStore = AppStore.injector.get<WorkStore>();
   final String ean;
   final void Function() pressedClose;
@@ -18,13 +21,17 @@ class SearchView extends StatefulWidget {
   final Stream<List<String>> skuSuggestionsStream =
       Stream<List<String>>.empty();
 
-  SearchView(this.ean, this.pressedClose, this.pressedSubmit);
+  SearchPage(this.name, this.ean, this.pressedClose, this.pressedSubmit);
 
   @override
   State<StatefulWidget> createState() => _State();
+
+  @override
+  // TODO: implement job
+  Job get job => throw UnimplementedError();
 }
 
-class _State extends State<SearchView> {
+class _State extends State<SearchPage> {
   List<String> skuSuggestions;
   /*
   FutureBuilder futureBuilder() => FutureBuilder<List<String>>(
@@ -62,8 +69,7 @@ class _State extends State<SearchView> {
               decoration:
                   BoxDecoration(color: Color.fromARGB(90, 255, 255, 255))),
         ),
-        resizeToAvoidBottomInset: false,
-        backgroundColor: Color.fromARGB(190, 255, 255, 255));
+        resizeToAvoidBottomInset: false);
   }
 // there is a flutter closebutton already
 

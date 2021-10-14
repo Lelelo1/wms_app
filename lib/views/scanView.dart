@@ -4,7 +4,6 @@ import 'package:wms_app/jobs/identify.dart';
 import 'package:wms_app/models/product.dart';
 import 'package:wms_app/services/visionService.dart';
 import 'package:wms_app/views/cameraView.dart';
-import 'package:wms_app/views/searchView.dart';
 
 import '../utils.dart';
 

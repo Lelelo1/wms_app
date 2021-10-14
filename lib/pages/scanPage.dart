@@ -50,8 +50,9 @@ class _State extends State<ScanPage> {
     return Scaffold(
         //appBar: WMSAppBar(this.widget.name).get(),
         body: content(),
-        extendBodyBehindAppBar:
-            true); // https://stackoverflow.com/questions/49840074/keyboard-pushes-the-content-up-resizes-the-screen
+        extendBodyBehindAppBar: true,
+        resizeToAvoidBottomInset:
+            false); // https://stackoverflow.com/questions/49840074/keyboard-pushes-the-content-up-resizes-the-screen
   }
 
   // conditional renderering, searchView
