@@ -75,7 +75,7 @@ class _State extends State<SearchPage> {
 
   // enter to sku to match it with the ean code that where scanned, select item in the list
   // TextFormField...?
-
+  double textLeftPadding = 20;
   Color textFieldColor() => Color.fromARGB(255, 242, 233, 206);
   BorderRadius textFieldBorderRadius() => BorderRadius.circular(25.0);
   InputBorder inputBorder() => OutlineInputBorder(
@@ -90,10 +90,13 @@ class _State extends State<SearchPage> {
                 hintText: 'Ange Artikelnummer',
                 fillColor: textFieldColor(),
                 filled: true,
-                contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                contentPadding:
+                    EdgeInsets.fromLTRB(this.textLeftPadding, 10.0, 20.0, 10.0),
                 enabledBorder: inputBorder(),
-                focusedBorder:
-                    inputBorder())), // it can maybe look abit different, as you understand that you have focused/selected the textfield
+                focusedBorder: inputBorder()),
+            style: TextStyle(
+                fontSize:
+                    17)), // it can maybe look abit different, as you understand that you have focused/selected the textfield
         elevation: 16,
         color: Colors.transparent,
         borderRadius: textFieldBorderRadius(),
@@ -114,50 +117,32 @@ class _State extends State<SearchPage> {
 
     return ListView(
         children: (skuSuggestions).map((e) => renderSuggestion(e)).toList(),
-        shrinkWrap: true);
-    /*
-    return ListView.builder(
-        padding: const EdgeInsets.all(8),
-        shrinkWrap:
-            true, // https://stackoverflow.com/questions/50688970/cant-add-a-listview-in-flutter
-        itemCount: skuSuggestions.length,
-        
-        itemBuilder: (BuildContext context, int index) {
-          return renderSuggestion(skuSuggestions[index]);
-        });
-    */
-    /*
-    return Container(
-        child: Column(
-            children:
-                (skuSuggestions).map((e) => renderSuggestion(e)).toList()),
-        color: Color.fromARGB(255, 240, 227, 213));
-        */
+        shrinkWrap: true,
+        padding: EdgeInsets.zero);
   }
 
-  Widget renderSuggestion(String sku) {
-    return Container(
-        child: Card(
-            child: Padding(
-              child: Align(
-                  child: Text(sku, style: TextStyle(fontSize: 17)),
-                  alignment: Alignment.centerLeft),
-              padding: EdgeInsets.only(left: 10, right: 10),
-            ),
+//Sku:  FS6541MUI-65I
+  /*
+  Card(
+            child: ,
             color: Color.fromARGB(135, 255, 255, 255),
-            elevation: 20,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15))),
-        height: 50);
-
-    /*
-    return Padding(
-        child: Text(sku,
-            textAlign: TextAlign.left,
-            style: TextStyle(
-                backgroundColor: Color.fromARGB(255, 240, 240, 240),
-                fontSize: 18)),
-        padding: EdgeInsets.all(2));
-        */
+            elevation: 20)
+            */
+  // padding: EdgeInsets.only(left: 10, right: 10)
+  Widget renderSuggestion(String sku) {
+    print("Sku:" +
+        sku); // why sku prepended with space, it makes it look like padding is wrong
+    return Container(
+        child: MaterialButton(
+          child: Align(
+              child: Text(sku, style: TextStyle(fontSize: 17)),
+              alignment: Alignment.centerLeft),
+          onPressed: () {},
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          padding: EdgeInsets.only(left: this.textLeftPadding),
+        ),
+        height: 50,
+        color: Color.fromARGB(40, 120, 120, 120));
   }
 }
