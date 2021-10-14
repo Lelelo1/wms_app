@@ -57,12 +57,12 @@ class _State extends State<SearchPage> {
         body: SafeArea(
           child: Container(
               child: (Column(children: [
-                Text(this.widget.ean,
-                    style: TextStyle(fontSize: 28),
-                    textAlign: TextAlign.center),
-                Row(children: [
-                  WMSTitleArea.closeButton(this.widget.pressedClose, 80),
-                ], mainAxisAlignment: MainAxisAlignment.center),
+                Padding(
+                    child: Text(this.widget.ean,
+                        style: TextStyle(fontSize: 28),
+                        textAlign: TextAlign.center),
+                    padding: EdgeInsets.only(
+                        left: 3, top: 12, right: 3, bottom: 12)),
                 renderTextField(),
                 Flexible(child: renderSuggestions(this.skuSuggestions))
               ])),
