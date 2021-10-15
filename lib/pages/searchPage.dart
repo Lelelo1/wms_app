@@ -130,8 +130,6 @@ class _State extends State<SearchPage> {
             */
   // padding: EdgeInsets.only(left: 10, right: 10)
   Widget renderSuggestion(String sku) {
-    print("Sku:" +
-        sku); // why sku prepended with space, it makes it look like padding is wrong
     return Container(
         child: MaterialButton(
           child: Align(

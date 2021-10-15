@@ -1,9 +1,9 @@
-/*
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:wms_app/models/archivedProduct.dart';
 import 'package:wms_app/models/product.dart';
+import 'package:wms_app/widgets/wmsAsyncWidget.dart';
 
 // needs proper sizing for mulitple screen sizes !!
 
@@ -87,12 +87,8 @@ class ProductView extends StatelessWidget {
   }
 
   // methods given in 'Product's class order
-  Future<Widget> nameWidget() async {
-    return Text(
-      await product?.getName(),
-      style: TextStyle(fontSize: 20),
-    );
-  }
+  Widget nameWidget() => WMSAsyncWidget<String>(product?.getName(),
+      (String name) => Text(name, style: TextStyle(fontSize: 20)));
 
   Widget shelfWidget() {
     return Text(product?.getShelf(), style: TextStyle(fontSize: 22));
@@ -125,4 +121,3 @@ class ProductView extends StatelessWidget {
   }
   */
 }
-*/

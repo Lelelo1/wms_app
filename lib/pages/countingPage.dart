@@ -31,7 +31,7 @@ class _State extends State<CountingPage> {
   }
 
   // alls pages should have future builder, more or less
-  FutureBuilder futureBuilder() => FutureBuilder<Sequence>(
+  FutureBuilder () => FutureBuilder<Sequence>(
       future: futureSequence,
       builder: (BuildContext context, AsyncSnapshot<Sequence> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {

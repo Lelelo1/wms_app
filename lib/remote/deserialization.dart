@@ -31,7 +31,13 @@ class Deserialization {
     if (results == null || results.isEmpty) {
       return null;
     }
-    var suggestions = results.map<String>((e) => e[0]).toList();
+    //why is sku prepended with space, it makes it look like padding is wrong
+    var suggestions = results.map<String>((e) {
+      var sku = e[0];
+      print("sku...");
+      print(sku);
+      return sku;
+    }).toList();
     return suggestions;
   }
 }
