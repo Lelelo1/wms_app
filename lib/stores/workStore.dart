@@ -27,6 +27,7 @@ class WorkStore {
     return Sequence(products);
   }
 
+/*
   Sequence getRegistration() {
     return null;
   }
@@ -34,4 +35,5 @@ class WorkStore {
   Sequence getCounting() {
     return null;
   }
+  */
 }

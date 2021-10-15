@@ -11,7 +11,7 @@ class ProductsSource /*implements AbstractProductsSource */ {
   // needs internet permission android real device, otherwise: 'SocketException: OS Error: Connection refused'
   // https://stackoverflow.com/questions/55785581/socketexception-os-error-connection-refused-errno-111-in-flutter-using-djan
   // such permission is granted on install time: https://developer.android.com/training/basics/network-ops/connecting
-  Future<MySqlConnection> connect() async {
+  Future<MySqlConnection> _connect() async {
     var settings = new ConnectionSettings(
         host: MySql.host,
         port: MySql.port,

@@ -3,11 +3,11 @@
 // potentially create a mock, when showing to people and not being connected, to pin pointing problems
 // etc
 
-/*
+/
 import 'abstractProductsSource.dart';
 
 class MockProductsSource implements AbstractProductsSource {
-  /*
+  /
   // my own pattern, supported lazy fire and forget initialilization, but it's possible to awat the creation of all services vis there 'getAsync' method
   static Future<MockProductsSource> futureMockProductsSource;
   static void init() {
