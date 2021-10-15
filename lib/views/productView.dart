@@ -90,9 +90,8 @@ class ProductView extends StatelessWidget {
   Widget nameWidget() => WMSAsyncWidget<String>(product?.getName(),
       (String name) => Text(name, style: TextStyle(fontSize: 20)));
 
-  Widget shelfWidget() {
-    return Text(product?.getShelf(), style: TextStyle(fontSize: 22));
-  }
+  Widget shelfWidget() => WMSAsyncWidget(product?.getShelf(),
+      (shelf) => Text(shelf, style: TextStyle(fontSize: 22)));
 
   Widget skuWidget() {
     return Text(product?.getSKU().toString(),
