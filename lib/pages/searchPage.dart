@@ -4,8 +4,11 @@ import 'package:wms_app/models/product.dart';
 import 'package:wms_app/models/sequence.dart';
 import 'package:wms_app/pages/AbstractPage.dart';
 import 'package:wms_app/pages/loadingPage.dart';
+import 'package:wms_app/remote/mockWarehouseSystem.dart';
 import 'package:wms_app/stores/appStore.dart';
 import 'package:wms_app/stores/workStore.dart';
+import 'package:wms_app/views/SearchProductView.dart';
+import 'package:wms_app/views/productView.dart';
 import 'package:wms_app/widgets/wmsAppBar.dart';
 import 'package:wms_app/widgets/wmsTitleArea.dart';
 
@@ -45,6 +48,9 @@ class _State extends State<SearchPage> {
         return content(snapshot.data);
       });
   */
+  TextEditingController _textController = TextEditingController();
+  String inputText;
+  String selectedSKU;
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +70,7 @@ class _State extends State<SearchPage> {
                     padding: EdgeInsets.only(
                         left: 3, top: 12, right: 3, bottom: 12)),
                 renderTextField(),
-                Flexible(child: renderSuggestions(this.skuSuggestions))
+                ...views()
               ])),
               decoration:
                   BoxDecoration(color: Color.fromARGB(90, 255, 255, 255))),
@@ -84,6 +90,7 @@ class _State extends State<SearchPage> {
   double textFieldHeight = 40;
   Widget renderTextField() => Material(
         child: TextFormField(
+            controller: _textController,
             onChanged: setInputTextState,
             autofocus: false,
             decoration: InputDecoration(
@@ -108,6 +115,38 @@ class _State extends State<SearchPage> {
     setState(() {
       this.skuSuggestions = suggestions;
     });
+  }
+
+  List<Widget> views() {
+    //var v = Utils.hasValue(selectedSKU);
+
+    return Utils.hasValue(selectedSKU)
+        ? confirmContent()
+        : [renderSuggestions(this.skuSuggestions)];
+  }
+
+  AbstractProduct _mockProduct = MockProduct(
+      111111111,
+      "eaneaneanean",
+      "assets/images/product_placeholder.png",
+      "1productnameproduct",
+      "1skuskuskusku",
+      "1Shelf-11-2");
+
+  List<Widget> confirmContent() {
+    return [Flexible(child: ProductView(_mockProduct))]; /*, confirmButton()*/
+  }
+
+  Widget confirmButton() {
+    return Card(
+        child: ElevatedButton(
+            child: Text("Länka"),
+            onPressed: () {
+              print("product with sku: " +
+                  this.selectedSKU +
+                  " was updated with ean: " +
+                  this.widget.ean);
+            }));
   }
 
   Widget renderSuggestions(List<String> skuSuggestions) {
@@ -135,7 +174,14 @@ class _State extends State<SearchPage> {
           child: Align(
               child: Text(sku, style: TextStyle(fontSize: 17)),
               alignment: Alignment.centerLeft),
-          onPressed: () {},
+          onPressed: () {
+            // https://stackoverflow.com/questions/53481261/how-to-unfocus-textfield-that-has-custom-focusnode
+            FocusScope.of(context).requestFocus(new FocusNode());
+            _textController.text = sku;
+            setState(() {
+              this.selectedSKU = sku;
+            });
+          },
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
           padding: EdgeInsets.only(left: this.textLeftPadding),

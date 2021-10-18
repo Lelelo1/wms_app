@@ -10,6 +10,7 @@ import 'package:wms_app/pages/scanPage.dart';
 import 'package:wms_app/pages/searchPage.dart';
 import 'package:wms_app/utils.dart';
 
+// rename to 'WorkPage'... ?
 class JobPage extends StatefulWidget implements AbstractPage {
   final Job job;
 
@@ -44,6 +45,7 @@ class _State extends State<JobPage> {
       return;
     }
 
+    print("navigate to SearchPage");
     Navigator.of(context).push(PageRouteBuilder(
         pageBuilder: (_, __, ___) => blurView(
               Opacity(

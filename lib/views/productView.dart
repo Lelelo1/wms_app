@@ -16,9 +16,9 @@ import 'package:wms_app/widgets/wmsAsyncWidget.dart';
 // https://stackoverflow.com/questions/60133733/non-final-field-in-stateless-flutter-widget
 // ignore: must_be_immutable
 class ProductView extends StatelessWidget {
-  Product product;
+  AbstractProduct product;
 
-  ProductView(Product product) {
+  ProductView(AbstractProduct product) {
     // asume as product, handle outside
     this.product = product;
   }
@@ -93,10 +93,10 @@ class ProductView extends StatelessWidget {
   Widget shelfWidget() => WMSAsyncWidget(product?.getShelf(),
       (shelf) => Text(shelf, style: TextStyle(fontSize: 22)));
 
-  Widget skuWidget() {
-    return Text(product?.getSKU().toString(),
-        style: TextStyle(fontSize: 38), textAlign: TextAlign.center);
-  }
+  Widget skuWidget() => WMSAsyncWidget(
+      product?.getSKU(),
+      (sku) => Text(sku,
+          style: TextStyle(fontSize: 38), textAlign: TextAlign.center));
 
   Widget boxWidget() {
     return Text("Boxnummer: " + "some box (not implemented)");
