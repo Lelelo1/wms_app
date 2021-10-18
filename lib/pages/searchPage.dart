@@ -70,7 +70,7 @@ class _State extends State<SearchPage> {
                     padding: EdgeInsets.only(
                         left: 3, top: 12, right: 3, bottom: 12)),
                 renderTextField(),
-                ...views()
+                view()
               ])),
               decoration:
                   BoxDecoration(color: Color.fromARGB(90, 255, 255, 255))),
@@ -117,12 +117,12 @@ class _State extends State<SearchPage> {
     });
   }
 
-  List<Widget> views() {
+  Widget view() {
     //var v = Utils.hasValue(selectedSKU);
 
     return Utils.hasValue(selectedSKU)
         ? confirmContent()
-        : [renderSuggestions(this.skuSuggestions)];
+        : renderSuggestions(this.skuSuggestions);
   }
 
   AbstractProduct _mockProduct = MockProduct(
@@ -133,8 +133,9 @@ class _State extends State<SearchPage> {
       "1skuskuskusku",
       "1Shelf-11-2");
 
-  List<Widget> confirmContent() {
-    return [Flexible(child: ProductView(_mockProduct))]; /*, confirmButton()*/
+  Widget confirmContent() {
+    return SearchProductView(_mockProduct);
+    ; /*, confirmButton()*/
   }
 
   Widget confirmButton() {
@@ -153,11 +154,12 @@ class _State extends State<SearchPage> {
     if (skuSuggestions == null || skuSuggestions.length == 0) {
       return Container();
     }
-
-    return ListView(
-        children: (skuSuggestions).map((e) => renderSuggestion(e)).toList(),
-        shrinkWrap: true,
-        padding: EdgeInsets.zero);
+    // needs 'Flexible' otherwise overflow pixels
+    return Flexible(
+        child: ListView(
+            children: (skuSuggestions).map((e) => renderSuggestion(e)).toList(),
+            shrinkWrap: true,
+            padding: EdgeInsets.zero));
   }
 
 //Sku:  FS6541MUI-65I
