@@ -5,32 +5,22 @@ import 'package:wms_app/models/archivedProduct.dart';
 import 'package:wms_app/models/product.dart';
 import 'package:wms_app/widgets/wmsAsyncWidget.dart';
 
-// needs proper sizing for mulitple screen sizes !!
+// need to design for mulitiple screen sizes:
 
-// https://trello.com/c/sgBxC7JO/7-förslag-layout
-
-// Should look like (in the first scetch):
-// Hyllplats :  Artikelnummer
-// Namn : Box
-
-// https://stackoverflow.com/questions/60133733/non-final-field-in-stateless-flutter-widget
-// ignore: must_be_immutable
 class SearchProductView extends StatelessWidget {
   AbstractProduct product;
-
-  SearchProductView(AbstractProduct product) {
-    // asume as product, handle outside
-    this.product = product;
-  }
+  double width;
+  double height;
+  SearchProductView(this.product, this.width /*, this.height*/);
 // firstRow(), secondRow()
   int columnCount = 2;
   double imageHeight;
   @override
   Widget build(BuildContext context) {
-    if (imageHeight == null) {
-      imageHeight = MediaQuery.of(context).size.height * 0.2;
-    }
-    return Column(children: [topDetails(), thirdRow()]);
+    return Column(children: [
+      Padding(child: nameCard(), padding: EdgeInsets.only(top: 20)),
+      Padding(child: thirdRow(), padding: EdgeInsets.only(top: 150))
+    ]);
   }
 
   static BorderRadiusGeometry borderRadiusGeometry = BorderRadius.circular(35);
@@ -46,31 +36,29 @@ class SearchProductView extends StatelessWidget {
 
 // card has ineherent padding, but can't be set.. :https://stackoverflow.com/questions/57730800/how-to-remove-a-cards-inner-padding-in-flutter
 
-  Widget topDetails() {
+  Widget nameCard() {
     return Card(
-        child: Container(
-            child: Column(
-                children: [skuWidget(), SizedBox(height: 10), nameWidget()]),
-            padding: EdgeInsets.only(left: 10, top: 10, right: 10, bottom: 10)),
-        color: Color.fromARGB(210, 209, 251, 255),
-        margin: EdgeInsets.only(left: 10, top: 10, right: 10, bottom: 0));
+        child: Padding(
+      child: nameWidget(),
+      padding: EdgeInsets.all(20),
+    ));
   }
+
+  Widget nameWidget() => WMSAsyncWidget(this.product.getName(),
+      (name) => Text(name, style: TextStyle(fontSize: 20)));
 
   // potentially blur list and focus what product: https://stackoverflow.com/questions/60585494/i-cant-make-blurred-item-with-sharp-border
 
   Widget thirdRow() {
     print("imageHeight is: " + this.imageHeight.toString());
-    return Container(
-        child: imageWidget(),
-        color: Color.fromARGB(210, 200, 200, 200),
-        margin: EdgeInsets.only(left: 10, top: 10, right: 10, bottom: 10),
-        height: this.imageHeight);
+    return imageWidget();
   }
 
+  /*
   // methods given in 'Product's class order
   Widget nameWidget() => WMSAsyncWidget<String>(product?.getName(),
       (String name) => Text(name, style: TextStyle(fontSize: 20)));
-
+  */
   Widget shelfWidget() => WMSAsyncWidget(product?.getShelf(),
       (shelf) => Text(shelf, style: TextStyle(fontSize: 22)));
 

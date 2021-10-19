@@ -54,10 +54,10 @@ class _State extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
-    return content();
+    return content(context);
   }
 
-  Widget content() {
+  Widget content(BuildContext context) {
     return Scaffold(
         //appBar: WMSAppBar(this.widget.name).get(),
         body: SafeArea(
@@ -70,7 +70,7 @@ class _State extends State<SearchPage> {
                     padding: EdgeInsets.only(
                         left: 3, top: 12, right: 3, bottom: 12)),
                 renderTextField(),
-                view()
+                Expanded(child: view(context))
               ])),
               decoration:
                   BoxDecoration(color: Color.fromARGB(90, 255, 255, 255))),
@@ -101,9 +101,13 @@ class _State extends State<SearchPage> {
                     EdgeInsets.fromLTRB(this.textLeftPadding, 10.0, 20.0, 10.0),
                 enabledBorder: inputBorder(),
                 focusedBorder: inputBorder()),
+            textAlign: Utils.hasValue(this.selectedSKU)
+                ? TextAlign.center
+                : TextAlign.start,
             style: TextStyle(
-                fontSize:
-                    17)), // it can maybe look abit different, as you understand that you have focused/selected the textfield
+                fontSize: Utils.hasValue((this.selectedSKU)) ? 23 : 17)),
+        textStyle:
+            TextStyle(), // it can maybe look abit different, as you understand that you have focused/selected the textfield
         elevation: 16,
         color: Colors.transparent,
         borderRadius: textFieldBorderRadius(),
@@ -117,11 +121,11 @@ class _State extends State<SearchPage> {
     });
   }
 
-  Widget view() {
+  Widget view(BuildContext context) {
     //var v = Utils.hasValue(selectedSKU);
 
     return Utils.hasValue(selectedSKU)
-        ? confirmContent()
+        ? confirmContent(context)
         : renderSuggestions(this.skuSuggestions);
   }
 
@@ -133,8 +137,11 @@ class _State extends State<SearchPage> {
       "1skuskuskusku",
       "1Shelf-11-2");
 
-  Widget confirmContent() {
-    return SearchProductView(_mockProduct);
+  Widget confirmContent(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    var width = size.width * 0.92;
+    //var height = size.height * 0.82;
+    return SearchProductView(_mockProduct, width /*, height*/);
     /*, confirmButton()*/
   }
 
