@@ -162,11 +162,10 @@ class _State extends State<SearchPage> {
       return Container();
     }
     // needs 'Flexible' otherwise overflow pixels
-    return Flexible(
-        child: ListView(
-            children: (skuSuggestions).map((e) => renderSuggestion(e)).toList(),
-            shrinkWrap: true,
-            padding: EdgeInsets.zero));
+    return ListView(
+        children: (skuSuggestions).map((e) => renderSuggestion(e)).toList(),
+        shrinkWrap: true,
+        padding: EdgeInsets.zero);
   }
 
 //Sku:  FS6541MUI-65I
