@@ -135,7 +135,7 @@ class _State extends State<SearchPage> {
 
   Widget confirmContent() {
     return SearchProductView(_mockProduct);
-    ; /*, confirmButton()*/
+    /*, confirmButton()*/
   }
 
   Widget confirmButton() {

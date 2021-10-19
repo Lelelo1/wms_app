@@ -74,7 +74,16 @@ class WarehouseSystem implements AbstractWarehouseSystem {
   // some sort of error handling and make more cleaner?
   Future<T> interact<T>(
       Future<T> Function(MySqlConnection connection) action) async {
-    var connection = await _productsSource.connect();
+    print("interact");
+    MySqlConnection connection;
+    try {
+      connection = await _productsSource.connect();
+    } on Exception catch (exception) {
+      print("failed interact. did not connect...");
+      print(exception.toString());
+      return null;
+    }
+    print("interact got connection, preforming action");
     var result = await action(connection);
     _productsSource.disconnect(connection);
     return result;
