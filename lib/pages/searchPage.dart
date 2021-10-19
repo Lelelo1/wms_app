@@ -21,9 +21,6 @@ class SearchPage extends StatefulWidget implements AbstractPage {
   final void Function() pressedClose;
   final void Function(Product) pressedSubmit;
 
-  final Stream<List<String>> skuSuggestionsStream =
-      Stream<List<String>>.empty();
-
   SearchPage(this.name, this.ean, this.pressedClose, this.pressedSubmit);
 
   @override
@@ -93,14 +90,7 @@ class _State extends State<SearchPage> {
             controller: _textController,
             onChanged: setInputTextState,
             autofocus: false,
-            decoration: InputDecoration(
-                hintText: 'Ange Artikelnummer',
-                fillColor: textFieldColor(),
-                filled: true,
-                contentPadding:
-                    EdgeInsets.fromLTRB(this.textLeftPadding, 10.0, 20.0, 10.0),
-                enabledBorder: inputBorder(),
-                focusedBorder: inputBorder()),
+            decoration: inputDecoration(),
             textAlign: Utils.hasValue(this.selectedSKU)
                 ? TextAlign.center
                 : TextAlign.start,
@@ -120,6 +110,34 @@ class _State extends State<SearchPage> {
       this.skuSuggestions = suggestions;
     });
   }
+
+/* floatingLabelBehavior: FloatingLabelBehavior
+          .always, // show hintext when having textfield selected, (and when after having cleared text)*/
+
+  InputDecoration inputDecoration() => InputDecoration(
+      hintText: 'Ange Artikelnummer',
+      fillColor: textFieldColor(),
+      filled: true,
+      contentPadding:
+          EdgeInsets.fromLTRB(this.textLeftPadding, 10.0, 20.0, 10.0),
+      enabledBorder: inputBorder(),
+      focusedBorder: inputBorder(),
+      suffixIcon: Utils.hasValue(this.selectedSKU)
+          ? IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () {
+                print("clear sku");
+                this._textController.clear();
+                setState(() {
+                  this.selectedSKU = null;
+                  this.skuSuggestions = null;
+                });
+              })
+          : IconButton(
+              icon: Container(),
+              onPressed: () {
+                // needed otherwise hintext goes missing
+              }));
 
   Widget view(BuildContext context) {
     //var v = Utils.hasValue(selectedSKU);
