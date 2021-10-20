@@ -104,7 +104,6 @@ class _State extends State<CameraView> {
           child: Center(
               child: Text("something went wrong with the CameraController")));
     }
-    print("render content");
 
     var size = MediaQuery.of(context).size;
     var aspectRatio = size.width / size.height;

@@ -73,7 +73,6 @@ class _State extends State<ScanView> {
 
   void scan() async {
     var visionSevice = VisionService.getInstance();
-
     String barcode;
     var streamImage = CameraViewController.streamImage;
     if (Utils.hasValue(streamImage)) {

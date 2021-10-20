@@ -106,6 +106,7 @@ class _State extends State<SearchPage> {
   void setInputTextState(String text) async {
     var suggestions =
         await this.widget.workStore.warehouseSystem.getSKUSuggestions(text);
+    print("setInputTextState");
     setState(() {
       this.skuSuggestions = suggestions;
     });
@@ -130,6 +131,7 @@ class _State extends State<SearchPage> {
                 this._textController.clear();
                 setState(() {
                   this.selectedSKU = null;
+
                   this.skuSuggestions = null;
                 });
               })
@@ -140,8 +142,6 @@ class _State extends State<SearchPage> {
               }));
 
   Widget view(BuildContext context) {
-    //var v = Utils.hasValue(selectedSKU);
-
     return Utils.hasValue(selectedSKU)
         ? confirmContent(context)
         : renderSuggestions(this.skuSuggestions);
@@ -159,6 +159,7 @@ class _State extends State<SearchPage> {
     var size = MediaQuery.of(context).size;
     var width = size.width * 0.92;
     //var height = size.height * 0.82;
+    print("confirmContent");
     return SearchProductView(_mockProduct, width /*, height*/);
     /*, confirmButton()*/
   }
@@ -202,11 +203,11 @@ class _State extends State<SearchPage> {
               alignment: Alignment.centerLeft),
           onPressed: () {
             // https://stackoverflow.com/questions/53481261/how-to-unfocus-textfield-that-has-custom-focusnode
-            FocusScope.of(context).requestFocus(new FocusNode());
+
             _textController.text = sku;
-            setState(() {
-              this.selectedSKU = sku;
-            });
+            this.selectedSKU = sku;
+            FocusScope.of(context)
+                .requestFocus(new FocusNode()); // triggers state change
           },
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),

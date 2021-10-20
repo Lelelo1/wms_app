@@ -17,6 +17,7 @@ class SearchProductView extends StatelessWidget {
   double imageHeight;
   @override
   Widget build(BuildContext context) {
+    print("build searchproductview");
     return Column(children: [
       Padding(child: nameCard(), padding: EdgeInsets.only(top: 20)),
       Padding(child: thirdRow(), padding: EdgeInsets.only(top: 150))
