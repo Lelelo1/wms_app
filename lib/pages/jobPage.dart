@@ -46,15 +46,19 @@ class _State extends State<JobPage> {
     }
 
     print("navigate to SearchPage");
-    Navigator.of(context).push(PageRouteBuilder(
-        pageBuilder: (_, __, ___) => blurView(
-              Opacity(
-                  child: SearchPage(
-                      "search", barcode, closeSearchView, preformJob),
-                  opacity: 0.94), //0.96
-            ),
-        opaque: false));
+    // using 'pushReplacement' otherwise there are two renders of SearchProductView's: https://stackoverflow.com/questions/59457306/flutter-navigation-reopen-page-instead-of-pushing-it-again
+    //Navigator.of(context).pushReplacement(();
 
+    Navigator.push(
+        context,
+        PageRouteBuilder(
+            pageBuilder: (_, __, ___) => blurView(
+                  Opacity(
+                      child: SearchPage(
+                          "search", barcode, closeSearchView, preformJob),
+                      opacity: 0.94), //0.96
+                ),
+            opaque: false));
     /*
     Navigator.push(
         this.context,

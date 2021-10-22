@@ -20,7 +20,7 @@ class SearchPage extends StatefulWidget implements AbstractPage {
   final String ean;
   final void Function() pressedClose;
   final void Function(Product) pressedSubmit;
-
+  final TextEditingController _textController = TextEditingController();
   SearchPage(this.name, this.ean, this.pressedClose, this.pressedSubmit);
 
   @override
@@ -45,8 +45,6 @@ class _State extends State<SearchPage> {
         return content(snapshot.data);
       });
   */
-  TextEditingController _textController = TextEditingController();
-  String inputText;
   String selectedSKU;
 
   @override
@@ -87,7 +85,7 @@ class _State extends State<SearchPage> {
   double textFieldHeight = 40;
   Widget renderTextField() => Material(
         child: TextFormField(
-            controller: _textController,
+            controller: this.widget._textController,
             onChanged: setInputTextState,
             autofocus: false,
             decoration: inputDecoration(),
@@ -106,7 +104,6 @@ class _State extends State<SearchPage> {
   void setInputTextState(String text) async {
     var suggestions =
         await this.widget.workStore.warehouseSystem.getSKUSuggestions(text);
-    print("setInputTextState");
     setState(() {
       this.skuSuggestions = suggestions;
     });
@@ -127,11 +124,9 @@ class _State extends State<SearchPage> {
           ? IconButton(
               icon: Icon(Icons.arrow_back),
               onPressed: () {
-                print("clear sku");
-                this._textController.clear();
+                this.widget._textController.clear();
                 setState(() {
                   this.selectedSKU = null;
-
                   this.skuSuggestions = null;
                 });
               })
@@ -156,24 +151,41 @@ class _State extends State<SearchPage> {
       "1Shelf-11-2");
 
   Widget confirmContent(BuildContext context) {
+    print("show confirmContent " + this.selectedSKU);
     var size = MediaQuery.of(context).size;
     var width = size.width * 0.92;
     //var height = size.height * 0.82;
-    print("confirmContent");
-    return SearchProductView(_mockProduct, width /*, height*/);
-    /*, confirmButton()*/
+    return Column(children: [
+      SearchProductView(_mockProduct, width /*, height*/),
+      confirmButton()
+    ]);
   }
 
+  Color confirmButtonBodyColor = Color.fromARGB(180, 90, 57, 173);
+
   Widget confirmButton() {
-    return Card(
-        child: ElevatedButton(
-            child: Text("Länka"),
-            onPressed: () {
-              print("product with sku: " +
-                  this.selectedSKU +
-                  " was updated with ean: " +
-                  this.widget.ean);
-            }));
+    return Expanded(
+        child: Align(
+            child: Container(
+                child: MaterialButton(
+                  child:
+                      Text("Lägg till", style: TextStyle(color: Colors.white)),
+                  onPressed: () {
+                    print("product with sku: " +
+                        this.selectedSKU +
+                        " was updated with ean: " +
+                        this.widget.ean);
+                  },
+                  elevation: 10,
+                  color: confirmButtonBodyColor,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
+                      side: BorderSide(color: confirmButtonBodyColor)),
+                ),
+                width: 230,
+                height: 120,
+                padding: EdgeInsets.only(bottom: 60)),
+            alignment: Alignment.bottomCenter));
   }
 
   Widget renderSuggestions(List<String> skuSuggestions) {
@@ -202,12 +214,15 @@ class _State extends State<SearchPage> {
               child: Text(sku, style: TextStyle(fontSize: 17)),
               alignment: Alignment.centerLeft),
           onPressed: () {
+            // following code is sensitive to do 2 renderers, it is probably solved
+            print("pressed " + sku);
+            this.widget._textController.text = sku;
             // https://stackoverflow.com/questions/53481261/how-to-unfocus-textfield-that-has-custom-focusnode
-
-            _textController.text = sku;
-            this.selectedSKU = sku;
-            FocusScope.of(context)
-                .requestFocus(new FocusNode()); // triggers state change
+            //this.selectedSKU = sku;
+            setState(() {
+              this.selectedSKU = sku;
+            });
+            //FocusScope.of(context).unfocus();// two renders without calling setState can happen try to do something with focus this way...
           },
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
