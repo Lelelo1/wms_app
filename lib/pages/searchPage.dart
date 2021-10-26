@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wms_app/jobs/identify.dart';
 import 'package:wms_app/models/product.dart';
 import 'package:wms_app/models/sequence.dart';
-import 'package:wms_app/pages/AbstractPage.dart';
+import 'package:wms_app/pages/abstractPage.dart';
 import 'package:wms_app/pages/loadingPage.dart';
 import 'package:wms_app/remote/mockWarehouseSystem.dart';
 import 'package:wms_app/stores/appStore.dart';

@@ -5,7 +5,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:wms_app/jobs/identify.dart';
 import 'package:wms_app/models/product.dart';
-import 'package:wms_app/pages/AbstractPage.dart';
+import 'package:wms_app/pages/abstractPage.dart';
 import 'package:wms_app/pages/scanPage.dart';
 import 'package:wms_app/pages/searchPage.dart';
 import 'package:wms_app/utils.dart';

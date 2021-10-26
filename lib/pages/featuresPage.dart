@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:wms_app/features/features.dart';
 import 'package:wms_app/jobs/identify.dart';
-import 'package:wms_app/pages/AbstractPage.dart';
+import 'package:wms_app/pages/abstractPage.dart';
 import 'package:wms_app/pages/abstractPage.dart';
 import 'package:wms_app/pages/jobPage.dart';
 import 'package:wms_app/pages/jobPage.dart';
+import 'package:wms_app/pages/productPage.dart';
 
 class FeaturesPage extends StatefulWidget /* implements AbstractPage */ {
   @override
@@ -35,14 +36,17 @@ class _State extends State<FeaturesPage> {
         crossAxisCount: 2,
         // Generate 100 widgets that display their index in the List.
         children: [
-          renderFeature(JobPage(Job("jobtask", Jobs.identify)))
+          renderFeature(ProductPage(
+              "productPage",
+              Job("productPage",
+                  Jobs.identify))) // JobPage(Job("jobtask", Jobs.identify))
         ] //Features.get().map(renderFeature).toList(),
         );
   }
 
   // can't provide 'JobPage' as 'AbstractPage' despite being able to do so with
   // previous pages
-  Widget renderFeature(JobPage feature) {
+  Widget renderFeature(AbstractPage feature) {
     return GestureDetector(
         child: Card(
             child: Center(
