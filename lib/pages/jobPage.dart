@@ -14,16 +14,18 @@ import 'package:wms_app/utils.dart';
 class JobPage extends StatefulWidget implements AbstractPage {
   final Job job;
 
-  JobPage(this.job);
+  JobPage(this.name, this.job);
 
   @override
   State<StatefulWidget> createState() => _State();
+
+  @override
+  String name;
 }
 
 class _State extends State<JobPage> {
   @override
-  Widget build(BuildContext context) =>
-      ScanPage(this.widget.job.name, this.successfullScan);
+  Widget build(BuildContext context) => ScanPage(this.successfullScan);
   // probably need to make fade and do transperency within SearchView component to make it
   // appear/dissapear and use Stack here oustide of it
 
@@ -39,7 +41,7 @@ class _State extends State<JobPage> {
   void successfullScan(String barcode) async {
     print("Successfull scaaaan!: " + barcode);
 
-    var product = await this.widget.job.identify(barcode);
+    var product = null; //await this.widget.job.identify(barcode);
     if (Utils.hasValue(product)) {
       // preform other job
       return;
@@ -74,7 +76,7 @@ class _State extends State<JobPage> {
     var productName = await product.getName();
     var productId = product.id;
     print("preform job " +
-        this.widget.job.name +
+        this.widget.name +
         " with product" +
         productName +
         " id: " +

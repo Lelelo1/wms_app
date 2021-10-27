@@ -11,9 +11,8 @@ import 'package:wms_app/views/scanView.dart';
 import 'abstractPage.dart';
 
 class ScanPage extends StatefulWidget {
-  final String name;
   final void Function(String product) onSuccesfullScan;
-  ScanPage(this.name, this.onSuccesfullScan);
+  ScanPage(this.onSuccesfullScan);
 
   @override
   _State createState() => _State();

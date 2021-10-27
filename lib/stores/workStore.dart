@@ -28,6 +28,8 @@ class WorkStore {
     return Sequence(products);
   }
 
+  Future<Product> product(String ean) => warehouseSystem.getProduct(ean);
+
 /*
   Sequence getRegistration() {
     return null;

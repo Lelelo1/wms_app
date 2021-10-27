@@ -5,5 +5,6 @@ abstract class AbstractPage {
   //String
   //get name; // for some eason 'final' in the widget page and 'get' matches
 
-  Job get job;
+  //Job get job;
+  String get name;
 }

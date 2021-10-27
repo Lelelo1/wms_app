@@ -36,10 +36,8 @@ class _State extends State<FeaturesPage> {
         crossAxisCount: 2,
         // Generate 100 widgets that display their index in the List.
         children: [
-          renderFeature(ProductPage(
-              "productPage",
-              Job("productPage",
-                  Jobs.identify))) // JobPage(Job("jobtask", Jobs.identify))
+          renderFeature(ProductPage("Produktinformation",
+              null)) // JobPage(Job("jobtask", Jobs.identify))
         ] //Features.get().map(renderFeature).toList(),
         );
   }
@@ -51,7 +49,7 @@ class _State extends State<FeaturesPage> {
         child: Card(
             child: Center(
           child: Text(
-            feature.job.name,
+            feature.name,
             style: Theme.of(context).textTheme.headline5,
             textAlign: TextAlign.center,
           ),
