@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wms_app/models/job.dart';
+//import 'package:wms_app/models/job.dart';
 import 'package:wms_app/models/archivedProduct.dart';
 import 'package:wms_app/models/product.dart';
 import 'package:wms_app/stores/appStore.dart';

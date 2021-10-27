@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:wms_app/jobs/identify.dart';
 import 'package:wms_app/models/product.dart';
 import 'package:wms_app/pages/jobPage.dart';
@@ -40,17 +41,16 @@ class _State extends State<ProductPage> {
         extendBodyBehindAppBar: true);
   }
 
-  List<Widget> renderContent() {
-    return product == null
-        ? [ScanPage(scannedEAN)]
-        : [ScanPage(scannedEAN), Center(child: Text("produkt information"))];
-  }
+  List<Widget> renderContent() =>
+      [ScanPage(scannedEAN), Center(child: Text("produkt information"))];
 
   Future<AbstractProduct> getProduct(String ean) =>
       this.widget.workStore.warehouseSystem.getProduct(ean);
   void scannedEAN(String ean) {
     this.product = Product(111111111);
-    pageController.jumpToPage(1);
+    pageController.animateToPage(1,
+        duration: Duration(milliseconds: 600),
+        curve: Curves.decelerate); // find nice curve
   }
 
   Widget placeholder(String ean) => Center(child: Text(ean));
