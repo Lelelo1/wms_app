@@ -17,6 +17,8 @@ class ProductPage extends StatefulWidget implements AbstractPage {
   final Job job;
   final workStore = AppStore.injector.get<WorkStore>();
 
+  final PageController pageController = PageController();
+
   ProductPage(this.name, this.job);
 
   @override
@@ -24,31 +26,55 @@ class ProductPage extends StatefulWidget implements AbstractPage {
 }
 
 class _State extends State<ProductPage> {
-  PageController pageController = PageController();
   Product product;
+
+  Color scanPageTitleColor = Colors.white;
+  Color productInformationTitleColor = Colors.black;
+
+  double pageIndex = 0;
+
+  Color pageTitleColor() =>
+      pageIndex > 0 ? productInformationTitleColor : scanPageTitleColor;
+
+  @override
+  void initState() {
+    this.widget.pageController.addListener(updatePageIndex);
+    super.initState();
+  }
+
+  void updatePageIndex() {
+    print("page is: " + this.widget.pageController.page.toString());
+    setState(() {
+      this.pageIndex = this.widget.pageController.page;
+    });
+  }
 
   // make a WMSScaffold and reuse
   @override
   Widget build(BuildContext context) {
     //pageController = PageController()
+
     return Scaffold(
-        appBar: WMSAppBar(this.widget.name).get(),
+        appBar: WMSAppBar(widget.name, pageTitleColor()).get(),
         body: PageView(
-          controller: pageController,
+          controller: this.widget.pageController,
           children: renderContent(),
           scrollDirection: Axis.vertical,
         ),
         extendBodyBehindAppBar: true);
   }
 
-  List<Widget> renderContent() =>
-      [ScanPage(scannedEAN), Center(child: Text("produkt information"))];
+  List<Widget> renderContent() => [
+        ScanPage(scannedEAN),
+        Column(children: [Text("produkt information")])
+      ];
 
   Future<AbstractProduct> getProduct(String ean) =>
-      this.widget.workStore.warehouseSystem.getProduct(ean);
+      this.widget.workStore.product(ean);
   void scannedEAN(String ean) {
     this.product = Product(111111111);
-    pageController.animateToPage(1,
+
+    this.widget.pageController.animateToPage(1,
         duration: Duration(milliseconds: 600),
         curve: Curves.decelerate); // find nice curve
   }

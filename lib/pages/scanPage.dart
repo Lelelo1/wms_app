@@ -27,7 +27,6 @@ class _State extends State<ScanPage> {
   @override
   void initState() {
     super.initState();
-    futureSequence = workStore.getCollection();
   }
 
   // alls pages should have future builder, more or less

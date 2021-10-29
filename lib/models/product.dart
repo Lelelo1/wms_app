@@ -1,6 +1,12 @@
 // having objects tied directly to warehousesystem/database
 
+import 'package:wms_app/models/attributes.dart';
+import 'package:wms_app/stores/appStore.dart';
+import 'package:wms_app/stores/workStore.dart';
+
 class Product extends AbstractProduct {
+  static final _warehouseSystem = AppStore.injector.get<WorkStore>();
+
   int id;
   Product(int id);
 
@@ -29,10 +35,8 @@ class Product extends AbstractProduct {
   }
 
   @override
-  Future<String> getShelf() {
-    // TODO: implement getShelf
-    throw UnimplementedError();
-  }
+  Future<String> getShelf() =>
+      _warehouseSystem.attribute(id, Attribute.c2c_hyllplats);
 }
 
 abstract class AbstractProduct {

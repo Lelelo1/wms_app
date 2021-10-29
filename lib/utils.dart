@@ -1,9 +1,11 @@
+import 'dart:collection';
 import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_ml_vision/google_ml_vision.dart';
+import 'package:mysql1/mysql1.dart';
 
 class Utils {
   // for better readability, there is a javascript
@@ -13,7 +15,22 @@ class Utils {
     return value != null;
   }
 
-  static bool isNullOrEmpty(String text) => text == null || text == "";
+  static bool isNullOrEmpty<T>(T t) {
+    if (t == null) {
+      return true;
+    }
+
+    // check is empty
+    if (t is String) {
+      return t.isEmpty;
+    } else if (t is ListBase) {
+      return t.isEmpty;
+    } else if (t is Results) {
+      return t.isEmpty;
+    }
+    throw Exception(
+        "Utils isNullOrEmpty is not supperted for type " + T.toString());
+  }
 
   // https://stackoverflow.com/questions/55579906/how-to-count-items-occurence-in-a-list
   static Map occurence<T>(List<T> list) {

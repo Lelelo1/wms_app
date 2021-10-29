@@ -102,8 +102,7 @@ class _State extends State<SearchPage> {
       );
 
   void setInputTextState(String text) async {
-    var suggestions =
-        await this.widget.workStore.warehouseSystem.getSKUSuggestions(text);
+    var suggestions = await this.widget.workStore.suggestions(text);
     setState(() {
       this.skuSuggestions = suggestions;
     });

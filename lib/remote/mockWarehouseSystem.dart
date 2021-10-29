@@ -1,3 +1,4 @@
+import 'package:wms_app/models/attributes.dart';
 import 'package:wms_app/models/product.dart';
 import 'package:wms_app/remote/abstractWarehouseSystem.dart';
 
@@ -83,4 +84,28 @@ class MockWarehouseSystem implements AbstractWarehouseSystem {
         "8skuSuugestion",
         "9skuSuugestion"
       ]);
+
+  @override
+  Future<T> attribute<T>(int id, Attribute attribute) {
+    // TODO: implement attribute
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<AbstractProduct> product(String ean) {
+    // TODO: implement product
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<AbstractProduct>> products() {
+    // TODO: implement products
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<String>> skuSuggestions(String text) {
+    // TODO: implement skuSuggestions
+    throw UnimplementedError();
+  }
 }

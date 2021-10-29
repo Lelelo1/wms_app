@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 
 class WMSAppBar {
   final String name;
-
-  WMSAppBar(this.name);
+  final Color textColor;
+  WMSAppBar(this.name, this.textColor);
 
   AppBar get() => AppBar(
-      title: Text(this.name),
+      title: Text(this.name, style: TextStyle(color: textColor)),
       backgroundColor: Color.fromARGB(0, 120, 120, 120),
       elevation: 0,
       centerTitle: true);
