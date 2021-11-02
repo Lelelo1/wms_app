@@ -8,6 +8,7 @@ import 'package:wms_app/stores/appStore.dart';
 import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/widgets/wmsAppBar.dart';
 import 'package:wms_app/widgets/wmsAsyncWidget.dart';
+import 'package:wms_app/widgets/wmsScaffold.dart';
 
 import '../utils.dart';
 import 'abstractPage.dart';
@@ -43,6 +44,8 @@ class _State extends State<ProductPage> {
     return pageIndex > 0 ? productInformationTitleColor : scanPageTitleColor;
   }
 
+  bool shouldExtendPageContent() => pageIndex == 0 ? true : false;
+
   int currentPage() {
     var p = this.widget.pageController.page;
     if (p > 0.5) {
@@ -67,6 +70,13 @@ class _State extends State<ProductPage> {
   Widget build(BuildContext context) {
     //pageController = PageController()
 
+    return WMSScaffold(widget.name, pageTitleColor()).get(PageView(
+      controller: this.widget.pageController,
+      children: renderContent(),
+      scrollDirection: Axis.vertical,
+    ));
+
+    /*
     return Scaffold(
         appBar: WMSAppBar(widget.name, pageTitleColor()).get(),
         body: PageView(
@@ -75,12 +85,17 @@ class _State extends State<ProductPage> {
           scrollDirection: Axis.vertical,
         ),
         extendBodyBehindAppBar: true);
+        */
   }
 
-  List<Widget> renderContent() => [
-        ScanPage(scannedEAN),
-        Column(children: [Center(child: Text("produkt information"))])
-      ];
+  List<Widget> renderContent() => [ScanPage(scannedEAN), productView()];
+
+  Widget productView() => Container(
+          child: SafeArea(
+        child: Column(children: [
+          Text("produkt information"),
+        ]),
+      ));
 
   Future<AbstractProduct> getProduct(String ean) =>
       this.widget.workStore.product(ean);
