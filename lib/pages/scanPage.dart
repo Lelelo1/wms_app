@@ -9,9 +9,18 @@ import 'package:wms_app/views/cameraView.dart';
 import 'package:wms_app/views/productView.dart';
 import 'package:wms_app/views/scanView.dart';
 import 'abstractPage.dart';
+import 'package:async/async.dart';
+
+// https://medium.com/saugo360/flutter-my-futurebuilder-keeps-firing-6e774830bc2
 
 class ScanPage extends StatefulWidget {
+  final AsyncMemoizer<CameraView> _memoizer = AsyncMemoizer();
+
   final void Function(String product) onSuccesfullScan;
+
+  // seems to need same type: https://stackoverflow.com/questions/62731654/flutter-combine-multiple-futuret-tasks
+  //FutureGroup<>
+
   ScanPage(this.onSuccesfullScan);
 
   @override
@@ -21,45 +30,37 @@ class ScanPage extends StatefulWidget {
 class _State extends State<ScanPage> {
   WorkStore workStore = AppStore.injector.get<WorkStore>();
   //MediaQueryData mediaQueryData;
-
-  Future<Sequence> futureSequence;
-
+  // Future<Sequence> sequence;
+  Future<CameraView> cameraViewFuture;
   @override
   void initState() {
+    this.cameraViewFuture = this.widget._memoizer.runOnce(() => CameraView());
+    // combine futures and use 'WMSAsyncWidget'
     super.initState();
   }
 
   // alls pages should have future builder, more or less
-  FutureBuilder futureBuilder() => FutureBuilder<Sequence>(
-      future: futureSequence,
-      builder: (BuildContext context, AsyncSnapshot<Sequence> snapshot) {
+  FutureBuilder futureBuilder() => FutureBuilder<CameraView>(
+      future: this.cameraViewFuture,
+      builder: (BuildContext context, AsyncSnapshot<CameraView> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           // https://stackoverflow.com/questions/52847534/flutter-futurebuilder-returning-null-error-triggered
           return LoadingPage();
         }
-
         return page(snapshot.data);
       });
-
-  CameraView cameraView;
-  int totalTimesScanned = 0;
-  // the future values needed for the page. add it to abstract page maybe
-  Widget page(Sequence sequence) {
+  // conditional renderering, searchView
+  Widget page(CameraView cameraView) {
     return Scaffold(
         //appBar: WMSAppBar(this.widget.name).get(),
-        body: content(),
+        body: Column(children: [
+          cameraView,
+          ScanView(0.44, this.widget.onSuccesfullScan)
+        ] // camera view part of page and recontructed on 'scannedProducts' state change
+            ),
         extendBodyBehindAppBar: true,
         resizeToAvoidBottomInset:
             false); // https://stackoverflow.com/questions/49840074/keyboard-pushes-the-content-up-resizes-the-screen
-  }
-
-  // conditional renderering, searchView
-  Widget content() {
-    return Column(children: [
-      CameraView(),
-      ScanView(0.44, this.widget.onSuccesfullScan)
-    ] // camera view part of page and recontructed on 'scannedProducts' state change
-        );
   }
 
   // animate scanview height changes..?

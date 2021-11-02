@@ -31,21 +31,34 @@ class _State extends State<ProductPage> {
   Color scanPageTitleColor = Colors.white;
   Color productInformationTitleColor = Colors.black;
 
-  double pageIndex = 0;
-
-  Color pageTitleColor() =>
-      pageIndex > 0 ? productInformationTitleColor : scanPageTitleColor;
+  int pageIndex = 0;
 
   @override
-  void initState() {
+  initState() {
     this.widget.pageController.addListener(updatePageIndex);
     super.initState();
   }
 
+  Color pageTitleColor() {
+    return pageIndex > 0 ? productInformationTitleColor : scanPageTitleColor;
+  }
+
+  int currentPage() {
+    var p = this.widget.pageController.page;
+    if (p > 0.5) {
+      return 1;
+    } else {
+      return 0;
+    }
+  }
+
   void updatePageIndex() {
-    print("page is: " + this.widget.pageController.page.toString());
+    var page = currentPage();
     setState(() {
-      this.pageIndex = this.widget.pageController.page;
+      if (this.pageIndex != page) {
+        print("setState: " + page.toString());
+        this.pageIndex = page;
+      }
     });
   }
 
@@ -66,7 +79,7 @@ class _State extends State<ProductPage> {
 
   List<Widget> renderContent() => [
         ScanPage(scannedEAN),
-        Column(children: [Text("produkt information")])
+        Column(children: [Center(child: Text("produkt information"))])
       ];
 
   Future<AbstractProduct> getProduct(String ean) =>
