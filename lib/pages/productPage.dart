@@ -88,20 +88,35 @@ class _State extends State<ProductPage> {
         */
   }
 
-  List<Widget> renderContent() => [ScanPage(scannedEAN), productView()];
+  List<Widget> renderContent() => [ScanPage(scannedEAN)];
 
-  Widget productView() => Container(
-          child: SafeArea(
-        child: Column(children: [
-          Text("produkt information"),
-        ]),
-      ));
+  Widget asyncProductView() => this.product == null
+      ? Container()
+      : WMSAsyncWidget(
+          this.product?.getShelf(),
+          (shelf) => SafeArea(
+                child: Column(children: [
+                  Text(shelf),
+                ]),
+              ));
 
   Future<AbstractProduct> getProduct(String ean) =>
       this.widget.workStore.product(ean);
-  void scannedEAN(String ean) {
-    this.product = Product(111111111);
+  void scannedEAN(String ean) async {
+    var product = await this.widget.workStore.product(ean);
 
+    if (product == null) {
+      // ignore scan
+      print("could not find this product with ean in the warehouse system");
+      return;
+    }
+
+    product.setEAN(ean);
+
+    product.getShelf();
+
+    //product.getSKU();
+    print("animate to page one");
     this.widget.pageController.animateToPage(1,
         duration: Duration(milliseconds: 600),
         curve: Curves.decelerate); // find nice curve

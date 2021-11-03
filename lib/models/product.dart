@@ -35,8 +35,16 @@ class Product extends AbstractProduct {
   }
 
   @override
-  Future<String> getShelf() =>
-      _warehouseSystem.attribute(id, Attribute.c2c_hyllplats);
+  Future<String> getShelf() {
+    print("getting shelf");
+    return _warehouseSystem.attribute(id, Attribute.c2c_hyllplats);
+  }
+
+  @override
+  Future<void> setEAN(String ean) {
+    // TODO: implement setEAN
+    // set ean to the product in the warehousesystem
+  }
 }
 
 abstract class AbstractProduct {
@@ -46,6 +54,8 @@ abstract class AbstractProduct {
   Future<String> getShelf();
   Future<String> getName();
   Future<String> getImage();
+
+  Future<void> setEAN(String ean);
 }
 
 class MockProduct implements AbstractProduct {
@@ -75,6 +85,12 @@ class MockProduct implements AbstractProduct {
 
   @override
   Future<String> getShelf() => Future.sync(() => _shelf);
+
+  @override
+  Future<void> setEAN(String ean) {
+    this._ean = ean;
+    return Future.sync(() => null);
+  }
 }
 
 // create mock abstract source

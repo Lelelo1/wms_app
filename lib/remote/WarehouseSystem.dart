@@ -11,8 +11,8 @@ import '../utils.dart';
 
 // https://pub.dev/packages/mysql1
 class WarehouseSystem /*implements AbstractProductsSource */ {
-  Future<T> _interact<T>(
-      Future<T> Function(MySqlConnection connection) action) async {
+  Future<Results> _interact<Results>(
+      Future<Results> Function(MySqlConnection connection) action) async {
     print("interact");
     MySqlConnection connection;
     try {
@@ -56,14 +56,20 @@ class WarehouseSystem /*implements AbstractProductsSource */ {
     return Deserialization.toSkus(results);
   }
 
-  attribute<T>(int id, Attribute attribute) async {
+  Future<T> attribute<T>(int id, Attribute attribute) async {
     var results = await _interact((connection) => connection
         .query((SQLQuery.getAttribute(id.toString(), attribute.toString()))));
 
+    print("results....!!");
+    print(results.length); // prints '()'
+
     if (Utils.isNullOrEmpty(results)) {
-      return null;
+      return null; // causes error: [ERROR:flutter/lib/ui/ui_dart_state.cc(199)] Unhandled Exception: type 'Future<dynamic>' is not a subtype of type 'Future<String>'
     }
 
+    //print("results....!!");
+    //print(results.toString());
+    print("bambam");
     return results.map<T>((e) => e[0]).first;
   }
 

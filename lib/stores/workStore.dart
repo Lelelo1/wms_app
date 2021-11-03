@@ -18,7 +18,7 @@ class WorkStore {
       _warehouseSystem.getSKUSuggestions(text);
 
   Future<T> attribute<T>(int id, Attribute attribute) =>
-      _warehouseSystem.attribute(id, attribute);
+      _warehouseSystem.attribute<T>(id, attribute);
 /*
   Sequence getRegistration() {
     return null;
