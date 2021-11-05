@@ -46,7 +46,8 @@ class WarehouseSystem /*implements AbstractProductsSource */ {
     Results results;
     var sql = SQLQuery.getProduct(ean);
     results = await _interact((connection) => connection.query(sql));
-    return Deserialization.toProduct(results);
+    var p = Deserialization.toProduct(results);
+    return p;
   }
 
   Future<List<String>> getSKUSuggestions(String text) async {
@@ -56,12 +57,9 @@ class WarehouseSystem /*implements AbstractProductsSource */ {
     return Deserialization.toSkus(results);
   }
 
-  Future<T> attribute<T>(int id, Attribute attribute) async {
-    var results = await _interact((connection) => connection
-        .query((SQLQuery.getAttribute(id.toString(), attribute.toString()))));
-
-    print("results....!!");
-    print(results.length); // prints '()'
+  Future<T> attribute<T>(int id, String atttribute) async {
+    var results = await _interact((connection) =>
+        connection.query((SQLQuery.getAttribute(id.toString(), atttribute))));
 
     if (Utils.isNullOrEmpty(results)) {
       return null; // causes error: [ERROR:flutter/lib/ui/ui_dart_state.cc(199)] Unhandled Exception: type 'Future<dynamic>' is not a subtype of type 'Future<String>'
@@ -69,7 +67,6 @@ class WarehouseSystem /*implements AbstractProductsSource */ {
 
     //print("results....!!");
     //print(results.toString());
-    print("bambam");
     return results.map<T>((e) => e[0]).first;
   }
 
@@ -106,6 +103,12 @@ class SQLQuery {
   // see table in magento: https://www.katsumi.se/index.php/yuDuMinD/catalog_product_attribute/index/key/e036b264c18e46443f82569948fa575c/
 
   static String getAttribute(String entityId, String attributeCode) {
-    return "SELECT `catalog_product_entity_varchar`.`value` FROM `catalog_product_entity_varchar` WHERE `catalog_product_entity_varchar`.`attribute_id` IN (SELECT `eav_attribute`.`attribute_id` FROM `eav_attribute` WHERE `eav_attribute`.`attribute_code` = '$attributeCode') AND `catalog_product_entity_varchar`.`entity_id` = '$entityId' AND `catalog_product_entity_varchar`. `store_id` = '0';";
+    print("warehousesystem get " + attributeCode);
+    var attributeQuery =
+        "SELECT `catalog_product_entity_varchar`.`value` FROM `catalog_product_entity_varchar` WHERE `catalog_product_entity_varchar`.`attribute_id` IN (SELECT `eav_attribute`.`attribute_id` FROM `eav_attribute` WHERE `eav_attribute`.`attribute_code` = '$attributeCode') AND `catalog_product_entity_varchar`.`entity_id` = '$entityId' AND `catalog_product_entity_varchar`. `store_id` = '0';";
+    print(attributeQuery);
+
+    return attributeQuery;
   }
+  //"SELECT `catalog_product_entity_varchar`.`value` FROM `catalog_product_entity_varchar` WHERE `catalog_product_entity_varchar`.`attribute_id` IN (SELECT `eav_attribute`.`attribute_id` FROM `eav_attribute` WHERE `eav_attribute`.`attribute_code` = '<attribute name>') AND `catalog_product_entity_varchar`.`entity_id` = '<entity id>' AND `catalog_product_entity_varchar`. `store_id` = '0';"
 }

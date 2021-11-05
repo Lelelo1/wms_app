@@ -1,2 +1,5 @@
 // Katsumi match attributes in MySql Magento warehouse system
-enum Attribute { c2c_hyllplats }
+class Attribute {
+  static String name = "Name";
+  static String shelf = "c2c_hyllplats";
+}

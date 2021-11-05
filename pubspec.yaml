@@ -40,9 +40,12 @@ dependencies:
   google_ml_vision: ^0.0.6 #dysfunction textrecognition confidence score
   camera: ^0.8.1+7
   rflutter_alert: ^2.0.4
+  mobx: ^2.0.5
+  flutter_mobx: ^2.0.2
 dev_dependencies:
   integration_test:
     sdk: flutter
+  build_runner: ^1.1.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

@@ -32,6 +32,9 @@ class Utils {
         "Utils isNullOrEmpty is not supperted for type " + T.toString());
   }
 
+  static String defaultToDash(String string) =>
+      isNullOrEmpty(string) ? "-" : string;
+
   // https://stackoverflow.com/questions/55579906/how-to-count-items-occurence-in-a-list
   static Map occurence<T>(List<T> list) {
     var map = Map();

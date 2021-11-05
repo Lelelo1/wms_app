@@ -4,11 +4,16 @@ import 'package:wms_app/models/attributes.dart';
 import 'package:wms_app/stores/appStore.dart';
 import 'package:wms_app/stores/workStore.dart';
 
+import '../utils.dart';
+
 class Product extends AbstractProduct {
   static final _warehouseSystem = AppStore.injector.get<WorkStore>();
 
   int id;
-  Product(int id);
+  Product(int id) {
+    // needed explicit constuctor for some weird reason, to set 'id'
+    this.id = id;
+  }
 
   @override
   Future<String> getEAN() {
@@ -23,9 +28,9 @@ class Product extends AbstractProduct {
   }
 
   @override
-  Future<String> getName() {
-    // TODO: implement getName
-    throw UnimplementedError();
+  Future<String> getName() async {
+    return Utils.defaultToDash(
+        await _warehouseSystem.attribute<String>(id, Attribute.name));
   }
 
   @override
@@ -35,9 +40,9 @@ class Product extends AbstractProduct {
   }
 
   @override
-  Future<String> getShelf() {
-    print("getting shelf");
-    return _warehouseSystem.attribute(id, Attribute.c2c_hyllplats);
+  Future<String> getShelf() async {
+    return Utils.defaultToDash(
+        await _warehouseSystem.attribute<String>(id, Attribute.shelf));
   }
 
   @override

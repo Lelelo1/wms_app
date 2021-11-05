@@ -35,7 +35,6 @@ class _State extends State<ScanPage> {
   @override
   void initState() {
     this.cameraViewFuture = this.widget._memoizer.runOnce(() => CameraView());
-    // combine futures and use 'WMSAsyncWidget'
     super.initState();
   }
 
@@ -67,6 +66,7 @@ class _State extends State<ScanPage> {
 
   @override
   Widget build(BuildContext context) {
+    print("scanPage build");
     return futureBuilder();
   }
 

@@ -9,7 +9,13 @@ class Deserialization {
     if (results == null || results.isEmpty) {
       return null;
     }
-    return results.map((e) => Product(e[0])).first;
+
+    var ids = results.map((e) => (e[0] as int)).toList();
+    print("ids...");
+    ids.forEach((element) {
+      print(element.toString());
+    });
+    return Product(ids[0]);
   }
 
   static List<String> toSkus(Results results) {
