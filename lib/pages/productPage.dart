@@ -132,11 +132,18 @@ class _State extends State<ProductPage> implements WMSPrintableState {
       WMSAsyncWidget(this.product.getShelf(),
           (String shelf) => Text(shelf, style: TextStyle(fontSize: 18))),
       // image
-      WMSAsyncWidget(this.product.getName(),
-          (String name) => Text(name, style: TextStyle(fontSize: 15))),
+      WMSAsyncWidget(
+          this.product.getName(),
+          (String name) => Padding(
+              padding: EdgeInsets.all(10),
+              child: Text(name,
+                  style: TextStyle(fontSize: 15),
+                  textAlign: TextAlign.center))),
       //WMSAsyncWidget(this.product.getEAN(), (String name) => Text(name)), // barcode icon
     ]));
   }
+
+  // do some common text aliging with padding, and also common fotsize, large title medium title, normal fontsize eg
 
   // sku:
   // id -> Icons.desktop_windows
