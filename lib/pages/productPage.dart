@@ -58,8 +58,10 @@ class _State extends State<ProductPage> implements WMSPrintableState {
       Utils.varStateToString(
           "productInformationTitleColor", this.productInformationTitleColor);
 
+  Size size = Size.zero;
   @override
   Widget build(BuildContext context) {
+    this.size = MediaQuery.of(context).size;
     return page();
   }
 
@@ -108,24 +110,32 @@ class _State extends State<ProductPage> implements WMSPrintableState {
         })
       ];
   // Future.sync(() => "mockShelf")
+  double skuPadding() => this.size.height * 0.02;
   Widget asyncProductView() {
-    print(
-        "async widget: " + stateToString()); // renders 2 times for some reason
+    print("async widget: " + stateToString());
     return SafeArea(
         child: Column(children: [
-      WMSAsyncWidget(this.product.getSKU(), (String sku) => Text(sku, style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400))), //,
-      WMSAsyncWidget(this.product.getEAN(), (String shelf) => WMSLabel(shelf, LineIcons.barcode)),
-      WMSAsyncWidget(this.product.getShelf(), (String shelf) => Text(shelf)),
-      WMSAsyncWidget(this.product.getName(), (String name) => Text(name)),
+      WMSAsyncWidget(
+          this.product.getSKU(),
+          (String sku) => Padding(
+              padding: EdgeInsets.only(top: skuPadding(), bottom: skuPadding()),
+              child: Text(sku,
+                  style: TextStyle(
+                      fontSize: 25, fontWeight: FontWeight.w400)))), //,
+      Row(children: [
+        WMSAsyncWidget(this.product.getEAN(),
+            (String shelf) => WMSLabel(shelf, LineIcons.barcode)),
+        WMSAsyncWidget(Future.sync(() => this.product.id.toString()),
+            (String id) => WMSLabel(id, Icons.desktop_windows))
+      ], mainAxisAlignment: MainAxisAlignment.center),
+      Container(height: 300),
+      WMSAsyncWidget(this.product.getShelf(),
+          (String shelf) => Text(shelf, style: TextStyle(fontSize: 18))),
+      // image
+      WMSAsyncWidget(this.product.getName(),
+          (String name) => Text(name, style: TextStyle(fontSize: 15))),
       //WMSAsyncWidget(this.product.getEAN(), (String name) => Text(name)), // barcode icon
-      WMSAsyncWidget(Future.sync(() => this.product.id.toString()),
-          (String id) => Row(children: [Icon(Icons.text_format), Text(id)]))
     ]));
-  }
-
-
-  Widget skuWidget(String sku) {
-    return Row(children: [Ic],)
   }
 
   // sku:
