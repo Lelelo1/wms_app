@@ -16,33 +16,34 @@ class Product extends AbstractProduct {
   }
 
   @override
-  Future<String> getEAN() {
-    // TODO: implement getEAN
-    throw UnimplementedError();
+  Future<String> getEAN() async {
+    var ean = (await _warehouseSystem.attribute(id, Attribute.ean)).first;
+    return Utils.defaultToDash(ean);
   }
 
+  static String katsumiImages = "https://www.katsumi.se/media/catalog/product/";
   @override
-  Future<String> getImage() {
-    // TODO: implement getImage
-    throw UnimplementedError();
+  Future<List<String>> getImages() async {
+    var imgs = await _warehouseSystem.attribute<String>(id, Attribute.image);
+    return imgs.map((e) => katsumiImages + e).toList();
   }
 
   @override
   Future<String> getName() async {
     return Utils.defaultToDash(
-        await _warehouseSystem.attribute<String>(id, Attribute.name));
+        (await _warehouseSystem.attribute<String>(id, Attribute.name)).first);
   }
 
   @override
-  Future<String> getSKU() {
-    // TODO: implement getSKU
-    throw UnimplementedError();
+  Future<String> getSKU() async {
+    var sku = (await _warehouseSystem.attribute(id, Attribute.sku)).first;
+    return Utils.defaultToDash(sku);
   }
 
   @override
   Future<String> getShelf() async {
     return Utils.defaultToDash(
-        await _warehouseSystem.attribute<String>(id, Attribute.shelf));
+        (await _warehouseSystem.attribute<String>(id, Attribute.shelf)).first);
   }
 
   @override
@@ -58,7 +59,7 @@ abstract class AbstractProduct {
   Future<String> getSKU();
   Future<String> getShelf();
   Future<String> getName();
-  Future<String> getImage();
+  Future<List<String>> getImages();
 
   Future<void> setEAN(String ean);
 }
@@ -68,10 +69,10 @@ class MockProduct implements AbstractProduct {
   int id;
 
   MockProduct(
-      this.id, this._ean, this._img, this._name, this._sku, this._shelf);
+      this.id, this._ean, this._imgs, this._name, this._sku, this._shelf);
 
   String _ean;
-  String _img;
+  List<String> _imgs;
   String _name;
   String _sku;
   String _shelf;
@@ -80,7 +81,7 @@ class MockProduct implements AbstractProduct {
   Future<String> getEAN() => Future.sync(() => _ean);
 
   @override
-  Future<String> getImage() => Future.sync(() => _img);
+  Future<List<String>> getImages() => Future.sync(() => _imgs);
 
   @override
   Future<String> getName() => Future.sync(() => _name);

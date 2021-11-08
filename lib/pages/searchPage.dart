@@ -144,7 +144,7 @@ class _State extends State<SearchPage> {
   AbstractProduct _mockProduct = MockProduct(
       111111111,
       "eaneaneanean",
-      "assets/images/product_placeholder.png",
+      ["assets/images/product_placeholder.png"],
       "1productnameproduct",
       "1skuskuskusku",
       "1Shelf-11-2");

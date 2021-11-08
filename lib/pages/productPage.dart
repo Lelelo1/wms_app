@@ -10,10 +10,13 @@ import 'package:wms_app/stores/appStore.dart';
 import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/widgets/wmsAppBar.dart';
 import 'package:wms_app/widgets/wmsAsyncWidget.dart';
+import 'package:wms_app/widgets/wmsLabel.dart';
+import 'package:wms_app/widgets/wmsPrintableState.dart';
 import 'package:wms_app/widgets/wmsScaffold.dart';
 import 'package:mobx/mobx.dart';
 import '../utils.dart';
 import 'abstractPage.dart';
+import 'package:line_icons/line_icons.dart';
 
 // ignore: must_be_immutable
 class ProductPage extends StatefulWidget implements AbstractPage {
@@ -29,7 +32,7 @@ class ProductPage extends StatefulWidget implements AbstractPage {
   State<StatefulWidget> createState() => _State();
 }
 
-class _State extends State<ProductPage> {
+class _State extends State<ProductPage> implements WMSPrintableState {
   @override
   void initState() {
     this.widget.pageController.addListener(updatePageIndex);
@@ -43,6 +46,17 @@ class _State extends State<ProductPage> {
 
   Color scanPageTitleColor = Colors.white;
   Color productInformationTitleColor = Colors.black;
+
+  @override
+  String stateToString() =>
+      Utils.varStateToString("pageIndex", this.pageIndex) +
+      ", " +
+      Utils.varStateToString("product", this.product) +
+      ", " +
+      Utils.varStateToString("scanPageTitleColor", this.scanPageTitleColor) +
+      ", " +
+      Utils.varStateToString(
+          "productInformationTitleColor", this.productInformationTitleColor);
 
   @override
   Widget build(BuildContext context) {
@@ -85,31 +99,41 @@ class _State extends State<ProductPage> {
     }
   }
 
-  List<Widget> renderContent() =>
-      [ScanPage(scannedEAN), Observer(builder: (_) => asyncProductView())];
+  List<Widget> renderContent() => [
+        ScanPage(scannedEAN),
+        Observer(builder: (_) {
+          print("observer on product in product page: " +
+              this.product.toString());
+          return asyncProductView();
+        })
+      ];
+  // Future.sync(() => "mockShelf")
   Widget asyncProductView() {
-    if (this.product == null) {
-      return Container();
-    }
-    print("async widget");
-    return Column(children: [
-      WMSAsyncWidget(
-          this.product.getShelf(),
-          (String shelf) => SafeArea(
-                child: Column(children: [
-                  Text(shelf == null ? '' : shelf),
-                ]),
-              )),
-      WMSAsyncWidget(
-          this.product.getName(),
-          (String shelf) => SafeArea(
-                child: Column(children: [
-                  Text(shelf == null ? '' : shelf),
-                ]),
-              ))
-    ]);
+    print(
+        "async widget: " + stateToString()); // renders 2 times for some reason
+    return SafeArea(
+        child: Column(children: [
+      WMSAsyncWidget(this.product.getSKU(), (String sku) => Text(sku, style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400))), //,
+      WMSAsyncWidget(this.product.getEAN(), (String shelf) => WMSLabel(shelf, LineIcons.barcode)),
+      WMSAsyncWidget(this.product.getShelf(), (String shelf) => Text(shelf)),
+      WMSAsyncWidget(this.product.getName(), (String name) => Text(name)),
+      //WMSAsyncWidget(this.product.getEAN(), (String name) => Text(name)), // barcode icon
+      WMSAsyncWidget(Future.sync(() => this.product.id.toString()),
+          (String id) => Row(children: [Icon(Icons.text_format), Text(id)]))
+    ]));
   }
 
+
+  Widget skuWidget(String sku) {
+    return Row(children: [Ic],)
+  }
+
+  // sku:
+  // id -> Icons.desktop_windows
+  // ean -> LineIcons.barcode)
+  // shelf -> Icon(LineIcons.warehouse // cound't find anny better...
+  // (img)
+  // Icon(Icons.text_format) // can be made better
   Future<AbstractProduct> getProduct(String ean) =>
       this.widget.workStore.product(ean);
   void scannedEAN(String ean) async {

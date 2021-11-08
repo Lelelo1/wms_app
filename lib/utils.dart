@@ -45,6 +45,9 @@ class Utils {
   // same of primitive types in other programming languages
   static double defaultZero<T extends double>(T value) =>
       value == null ? 0 : value;
+
+  static String varStateToString<T>(String variableName, T value) =>
+      variableName + ": " + value.toString();
 }
 
 class ImageUtils {

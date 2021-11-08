@@ -7,66 +7,66 @@ class MockWarehouseSystem implements AbstractWarehouseSystem {
   Future<MockProduct> getProduct(String ean) => Future.sync(() => MockProduct(
       111111111,
       "eaneaneanean",
-      "assets/images/product_placeholder.png",
+      ["assets/images/product_placeholder.png"],
       "1productnameproduct",
       "1skuskuskusku",
       "1Shelf-11-2"));
-
+  // add more images than one to some products since that is the case often in the actual warehouse system
   @override
   Future<List<AbstractProduct>> getProducts() => Future.sync(() => [
         MockProduct(
             111111111,
             "eaneaneanean",
-            "assets/images/product_placeholder.png",
+            ["assets/images/product_placeholder.png"],
             "1productnameproduct",
             "1skuskuskusku",
             "1Shelf-11-2"),
         MockProduct(
             222222222,
             "eaneaneanean",
-            "assets/images/product_placeholder.png",
+            ["assets/images/product_placeholder.png"],
             "2productnameproduct",
             "2skuskuskusku",
             "2Shelf-11-2"),
         MockProduct(
             333333333,
             "eaneaneanean",
-            "assets/images/product_placeholder.png",
+            ["assets/images/product_placeholder.png"],
             "3productnameproduct",
             "3skuskuskusku",
             "3Shelf-11-2"),
         MockProduct(
             444444444,
             "eaneaneanean",
-            "assets/images/product_placeholder.png",
+            ["assets/images/product_placeholder.png"],
             "4productnameproduct",
             "4skuskuskusku",
             "4Shelf-11-2"),
         MockProduct(
             5555555555,
             "eaneaneanean",
-            "assets/images/product_placeholder.png",
+            ["assets/images/product_placeholder.png"],
             "5productnameproduct",
             "5skuskuskusku",
             "5Shelf-11-2"),
         MockProduct(
             666666666,
             "eaneaneanean",
-            "assets/images/product_placeholder.png",
+            ["assets/images/product_placeholder.png"],
             "6productnameproduct",
             "6skuskuskusku",
             "6Shelf-11-2"),
         MockProduct(
             7777777777,
             "eaneaneanean",
-            "assets/images/product_placeholder.png",
+            ["assets/images/product_placeholder.png"],
             "7productnameproduct",
             "7skuskuskusku",
             "7Shelf-11-2"),
         MockProduct(
             8888888888,
             "eaneaneanean",
-            "assets/images/product_placeholder.png",
+            ["assets/images/product_placeholder.png"],
             "8productnameproduct",
             "8skuskuskusku",
             "8Shelf-11-2")

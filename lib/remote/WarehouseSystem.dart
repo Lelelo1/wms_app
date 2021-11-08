@@ -57,9 +57,11 @@ class WarehouseSystem /*implements AbstractProductsSource */ {
     return Deserialization.toSkus(results);
   }
 
-  Future<T> attribute<T>(int id, String atttribute) async {
+  Future<List<T>> attribute<T>(int id, String attribute) async {
     var results = await _interact((connection) =>
-        connection.query((SQLQuery.getAttribute(id.toString(), atttribute))));
+        connection.query((SQLQuery.getAttribute(id.toString(), attribute))));
+
+    print(results.toString());
 
     if (Utils.isNullOrEmpty(results)) {
       return null; // causes error: [ERROR:flutter/lib/ui/ui_dart_state.cc(199)] Unhandled Exception: type 'Future<dynamic>' is not a subtype of type 'Future<String>'
@@ -67,7 +69,7 @@ class WarehouseSystem /*implements AbstractProductsSource */ {
 
     //print("results....!!");
     //print(results.toString());
-    return results.map<T>((e) => e[0]).first;
+    return results.map<T>((e) => e[0]).toList();
   }
 
   Future<void> disconnect(MySqlConnection connection) => connection.close();
@@ -104,11 +106,17 @@ class SQLQuery {
 
   static String getAttribute(String entityId, String attributeCode) {
     print("warehousesystem get " + attributeCode);
-    var attributeQuery =
-        "SELECT `catalog_product_entity_varchar`.`value` FROM `catalog_product_entity_varchar` WHERE `catalog_product_entity_varchar`.`attribute_id` IN (SELECT `eav_attribute`.`attribute_id` FROM `eav_attribute` WHERE `eav_attribute`.`attribute_code` = '$attributeCode') AND `catalog_product_entity_varchar`.`entity_id` = '$entityId' AND `catalog_product_entity_varchar`. `store_id` = '0';";
+    var attributeQuery = attributeCode == Attribute.sku
+        ? _skuQuery(entityId)
+        : _attributeQuery(entityId, attributeCode);
     print(attributeQuery);
-
     return attributeQuery;
   }
+
+  static _attributeQuery(String entityId, String attributeCode) =>
+      "SELECT `catalog_product_entity_varchar`.`value` FROM `catalog_product_entity_varchar` WHERE `catalog_product_entity_varchar`.`attribute_id` IN (SELECT `eav_attribute`.`attribute_id` FROM `eav_attribute` WHERE `eav_attribute`.`attribute_code` = '$attributeCode') AND `catalog_product_entity_varchar`.`entity_id` = '$entityId' AND `catalog_product_entity_varchar`. `store_id` = '0';";
+  // 'sku' can't be used with the generic attribute query
+  static _skuQuery(String entityId) =>
+      "SELECT `catalog_product_entity`.`sku`FROM `catalog_product_entity` WHERE `catalog_product_entity`.`entity_id` = '$entityId'";
   //"SELECT `catalog_product_entity_varchar`.`value` FROM `catalog_product_entity_varchar` WHERE `catalog_product_entity_varchar`.`attribute_id` IN (SELECT `eav_attribute`.`attribute_id` FROM `eav_attribute` WHERE `eav_attribute`.`attribute_code` = '<attribute name>') AND `catalog_product_entity_varchar`.`entity_id` = '<entity id>' AND `catalog_product_entity_varchar`. `store_id` = '0';"
 }
