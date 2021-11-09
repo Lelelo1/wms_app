@@ -123,21 +123,34 @@ class _State extends State<ProductPage> implements WMSPrintableState {
     print("async widget: " + stateToString());
     return SafeArea(
         child: Column(children: [
-      WMSAsyncWidget(
-          this.product.getSKU(),
-          (String sku) => Padding(
-              padding: EdgeInsets.only(top: skuPadding(), bottom: skuPadding()),
-              child: Text(sku,
-                  style: TextStyle(
-                      fontSize: 25, fontWeight: FontWeight.w400)))), //,
-      Row(children: [
+      titleArea(),
+      subtitleArea(),
+      imageArea(),
+      shelfWidget(),
+      nameWidget()
+      //WMSAsyncWidget(this.product.getEAN(), (String name) => Text(name)), // barcode icon
+    ]));
+  }
+
+  // potentially move specific widgets to wms widgets folder so they can be resued elsewhere
+
+  Widget titleArea() => WMSAsyncWidget(
+      this.product.getSKU(),
+      (String sku) => Padding(
+          padding: EdgeInsets.only(top: skuPadding(), bottom: skuPadding()),
+          child: Text(sku,
+              style: TextStyle(fontSize: 25, fontWeight: FontWeight.w400))));
+
+  Widget subtitleArea() => Row(children: [
         WMSAsyncWidget(
             this.product.getEAN(),
             (String shelf) =>
                 WMSLabel(shelf, LineIcons.barcode, this.eanIdPadding())),
         WMSAsyncWidget(Future.sync(() => this.product.id.toString()),
             (String id) => WMSLabel(id, Icons.desktop_windows, eanIdPadding()))
-      ], mainAxisAlignment: MainAxisAlignment.center),
+      ], mainAxisAlignment: MainAxisAlignment.center);
+
+  Widget imageArea() =>
       WMSAsyncWidget(this.product.getImages(), (List<String> imgs) {
         Image image = Utils.isNullOrEmpty(imgs)
             ? Image.asset("assets/images/product_placeholder.png",
@@ -145,20 +158,17 @@ class _State extends State<ProductPage> implements WMSPrintableState {
             : Image.network(imgs[0],
                 width: imageSize().width, height: imageSize().height);
         return Padding(child: image, padding: imagePadding());
-      }),
-      WMSAsyncWidget(this.product.getShelf(),
-          (String shelf) => Text(shelf, style: TextStyle(fontSize: 18))),
-      // image
-      WMSAsyncWidget(
-          this.product.getName(),
-          (String name) => Padding(
-              padding: EdgeInsets.all(10),
-              child: Text(name,
-                  style: TextStyle(fontSize: 15),
-                  textAlign: TextAlign.center))),
-      //WMSAsyncWidget(this.product.getEAN(), (String name) => Text(name)), // barcode icon
-    ]));
-  }
+      });
+
+  Widget shelfWidget() => WMSAsyncWidget(this.product.getShelf(),
+      (String shelf) => Text(shelf, style: TextStyle(fontSize: 18)));
+
+  Widget nameWidget() => WMSAsyncWidget(
+      this.product.getName(),
+      (String name) => Padding(
+          padding: EdgeInsets.all(10),
+          child: Text(name,
+              style: TextStyle(fontSize: 15), textAlign: TextAlign.center)));
 
   // do some common text aliging with padding, and also common fotsize, large title medium title, normal fontsize eg
 
