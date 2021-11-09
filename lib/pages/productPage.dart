@@ -101,6 +101,9 @@ class _State extends State<ProductPage> implements WMSPrintableState {
     }
   }
 
+  String mockImage =
+      "https://www.google.com/url?sa=i&url=https%3A%2F%2Fopidesign.net%2Flandscape-architecture%2Flandscape-architecture-fun-facts%2F&psig=AOvVaw1_EBAtFy6ELVqOXJWM_av0&ust=1636540639080000&source=images&cd=vfe&ved=0CAgQjRxqFwoTCPi53pKLi_QCFQAAAAAdAAAAABAD";
+
   List<Widget> renderContent() => [
         ScanPage(scannedEAN),
         Observer(builder: (_) {
@@ -111,6 +114,11 @@ class _State extends State<ProductPage> implements WMSPrintableState {
       ];
   // Future.sync(() => "mockShelf")
   double skuPadding() => this.size.height * 0.02;
+  EdgeInsets eanIdPadding() => EdgeInsets.only(
+      left: 5, top: this.skuPadding() * 0.6, right: 5, bottom: 0);
+  Size imageSize() => new Size(400, 400);
+  EdgeInsets imagePadding() => EdgeInsets.only(
+      left: 5, top: skuPadding(), right: 5, bottom: skuPadding());
   Widget asyncProductView() {
     print("async widget: " + stateToString());
     return SafeArea(
@@ -123,12 +131,21 @@ class _State extends State<ProductPage> implements WMSPrintableState {
                   style: TextStyle(
                       fontSize: 25, fontWeight: FontWeight.w400)))), //,
       Row(children: [
-        WMSAsyncWidget(this.product.getEAN(),
-            (String shelf) => WMSLabel(shelf, LineIcons.barcode)),
+        WMSAsyncWidget(
+            this.product.getEAN(),
+            (String shelf) =>
+                WMSLabel(shelf, LineIcons.barcode, this.eanIdPadding())),
         WMSAsyncWidget(Future.sync(() => this.product.id.toString()),
-            (String id) => WMSLabel(id, Icons.desktop_windows))
+            (String id) => WMSLabel(id, Icons.desktop_windows, eanIdPadding()))
       ], mainAxisAlignment: MainAxisAlignment.center),
-      Container(height: 300),
+      WMSAsyncWidget(this.product.getImages(), (List<String> imgs) {
+        Image image = Utils.isNullOrEmpty(imgs)
+            ? Image.asset("assets/images/product_placeholder.png",
+                width: imageSize().width, height: imageSize().height)
+            : Image.network(imgs[0],
+                width: imageSize().width, height: imageSize().height);
+        return Padding(child: image, padding: imagePadding());
+      }),
       WMSAsyncWidget(this.product.getShelf(),
           (String shelf) => Text(shelf, style: TextStyle(fontSize: 18))),
       // image
@@ -179,3 +196,5 @@ class _State extends State<ProductPage> implements WMSPrintableState {
 
   Widget placeholder(String ean) => Center(child: Text(ean));
 }
+
+// https://pub.dev/packages/carousel_slider/install

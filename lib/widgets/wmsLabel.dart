@@ -4,10 +4,9 @@ class WMSLabel extends StatelessWidget {
   final String text;
   final IconData iconData;
 
-  final double paddingVertical = 20;
-  final double paddingSide = 10;
+  final EdgeInsets edgeInsets;
   final double spacing = 8;
-  WMSLabel(this.text, this.iconData);
+  WMSLabel(this.text, this.iconData, this.edgeInsets);
 
   @override
   Widget build(BuildContext context) {
@@ -17,10 +16,6 @@ class WMSLabel extends StatelessWidget {
           Container(width: spacing),
           Text(this.text),
         ], mainAxisAlignment: MainAxisAlignment.center),
-        padding: EdgeInsets.only(
-            left: paddingSide,
-            top: paddingVertical,
-            right: paddingSide,
-            bottom: paddingVertical));
+        padding: edgeInsets);
   }
 }

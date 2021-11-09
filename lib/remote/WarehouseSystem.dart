@@ -106,11 +106,16 @@ class SQLQuery {
 
   static String getAttribute(String entityId, String attributeCode) {
     print("warehousesystem get " + attributeCode);
-    var attributeQuery = attributeCode == Attribute.sku
-        ? _skuQuery(entityId)
-        : _attributeQuery(entityId, attributeCode);
-    print(attributeQuery);
-    return attributeQuery;
+
+    if (attributeCode == Attribute.sku) {
+      return _skuQuery(entityId);
+    }
+
+    if (attributeCode == Attribute.images) {
+      return _imagesQuery(entityId);
+    }
+
+    return _attributeQuery(entityId, attributeCode);
   }
 
   static _attributeQuery(String entityId, String attributeCode) =>
@@ -118,5 +123,6 @@ class SQLQuery {
   // 'sku' can't be used with the generic attribute query
   static _skuQuery(String entityId) =>
       "SELECT `catalog_product_entity`.`sku`FROM `catalog_product_entity` WHERE `catalog_product_entity`.`entity_id` = '$entityId'";
-  //"SELECT `catalog_product_entity_varchar`.`value` FROM `catalog_product_entity_varchar` WHERE `catalog_product_entity_varchar`.`attribute_id` IN (SELECT `eav_attribute`.`attribute_id` FROM `eav_attribute` WHERE `eav_attribute`.`attribute_code` = '<attribute name>') AND `catalog_product_entity_varchar`.`entity_id` = '<entity id>' AND `catalog_product_entity_varchar`. `store_id` = '0';"
+  static _imagesQuery(String entityId) =>
+      "SELECT `catalog_product_entity_media_gallery`.`value` FROM `catalog_product_entity_media_gallery`, `catalog_product_entity_media_gallery_value` WHERE `catalog_product_entity_media_gallery`.`entity_id` IN (SELECT `catalog_product_relation`.`parent_id` FROM `catalog_product_relation` WHERE `catalog_product_relation`.`child_id` = '$entityId') AND `catalog_product_entity_media_gallery`.`value_id` = `catalog_product_entity_media_gallery_value`.`value_id` AND (`catalog_product_entity_media_gallery_value`.`position` = '1' OR `catalog_product_entity_media_gallery_value`.`position` = '2') ORDER BY `catalog_product_entity_media_gallery_value`.`position` ASC;";
 }

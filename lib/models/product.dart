@@ -22,9 +22,10 @@ class Product extends AbstractProduct {
   }
 
   static String katsumiImages = "https://www.katsumi.se/media/catalog/product/";
+
   @override
   Future<List<String>> getImages() async {
-    var imgs = await _warehouseSystem.attribute<String>(id, Attribute.image);
+    var imgs = await _warehouseSystem.attribute<String>(id, Attribute.images);
     return imgs.map((e) => katsumiImages + e).toList();
   }
 
