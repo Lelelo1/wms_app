@@ -12,7 +12,6 @@ class WMSAsyncWidget<T> extends StatelessWidget {
   FutureBuilder createFutureBuilder() => FutureBuilder<T>(
       future: data,
       builder: (_, AsyncSnapshot snapshot) {
-        print("connection state: " + ConnectionState.waiting.toString());
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Container(); // placeolder until render with async data is finished;;
         }
