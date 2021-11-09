@@ -109,7 +109,7 @@ class _State extends State<ProductPage> implements WMSPrintableState {
         ScanPage(scannedEAN),
         Observer(builder: (_) {
           print("observer on product in product page: " +
-              this.product.toString());
+              this.product?.toString());
           return asyncProductView();
         })
       ];
@@ -200,6 +200,8 @@ class _State extends State<ProductPage> implements WMSPrintableState {
   // Icon(Icons.text_format) // can be made better
   Future<AbstractProduct> getProduct(String ean) =>
       this.widget.workStore.product(ean);
+
+  @action
   void scannedEAN(String ean) async {
     var product = await this.widget.workStore.product(ean);
 
@@ -210,7 +212,7 @@ class _State extends State<ProductPage> implements WMSPrintableState {
     }
     print("product id: " + product.id.toString());
 
-    this.product = product;
+    this.product = product; // needs action decoration...
 
     //product.setEAN(ean);
 
