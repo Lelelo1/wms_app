@@ -17,6 +17,7 @@ import 'package:mobx/mobx.dart';
 import '../utils.dart';
 import 'abstractPage.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:flip_card/flip_card.dart';
 
 // ignore: must_be_immutable
 class ProductPage extends StatefulWidget implements AbstractPage {
@@ -152,13 +153,32 @@ class _State extends State<ProductPage> implements WMSPrintableState {
 
   Widget imageArea() =>
       WMSAsyncWidget(this.product.getImages(), (List<String> imgs) {
-        Image image = Utils.isNullOrEmpty(imgs)
-            ? Image.asset("assets/images/product_placeholder.png",
-                width: imageSize().width, height: imageSize().height)
-            : Image.network(imgs[0],
-                width: imageSize().width, height: imageSize().height);
-        return Padding(child: image, padding: imagePadding());
+        if (Utils.isNullOrEmpty(imgs)) {
+          return Padding(
+              child: Image.asset("assets/images/product_placeholder.png"),
+              padding: imagePadding());
+        }
+
+        return Padding(child: flipImage(imgs), padding: imagePadding());
       });
+
+  Widget flipImage(List<String> imgs) {
+    var frontImage = Image.network(imgs[0],
+        width: imageSize().width, height: imageSize().height);
+    if (imgs.length == 0) {
+      return frontImage;
+    }
+
+    var backImage = Image.network(imgs[1],
+        width: imageSize().width, height: imageSize().height);
+    return FlipCard(
+      fill: Fill
+          .fillBack, // Fill the back side of the card to make in the same size as the front.
+      direction: FlipDirection.HORIZONTAL, // default
+      front: frontImage,
+      back: backImage,
+    );
+  }
 
   Widget shelfWidget() => WMSAsyncWidget(this.product.getShelf(),
       (String shelf) => Text(shelf, style: TextStyle(fontSize: 18)));
