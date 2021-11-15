@@ -3,13 +3,13 @@ class ArchivedProduct {
   // in order of importance, potentially break into different class when need, andmore features are developed
 
   // ean and sku are varchar (strings) in database, but can't and should really not contain letters I think?
-  int id;
-  String ean;
-  String sku; // artikelnummer
-  String shelf; // hyllplats
-  String name; // namn
-  String image; // image
-  int box; // låda, does not exist in database is created
+  int? id;
+  String? ean;
+  String? sku; // artikelnummer
+  String? shelf; // hyllplats
+  String? name; // namn
+  String? image; // image
+  int? box; // låda, does not exist in database is created
   // entity_id to get all atributes with
   ArchivedProduct(int id, String ean, String sku, String shelf, String name,
       String image, int box) {

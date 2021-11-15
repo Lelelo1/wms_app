@@ -16,7 +16,7 @@ import '../utils.dart';
 
 class SearchPage extends StatefulWidget implements AbstractPage {
   final String name;
-  final WorkStore workStore = AppStore.injector.get<WorkStore>();
+  final WorkStore workStore = WorkStore.instance;
   final String ean;
   final void Function() pressedClose;
   final void Function(Product) pressedSubmit;
@@ -32,7 +32,7 @@ class SearchPage extends StatefulWidget implements AbstractPage {
 }
 
 class _State extends State<SearchPage> {
-  List<String> skuSuggestions;
+  List<String> skuSuggestions = [];
   /*
   FutureBuilder futureBuilder() => FutureBuilder<List<String>>(
       future: this.skuSuggestions,
@@ -45,7 +45,7 @@ class _State extends State<SearchPage> {
         return content(snapshot.data);
       });
   */
-  String selectedSKU;
+  String selectedSKU = "";
 
   @override
   Widget build(BuildContext context) {
@@ -89,11 +89,10 @@ class _State extends State<SearchPage> {
             onChanged: setInputTextState,
             autofocus: false,
             decoration: inputDecoration(),
-            textAlign: Utils.hasValue(this.selectedSKU)
+            textAlign: this.selectedSKU.isNotEmpty
                 ? TextAlign.center
                 : TextAlign.start,
-            style: TextStyle(
-                fontSize: Utils.hasValue((this.selectedSKU)) ? 23 : 17)),
+            style: TextStyle(fontSize: this.selectedSKU.isNotEmpty ? 23 : 17)),
         textStyle:
             TextStyle(), // it can maybe look abit different, as you understand that you have focused/selected the textfield
         elevation: 16,
@@ -119,14 +118,14 @@ class _State extends State<SearchPage> {
           EdgeInsets.fromLTRB(this.textLeftPadding, 10.0, 20.0, 10.0),
       enabledBorder: inputBorder(),
       focusedBorder: inputBorder(),
-      suffixIcon: Utils.hasValue(this.selectedSKU)
+      suffixIcon: this.selectedSKU.isNotEmpty
           ? IconButton(
               icon: Icon(Icons.arrow_back),
               onPressed: () {
                 this.widget._textController.clear();
                 setState(() {
-                  this.selectedSKU = null;
-                  this.skuSuggestions = null;
+                  this.selectedSKU = "";
+                  this.skuSuggestions = [];
                 });
               })
           : IconButton(
@@ -136,7 +135,7 @@ class _State extends State<SearchPage> {
               }));
 
   Widget view(BuildContext context) {
-    return Utils.hasValue(selectedSKU)
+    return selectedSKU.isNotEmpty
         ? confirmContent(context)
         : renderSuggestions(this.skuSuggestions);
   }
@@ -188,7 +187,7 @@ class _State extends State<SearchPage> {
   }
 
   Widget renderSuggestions(List<String> skuSuggestions) {
-    if (skuSuggestions == null || skuSuggestions.length == 0) {
+    if (skuSuggestions.isEmpty) {
       return Container();
     }
     // needs 'Flexible' otherwise overflow pixels

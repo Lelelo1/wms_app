@@ -9,12 +9,12 @@ import 'package:wms_app/widgets/wmsAsyncWidget.dart';
 
 class SearchProductView extends StatelessWidget {
   AbstractProduct product;
-  double width;
-  double height;
+  double width = 0;
+  double height = 0;
   SearchProductView(this.product, this.width /*, this.height*/);
 // firstRow(), secondRow()
   int columnCount = 2;
-  double imageHeight;
+  double imageHeight = 0;
   @override
   Widget build(BuildContext context) {
     print("build searchproductview");
@@ -45,7 +45,7 @@ class SearchProductView extends StatelessWidget {
     ));
   }
 
-  Widget nameWidget() => WMSAsyncWidget(this.product.getName(),
+  Widget nameWidget() => WMSAsyncWidget<String>(this.product.getName(),
       (name) => Text(name, style: TextStyle(fontSize: 20)));
 
   // potentially blur list and focus what product: https://stackoverflow.com/questions/60585494/i-cant-make-blurred-item-with-sharp-border
@@ -60,11 +60,11 @@ class SearchProductView extends StatelessWidget {
   Widget nameWidget() => WMSAsyncWidget<String>(product?.getName(),
       (String name) => Text(name, style: TextStyle(fontSize: 20)));
   */
-  Widget shelfWidget() => WMSAsyncWidget(product?.getShelf(),
+  Widget shelfWidget() => WMSAsyncWidget<String>(product.getShelf(),
       (shelf) => Text(shelf, style: TextStyle(fontSize: 22)));
 
-  Widget skuWidget() => WMSAsyncWidget(
-      product?.getSKU(),
+  Widget skuWidget() => WMSAsyncWidget<String>(
+      product.getSKU(),
       (sku) => Text(sku,
           style: TextStyle(fontSize: 38), textAlign: TextAlign.center));
 

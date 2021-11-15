@@ -3,22 +3,32 @@
 import 'package:wms_app/models/attributes.dart';
 import 'package:wms_app/stores/appStore.dart';
 import 'package:wms_app/stores/workStore.dart';
-
 import '../utils.dart';
+import 'package:collection/collection.dart';
+
+// potentially remove the '?' operator so default values can used. Which I guess
+// is the reason for the null safety anyway
 
 class Product extends AbstractProduct {
-  static final _warehouseSystem = AppStore.injector.get<WorkStore>();
+  static final _warehouseSystem = WorkStore.instance;
 
-  int id;
+  int id = 0;
   Product(int id) {
     // needed explicit constuctor for some weird reason, to set 'id'
     this.id = id;
   }
 
+  // named constructor
+  // https://dart.dev/guides/language/language-tour#constructors
+  Product.empty() {
+    // set all fields to non default value
+  }
+
   @override
   Future<String> getEAN() async {
-    var ean = (await _warehouseSystem.attribute(id, Attribute.ean)).first;
-    return Utils.defaultToDash(ean);
+    var ean = (await _warehouseSystem.attribute<String>(id, Attribute.ean))
+        ?.firstOrNull;
+    return Utils.defaultString(ean, "-");
   }
 
   static String katsumiImages = "https://www.katsumi.se/media/catalog/product/";
@@ -26,36 +36,41 @@ class Product extends AbstractProduct {
   @override
   Future<List<String>> getImages() async {
     var imgs = await _warehouseSystem.attribute<String>(id, Attribute.images);
-    return imgs.map((e) => katsumiImages + e).toList();
+    // potentially specify a fallback image, error image eg.
+    return Utils.defaultImages(imgs).map((e) => katsumiImages + e).toList();
   }
 
   @override
   Future<String> getName() async {
-    return Utils.defaultToDash(
-        (await _warehouseSystem.attribute<String>(id, Attribute.name)).first);
+    var name = (await _warehouseSystem.attribute<String>(id, Attribute.name))
+        ?.firstOrNull;
+    return Utils.defaultString(name, "-");
   }
 
   @override
   Future<String> getSKU() async {
-    var sku = (await _warehouseSystem.attribute(id, Attribute.sku)).first;
-    return Utils.defaultToDash(sku);
+    var sku =
+        (await _warehouseSystem.attribute(id, Attribute.sku))?.firstOrNull;
+    return Utils.defaultString(sku, "-");
   }
 
   @override
   Future<String> getShelf() async {
-    return Utils.defaultToDash(
-        (await _warehouseSystem.attribute<String>(id, Attribute.shelf)).first);
+    var shelf = (await _warehouseSystem.attribute<String?>(id, Attribute.shelf))
+        ?.firstOrNull;
+    return Utils.defaultString(shelf, "-");
   }
 
   @override
   Future<void> setEAN(String ean) {
     // TODO: implement setEAN
     // set ean to the product in the warehousesystem
+    return Future.sync(() => null);
   }
 }
 
 abstract class AbstractProduct {
-  int id;
+  int id = 0;
   Future<String> getEAN();
   Future<String> getSKU();
   Future<String> getShelf();

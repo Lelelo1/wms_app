@@ -2,7 +2,7 @@ import 'package:flutter_simple_dependency_injection/injector.dart';
 import 'package:wms_app/stores/workStore.dart';
 
 class AppStore {
-  static Injector injector;
+  static Injector? injector;
 }
 
 // https://pub.dev/packages/flutter_simple_dependency_injection

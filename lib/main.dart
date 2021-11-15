@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:wms_app/pages/featuresPage.dart';
-import 'package:screen/screen.dart';
 import 'package:flutter_simple_dependency_injection/injector.dart';
 import 'package:wms_app/stores/appStore.dart';
 import 'package:wms_app/views/cameraView.dart';
+import 'package:wakelock/wakelock.dart';
 
 void main() {
   runApp(App());
-  Screen.keepOn(true);
+  // Screen.keepOn(true); package had not been updated since 2019
+  Wakelock.enable();
 
   AppStore.injector = Module().initialise(Injector());
 }
@@ -24,13 +25,13 @@ class App extends StatefulWidget {
 class _AppState extends State<App> with WidgetsBindingObserver {
   @override
   void initState() {
-    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance?.addObserver(this);
     super.initState();
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
+    WidgetsBinding.instance?.removeObserver(this);
     super.dispose();
   }
 
@@ -63,8 +64,10 @@ class _AppState extends State<App> with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     // AppLifecycleState.resumed
     // AppLifecycleState.paused<-when leaving app
+    /*
     var cameraController =
         await CameraViewController.getCameraControllerInstance();
+        */
     print("lifecyclestate: " + state.toString());
     if (state == AppLifecycleState.paused) {
       // cannot stop java.lang.IllegalStateException to happen when app
@@ -72,8 +75,10 @@ class _AppState extends State<App> with WidgetsBindingObserver {
       // cameraController.dispose();
       // CameraViewController.pauseImageStream();
     } else if (state == AppLifecycleState.resumed) {
+      /*
       CameraViewController.resumeImageStream(); // needed!
-      cameraController.initialize();
+      cameraController?.initialize();
+      */
     }
   }
 }

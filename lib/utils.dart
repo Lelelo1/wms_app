@@ -32,8 +32,14 @@ class Utils {
         "Utils isNullOrEmpty is not supperted for type " + T.toString());
   }
 
-  static String defaultToDash(String string) =>
-      isNullOrEmpty(string) ? "-" : string;
+  // needed for null safety, just like primitives in other languages
+  static String defaultString(String? value, [String to = '']) => value ?? to;
+  static int defaultInt(int? value) => value ?? 0;
+  static double defaultDouble(double? value) => value ?? 0;
+
+  static List<String> defaultImages(List<String>? images,
+          [List<String> to = const []]) =>
+      images ?? to;
 
   // https://stackoverflow.com/questions/55579906/how-to-count-items-occurence-in-a-list
   static Map occurence<T>(List<T> list) {
@@ -42,12 +48,34 @@ class Utils {
     return map;
   }
 
-  // same of primitive types in other programming languages
-  static double defaultZero<T extends double>(T value) =>
-      value == null ? 0 : value;
-
   static String varStateToString<T>(String variableName, T value) =>
       variableName + ": " + value.toString();
+
+  static int toInt(double value) => value.round();
+}
+
+// needed beacuse of null safeety strings
+// I actually don't think is needed, if I make sure 'String' is used everywhere instead of 'String?'
+extension StringNullSafetyExtensions on String? {
+  String append(String string) => Utils.defaultString(this) + string;
+
+  String prepend(String string) => string + Utils.defaultString(this);
+
+  String appendSafe(String? string) =>
+      Utils.defaultString(this) + Utils.defaultString(string);
+
+  String prependSafe(String? string) =>
+      Utils.defaultString(string) + Utils.defaultString(this);
+}
+
+extension StringExtensions on String {
+  String append(String string) => this + string;
+
+  String prepend(String string) => string + this;
+
+  String appendSafe(String? string) => this + Utils.defaultString(string);
+
+  String prependSafe(String? string) => Utils.defaultString(string) + this;
 }
 
 class ImageUtils {

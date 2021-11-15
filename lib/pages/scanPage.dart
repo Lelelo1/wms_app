@@ -28,10 +28,10 @@ class ScanPage extends StatefulWidget {
 }
 
 class _State extends State<ScanPage> {
-  WorkStore workStore = AppStore.injector.get<WorkStore>();
+  WorkStore workStore = WorkStore.instance;
   //MediaQueryData mediaQueryData;
   // Future<Sequence> sequence;
-  Future<CameraView> cameraViewFuture;
+  Future<CameraView>? cameraViewFuture;
   @override
   void initState() {
     this.cameraViewFuture = this.widget._memoizer.runOnce(() => CameraView());
@@ -46,10 +46,11 @@ class _State extends State<ScanPage> {
           // https://stackoverflow.com/questions/52847534/flutter-futurebuilder-returning-null-error-triggered
           return LoadingPage();
         }
-        return page(snapshot.data);
+        //return page(snapshot.data);
+        return page(snapshot.data ?? Container());
       });
   // conditional renderering, searchView
-  Widget page(CameraView cameraView) {
+  Widget page(Widget cameraView) {
     return Scaffold(
         //appBar: WMSAppBar(this.widget.name).get(),
         body: Column(children: [

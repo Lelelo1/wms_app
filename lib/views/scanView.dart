@@ -4,8 +4,8 @@ import 'package:wms_app/jobs/identify.dart';
 import 'package:wms_app/models/product.dart';
 import 'package:wms_app/services/visionService.dart';
 import 'package:wms_app/views/cameraView.dart';
-
 import '../utils.dart';
+//import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 class ScanView extends StatefulWidget {
   double ratio;
@@ -20,10 +20,10 @@ class ScanView extends StatefulWidget {
 
 class _State extends State<ScanView> {
   List<String> scannedBarcodes = [];
-  Size currentSize;
+  Size currentSize = Size.zero;
 
-  Size defaultSize;
-  Size enlargedSize;
+  Size defaultSize = Size.zero;
+  Size enlargedSize = Size.zero;
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +60,7 @@ class _State extends State<ScanView> {
   }
 
   List<Widget> scannedProducts() {
-    if (this.scannedBarcodes?.length == 0) {
+    if (this.scannedBarcodes.isEmpty) {
       return [Container()];
     }
 
@@ -72,10 +72,10 @@ class _State extends State<ScanView> {
   }
 
   void scan() async {
-    var visionSevice = VisionService.getInstance();
+    var visionSevice = VisionService.instance;
     String barcode;
     var streamImage = CameraViewController.streamImage;
-    if (Utils.hasValue(streamImage)) {
+    if (streamImage != null) {
       barcode = await visionSevice.analyzeBarcodeFromBytes(
           ImageUtils.concatenatePlanes(streamImage.planes),
           ImageUtils.imageData(streamImage));

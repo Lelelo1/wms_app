@@ -5,9 +5,9 @@ import 'package:wms_app/models/product.dart';
 //
 
 class Deserialization {
-  static Product toProduct(Results results) {
+  static Product toProduct(Results? results) {
     if (results == null || results.isEmpty) {
-      return null;
+      return Product.empty();
     }
 
     var ids = results.map((e) => (e[0] as int)).toList();
@@ -18,9 +18,9 @@ class Deserialization {
     return Product(ids[0]);
   }
 
-  static List<String> toSkus(Results results) {
+  static List<String> toSkus(Results? results) {
     if (results == null || results.isEmpty) {
-      return null;
+      return List.empty();
     }
     //why is sku prepended with space, it makes it look like padding is wrong
     var suggestions = results.map<String>((e) {

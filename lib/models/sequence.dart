@@ -2,10 +2,9 @@ import 'package:wms_app/models/product.dart';
 
 class Sequence {
   List<Product> products;
-  Iterator<Product> iterator;
+  Iterator<Product> iterator() => products.iterator;
 
-  Sequence(List<Product> products) {
-    iterator = products.iterator;
-    iterator.moveNext();
+  Sequence(this.products) {
+    iterator().moveNext();
   }
 }

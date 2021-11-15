@@ -15,13 +15,7 @@ import 'dart:math';
 // I am just assuming image rotation is 0 at all times
 
 class VisionService {
-  static VisionService _instance;
-  static VisionService getInstance() {
-    if (_instance == null) {
-      _instance = VisionService();
-    }
-    return _instance;
-  }
+  static late VisionService instance = VisionService();
 
   BarcodeDetector _barcodeDetector = GoogleVision.instance.barcodeDetector();
   TextRecognizer _textDetector = GoogleVision.instance.textRecognizer();
@@ -51,38 +45,37 @@ class VisionService {
       return barcode;
     }
     */
-    return (toBarcodeString(await _barcodeDetector.detectInImage(googleImage)));
-  }
-
-  String toBarcodeString(List<Barcode> barcodes) {
-    // need to know more about lists to make cleaner code below
-    try {
-      return barcodes[0]?.rawValue;
-    } catch (Exception) {
-      return '';
+    var barcodes = await _barcodeDetector.detectInImage(googleImage);
+    if (barcodes.isEmpty) {
+      return "";
     }
-  }
 
-  String extractBarcodeFromText(VisionText visionText) {
+    // return one of the barcodes arbitarily
+    var value = barcodes[0].rawValue;
+    return Utils.defaultString(value);
+  }
+  /*
+  String? extractBarcodeFromText(VisionText visionText) {
     // shorten somehow...?
     if (visionText == null ||
         visionText.blocks == null ||
         visionText.blocks.isEmpty) {
       return null;
     }
-    List<TextBlock> blocks = List<TextBlock>.from(visionText.blocks)
+    List<TextBlock?> blocks = List<TextBlock>.from(visionText.blocks)
         .where((element) => element != null)
         .toList(); // https://stackoverflow.com/questions/59439109/flutter-dart-cannot-modify-an-unmodifiable-list-occurs-when-trying-to-sort-a-l
     // for some reason I need to remove null values in the list...: https://stackoverflow.com/questions/66896648/how-to-convert-a-liststring-to-liststring-in-null-safe-dart
     // ... https://stackoverflow.com/questions/58385998/dart-flutter-max-value-from-list-of-objects
     print("blocks count: " + blocks.length.toString());
-    blocks.sort((a, b) => Utils.defaultZero(a.confidence)
-        .compareTo(Utils.defaultZero(b.confidence)));
+    blocks.sort((a, b) => Utils.defaultDouble(a?.confidence)
+        .compareTo(Utils.defaultDouble(b?.confidence)));
     print("confidences of the text where...");
     blocks.forEach((element) {
-      print("confidence " + element.confidence.toString());
+      print("confidence ".appendSafe(element?.confidence.toString()));
     });
 
     return visionText.blocks[0].text;
   }
+  */
 }

@@ -8,6 +8,8 @@ import 'package:wms_app/remote/abstractWarehouseSystem.dart';
 import 'package:wms_app/remote/warehouseSystem.dart';
 
 class WorkStore {
+  static late WorkStore instance = WorkStore();
+
   /*Abstract*/ WarehouseSystem _warehouseSystem = WarehouseSystem();
 
   // how to interact with ui error message?
@@ -17,7 +19,7 @@ class WorkStore {
   Future<List<String>> suggestions(String text) =>
       _warehouseSystem.getSKUSuggestions(text);
 
-  Future<List<T>> attribute<T>(int id, String attribute) =>
+  Future<List<T>?> attribute<T>(int id, String attribute) =>
       _warehouseSystem.attribute<T>(id, attribute);
 /*
   Sequence getRegistration() {

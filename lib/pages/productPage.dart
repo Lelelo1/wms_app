@@ -22,8 +22,8 @@ import 'package:flip_card/flip_card.dart';
 // ignore: must_be_immutable
 class ProductPage extends StatefulWidget implements AbstractPage {
   final String name;
-  final Job job;
-  final workStore = AppStore.injector.get<WorkStore>();
+  final Job? job;
+  final workStore = WorkStore.instance;
 
   final PageController pageController = PageController();
 
@@ -43,7 +43,7 @@ class _State extends State<ProductPage> implements WMSPrintableState {
   @observable
   int pageIndex = 0;
 
-  Product product;
+  Product product = Product.empty();
 
   Color scanPageTitleColor = Colors.white;
   Color productInformationTitleColor = Colors.black;
@@ -85,14 +85,8 @@ class _State extends State<ProductPage> implements WMSPrintableState {
 
   bool shouldExtendPageContent() => pageIndex == 0 ? true : false;
 
-  int currentPage() {
-    var p = this.widget.pageController.page;
-    if (p > 0.5) {
-      return 1;
-    } else {
-      return 0;
-    }
-  }
+  int currentPage() =>
+      Utils.toInt(Utils.defaultDouble(widget.pageController.page));
 
   void updatePageIndex() {
     var page = currentPage();
@@ -108,8 +102,8 @@ class _State extends State<ProductPage> implements WMSPrintableState {
   List<Widget> renderContent() => [
         ScanPage(scannedEAN),
         Observer(builder: (_) {
-          print("observer on product in product page: " +
-              this.product?.toString());
+          print("observer on product in product page: "
+              .appendSafe(this.product.toString()));
           return asyncProductView();
         })
       ];
@@ -205,7 +199,8 @@ class _State extends State<ProductPage> implements WMSPrintableState {
   void scannedEAN(String ean) async {
     var product = await this.widget.workStore.product(ean);
 
-    if (product == null) {
+    if (product.id == 0) {
+      // 'isEmpty' ...
       // ignore scan
       print("could not find this product with ean in the warehouse system");
       return;

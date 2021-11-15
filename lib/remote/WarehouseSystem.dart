@@ -11,10 +11,10 @@ import '../utils.dart';
 
 // https://pub.dev/packages/mysql1
 class WarehouseSystem /*implements AbstractProductsSource */ {
-  Future<Results> _interact<Results>(
-      Future<Results> Function(MySqlConnection connection) action) async {
+  Future<Results?> _interact<Results>(
+      Future<Results>? Function(MySqlConnection? connection) action) async {
     print("interact");
-    MySqlConnection connection;
+    MySqlConnection? connection;
     try {
       connection = await connect();
     } on Exception catch (exception) {
@@ -22,6 +22,7 @@ class WarehouseSystem /*implements AbstractProductsSource */ {
       print(exception.toString());
       return null;
     }
+
     print("interact got connection, preforming action");
     var result = await action(connection);
     disconnect(connection);
@@ -31,7 +32,7 @@ class WarehouseSystem /*implements AbstractProductsSource */ {
   // needs internet permission android real device, otherwise: 'SocketException: OS Error: Connection refused'
   // https://stackoverflow.com/questions/55785581/socketexception-os-error-connection-refused-errno-111-in-flutter-using-djan
   // such permission is granted on install time: https://developer.android.com/training/basics/network-ops/connecting
-  Future<MySqlConnection> connect() async {
+  Future<MySqlConnection?> connect() async {
     var settings = new ConnectionSettings(
         host: MySql.host,
         port: MySql.port,
@@ -43,36 +44,35 @@ class WarehouseSystem /*implements AbstractProductsSource */ {
   }
 
   Future<Product> getProduct(String ean) async {
-    Results results;
+    Results? results;
     var sql = SQLQuery.getProduct(ean);
-    results = await _interact((connection) => connection.query(sql));
+    results = await _interact((connection) => connection?.query(sql));
     var p = Deserialization.toProduct(results);
     return p;
   }
 
   Future<List<String>> getSKUSuggestions(String text) async {
     var results = await _interact(
-        (connection) => connection.query(SQLQuery.getSKUSuggestions(text)));
+        (connection) => connection?.query(SQLQuery.getSKUSuggestions(text)));
 
     return Deserialization.toSkus(results);
   }
 
-  Future<List<T>> attribute<T>(int id, String attribute) async {
+  Future<List<T>?> attribute<T>(int id, String attribute) async {
     var results = await _interact((connection) =>
-        connection.query((SQLQuery.getAttribute(id.toString(), attribute))));
+        connection?.query((SQLQuery.getAttribute(id.toString(), attribute))));
 
-    print(results.toString());
+    print(attribute + " " + results.toString());
 
-    if (Utils.isNullOrEmpty(results)) {
-      return null; // causes error: [ERROR:flutter/lib/ui/ui_dart_state.cc(199)] Unhandled Exception: type 'Future<dynamic>' is not a subtype of type 'Future<String>'
+    if (results == null) {
+      return List.empty();
     }
 
-    //print("results....!!");
-    //print(results.toString());
     return results.map<T>((e) => e[0]).toList();
   }
 
-  Future<void> disconnect(MySqlConnection connection) => connection.close();
+  Future<dynamic>? disconnect(MySqlConnection? connection) =>
+      connection?.close();
 }
 
 class SQLQuery {

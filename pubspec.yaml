@@ -18,32 +18,37 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.14.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
+    
   flutter_test:
     sdk: flutter
   flutter_driver:
     sdk: flutter
   
   cupertino_icons: ^1.0.2
-  screen: ^0.0.5
-  flutter_simple_dependency_injection: ^1.0.4
+  flutter_simple_dependency_injection: ^2.0.0
   #qr_code_scanner: ^0.3.5 inability controller the scanning proccess, potential memory leak
   mysql1: ^0.19.2
   flutter_beep: ^0.3.0
-  flutter_vibrate: ^1.1.0
+  #flutter_vibrate: ^1.1.0 // not used. and versino can't be used since updating other packages
   audioplayers: ^0.19.1
   # google_ml_kit: ^0.7.0 muliti usage camera, barcode, text and face
   google_ml_vision: ^0.0.6 #dysfunction textrecognition confidence score
-  camera: ^0.8.1+7
+  camera: ^0.9.4+3 
   rflutter_alert: ^2.0.4
   mobx: ^2.0.5
   flutter_mobx: ^2.0.2
   line_icons: ^2.0.1
   flip_card: ^0.6.0
+  #screen: ^0.0.5 not being updated:
+  wakelock: ^0.5.6
+  # wrong placing these here? // https://firebase.flutter.dev/docs/crashlytics/overview/
+  firebase_core: "^1.10.0"
+  firebase_crashlytics: "^2.3.0"
 dev_dependencies:
   integration_test:
     sdk: flutter

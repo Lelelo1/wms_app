@@ -18,10 +18,8 @@ import 'package:wms_app/widgets/wmsAsyncWidget.dart';
 class ProductView extends StatelessWidget {
   AbstractProduct product;
 
-  ProductView(AbstractProduct product) {
-    // asume as product, handle outside
-    this.product = product;
-  }
+  ProductView(this.product);
+
 // firstRow(), secondRow()
   int columnCount = 2;
   @override
@@ -87,14 +85,14 @@ class ProductView extends StatelessWidget {
   }
 
   // methods given in 'Product's class order
-  Widget nameWidget() => WMSAsyncWidget<String>(product?.getName(),
+  Widget nameWidget() => WMSAsyncWidget<String>(product.getName(),
       (String name) => Text(name, style: TextStyle(fontSize: 20)));
 
-  Widget shelfWidget() => WMSAsyncWidget(product?.getShelf(),
+  Widget shelfWidget() => WMSAsyncWidget<String>(product.getShelf(),
       (shelf) => Text(shelf, style: TextStyle(fontSize: 22)));
 
-  Widget skuWidget() => WMSAsyncWidget(
-      product?.getSKU(),
+  Widget skuWidget() => WMSAsyncWidget<String>(
+      product.getSKU(),
       (sku) => Text(sku,
           style: TextStyle(fontSize: 38), textAlign: TextAlign.center));
 
