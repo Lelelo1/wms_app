@@ -12,25 +12,26 @@ import 'package:wakelock/wakelock.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 void main() async {
-  await runZonedGuarded(() async {
-    WidgetsFlutterBinding.ensureInitialized();
-    //userId = await Utils.userId();
-
-    await Firebase.initializeApp(
-        options: const FirebaseOptions(
+  /*
+    const FirebaseOptions(
       apiKey: WMSFirebase.apiKey,
       appId: WMSFirebase.apiId,
       messagingSenderId: WMSFirebase.messagingSenderId,
       projectId: WMSFirebase.projectId,
-    ));
-    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
-    runApp(App());
-    // Screen.keepOn(true); package had not been updated since 2019
-    Wakelock.enable();
-    AppStore.injector = Module().initialise(Injector());
-  }, (error, stackTrace) {
-    FirebaseCrashlytics.instance.recordError(error, stackTrace);
-  });
+    )
+  */
+
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp();
+
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+  runApp(App());
+  // Screen.keepOn(true); package had not been updated since 2019
+  Wakelock.enable();
+  AppStore.injector = Module().initialise(Injector());
+
+  //FirebaseCrashlytics.instance.crash();
 }
 
 class App extends StatefulWidget {

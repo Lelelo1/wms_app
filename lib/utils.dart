@@ -7,7 +7,6 @@ import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_ml_vision/google_ml_vision.dart';
 import 'package:mysql1/mysql1.dart';
-import 'package:device_info/device_info.dart';
 
 class Utils {
   // for better readability, there is a javascript

@@ -34,11 +34,11 @@ class WarehouseSystem /*implements AbstractProductsSource */ {
   // such permission is granted on install time: https://developer.android.com/training/basics/network-ops/connecting
   Future<MySqlConnection?> connect() async {
     var settings = new ConnectionSettings(
-        host: MySql.host,
-        port: MySql.port,
-        user: MySql.user,
-        password: MySql.pass,
-        db: MySql.db);
+        host: WMSMySql.host,
+        port: WMSMySql.port,
+        user: WMSMySql.user,
+        password: WMSMySql.pass,
+        db: WMSMySql.db);
 
     return await MySqlConnection.connect(settings);
   }

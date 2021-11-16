@@ -1,4 +1,5 @@
 // partially made for debugging scanning
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:wms_app/jobs/identify.dart';
 import 'package:wms_app/models/product.dart';
@@ -44,18 +45,32 @@ class _State extends State<ScanView> {
   */
   Widget scanButton() {
     return Padding(
-        child: Container(
-            child: ElevatedButton(
-              style: ButtonStyle(
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0))),
+        child: Column(children: [
+          Container(
+              child: ElevatedButton(
+                style: ButtonStyle(
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.0))),
+                ),
+                child: Text('Scanna'),
+                onPressed: scan,
               ),
-              child: Text('Scanna'),
-              onPressed: scan,
-            ),
-            width: 170,
-            height: 65),
+              width: 170,
+              height: 65),
+          Padding(
+              child: Container(
+                  child: MaterialButton(
+                    color: Colors.red,
+                    child: Text('Crash'),
+                    onPressed: () {
+                      FirebaseCrashlytics.instance.crash();
+                    },
+                  ),
+                  width: 170,
+                  height: 65),
+              padding: EdgeInsets.only(top: 100))
+        ]),
         padding: EdgeInsets.all(30));
   }
 
