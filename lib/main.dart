@@ -1,16 +1,36 @@
+import 'dart:async';
+
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:wms_app/pages/featuresPage.dart';
 import 'package:flutter_simple_dependency_injection/injector.dart';
+import 'package:wms_app/secrets.dart';
 import 'package:wms_app/stores/appStore.dart';
+import 'package:wms_app/utils.dart';
 import 'package:wms_app/views/cameraView.dart';
 import 'package:wakelock/wakelock.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
-void main() {
-  runApp(App());
-  // Screen.keepOn(true); package had not been updated since 2019
-  Wakelock.enable();
+void main() async {
+  await runZonedGuarded(() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    //userId = await Utils.userId();
 
-  AppStore.injector = Module().initialise(Injector());
+    await Firebase.initializeApp(
+        options: const FirebaseOptions(
+      apiKey: WMSFirebase.apiKey,
+      appId: WMSFirebase.apiId,
+      messagingSenderId: WMSFirebase.messagingSenderId,
+      projectId: WMSFirebase.projectId,
+    ));
+    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+    runApp(App());
+    // Screen.keepOn(true); package had not been updated since 2019
+    Wakelock.enable();
+    AppStore.injector = Module().initialise(Injector());
+  }, (error, stackTrace) {
+    FirebaseCrashlytics.instance.recordError(error, stackTrace);
+  });
 }
 
 class App extends StatefulWidget {

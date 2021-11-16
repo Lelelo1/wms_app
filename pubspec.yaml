@@ -49,6 +49,7 @@ dependencies:
   # wrong placing these here? // https://firebase.flutter.dev/docs/crashlytics/overview/
   firebase_core: "^1.10.0"
   firebase_crashlytics: "^2.3.0"
+  
 dev_dependencies:
   integration_test:
     sdk: flutter
