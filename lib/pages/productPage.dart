@@ -203,6 +203,9 @@ class _State extends State<ProductPage> implements WMSPrintableState {
     if (product.id == 0) {
       // 'isEmpty' ...
       // ignore scan
+      this.setState(() {
+        this.product = Product.empty();
+      });
       print("could not find this product with ean in the warehouse system");
       return;
     }
