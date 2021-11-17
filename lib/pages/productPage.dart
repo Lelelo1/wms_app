@@ -75,6 +75,7 @@ class _State extends State<ProductPage> implements WMSPrintableState {
       controller: this.widget.pageController,
       children: renderContent(),
       scrollDirection: Axis.vertical,
+      physics: this.product.isEmpty() ? NeverScrollableScrollPhysics() : null,
     ));
   }
 
@@ -207,7 +208,7 @@ class _State extends State<ProductPage> implements WMSPrintableState {
     }
     print("product id: " + product.id.toString());
 
-    this.product = product; // needs action decoration...
+    //this.product = product; // needs action decoration...
 
     //product.setEAN(ean);
 
@@ -215,6 +216,9 @@ class _State extends State<ProductPage> implements WMSPrintableState {
 
     //product.getSKU();
 
+    this.setState(() {
+      this.product = product;
+    });
     print("animate to page one");
     this.widget.pageController.animateToPage(1,
         duration: Duration(milliseconds: 600),

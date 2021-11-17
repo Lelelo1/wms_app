@@ -18,6 +18,7 @@ class Product extends AbstractProduct {
     this.id = id;
   }
 
+  bool isEmpty() => id == 0;
   // named constructor
   // https://dart.dev/guides/language/language-tour#constructors
   Product.empty() {
