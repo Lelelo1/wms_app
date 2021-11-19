@@ -1,6 +1,13 @@
 # Uncomment this line to define a global platform for your project
 # platform :ios, '9.0'
 
+# https://stackoverflow.com/questions/56055142/cocoapods-could-not-find-compatible-versions-for-pod-firebase-coreonly
+# platform :ios, '11.0'
+
+# the: 'CocoaPods did not set the base configuration of your project because your project already has a custom config set.'
+# ... message seems to be warning and you are not suppoed to edit pd manually...: https://github.com/flutter/flutter/issues/73845
+# however it is not possible run flutter debug device, so need to make it work in Xcode
+
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
 
@@ -39,3 +46,4 @@ post_install do |installer|
     flutter_additional_ios_build_settings(target)
   end
 end
+

@@ -1,4 +1,6 @@
-version: "Apple Swift version 5.4 (swiftlang-1205.0.26.9 clang-1205.0.19.55)"
-options: "984666a5a201d96b2bfb49b46f5b2ddf"
-build_time: [1637149940, 603223000]
+version: "Apple Swift version 5.5.1 (swiftlang-1300.0.31.4 clang-1300.0.29.6)"
+options: "34e21fe18bde3489967e715c2705aba30305376c0d9bf487e0d73b8e77b3247d"
+build_start_time: [1637316095, 533501148]
+build_end_time: [1637316096, 36334037]
 inputs:
+  "/Users/lelelo1/Projects/wms-app/ios/Runner/AppDelegate.swift": !private [1634122465, 327800512]
