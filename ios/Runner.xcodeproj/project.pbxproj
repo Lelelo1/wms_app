@@ -146,6 +146,8 @@
 				17D7161E1D65F8C276E3DB78 /* [CP] Embed Pods Frameworks */,
 				5B14750E2B56287916620652 /* [CP] Copy Pods Resources */,
 				CF8ED81E273BDF9000602DA1 /* ShellScript */,
+				CF6A71F5274BAD1E0089C253 /* ShellScript */,
+				CF6A71F6274BAD4D0089C253 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -266,6 +268,40 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build\n";
+		};
+		CF6A71F5274BAD1E0089C253 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# https://stackoverflow.com/questions/55709939/how-to-upload-dsyms-files-which-developed-with-flutter\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
+		};
+		CF6A71F6274BAD4D0089C253 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n# https://stackoverflow.com/questions/55709939/how-to-upload-dsyms-files-which-developed-with-flutter\n\"${PODS_ROOT}/FirebaseCrashlytics/upload-symbols\" -gsp \"${PROJECT_DIR}/Runner/GoogleService-Info.plist\" -p ios \"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}\"\n";
 		};
 		CF8ED81E273BDF9000602DA1 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
