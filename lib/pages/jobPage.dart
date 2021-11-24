@@ -71,19 +71,6 @@ class _State extends State<JobPage> {
                 ;
                 */
   }
-
-  void closeSearchView() {} // not needed ?
-
-  void preformJob(Product product) async {
-    var productName = await product.getName();
-    var productId = product.id;
-    print("preform job " +
-        this.widget.name +
-        " with product" +
-        productName +
-        " id: " +
-        productId.toString());
-  }
 }
 
 // previously have tried SwitchTranstion to change widget inside with when doing view transition
