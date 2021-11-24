@@ -8,13 +8,13 @@ import 'package:wms_app/models/product.dart';
 import 'package:wms_app/pages/abstractPage.dart';
 import 'package:wms_app/pages/scanPage.dart';
 import 'package:wms_app/pages/searchPage.dart';
+import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/utils.dart';
 
-// rename to 'WorkPage'... ?
 class JobPage extends StatefulWidget implements AbstractPage {
-  final Job job;
+  final workStore = WorkStore.instance;
 
-  JobPage(this.name, this.job);
+  JobPage(this.name);
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -41,9 +41,11 @@ class _State extends State<JobPage> {
   void successfullScan(String barcode) async {
     print("Successfull scaaaan!: " + barcode);
 
-    var product = null; //await this.widget.job.identify(barcode);
-    if (Utils.hasValue(product)) {
+    var product = await this.widget.workStore.product(barcode);
+    print(await product.futureToString());
+    if (product.exists()) {
       // preform other job
+
       return;
     }
 

@@ -13,7 +13,6 @@ import '../utils.dart';
 class WarehouseSystem /*implements AbstractProductsSource */ {
   Future<Results?> _interact<Results>(
       Future<Results>? Function(MySqlConnection? connection) action) async {
-    print("interact");
     MySqlConnection? connection;
     try {
       connection = await connect();
@@ -47,6 +46,7 @@ class WarehouseSystem /*implements AbstractProductsSource */ {
     Results? results;
     var sql = SQLQuery.getProduct(ean);
     results = await _interact((connection) => connection?.query(sql));
+    print("ean" + " " + results.toString());
     var p = Deserialization.toProduct(results);
     return p;
   }

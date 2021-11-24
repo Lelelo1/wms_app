@@ -1,5 +1,6 @@
 // having objects tied directly to warehousesystem/database
 
+import 'package:flutter_test/flutter_test.dart';
 import 'package:wms_app/models/attributes.dart';
 import 'package:wms_app/stores/appStore.dart';
 import 'package:wms_app/stores/workStore.dart';
@@ -18,7 +19,7 @@ class Product extends AbstractProduct {
     this.id = id;
   }
 
-  bool isEmpty() => id == 0;
+  bool exists() => id > 0;
   // named constructor
   // https://dart.dev/guides/language/language-tour#constructors
   Product.empty() {
@@ -67,6 +68,33 @@ class Product extends AbstractProduct {
     // TODO: implement setEAN
     // set ean to the product in the warehousesystem
     return Future.sync(() => null);
+  }
+
+  Future<String> futureToString() async {
+    var id = this.id.toString();
+    var ean = await this.getEAN();
+    var images = await this.getImages();
+    var name = await this.getName();
+    var sku = await this.getSKU();
+    var shelf = await this.getShelf();
+
+    return "id: " +
+        id.toString() +
+        ", ean: " +
+        ean.toString() +
+        ", images: " +
+        Utils.listToString(images) +
+        ", name: " +
+        name +
+        ", sku: " +
+        sku +
+        ", shelf: " +
+        shelf;
+  }
+
+  @override
+  String toString() {
+    throw "not supported. use futureToString instead";
   }
 }
 

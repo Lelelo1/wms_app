@@ -57,19 +57,7 @@ class _State extends State<ScanView> {
                 onPressed: scan,
               ),
               width: 170,
-              height: 65),
-          Padding(
-              child: Container(
-                  child: MaterialButton(
-                    color: Colors.red,
-                    child: Text('Crash'),
-                    onPressed: () {
-                      FirebaseCrashlytics.instance.crash();
-                    },
-                  ),
-                  width: 170,
-                  height: 65),
-              padding: EdgeInsets.only(top: 100))
+              height: 65)
         ]),
         padding: EdgeInsets.all(30));
   }

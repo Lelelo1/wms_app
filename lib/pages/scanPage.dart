@@ -6,7 +6,6 @@ import 'package:wms_app/pages/loadingPage.dart';
 import 'package:wms_app/stores/appStore.dart';
 import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/views/cameraView.dart';
-import 'package:wms_app/views/productView.dart';
 import 'package:wms_app/views/scanView.dart';
 import 'abstractPage.dart';
 import 'package:async/async.dart';

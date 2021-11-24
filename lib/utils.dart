@@ -53,6 +53,33 @@ class Utils {
       variableName + ": " + value.toString();
 
   static int toInt(double value) => value.round();
+
+  static String listToString(List<String> list) {
+    if (isNullOrEmpty(list)) {
+      return "";
+    }
+
+    String s = "";
+    list.forEach((e) => s += ", " + e);
+
+    return s;
+  }
+  /*
+  static String toString<T>(T t) {
+    if (isNullOrEmpty(t)) {
+      return "";
+    }
+
+    if (t is List) {
+      // should catch all type of elements
+      String s = "";
+      t.forEach((e) => s += ", " + e);
+      return s;
+    }
+
+    return s;
+  }
+  */
 }
 
 // needed beacuse of null safeety strings

@@ -31,15 +31,15 @@ class _State extends State<FeaturesPage> {
 
   renderContent() {
     return GridView.count(
-        // Create a grid with 2 columns. If you change the scrollDirection to
-        // horizontal, this produces 2 rows.
-        crossAxisCount: 2,
-        // Generate 100 widgets that display their index in the List.
-        children: [
-          renderFeature(ProductPage("Produktinformation",
-              null)) // JobPage(Job("jobtask", Jobs.identify))
-        ] //Features.get().map(renderFeature).toList(),
-        );
+      // Create a grid with 2 columns. If you change the scrollDirection to
+      // horizontal, this produces 2 rows.
+      crossAxisCount: 2,
+      // Generate 100 widgets that display their index in the List.
+      children: [
+        renderFeature(ProductPage("Produktinformation")),
+        renderFeature(JobPage("Lägg in streckkoder i systemet"))
+      ],
+    );
   }
 
   // can't provide 'JobPage' as 'AbstractPage' despite being able to do so with

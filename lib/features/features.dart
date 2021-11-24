@@ -2,9 +2,6 @@
 // features.. should given/registered, and not contain widget imports..
 import 'package:flutter/material.dart';
 import 'package:wms_app/pages/abstractPage.dart';
-import 'package:wms_app/pages/collectPage.dart';
-import 'package:wms_app/pages/countingPage.dart';
-import 'package:wms_app/pages/productRegistrationPage.dart.dart';
 /*
 // move out, and remove featre folder..
 class Features {

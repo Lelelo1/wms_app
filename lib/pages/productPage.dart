@@ -22,12 +22,11 @@ import 'package:flip_card/flip_card.dart';
 // ignore: must_be_immutable
 class ProductPage extends StatefulWidget implements AbstractPage {
   final String name;
-  final Job? job;
   final workStore = WorkStore.instance;
 
   final PageController pageController = PageController();
 
-  ProductPage(this.name, this.job);
+  ProductPage(this.name);
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -75,7 +74,7 @@ class _State extends State<ProductPage> implements WMSPrintableState {
       controller: this.widget.pageController,
       children: renderContent(),
       scrollDirection: Axis.vertical,
-      physics: this.product.isEmpty() ? NeverScrollableScrollPhysics() : null,
+      physics: this.product.exists() ? null : NeverScrollableScrollPhysics(),
     ));
   }
 

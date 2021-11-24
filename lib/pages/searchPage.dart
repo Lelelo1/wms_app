@@ -7,8 +7,7 @@ import 'package:wms_app/pages/loadingPage.dart';
 import 'package:wms_app/remote/mockWarehouseSystem.dart';
 import 'package:wms_app/stores/appStore.dart';
 import 'package:wms_app/stores/workStore.dart';
-import 'package:wms_app/views/SearchProductView.dart';
-import 'package:wms_app/views/productView.dart';
+import 'package:wms_app/views/searchProductView.dart';
 import 'package:wms_app/widgets/wmsAppBar.dart';
 import 'package:wms_app/widgets/wmsTitleArea.dart';
 
@@ -25,10 +24,6 @@ class SearchPage extends StatefulWidget implements AbstractPage {
 
   @override
   State<StatefulWidget> createState() => _State();
-
-  @override
-  // TODO: implement job
-  Job get job => throw UnimplementedError();
 }
 
 class _State extends State<SearchPage> {
