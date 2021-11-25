@@ -8,16 +8,20 @@ import 'package:wms_app/models/product.dart';
 import 'package:wms_app/pages/abstractPage.dart';
 import 'package:wms_app/pages/scanPage.dart';
 import 'package:wms_app/pages/searchPage.dart';
+import 'package:wms_app/routes/productRoute.dart';
 import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/utils.dart';
+import 'package:wms_app/routes/searchRoute.dart';
+import 'package:wms_app/views/scrollable.dart';
+import 'package:wms_app/widgets/wmsScaffold.dart';
 
 class JobPage extends StatefulWidget implements AbstractPage {
   final workStore = WorkStore.instance;
-  final Widget overlayView;
-  final Widget scrollToView;
-  final Widget Function(String barcode) fadeToView;
+  final Widget Function(Product product) overlayRoute;
+  final ProductRoute Function(Product product) scrollRoute;
+  final SearchRoute Function(String barcode) fadeRoute;
 
-  JobPage(this.name, this.overlayView, this.scrollToView, this.fadeToView);
+  JobPage(this.name, this.overlayRoute, this.scrollRoute, this.fadeRoute);
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -27,10 +31,19 @@ class JobPage extends StatefulWidget implements AbstractPage {
 }
 
 class _State extends State<JobPage> {
+  Product product = Product.empty();
+
   @override
-  Widget build(BuildContext context) => ScanPage(this.successfullScan);
-  // probably need to make fade and do transperency within SearchView component to make it
-  // appear/dissapear and use Stack here oustide of it
+  Widget build(BuildContext context) {
+    return WMSScaffold(
+            this.widget.name,
+            Color.fromARGB(255, 194, 66,
+                245) /*pageTitleColor(pageIndex)*/) // can't rerender app bar separetely in flutter. It requires whole scaffold (all content) to rerender, unless memoizing everything which should not be done to content that are specific to ProductPage there is no way of doing it
+        .get(WMSScrollable(content(), this.widget.scrollRoute(product)));
+    //ScanPage(this.successfullScan);
+  }
+
+  Widget content() => ScanPage(this.successfullScan);
 
   void successfullScan(String barcode) async {
     print("Successfull scaaaan!: " + barcode);
@@ -44,26 +57,13 @@ class _State extends State<JobPage> {
     }
 
     print("navigate to SearchPage");
-    // using 'pushReplacement' otherwise there are two renders of SearchProductView's: https://stackoverflow.com/questions/59457306/flutter-navigation-reopen-page-instead-of-pushing-it-again
-    //Navigator.of(context).pushReplacement(();
-
-    Navigator.push(
-        context,
-        PageRouteBuilder(
-            pageBuilder: (_, __, ___) => blurView(
-                  Opacity(
-                      child: SearchPage("search", barcode),
-                      opacity: 0.94), //0.96
-                ),
-            opaque: false));
     /*
     Navigator.push(
-        this.context,
-        MaterialPageRoute(
-            builder: (context) =>
-                ;
-                */
+        context,
+        ;
+        */
   }
 }
 
+ 
 // previously have tried SwitchTranstion to change widget inside with when doing view transition

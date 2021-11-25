@@ -5,6 +5,7 @@ import 'dart:ui';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:google_ml_vision/google_ml_vision.dart';
 import 'package:mysql1/mysql1.dart';
 
@@ -126,4 +127,9 @@ class ImageUtils {
     planes.forEach((Plane plane) => allBytes.putUint8List(plane.bytes));
     return allBytes.done().buffer.asUint8List();
   }
+}
+
+class WMSEmptyWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) => Container();
 }
