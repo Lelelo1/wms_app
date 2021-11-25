@@ -10,8 +10,8 @@ class SearchRoute extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _BlurView(
-        Opacity(child: SearchPage("search", barcode), opacity: 0.94));
+    return _BlurView(Opacity(
+        child: SearchPage("search", barcode, () {}, (p) {}), opacity: 0.94));
   }
 }
 

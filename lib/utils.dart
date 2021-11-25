@@ -129,6 +129,7 @@ class ImageUtils {
   }
 }
 
+// make a extension method on all widgets and check of isEmpty
 class WMSEmptyWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Container();

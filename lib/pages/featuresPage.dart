@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:wms_app/pages/abstractPage.dart';
 import 'package:wms_app/pages/jobPage.dart';
 import 'package:wms_app/pages/productPage.dart';
+import 'package:wms_app/routes/productRoute.dart';
+import 'package:wms_app/utils.dart';
 
 class FeaturesPage extends StatefulWidget /* implements AbstractPage */ {
   @override
@@ -32,9 +34,12 @@ class _State extends State<FeaturesPage> {
       crossAxisCount: 2,
       // Generate 100 widgets that display their index in the List.
       children: [
-        renderFeature(ProductPage("Produktinformation")),
-        renderFeature(JobPage("Lägg in streckkoder i systemet", Container(),
-            Container(), (barcode) => Container()))
+        /*renderFeature(ProductPage("Produktinformation")),*/
+        renderFeature(JobPage(
+            "Lägg in streckkoder i systemet",
+            (p) => WMSEmptyWidget(),
+            (p) => p.exists() ? ProductRoute(p) : WMSEmptyWidget(),
+            (p) => WMSEmptyWidget()))
       ],
     );
   }

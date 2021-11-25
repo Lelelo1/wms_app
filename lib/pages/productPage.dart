@@ -1,23 +1,14 @@
+/*
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
-import 'package:wms_app/jobs/identify.dart';
 import 'package:wms_app/models/product.dart';
-import 'package:wms_app/pages/jobPage.dart';
 import 'package:wms_app/pages/scanPage.dart';
-import 'package:wms_app/stores/appStore.dart';
 import 'package:wms_app/stores/workStore.dart';
-import 'package:wms_app/widgets/wmsAppBar.dart';
-import 'package:wms_app/widgets/wmsAsyncWidget.dart';
-import 'package:wms_app/widgets/wmsLabel.dart';
-import 'package:wms_app/widgets/wmsPrintableState.dart';
 import 'package:wms_app/widgets/wmsScaffold.dart';
-import 'package:mobx/mobx.dart';
 import '../utils.dart';
 import 'abstractPage.dart';
-import 'package:line_icons/line_icons.dart';
-import 'package:flip_card/flip_card.dart';
 
 // ignore: must_be_immutable
 class ProductPage extends StatefulWidget implements AbstractPage {
@@ -32,7 +23,7 @@ class ProductPage extends StatefulWidget implements AbstractPage {
   State<StatefulWidget> createState() => _State();
 }
 
-class _State extends State<ProductPage> implements WMSPrintableState {
+class _State extends State<ProductPage> /* implements WMSPrintableState*/ {
   @override
   void initState() {
     this.widget.pageController.addListener(updatePageIndex);
@@ -47,6 +38,7 @@ class _State extends State<ProductPage> implements WMSPrintableState {
   Color scanPageTitleColor = Colors.white;
   Color productInformationTitleColor = Colors.black;
 
+  /*
   @override
   String stateToString() =>
       Utils.varStateToString("pageIndex", this.pageIndex) +
@@ -57,6 +49,7 @@ class _State extends State<ProductPage> implements WMSPrintableState {
       ", " +
       Utils.varStateToString(
           "productInformationTitleColor", this.productInformationTitleColor);
+          */
 
   Size size = Size.zero;
   @override
@@ -104,21 +97,9 @@ class _State extends State<ProductPage> implements WMSPrintableState {
         Observer(builder: (_) {
           print("observer on product in product page: "
               .appendSafe(this.product.toString()));
-          return asyncProductView();
+          return WMSEmptyWidget();
         })
       ];
-  // Future.sync(() => "mockShelf")
-
-  // do some common text aliging with padding, and also common fotsize, large title medium title, normal fontsize eg
-
-  // sku:
-  // id -> Icons.desktop_windows
-  // ean -> LineIcons.barcode)
-  // shelf -> Icon(LineIcons.warehouse // cound't find anny better...
-  // (img)
-  // Icon(Icons.text_format) // can be made better
-  Future<AbstractProduct> getProduct(String ean) =>
-      this.widget.workStore.product(ean);
 
   @action
   void scannedEAN(String ean) async {
@@ -156,3 +137,4 @@ class _State extends State<ProductPage> implements WMSPrintableState {
 }
 
 // https://pub.dev/packages/carousel_slider/install
+*/

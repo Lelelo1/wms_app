@@ -9,7 +9,6 @@ class WMSScrollable extends StatelessWidget {
   final PageController pageController = PageController();
 
   final Widget content;
-  // final Product product;
   final Widget scrollRoute;
 
   WMSScrollable(this.content, this.scrollRoute);
@@ -21,10 +20,10 @@ class WMSScrollable extends StatelessWidget {
         children: renderContent(),
         scrollDirection: Axis.vertical,
         physics: this.scrollRoute is WMSEmptyWidget
-            ? null
-            : NeverScrollableScrollPhysics());
+            ? NeverScrollableScrollPhysics()
+            : null);
   }
 
   List<Widget> renderContent() =>
-      scrollRoute is WMSEmptyWidget ? [content, scrollRoute] : [content];
+      scrollRoute is WMSEmptyWidget ? [content] : [content, scrollRoute];
 }

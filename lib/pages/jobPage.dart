@@ -18,8 +18,8 @@ import 'package:wms_app/widgets/wmsScaffold.dart';
 class JobPage extends StatefulWidget implements AbstractPage {
   final workStore = WorkStore.instance;
   final Widget Function(Product product) overlayRoute;
-  final ProductRoute Function(Product product) scrollRoute;
-  final SearchRoute Function(String barcode) fadeRoute;
+  final Widget Function(Product product) scrollRoute;
+  final Widget Function(String barcode) fadeRoute;
 
   JobPage(this.name, this.overlayRoute, this.scrollRoute, this.fadeRoute);
 
@@ -33,14 +33,12 @@ class JobPage extends StatefulWidget implements AbstractPage {
 class _State extends State<JobPage> {
   Product product = Product.empty();
 
+  // note that can't rerender color in app bar without rerender the rest of the app...
   @override
   Widget build(BuildContext context) {
-    return WMSScaffold(
-            this.widget.name,
-            Color.fromARGB(255, 194, 66,
-                245) /*pageTitleColor(pageIndex)*/) // can't rerender app bar separetely in flutter. It requires whole scaffold (all content) to rerender, unless memoizing everything which should not be done to content that are specific to ProductPage there is no way of doing it
+    print("build!!");
+    return WMSScaffold(this.widget.name, Color.fromARGB(255, 194, 66, 245))
         .get(WMSScrollable(content(), this.widget.scrollRoute(product)));
-    //ScanPage(this.successfullScan);
   }
 
   Widget content() => ScanPage(this.successfullScan);
@@ -50,13 +48,14 @@ class _State extends State<JobPage> {
 
     var product = await this.widget.workStore.product(barcode);
     print(await product.futureToString());
-    if (product.exists()) {
-      // preform other job
 
-      return;
-    }
+    // if (product.exists())
 
-    print("navigate to SearchPage");
+    setState(() {
+      this.product = product;
+    });
+
+    //print("navigate to SearchPage");
     /*
     Navigator.push(
         context,
@@ -65,5 +64,4 @@ class _State extends State<JobPage> {
   }
 }
 
- 
 // previously have tried SwitchTranstion to change widget inside with when doing view transition

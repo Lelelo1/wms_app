@@ -3,9 +3,6 @@ import 'package:wms_app/jobs/identify.dart';
 import 'package:wms_app/models/product.dart';
 import 'package:wms_app/models/sequence.dart';
 import 'package:wms_app/pages/abstractPage.dart';
-import 'package:wms_app/pages/loadingPage.dart';
-import 'package:wms_app/remote/mockWarehouseSystem.dart';
-import 'package:wms_app/stores/appStore.dart';
 import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/views/searchProductView.dart';
 import 'package:wms_app/widgets/wmsAppBar.dart';
@@ -21,7 +18,7 @@ class SearchPage extends StatefulWidget implements AbstractPage {
   final void Function(Product) pressedSubmit;
   // how to assign optiomal function default set default vale const
   final TextEditingController _textController = TextEditingController();
-  SearchPage(this.name, this.ean, [this.pressedClose = () {}], [this.pressedSubmit]);
+  SearchPage(this.name, this.ean, this.pressedClose, this.pressedSubmit);
 
   @override
   State<StatefulWidget> createState() => _State();
