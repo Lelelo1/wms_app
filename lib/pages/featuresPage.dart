@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wms_app/features/features.dart';
-import 'package:wms_app/jobs/identify.dart';
 import 'package:wms_app/pages/abstractPage.dart';
-import 'package:wms_app/pages/abstractPage.dart';
-import 'package:wms_app/pages/jobPage.dart';
 import 'package:wms_app/pages/jobPage.dart';
 import 'package:wms_app/pages/productPage.dart';
 
@@ -37,7 +33,8 @@ class _State extends State<FeaturesPage> {
       // Generate 100 widgets that display their index in the List.
       children: [
         renderFeature(ProductPage("Produktinformation")),
-        renderFeature(JobPage("Lägg in streckkoder i systemet"))
+        renderFeature(JobPage("Lägg in streckkoder i systemet", Container(),
+            Container(), (barcode) => Container()))
       ],
     );
   }

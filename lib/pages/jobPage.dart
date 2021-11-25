@@ -13,8 +13,11 @@ import 'package:wms_app/utils.dart';
 
 class JobPage extends StatefulWidget implements AbstractPage {
   final workStore = WorkStore.instance;
+  final Widget overlayView;
+  final Widget scrollToView;
+  final Widget Function(String barcode) fadeToView;
 
-  JobPage(this.name);
+  JobPage(this.name, this.overlayView, this.scrollToView, this.fadeToView);
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -29,15 +32,6 @@ class _State extends State<JobPage> {
   // probably need to make fade and do transperency within SearchView component to make it
   // appear/dissapear and use Stack here oustide of it
 
-  // potentially move to 'view' folder
-  Widget blurView(Widget view) => BackdropFilter(
-      filter: ImageFilter.blur(sigmaX: 1.5, sigmaY: 1.5),
-      child: Container(
-        child: view,
-        width: double.infinity,
-        height: double.infinity,
-        decoration: BoxDecoration(color: Colors.white.withOpacity(0.10)),
-      ));
   void successfullScan(String barcode) async {
     print("Successfull scaaaan!: " + barcode);
 
@@ -58,8 +52,7 @@ class _State extends State<JobPage> {
         PageRouteBuilder(
             pageBuilder: (_, __, ___) => blurView(
                   Opacity(
-                      child: SearchPage(
-                          "search", barcode, closeSearchView, preformJob),
+                      child: SearchPage("search", barcode),
                       opacity: 0.94), //0.96
                 ),
             opaque: false));
