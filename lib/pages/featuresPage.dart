@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wms_app/models/flexibleProduct.dart';
 import 'package:wms_app/pages/abstractPage.dart';
 import 'package:wms_app/pages/jobPage.dart';
 import 'package:wms_app/pages/productPage.dart';
@@ -30,6 +31,15 @@ class _State extends State<FeaturesPage> {
     );
   }
 
+  Widget primaryContent(FlexibleProduct p) =>
+      WMSEmptyWidget(); // to be placed in the CameraView area, like shelf for the 'return' job
+
+  Widget searchContent(FlexibleProduct p) => WMSAsyncWidget<String>(p.ean(),
+      (ean) => SearchRoute(SearchPage("Lägg in streckoder i systemet", ean)));
+
+  Widget productContent(FlexibleProduct p) =>
+      p.exists() ? ProductRoute(p) : WMSEmptyWidget();
+
   renderContent() {
     return GridView.count(
       // Create a grid with 2 columns. If you change the scrollDirection to
@@ -38,14 +48,8 @@ class _State extends State<FeaturesPage> {
       // Generate 100 widgets that display their index in the List.
       children: [
         /*renderFeature(ProductPage("Produktinformation")),*/
-        renderFeature(JobPage(
-            "Lägg in streckkoder i systemet",
-            (p) => WMSEmptyWidget(),
-            (p) => WMSAsyncWidget<String>(
-                p.ean(),
-                (ean) => SearchRoute(
-                    SearchPage("Lägg in streckoder i systemet", ean))),
-            (p) => p.exists() ? ProductRoute(p) : WMSEmptyWidget()))
+        renderFeature(JobPage("Lägg in streckkoder i systemet", primaryContent,
+            searchContent, productContent))
       ],
     );
   }
