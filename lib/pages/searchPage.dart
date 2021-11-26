@@ -14,8 +14,10 @@ class SearchPage extends StatefulWidget implements AbstractPage {
   final String name;
   final WorkStore workStore = WorkStore.instance;
   final String ean;
-  //final void Function() pressedClose;
-  //final void Function(Product) pressedSubmit;
+  /*
+  final void Function() pressedClose;
+  final void Function(Product) pressedSubmit;
+  */
   // how to assign optiomal function default set default vale const
   final TextEditingController _textController = TextEditingController();
   SearchPage(this.name, this.ean);

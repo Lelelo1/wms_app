@@ -2,7 +2,6 @@
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wms_app/models/attributes.dart';
-import 'package:wms_app/stores/appStore.dart';
 import 'package:wms_app/stores/workStore.dart';
 import '../utils.dart';
 import 'package:collection/collection.dart';

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:wms_app/models/archivedProduct.dart';
 import 'package:wms_app/models/attributes.dart';
+import 'package:wms_app/models/flexibleProduct.dart';
 import 'package:wms_app/models/product.dart';
 import 'package:wms_app/models/sequence.dart';
 import 'package:wms_app/remote/abstractWarehouseSystem.dart';
@@ -14,7 +15,8 @@ class WorkStore {
 
   // how to interact with ui error message?
 
-  Future<Product> product(String ean) => _warehouseSystem.getProduct(ean);
+  Future<FlexibleProduct> product(String ean) =>
+      _warehouseSystem.getProduct(ean);
 
   Future<List<String>> suggestions(String text) =>
       _warehouseSystem.getSKUSuggestions(text);

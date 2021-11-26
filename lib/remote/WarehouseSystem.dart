@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:mysql1/mysql1.dart';
 import 'package:wms_app/models/archivedProduct.dart';
 import 'package:wms_app/models/attributes.dart';
+import 'package:wms_app/models/flexibleProduct.dart';
 import 'package:wms_app/models/product.dart';
 import 'package:wms_app/remote/deserialization.dart';
 import 'package:wms_app/secrets.dart';
@@ -42,12 +43,12 @@ class WarehouseSystem /*implements AbstractProductsSource */ {
     return await MySqlConnection.connect(settings);
   }
 
-  Future<Product> getProduct(String ean) async {
+  Future<FlexibleProduct> getProduct(String ean) async {
     Results? results;
     var sql = SQLQuery.getProduct(ean);
     results = await _interact((connection) => connection?.query(sql));
     print("ean" + " " + results.toString());
-    var p = Deserialization.toProduct(results);
+    var p = Deserialization.toProduct(results, ean);
     return p;
   }
 

@@ -6,6 +6,7 @@ import 'package:wms_app/pages/searchPage.dart';
 import 'package:wms_app/routes/productRoute.dart';
 import 'package:wms_app/routes/searchRoute.dart';
 import 'package:wms_app/utils.dart';
+import 'package:wms_app/widgets/wmsAsyncWidget.dart';
 
 class FeaturesPage extends StatefulWidget /* implements AbstractPage */ {
   @override
@@ -40,8 +41,10 @@ class _State extends State<FeaturesPage> {
         renderFeature(JobPage(
             "Lägg in streckkoder i systemet",
             (p) => WMSEmptyWidget(),
-            (ean) =>
-                SearchRoute(SearchPage("Lägg in streckoder i systemet", ean)),
+            (p) => WMSAsyncWidget<String>(
+                p.ean(),
+                (ean) => SearchRoute(
+                    SearchPage("Lägg in streckoder i systemet", ean))),
             (p) => p.exists() ? ProductRoute(p) : WMSEmptyWidget()))
       ],
     );

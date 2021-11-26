@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:wms_app/models/flexibleProduct.dart';
 import 'package:wms_app/models/product.dart';
 import 'package:wms_app/pages/abstractPage.dart';
 import 'package:wms_app/pages/scanPage.dart';
@@ -9,12 +10,14 @@ import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/views/scrollable.dart';
 import 'package:wms_app/widgets/wmsScaffold.dart';
 
+typedef Content = Widget Function(FlexibleProduct p);
+
 class JobPage extends StatefulWidget implements AbstractPage {
   final workStore = WorkStore.instance;
   // in the order they are shown
-  final Widget Function(Product product) overlayRoute;
-  final Widget Function(String barcode) fadeRoute;
-  final Widget Function(Product product) scrollRoute;
+  final Content overlayRoute;
+  final Content fadeRoute;
+  final Content scrollRoute;
 
   JobPage(this.name, this.overlayRoute, this.fadeRoute, this.scrollRoute);
 
@@ -26,13 +29,12 @@ class JobPage extends StatefulWidget implements AbstractPage {
 }
 
 class _State extends State<JobPage> {
-  Product product = Product.empty();
-
+  FlexibleProduct product = FlexibleProduct.empty();
   // note that can't rerender color in app bar without rerender the rest of the app...
   @override
   Widget build(BuildContext context) {
     return WMSScaffold(this.widget.name, Color.fromARGB(255, 194, 66, 245))
-        .get(WMSScrollable(content(), this.widget.scrollRoute(product)));
+        .get(WMSScrollable(content(), this.widget.scrollRoute(this.product)));
   }
 
   // ScanPage should take primiryContent thet is displayed in the cameraview
@@ -50,7 +52,7 @@ class _State extends State<JobPage> {
     });
 
     if (!this.product.exists()) {
-      fadeTransition(this.widget.fadeRoute(barcode));
+      fadeTransition(this.widget.fadeRoute(product));
     }
   }
 

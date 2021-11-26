@@ -2,6 +2,7 @@ import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:wms_app/models/flexibleProduct.dart';
 import 'package:wms_app/models/product.dart';
 import 'package:wms_app/utils.dart';
 import 'package:wms_app/widgets/wmsAsyncWidget.dart';
@@ -9,7 +10,7 @@ import 'package:wms_app/widgets/wmsLabel.dart';
 
 // mobx needs stateful widget to work
 class ProductRoute extends StatefulWidget {
-  final Product product;
+  final FlexibleProduct product;
 
   ProductRoute(this.product);
 
@@ -37,7 +38,7 @@ class _State extends State<ProductRoute> {
 
   double skuPadding() => this.size.height * 0.02;
   Widget titleArea() => WMSAsyncWidget(
-      this.widget.product.getSKU(),
+      this.widget.product.sku(),
       (String sku) => Padding(
           padding: EdgeInsets.only(top: skuPadding(), bottom: skuPadding()),
           child: Text(sku,
@@ -48,10 +49,10 @@ class _State extends State<ProductRoute> {
 
   Widget subtitleArea() => Row(children: [
         WMSAsyncWidget(
-            this.widget.product.getEAN(),
+            this.widget.product.ean(),
             (String shelf) =>
                 WMSLabel(shelf, LineIcons.barcode, this.eanIdPadding())),
-        WMSAsyncWidget(Future.sync(() => this.widget.product.id.toString()),
+        WMSAsyncWidget(Future.sync(() => this.widget.product.id().toString()),
             (String id) => WMSLabel(id, Icons.desktop_windows, eanIdPadding()))
       ], mainAxisAlignment: MainAxisAlignment.center);
 
@@ -60,7 +61,7 @@ class _State extends State<ProductRoute> {
       left: 5, top: skuPadding(), right: 5, bottom: skuPadding());
 
   Widget imageArea() =>
-      WMSAsyncWidget(this.widget.product.getImages(), (List<String> imgs) {
+      WMSAsyncWidget(this.widget.product.images(), (List<String> imgs) {
         if (Utils.isNullOrEmpty(imgs)) {
           return Padding(
               child: Image.asset("assets/images/product_placeholder.png"),
@@ -89,11 +90,11 @@ class _State extends State<ProductRoute> {
     );
   }
 
-  Widget shelfWidget() => WMSAsyncWidget(this.widget.product.getShelf(),
+  Widget shelfWidget() => WMSAsyncWidget(this.widget.product.shelf(),
       (String shelf) => Text(shelf, style: TextStyle(fontSize: 18)));
 
   Widget nameWidget() => WMSAsyncWidget(
-      this.widget.product.getName(),
+      this.widget.product.name(),
       (String name) => Padding(
           padding: EdgeInsets.all(10),
           child: Text(name,
