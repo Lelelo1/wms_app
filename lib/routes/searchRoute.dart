@@ -4,17 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:wms_app/pages/searchPage.dart';
 
 class SearchRoute extends StatelessWidget {
-  final String barcode;
+  final SearchPage searchPage;
 
-  SearchRoute(this.barcode);
+  SearchRoute(this.searchPage);
 
   @override
   Widget build(BuildContext context) {
-    return _BlurView(Opacity(
-        child: SearchPage("search", barcode, () {}, (p) {}), opacity: 0.94));
+    return _BlurView(Opacity(child: searchPage, opacity: 0.94));
   }
 }
 
+// creata fade component
 class _BlurView extends StatelessWidget {
   final Widget widget;
 
