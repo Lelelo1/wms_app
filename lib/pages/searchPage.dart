@@ -3,6 +3,7 @@ import 'package:wms_app/models/product.dart';
 import 'package:wms_app/pages/abstractPage.dart';
 import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/views/searchProductView.dart';
+import 'package:flutter/services.dart';
 
 class SearchPage extends StatefulWidget implements AbstractPage {
   final String name;
@@ -13,7 +14,7 @@ class SearchPage extends StatefulWidget implements AbstractPage {
   final void Function(Product) pressedSubmit;
   */
   // how to assign optiomal function default set default vale const
-  final TextEditingController _textController = TextEditingController();
+  //final TextEditingController _textController = TextEditingController();
   SearchPage(this.name, this.ean);
 
   @override
@@ -35,6 +36,8 @@ class _State extends State<SearchPage> {
       });
   */
   String selectedSKU = "";
+
+  String text = "";
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +77,6 @@ class _State extends State<SearchPage> {
   double textFieldHeight = 40;
   Widget renderTextField() => Material(
         child: TextFormField(
-            controller: this.widget._textController,
             onChanged: setInputTextState,
             autofocus: false,
             decoration: inputDecoration(),
@@ -92,6 +94,7 @@ class _State extends State<SearchPage> {
   void setInputTextState(String text) async {
     var suggestions = await this.widget.workStore.suggestions(text);
     setState(() {
+      this.text = text;
       this.skuSuggestions = suggestions;
     });
   }
@@ -111,10 +114,10 @@ class _State extends State<SearchPage> {
           ? IconButton(
               icon: Icon(Icons.arrow_back),
               onPressed: () {
-                this.widget._textController.clear();
                 setState(() {
                   this.selectedSKU = "";
                   this.skuSuggestions = [];
+                  this.text = "";
                 });
               })
           : IconButton(
@@ -201,15 +204,16 @@ class _State extends State<SearchPage> {
               child: Text(sku, style: TextStyle(fontSize: 17)),
               alignment: Alignment.centerLeft),
           onPressed: () {
-            // following code is sensitive to do 2 renderers, it is probably solved
             print("pressed " + sku);
-            this.widget._textController.text = sku;
-            // https://stackoverflow.com/questions/53481261/how-to-unfocus-textfield-that-has-custom-focusnode
-            //this.selectedSKU = sku;
-            setState(() {
-              this.selectedSKU = sku;
-            });
-            //FocusScope.of(context).unfocus();// two renders without calling setState can happen try to do something with focus this way...
+
+            this.selectedSKU = sku;
+            this.text = sku;
+
+            // unfocusing keyboard in anyway triggers 2 renders
+            FocusScope.of(context)
+                .unfocus(); // two renders without calling setState can happen try to do something with focus this way...
+
+            // SystemChannels.textInput.invokeMethod('TextInput.hide'); // also two renders
           },
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
