@@ -8,6 +8,7 @@ import 'package:wms_app/routes/productRoute.dart';
 import 'package:wms_app/routes/searchRoute.dart';
 import 'package:wms_app/utils.dart';
 import 'package:wms_app/widgets/wmsAsyncWidget.dart';
+import 'package:wms_app/widgets/wmsEmptyWidget.dart';
 
 class FeaturesPage extends StatefulWidget /* implements AbstractPage */ {
   @override
@@ -34,11 +35,18 @@ class _State extends State<FeaturesPage> {
   Widget primaryContent(FlexibleProduct p) =>
       WMSEmptyWidget(); // to be placed in the CameraView area, like shelf for the 'return' job
 
-  Widget searchContent(FlexibleProduct p) => WMSAsyncWidget<String>(p.ean(),
-      (ean) => SearchRoute(SearchPage("Lägg in streckoder i systemet", ean)));
+  Widget searchContent(FlexibleProduct p) => p.exists()
+      ? WMSEmptyWidget()
+      : WMSAsyncWidget<String>(
+          p.ean(),
+          (ean) =>
+              SearchRoute(SearchPage("Lägg in streckoder i systemet", ean)));
 
   Widget productContent(FlexibleProduct p) =>
       p.exists() ? ProductRoute(p) : WMSEmptyWidget();
+
+  AbstractPage returnPage() => JobPage("Lägg in streckkoder i systemet",
+      primaryContent, searchContent, productContent);
 
   renderContent() {
     return GridView.count(
@@ -48,8 +56,7 @@ class _State extends State<FeaturesPage> {
       // Generate 100 widgets that display their index in the List.
       children: [
         /*renderFeature(ProductPage("Produktinformation")),*/
-        renderFeature(JobPage("Lägg in streckkoder i systemet", primaryContent,
-            searchContent, productContent))
+        renderFeature(returnPage())
       ],
     );
   }

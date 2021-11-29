@@ -1,14 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:wms_app/jobs/identify.dart';
 import 'package:wms_app/models/product.dart';
-import 'package:wms_app/models/sequence.dart';
 import 'package:wms_app/pages/abstractPage.dart';
 import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/views/searchProductView.dart';
-import 'package:wms_app/widgets/wmsAppBar.dart';
-import 'package:wms_app/widgets/wmsTitleArea.dart';
-
-import '../utils.dart';
 
 class SearchPage extends StatefulWidget implements AbstractPage {
   final String name;

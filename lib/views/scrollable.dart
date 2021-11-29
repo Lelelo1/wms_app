@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wms_app/models/product.dart';
-import 'package:wms_app/routes/productRoute.dart';
-import 'package:wms_app/utils.dart';
+import 'package:wms_app/widgets/wmsEmptyWidget.dart';
 
 // wrap a view and add scrollable bottom content to it
 
@@ -12,7 +10,6 @@ class WMSScrollable extends StatelessWidget {
   final Widget scrollRoute;
 
   WMSScrollable(this.content, this.scrollRoute);
-
   @override
   Widget build(BuildContext context) {
     return PageView(

@@ -8,6 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_ml_vision/google_ml_vision.dart';
 import 'package:mysql1/mysql1.dart';
+import 'package:wms_app/widgets/wmsEmptyWidget.dart';
 
 class Utils {
   // for better readability, there is a javascript
@@ -129,8 +130,12 @@ class ImageUtils {
   }
 }
 
-// make a extension method on all widgets and check of isEmpty
-class WMSEmptyWidget extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) => Container();
+extension WidgetExtensions on Widget {
+  void exists(void Function(Widget) exists) {
+    if (Widget is WMSEmptyWidget) {
+      return;
+    }
+
+    exists(this);
+  }
 }

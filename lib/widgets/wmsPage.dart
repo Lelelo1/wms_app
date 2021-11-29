@@ -9,10 +9,9 @@ import 'package:wms_app/pages/scanPage.dart';
 import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/utils.dart';
 import 'package:wms_app/views/scrollable.dart';
-import 'package:wms_app/widgets/wmsEmptyWidget.dart';
 import 'package:wms_app/widgets/wmsScaffold.dart';
 
-typedef Content = Widget Function(FlexibleProduct p);
+typedef Content = Widget Function(bool show);
 
 class JobPage extends StatefulWidget implements AbstractPage {
   final workStore = WorkStore.instance;
@@ -52,15 +51,11 @@ class _State extends State<JobPage> {
     setState(() {
       this.product = product; // should always reflect the resulting scan
     });
-
     fadeTransition(this.widget.fadeRoute(product));
+    //this.widget.fadeRoute(product).exists((w) => fadeTransition(w));
   }
 
   void fadeTransition(Widget searchRoute) {
-    if (searchRoute is WMSEmptyWidget) {
-      return;
-    }
-
     Navigator.push(
         context, PageRouteBuilder(pageBuilder: (_, __, ___) => searchRoute));
   }
