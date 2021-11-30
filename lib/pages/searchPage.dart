@@ -80,10 +80,9 @@ class _State extends State<SearchPage> {
             onChanged: setInputTextState,
             autofocus: false,
             decoration: inputDecoration(),
-            textAlign: this.selectedSKU.isNotEmpty
-                ? TextAlign.center
-                : TextAlign.start,
-            style: TextStyle(fontSize: this.selectedSKU.isNotEmpty ? 23 : 17)),
+            textAlign:
+                selectedSKU.isNotEmpty ? TextAlign.center : TextAlign.start,
+            style: TextStyle(fontSize: selectedSKU.isNotEmpty ? 23 : 17)),
         textStyle:
             TextStyle(), // it can maybe look abit different, as you understand that you have focused/selected the textfield
         elevation: 16,
@@ -110,12 +109,12 @@ class _State extends State<SearchPage> {
           EdgeInsets.fromLTRB(this.textLeftPadding, 10.0, 20.0, 10.0),
       enabledBorder: inputBorder(),
       focusedBorder: inputBorder(),
-      suffixIcon: this.selectedSKU.isNotEmpty
+      suffixIcon: selectedSKU.isNotEmpty
           ? IconButton(
               icon: Icon(Icons.arrow_back),
               onPressed: () {
                 setState(() {
-                  this.selectedSKU = "";
+                  selectedSKU = "";
                   this.skuSuggestions = [];
                   this.text = "";
                 });
@@ -128,7 +127,7 @@ class _State extends State<SearchPage> {
 
   Widget view(BuildContext context) {
     return selectedSKU.isNotEmpty
-        ? confirmContent(context)
+        ? Container() /*confirmContent(context)*/
         : renderSuggestions(this.skuSuggestions);
   }
 
@@ -141,7 +140,9 @@ class _State extends State<SearchPage> {
       "1Shelf-11-2");
 
   Widget confirmContent(BuildContext context) {
-    print("show confirmContent " + this.selectedSKU);
+    return Container();
+    /* causes twice render when running whole below
+    print("show confirmContent " + NoRender.selectedSKU);
     var size = MediaQuery.of(context).size;
     var width = size.width * 0.92;
     //var height = size.height * 0.82;
@@ -149,6 +150,7 @@ class _State extends State<SearchPage> {
       SearchProductView(_mockProduct, width /*, height*/),
       confirmButton()
     ]);
+    */
   }
 
   Color confirmButtonBodyColor = Color.fromARGB(180, 90, 57, 173);
@@ -162,7 +164,7 @@ class _State extends State<SearchPage> {
                       Text("Lägg till", style: TextStyle(color: Colors.white)),
                   onPressed: () {
                     print("product with sku: " +
-                        this.selectedSKU +
+                        selectedSKU +
                         " was updated with ean: " +
                         this.widget.ean);
                   },
@@ -206,7 +208,8 @@ class _State extends State<SearchPage> {
           onPressed: () {
             print("pressed " + sku);
 
-            this.selectedSKU = sku;
+            //this.selectedSKU = sku; // causes a render, why?
+            selectedSKU = sku;
             this.text = sku;
 
             // unfocusing keyboard in anyway triggers 2 renders
