@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:wms_app/models/flexibleProduct.dart';
+import 'package:wms_app/models/product.dart';
 import 'package:wms_app/pages/abstractPage.dart';
 import 'package:wms_app/pages/jobPage.dart';
-import 'package:wms_app/pages/productPage.dart';
 import 'package:wms_app/pages/searchPage.dart';
 import 'package:wms_app/routes/productRoute.dart';
 import 'package:wms_app/routes/searchRoute.dart';
 import 'package:wms_app/utils.dart';
-import 'package:wms_app/widgets/wmsAsyncWidget.dart';
 import 'package:wms_app/widgets/wmsEmptyWidget.dart';
 
 class FeaturesPage extends StatefulWidget /* implements AbstractPage */ {
@@ -32,17 +30,15 @@ class _State extends State<FeaturesPage> {
     );
   }
 
-  Widget primaryContent(FlexibleProduct p) =>
+  Widget primaryContent([Product p = const Product.empty(), String ean = ""]) =>
       WMSEmptyWidget(); // to be placed in the CameraView area, like shelf for the 'return' job
 
-  Widget searchContent(FlexibleProduct p) => p.exists()
-      ? WMSEmptyWidget()
-      : WMSAsyncWidget<String>(
-          p.ean(),
-          (ean) =>
-              SearchRoute(SearchPage("Lägg in streckoder i systemet", ean)));
+  Widget searchContent([Product p = const Product.empty(), String ean = ""]) =>
+      p.exists()
+          ? WMSEmptyWidget()
+          : SearchRoute(SearchPage("Lägg in streckoder i systemet", ean));
 
-  Widget productContent(FlexibleProduct p) =>
+  Widget productContent([Product p = const Product.empty(), String ean = ""]) =>
       p.exists() ? ProductRoute(p) : WMSEmptyWidget();
 
   AbstractPage returnPage() => JobPage("Lägg in streckkoder i systemet",

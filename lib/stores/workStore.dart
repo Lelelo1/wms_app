@@ -15,8 +15,7 @@ class WorkStore {
 
   // how to interact with ui error message?
 
-  Future<FlexibleProduct> product(String ean) =>
-      _warehouseSystem.getProduct(ean);
+  Future<Product> product(String ean) => _warehouseSystem.getProduct(ean);
 
   Future<List<String>> suggestions(String text) =>
       _warehouseSystem.getSKUSuggestions(text);

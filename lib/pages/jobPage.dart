@@ -2,22 +2,20 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:wms_app/models/flexibleProduct.dart';
 import 'package:wms_app/models/product.dart';
 import 'package:wms_app/pages/abstractPage.dart';
 import 'package:wms_app/pages/scanPage.dart';
 import 'package:wms_app/stores/workStore.dart';
-import 'package:wms_app/utils.dart';
 import 'package:wms_app/views/scrollable.dart';
 import 'package:wms_app/widgets/wmsEmptyWidget.dart';
 import 'package:wms_app/widgets/wmsScaffold.dart';
 
-typedef Content = Widget Function(FlexibleProduct p);
+typedef Content = Widget Function([Product p, String ean]);
 
 class JobPage extends StatefulWidget implements AbstractPage {
   final workStore = WorkStore.instance;
   // in the order they are shown
-  final Content overlayRoute;
+  final Content overlayRoute; //bool instead
   final Content fadeRoute;
   final Content scrollRoute;
 
@@ -31,7 +29,7 @@ class JobPage extends StatefulWidget implements AbstractPage {
 }
 
 class _State extends State<JobPage> {
-  FlexibleProduct product = FlexibleProduct.empty();
+  Product product = Product.empty();
   // note that can't rerender color in app bar without rerender the rest of the app...
   @override
   Widget build(BuildContext context) {

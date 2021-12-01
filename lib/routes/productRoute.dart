@@ -10,7 +10,7 @@ import 'package:wms_app/widgets/wmsLabel.dart';
 
 // mobx needs stateful widget to work
 class ProductRoute extends StatefulWidget {
-  final FlexibleProduct product;
+  final Product product;
 
   ProductRoute(this.product);
 
@@ -38,7 +38,7 @@ class _State extends State<ProductRoute> {
 
   double skuPadding() => this.size.height * 0.02;
   Widget titleArea() => WMSAsyncWidget(
-      this.widget.product.sku(),
+      this.widget.product.getSKU(),
       (String sku) => Padding(
           padding: EdgeInsets.only(top: skuPadding(), bottom: skuPadding()),
           child: Text(sku,
@@ -49,10 +49,10 @@ class _State extends State<ProductRoute> {
 
   Widget subtitleArea() => Row(children: [
         WMSAsyncWidget(
-            this.widget.product.ean(),
+            this.widget.product.getEAN(),
             (String shelf) =>
                 WMSLabel(shelf, LineIcons.barcode, this.eanIdPadding())),
-        WMSAsyncWidget(Future.sync(() => this.widget.product.id().toString()),
+        WMSAsyncWidget(Future.sync(() => this.widget.product.id.toString()),
             (String id) => WMSLabel(id, Icons.desktop_windows, eanIdPadding()))
       ], mainAxisAlignment: MainAxisAlignment.center);
 
@@ -61,7 +61,7 @@ class _State extends State<ProductRoute> {
       left: 5, top: skuPadding(), right: 5, bottom: skuPadding());
 
   Widget imageArea() =>
-      WMSAsyncWidget(this.widget.product.images(), (List<String> imgs) {
+      WMSAsyncWidget(this.widget.product.getImages(), (List<String> imgs) {
         if (Utils.isNullOrEmpty(imgs)) {
           return Padding(
               child: Image.asset("assets/images/product_placeholder.png"),
@@ -90,11 +90,11 @@ class _State extends State<ProductRoute> {
     );
   }
 
-  Widget shelfWidget() => WMSAsyncWidget(this.widget.product.shelf(),
+  Widget shelfWidget() => WMSAsyncWidget(this.widget.product.getShelf(),
       (String shelf) => Text(shelf, style: TextStyle(fontSize: 18)));
 
   Widget nameWidget() => WMSAsyncWidget(
-      this.widget.product.name(),
+      this.widget.product.getName(),
       (String name) => Padding(
           padding: EdgeInsets.all(10),
           child: Text(name,

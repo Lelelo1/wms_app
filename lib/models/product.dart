@@ -12,18 +12,11 @@ import 'package:collection/collection.dart';
 class Product extends AbstractProduct {
   static final _warehouseSystem = WorkStore.instance;
 
-  int id = 0;
-  Product(int id) {
-    // needed explicit constuctor for some weird reason, to set 'id'
-    this.id = id;
-  }
+  Product(int id) : super(id);
+
+  const Product.empty() : super.empty();
 
   bool exists() => id > 0;
-  // named constructor
-  // https://dart.dev/guides/language/language-tour#constructors
-  Product.empty() {
-    // set all fields to non default value
-  }
 
   @override
   Future<String> getEAN() async {
@@ -98,7 +91,7 @@ class Product extends AbstractProduct {
 }
 
 abstract class AbstractProduct {
-  int id = 0;
+  final int id;
   Future<String> getEAN();
   Future<String> getSKU();
   Future<String> getShelf();
@@ -106,6 +99,9 @@ abstract class AbstractProduct {
   Future<List<String>> getImages();
 
   Future<void> setEAN(String ean);
+
+  AbstractProduct(this.id);
+  const AbstractProduct.empty([this.id = 0]);
 }
 
 class MockProduct implements AbstractProduct {

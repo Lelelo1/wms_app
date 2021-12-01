@@ -1,5 +1,5 @@
 // a product model that can keep state but can sync with flexibleProduct in a good way
-
+/*
 import 'package:wms_app/models/product.dart';
 import 'package:wms_app/utils.dart';
 
@@ -36,3 +36,4 @@ class FlexibleProduct {
         () => "futureToString no implementation on 'FliexibleProduct'");
   }
 }
+*/

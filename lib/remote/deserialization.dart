@@ -6,9 +6,9 @@ import 'package:wms_app/models/product.dart';
 //
 
 class Deserialization {
-  static FlexibleProduct toProduct(Results? results, String ean) {
+  static Product toProduct(Results? results, String ean) {
     if (results == null || results.isEmpty) {
-      return FlexibleProduct.fromEAN(ean);
+      return Product.empty();
     }
 
     var ids = results.map((e) => (e[0] as int)).toList();
@@ -16,7 +16,7 @@ class Deserialization {
     ids.forEach((element) {
       print(element.toString());
     });
-    return FlexibleProduct(ids[0]);
+    return Product(ids[0]);
   }
 
   static List<String> toSkus(Results? results) {

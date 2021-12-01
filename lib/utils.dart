@@ -8,6 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_ml_vision/google_ml_vision.dart';
 import 'package:mysql1/mysql1.dart';
+import 'package:wms_app/models/product.dart';
 import 'package:wms_app/widgets/wmsEmptyWidget.dart';
 
 class Utils {
@@ -82,6 +83,7 @@ class Utils {
     return s;
   }
   */
+
 }
 
 // needed beacuse of null safeety strings

@@ -43,7 +43,7 @@ class WarehouseSystem /*implements AbstractProductsSource */ {
     return await MySqlConnection.connect(settings);
   }
 
-  Future<FlexibleProduct> getProduct(String ean) async {
+  Future<Product> getProduct(String ean) async {
     Results? results;
     var sql = SQLQuery.getProduct(ean);
     results = await _interact((connection) => connection?.query(sql));
@@ -60,8 +60,9 @@ class WarehouseSystem /*implements AbstractProductsSource */ {
   }
 
   Future<List<T>?> attribute<T>(int id, String attribute) async {
-    var results = await _interact((connection) =>
-        connection?.query((SQLQuery.getAttribute(id.toString(), attribute))));
+    var q = SQLQuery.getAttribute(id.toString(), attribute);
+    print("q..: " + q);
+    var results = await _interact((connection) => connection?.query(q));
 
     print(attribute + " " + results.toString());
 
