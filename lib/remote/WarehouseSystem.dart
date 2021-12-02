@@ -48,15 +48,20 @@ class WarehouseSystem /*implements AbstractProductsSource */ {
     var sql = SQLQuery.getProduct(ean);
     results = await _interact((connection) => connection?.query(sql));
     print("ean" + " " + results.toString());
-    var p = Deserialization.toProduct(results, ean);
-    return p;
+    var products =
+        Deserialization.products(results); // shoudl haev zero or one hit
+
+    if (products.isEmpty) {
+      return Product.empty();
+    }
+    return products[0];
   }
 
-  Future<List<String>> getSKUSuggestions(String text) async {
-    var results = await _interact(
-        (connection) => connection?.query(SQLQuery.getSKUSuggestions(text)));
+  Future<List<Product>> getProductSuggestions(String text) async {
+    var results = await _interact((connection) =>
+        connection?.query(SQLQuery.getProductSuggestions(text)));
 
-    return Deserialization.toSkus(results);
+    return Deserialization.products(results);
   }
 
   Future<List<T>?> attribute<T>(int id, String attribute) async {
@@ -97,9 +102,9 @@ class SQLQuery {
       "SELECT `catalog_product_entity`.`entity_id` FROM `catalog_product_entity` WHERE `catalog_product_entity`.`entity_id` IN (SELECT `entity_id` FROM `catalog_product_entity_varchar` WHERE `attribute_id` = '283' AND `value` = '" +
       ean +
       "') ORDER BY `entity_id` DESC LIMIT 1;";
-  static String getSKUSuggestions(String sku) {
+  static String getProductSuggestions(String sku) {
     // LIMIT 10
-    return "SELECT `sku` FROM `catalog_product_entity` WHERE `sku` LIKE '%" +
+    return "SELECT `entity_id` FROM `catalog_product_entity` WHERE `sku` LIKE '%" +
         sku +
         "%' LIMIT 20";
   }

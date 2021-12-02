@@ -17,8 +17,8 @@ class WorkStore {
 
   Future<Product> product(String ean) => _warehouseSystem.getProduct(ean);
 
-  Future<List<String>> suggestions(String text) =>
-      _warehouseSystem.getSKUSuggestions(text);
+  Future<List<Product>> productSuggestions(String text) =>
+      _warehouseSystem.getProductSuggestions(text);
 
   Future<List<T>?> attribute<T>(int id, String attribute) =>
       _warehouseSystem.attribute<T>(id, attribute);

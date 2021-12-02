@@ -62,12 +62,12 @@ class _State extends State<ProductRoute> {
 
   Widget imageArea() =>
       WMSAsyncWidget(this.widget.product.getImages(), (List<String> imgs) {
-        if (Utils.isNullOrEmpty(imgs)) {
+        if (imgs.isEmpty) {
           return Padding(
               child: Image.asset("assets/images/product_placeholder.png"),
               padding: imagePadding());
         }
-
+        print("ahahahaha");
         return Padding(child: flipImage(imgs), padding: imagePadding());
       });
 

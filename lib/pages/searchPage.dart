@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:wms_app/models/product.dart';
 import 'package:wms_app/pages/abstractPage.dart';
+import 'package:wms_app/routes/productRoute.dart';
 import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/views/searchProductView.dart';
 import 'package:wms_app/widgets/wmsAppBar.dart';
+import 'package:wms_app/widgets/wmsAsyncWidget.dart';
 
 class SearchPage extends StatefulWidget implements AbstractPage {
   final String name;
@@ -22,7 +24,7 @@ class SearchPage extends StatefulWidget implements AbstractPage {
 }
 
 class _State extends State<SearchPage> {
-  List<String> skuSuggestions = [];
+  List<Product> productSuggestions = [];
   /*
   FutureBuilder futureBuilder() => FutureBuilder<List<String>>(
       future: this.skuSuggestions,
@@ -97,10 +99,10 @@ class _State extends State<SearchPage> {
       );
 
   void setInputTextState(String text) async {
-    var suggestions = await this.widget.workStore.suggestions(text);
+    var suggestions = await this.widget.workStore.productSuggestions(text);
     setState(() {
       this.text = text;
-      this.skuSuggestions = suggestions;
+      this.productSuggestions = suggestions;
     });
   }
 
@@ -114,27 +116,12 @@ class _State extends State<SearchPage> {
       contentPadding:
           EdgeInsets.fromLTRB(this.textLeftPadding, 10.0, 20.0, 10.0),
       enabledBorder: inputBorder(),
-      focusedBorder: inputBorder(),
-      suffixIcon: selectedSKU.isNotEmpty
-          ? IconButton(
-              icon: Icon(Icons.arrow_back),
-              onPressed: () {
-                setState(() {
-                  selectedSKU = "";
-                  this.skuSuggestions = [];
-                  this.text = "";
-                });
-              })
-          : IconButton(
-              icon: Container(),
-              onPressed: () {
-                // needed otherwise hintext goes missing
-              }));
+      focusedBorder: inputBorder());
 
   Widget view(BuildContext context) {
     return selectedSKU.isNotEmpty
         ? confirmContent(context)
-        : renderSuggestions(this.skuSuggestions);
+        : renderSuggestions(this.productSuggestions);
   }
 
   AbstractProduct _mockProduct = MockProduct(
@@ -146,16 +133,14 @@ class _State extends State<SearchPage> {
       "1Shelf-11-2");
 
   Widget confirmContent(BuildContext context) {
-    //causes twice render when running whole below
+    // causes twice render when running whole below
     var size = MediaQuery.of(context).size;
     var width = size.width * 0.92;
-    //var height = size.height * 0.82; 
-    
+    //var height = size.height * 0.82;
     return Column(children: [
-      /*SearchProductView(_mockProduct, width /*, height*/*/),
+      SearchProductView(_mockProduct, width /*, height*/),
       confirmButton()
     ]);
-    
   }
 
   Color confirmButtonBodyColor = Color.fromARGB(180, 90, 57, 173);
@@ -172,6 +157,11 @@ class _State extends State<SearchPage> {
                         selectedSKU +
                         " was updated with ean: " +
                         this.widget.ean);
+                    setState(() {
+                      selectedSKU = "";
+                      this.productSuggestions = [];
+                      this.text = "";
+                    });
                   },
                   elevation: 10,
                   color: confirmButtonBodyColor,
@@ -185,13 +175,13 @@ class _State extends State<SearchPage> {
             alignment: Alignment.bottomCenter));
   }
 
-  Widget renderSuggestions(List<String> skuSuggestions) {
-    if (skuSuggestions.isEmpty) {
+  Widget renderSuggestions(List<Product> productSuggestions) {
+    if (productSuggestions.isEmpty) {
       return Container();
     }
     // needs 'Flexible' otherwise overflow pixels
     return ListView(
-        children: (skuSuggestions).map((e) => renderSuggestion(e)).toList(),
+        children: (productSuggestions).map((e) => renderSuggestion(e)).toList(),
         shrinkWrap: true,
         padding: EdgeInsets.zero);
   }
@@ -204,30 +194,37 @@ class _State extends State<SearchPage> {
             elevation: 20)
             */
   // padding: EdgeInsets.only(left: 10, right: 10)
-  Widget renderSuggestion(String sku) {
+  Widget renderSuggestion(Product suggestion) {
+    //var sku = await suggestion.getSKU();
+
     return Container(
-        child: MaterialButton(
-          child: Align(
-              child: Text(sku, style: TextStyle(fontSize: 17)),
-              alignment: Alignment.centerLeft),
-          onPressed: () {
-            print("pressed " + sku);
-
-            //this.selectedSKU = sku; // causes a render, why?
-            selectedSKU = sku;
-            this.text = sku;
-
-            // unfocusing keyboard in anyway triggers 2 renders
-            FocusScope.of(context)
-                .unfocus(); // two renders without calling setState can happen try to do something with focus this way...
-
-            // SystemChannels.textInput.invokeMethod('TextInput.hide'); // also two renders
-          },
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-          padding: EdgeInsets.only(left: this.textLeftPadding),
-        ),
+        child: WMSAsyncWidget<String>(
+            suggestion.getSKU(),
+            (sku) => MaterialButton(
+                  child: Align(
+                      child: Text(sku, style: TextStyle(fontSize: 17)),
+                      alignment: Alignment.centerLeft),
+                  onPressed: () {
+                    print("pressed " + sku);
+                    Navigator.push(
+                        this.context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                searchProductRoute(suggestion)));
+                    return;
+                  },
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15)),
+                  padding: EdgeInsets.only(left: this.textLeftPadding),
+                )),
         height: 50,
         color: Color.fromARGB(40, 120, 120, 120));
+  }
+
+  Widget searchProductRoute(Product product) {
+    return Scaffold(
+        appBar:
+            WMSAppBar("hej", Colors.black, Colors.white, Colors.black).get(),
+        body: Column(children: [ProductRoute(product), confirmButton()]));
   }
 }
