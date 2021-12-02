@@ -7,6 +7,7 @@ import 'package:wms_app/pages/abstractPage.dart';
 import 'package:wms_app/pages/scanPage.dart';
 import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/views/scrollable.dart';
+import 'package:wms_app/widgets/wmsAppBar.dart';
 import 'package:wms_app/widgets/wmsEmptyWidget.dart';
 import 'package:wms_app/widgets/wmsScaffold.dart';
 
@@ -33,8 +34,15 @@ class _State extends State<JobPage> {
   // note that can't rerender color in app bar without rerender the rest of the app...
   @override
   Widget build(BuildContext context) {
-    return WMSScaffold(this.widget.name, Color.fromARGB(255, 194, 66, 245))
-        .get(WMSScrollable(content(), this.widget.scrollRoute(this.product)));
+    return Scaffold(
+        appBar: WMSAppBar(this.widget.name, Color.fromARGB(255, 194, 66, 245),
+                Colors.transparent, Colors.white)
+            .get(),
+        extendBodyBehindAppBar: true,
+        body: WMSScrollable(content(), this.widget.scrollRoute(this.product)));
+
+    //return WMSScaffold(this.widget.name, Color.fromARGB(255, 194, 66, 245))
+    //    .get(WMSScrollable(content(), this.widget.scrollRoute(this.product)));
   }
 
   // ScanPage should take primiryContent thet is displayed in the cameraview

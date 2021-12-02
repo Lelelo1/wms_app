@@ -3,7 +3,7 @@ import 'package:wms_app/models/product.dart';
 import 'package:wms_app/pages/abstractPage.dart';
 import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/views/searchProductView.dart';
-import 'package:flutter/services.dart';
+import 'package:wms_app/widgets/wmsAppBar.dart';
 
 class SearchPage extends StatefulWidget implements AbstractPage {
   final String name;
@@ -41,21 +41,18 @@ class _State extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
+    print("build SearchPage: " + this.selectedSKU);
     return content(context);
   }
 
   Widget content(BuildContext context) {
     return Scaffold(
-        //appBar: WMSAppBar(this.widget.name).get(),
+        appBar: WMSAppBar("Hitta produkten i systemet", Colors.black,
+                Colors.white, Colors.black)
+            .get(),
         body: SafeArea(
           child: Container(
               child: (Column(children: [
-                Padding(
-                    child: Text(this.widget.ean,
-                        style: TextStyle(fontSize: 28),
-                        textAlign: TextAlign.center),
-                    padding: EdgeInsets.only(
-                        left: 3, top: 12, right: 3, bottom: 12)),
                 renderTextField(),
                 Expanded(child: view(context))
               ])),
@@ -63,7 +60,16 @@ class _State extends State<SearchPage> {
                   BoxDecoration(color: Color.fromARGB(90, 255, 255, 255))),
         ),
         resizeToAvoidBottomInset: false);
+
+    /*
+  Widget eanTitle() {
+    return Padding(
+        child: Text(this.widget.ean,
+            style: TextStyle(fontSize: 28), textAlign: TextAlign.center),
+        padding: EdgeInsets.only(left: 3, top: 12, right: 3, bottom: 12));
+        */
   }
+
 // there is a flutter closebutton already
 
   // enter to sku to match it with the ean code that where scanned, select item in the list
@@ -127,7 +133,7 @@ class _State extends State<SearchPage> {
 
   Widget view(BuildContext context) {
     return selectedSKU.isNotEmpty
-        ? Container() /*confirmContent(context)*/
+        ? confirmContent(context)
         : renderSuggestions(this.skuSuggestions);
   }
 
@@ -140,17 +146,16 @@ class _State extends State<SearchPage> {
       "1Shelf-11-2");
 
   Widget confirmContent(BuildContext context) {
-    return Container();
-    /* causes twice render when running whole below
-    print("show confirmContent " + NoRender.selectedSKU);
+    //causes twice render when running whole below
     var size = MediaQuery.of(context).size;
     var width = size.width * 0.92;
-    //var height = size.height * 0.82;
+    //var height = size.height * 0.82; 
+    
     return Column(children: [
-      SearchProductView(_mockProduct, width /*, height*/),
+      /*SearchProductView(_mockProduct, width /*, height*/*/),
       confirmButton()
     ]);
-    */
+    
   }
 
   Color confirmButtonBodyColor = Color.fromARGB(180, 90, 57, 173);

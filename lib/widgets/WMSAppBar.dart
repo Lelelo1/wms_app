@@ -6,15 +6,18 @@ import 'package:flutter/material.dart';
 class WMSAppBar {
   final String name;
   final Color textColor;
-  WMSAppBar(this.name, this.textColor) {
-    print("building wmsappbar");
-  }
+  final Color backgroundColor;
+  final Color backButtonColor;
+  WMSAppBar(
+      this.name, this.textColor, this.backgroundColor, this.backButtonColor);
 
   AppBar get() => AppBar(
-      title: Text(this.name, style: TextStyle(color: textColor)),
-      backgroundColor: Color.fromARGB(0, 120, 120, 120),
-      elevation: 0,
-      centerTitle: true);
+        title: Text(this.name, style: TextStyle(color: textColor)),
+        backgroundColor: Color.fromARGB(0, 120, 120, 120),
+        elevation: 0,
+        centerTitle: true,
+        iconTheme: IconThemeData(color: backButtonColor),
+      );
 }
 
 
