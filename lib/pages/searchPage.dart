@@ -224,7 +224,8 @@ class _State extends State<SearchPage> {
   Widget searchProductRoute(Product product) {
     return Scaffold(
         appBar:
-            WMSAppBar("hej", Colors.black, Colors.white, Colors.black).get(),
+            WMSAppBar("Lägg till ean", Colors.black, Colors.white, Colors.black)
+                .get(),
         body: Column(children: [ProductRoute(product), confirmButton()]));
   }
 }
