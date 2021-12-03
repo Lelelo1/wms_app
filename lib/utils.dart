@@ -131,7 +131,7 @@ class ImageUtils {
     return allBytes.done().buffer.asUint8List();
   }
 }
-
+/*
 extension WidgetExtensions on Widget {
   void exists(void Function(Widget) exists) {
     if (Widget is WMSEmptyWidget) {
@@ -140,4 +140,9 @@ extension WidgetExtensions on Widget {
 
     exists(this);
   }
+}
+*/
+
+extension StatefulWidgetExtensions on State {
+  Size size() => MediaQuery.of(this.context).size;
 }
