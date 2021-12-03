@@ -67,7 +67,6 @@ class _State extends State<ProductRoute> {
               child: Image.asset("assets/images/product_placeholder.png"),
               padding: imagePadding());
         }
-        print("ahahahaha");
         return Padding(child: flipImage(imgs), padding: imagePadding());
       });
 
