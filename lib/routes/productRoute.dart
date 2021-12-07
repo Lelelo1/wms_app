@@ -11,75 +11,70 @@ import 'package:wms_app/widgets/wmsLabel.dart';
 // mobx needs stateful widget to work
 class ProductRoute extends StatefulWidget {
   final Product product;
-
-  ProductRoute(this.product);
+  //final Size size;
+  ProductRoute(this.product /*, [this.size = Size.zero]*/);
 
   @override
   State<StatefulWidget> createState() => _State();
 }
 
 class _State extends State<ProductRoute> {
-  Size size = Size.zero;
+  //Size size() =>
+  //this.widget.size == Size.zero ? this.screenSize() : this.widget.size;
 
   @override
   Widget build(BuildContext context) {
-    size = MediaQuery.of(context).size;
-
     return SafeArea(
         child: Column(children: [
-      titleArea(),
-      subtitleArea(),
-      imageArea(),
-      shelfWidget(),
-      nameWidget()
-      //WMSAsyncWidget(this.product.getEAN(), (String name) => Text(name)), // barcode icon
+      Expanded(child: titleArea(), flex: 1),
+      Expanded(child: subtitleArea(), flex: 1),
+      Expanded(child: imageArea(), flex: 7),
+      Spacer(flex: 1),
+      Expanded(child: shelfWidget(), flex: 1),
+      Expanded(child: nameWidget(), flex: 1)
+      // WMSAsyncWidget(this.product.getEAN(), (String name) => Text(name)), // barcode icon
     ]));
   }
 
-  double skuPadding() => this.size.height * 0.02;
+  // double skuPadding() => this.size().height * 0.02;
+
   Widget titleArea() => WMSAsyncWidget(
       this.widget.product.getSKU(),
-      (String sku) => Padding(
-          padding: EdgeInsets.only(top: skuPadding(), bottom: skuPadding()),
-          child: Text(sku,
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.w400))));
-
-  EdgeInsets eanIdPadding() => EdgeInsets.only(
-      left: 5, top: this.skuPadding() * 0.6, right: 5, bottom: 0);
+      (String sku) => Text(sku,
+          style: TextStyle(fontSize: 25, fontWeight: FontWeight.w400)));
 
   Widget subtitleArea() => Row(children: [
-        WMSAsyncWidget(
-            this.widget.product.getEAN(),
-            (String shelf) =>
-                WMSLabel(shelf, LineIcons.barcode, this.eanIdPadding())),
+        WMSAsyncWidget(this.widget.product.getEAN(),
+            (String shelf) => WMSLabel(shelf, LineIcons.barcode)),
         WMSAsyncWidget(Future.sync(() => this.widget.product.id.toString()),
-            (String id) => WMSLabel(id, Icons.desktop_windows, eanIdPadding()))
+            (String id) => WMSLabel(id, Icons.desktop_windows))
       ], mainAxisAlignment: MainAxisAlignment.center);
 
-  Size imageSize() => new Size(400, 400);
+  //Size imageSize() => new Size(400, 400);
+  /*
   EdgeInsets imagePadding() => EdgeInsets.only(
       left: 5, top: skuPadding(), right: 5, bottom: skuPadding());
+  */
+
+  // width: double.infinity, fit: BoxFit.fitWidth: https://stackoverflow.com/questions/59362886/how-to-fit-an-image-to-column-width-in-flutter
 
   Widget imageArea() =>
       WMSAsyncWidget(this.widget.product.getImages(), (List<String> imgs) {
         if (imgs.isEmpty) {
-          return Padding(
-              child: Image.asset("assets/images/product_placeholder.png"),
-              padding: imagePadding());
+          return Image.asset("assets/images/product_placeholder.png",
+              width: double.infinity, fit: BoxFit.fitWidth);
         }
-        return Padding(child: flipImage(imgs), padding: imagePadding());
+        return flipImage(imgs);
       });
 
   // move to uu effect folder/package
   Widget flipImage(List<String> imgs) {
-    var frontImage = Image.network(imgs[0],
-        width: imageSize().width, height: imageSize().height);
+    var frontImage = Image.network(imgs[0]);
     if (imgs.length == 0) {
       return frontImage;
     }
 
-    var backImage = Image.network(imgs[1],
-        width: imageSize().width, height: imageSize().height);
+    var backImage = Image.network(imgs[1]);
     return FlipCard(
       fill: Fill
           .fillBack, // Fill the back side of the card to make in the same size as the front.
@@ -94,10 +89,8 @@ class _State extends State<ProductRoute> {
 
   Widget nameWidget() => WMSAsyncWidget(
       this.widget.product.getName(),
-      (String name) => Padding(
-          padding: EdgeInsets.all(10),
-          child: Text(name,
-              style: TextStyle(fontSize: 15), textAlign: TextAlign.center)));
+      (String name) => Text(name,
+          style: TextStyle(fontSize: 15), textAlign: TextAlign.center));
 
   // Future.sync(() => "mockShelf")
 

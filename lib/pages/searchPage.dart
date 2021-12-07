@@ -6,6 +6,7 @@ import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/views/searchProductView.dart';
 import 'package:wms_app/widgets/wmsAppBar.dart';
 import 'package:wms_app/widgets/wmsAsyncWidget.dart';
+import 'package:wms_app/utils.dart';
 
 class SearchPage extends StatefulWidget implements AbstractPage {
   final String name;
@@ -146,33 +147,27 @@ class _State extends State<SearchPage> {
   Color confirmButtonBodyColor = Color.fromARGB(180, 90, 57, 173);
 
   Widget confirmButton() {
-    return Expanded(
-        child: Align(
-            child: Container(
-                child: MaterialButton(
-                  child:
-                      Text("Lägg till", style: TextStyle(color: Colors.white)),
-                  onPressed: () {
-                    print("product with sku: " +
-                        selectedSKU +
-                        " was updated with ean: " +
-                        this.widget.ean);
-                    setState(() {
-                      selectedSKU = "";
-                      this.productSuggestions = [];
-                      this.text = "";
-                    });
-                  },
-                  elevation: 10,
-                  color: confirmButtonBodyColor,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0),
-                      side: BorderSide(color: confirmButtonBodyColor)),
-                ),
-                width: 230,
-                height: 120,
-                padding: EdgeInsets.only(bottom: 60)),
-            alignment: Alignment.bottomCenter));
+    return Container(
+        child: MaterialButton(
+          child: Text("Lägg till", style: TextStyle(color: Colors.white)),
+          onPressed: () {
+            print("product with sku: " +
+                selectedSKU +
+                " was updated with ean: " +
+                this.widget.ean);
+            setState(() {
+              selectedSKU = "";
+              this.productSuggestions = [];
+              this.text = "";
+            });
+          },
+          elevation: 10,
+          color: confirmButtonBodyColor,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(18.0),
+              side: BorderSide(color: confirmButtonBodyColor)),
+        ),
+        width: 200);
   }
 
   Widget renderSuggestions(List<Product> productSuggestions) {
@@ -226,6 +221,11 @@ class _State extends State<SearchPage> {
         appBar:
             WMSAppBar("Lägg till ean", Colors.black, Colors.white, Colors.black)
                 .get(),
-        body: Column(children: [ProductRoute(product), confirmButton()]));
+        body: Column(children: [
+          Expanded(child: ProductRoute(product), flex: 15),
+          Spacer(flex: 1),
+          Expanded(child: confirmButton(), flex: 2),
+          Spacer(flex: 2),
+        ]));
   }
 }

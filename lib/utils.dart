@@ -144,5 +144,9 @@ extension WidgetExtensions on Widget {
 */
 
 extension StatefulWidgetExtensions on State {
-  Size size() => MediaQuery.of(this.context).size;
+  Size screenSize() => MediaQuery.of(this.context).size;
+}
+
+extension SizeExtensions on Size {
+  Size modified(double h) => new Size(this.width, this.height * h);
 }
