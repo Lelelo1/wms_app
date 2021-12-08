@@ -6,6 +6,7 @@ import 'package:wms_app/models/flexibleProduct.dart';
 import 'package:wms_app/models/product.dart';
 import 'package:wms_app/utils.dart';
 import 'package:wms_app/widgets/wmsAsyncWidget.dart';
+import 'package:wms_app/widgets/wmsEmptyWidget.dart';
 import 'package:wms_app/widgets/wmsLabel.dart';
 
 // mobx needs stateful widget to work
@@ -24,6 +25,7 @@ class _State extends State<ProductRoute> {
 
   @override
   Widget build(BuildContext context) {
+    /*
     return SafeArea(
         child: Column(children: [
       Expanded(child: titleArea(), flex: 1),
@@ -34,18 +36,50 @@ class _State extends State<ProductRoute> {
       Expanded(child: nameWidget(), flex: 1)
       // WMSAsyncWidget(this.product.getEAN(), (String name) => Text(name)), // barcode icon
     ]));
+    */
+
+    // give side padding
+    return Row(children: [
+      Spacer(flex: 1),
+      Expanded(child: asyncProductRoute(), flex: 12),
+      Spacer(flex: 1)
+    ]);
+
+    //return asyncProductRoute();
+  }
+
+  WMSAsyncWidget asyncProductRoute() {
+    var fetchSKU = this.widget.product.getSKU();
+    var fetchEAN = this.widget.product.getEAN();
+    var fetchImages = this.widget.product.getImages();
+    var fetchShelf = this.widget.product.getShelf();
+    var fetchName = this.widget.product.getName();
+
+    return WMSAsyncWidget(
+        Future.wait([fetchSKU, fetchEAN, fetchImages, fetchShelf, fetchName]),
+        (_) => SafeArea(
+                child: Column(children: [
+              Expanded(child: titleArea(fetchSKU), flex: 1),
+              Expanded(child: subtitleArea(fetchEAN), flex: 1),
+              Expanded(child: imageArea(fetchImages), flex: 7),
+              Spacer(flex: 1),
+              Expanded(child: shelfWidget(fetchShelf), flex: 1),
+              Expanded(child: nameWidget(fetchName), flex: 1)
+              // WMSAsyncWidget(this.product.getEAN(), (String name) => Text(name)), // barcode icon
+            ])));
   }
 
   // double skuPadding() => this.size().height * 0.02;
 
-  Widget titleArea() => WMSAsyncWidget(
-      this.widget.product.getSKU(),
-      (String sku) => Text(sku,
-          style: TextStyle(fontSize: 25, fontWeight: FontWeight.w400)));
+  Widget titleArea(Future<String> title) => WMSAsyncWidget(
+      title,
+      (String sku) => FittedBox(
+          child: Text(sku,
+              style: TextStyle(fontSize: 25, fontWeight: FontWeight.w400))));
 
-  Widget subtitleArea() => Row(children: [
-        WMSAsyncWidget(this.widget.product.getEAN(),
-            (String shelf) => WMSLabel(shelf, LineIcons.barcode)),
+  Widget subtitleArea(Future<String> subtitle) => Row(children: [
+        WMSAsyncWidget(
+            subtitle, (String shelf) => WMSLabel(shelf, LineIcons.barcode)),
         WMSAsyncWidget(Future.sync(() => this.widget.product.id.toString()),
             (String id) => WMSLabel(id, Icons.desktop_windows))
       ], mainAxisAlignment: MainAxisAlignment.center);
@@ -58,19 +92,25 @@ class _State extends State<ProductRoute> {
 
   // width: double.infinity, fit: BoxFit.fitWidth: https://stackoverflow.com/questions/59362886/how-to-fit-an-image-to-column-width-in-flutter
 
-  Widget imageArea() =>
-      WMSAsyncWidget(this.widget.product.getImages(), (List<String> imgs) {
-        if (imgs.isEmpty) {
+  Widget imageArea(Future<List<String>> images) =>
+      WMSAsyncWidget(images, (List<String> images) {
+        if (images.isEmpty) {
           return Image.asset("assets/images/product_placeholder.png",
               width: double.infinity, fit: BoxFit.fitWidth);
         }
-        return flipImage(imgs);
+        return flipImage(images);
       });
 
   // move to uu effect folder/package
   Widget flipImage(List<String> imgs) {
+    print("imgs..");
+
+    imgs.forEach((element) {
+      print(element);
+    });
+
     var frontImage = Image.network(imgs[0]);
-    if (imgs.length == 0) {
+    if (imgs.length == 1) {
       return frontImage;
     }
 
@@ -84,11 +124,11 @@ class _State extends State<ProductRoute> {
     );
   }
 
-  Widget shelfWidget() => WMSAsyncWidget(this.widget.product.getShelf(),
-      (String shelf) => Text(shelf, style: TextStyle(fontSize: 18)));
+  Widget shelfWidget(Future<String> shelf) => WMSAsyncWidget(
+      shelf, (String shelf) => Text(shelf, style: TextStyle(fontSize: 18)));
 
-  Widget nameWidget() => WMSAsyncWidget(
-      this.widget.product.getName(),
+  Widget nameWidget(Future<String> name) => WMSAsyncWidget(
+      name,
       (String name) => Text(name,
           style: TextStyle(fontSize: 15), textAlign: TextAlign.center));
 

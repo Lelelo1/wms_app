@@ -10,11 +10,14 @@ class WMSLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(children: [
+    return Expanded(
+        child: Row(children: [
+      Spacer(flex: 6),
       Icon(this.iconData),
-      // Container(width: spacing),
       Spacer(flex: 1),
-      Text(this.text),
-    ]);
+      Text(this.text, style: TextStyle()),
+      Spacer(flex: 6)
+    ]));
   }
 }
+// to use spacer to set small space without having to make rest or children expanded....
