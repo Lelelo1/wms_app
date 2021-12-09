@@ -12,8 +12,8 @@ import 'package:wms_app/widgets/wmsLabel.dart';
 // mobx needs stateful widget to work
 class ProductRoute extends StatefulWidget {
   final Product product;
-  //final Size size;
-  ProductRoute(this.product /*, [this.size = Size.zero]*/);
+  Widget eanAddButton = WMSEmptyWidget();
+  ProductRoute(this.product, [this.eanAddButton = const WMSEmptyWidget()]);
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -59,16 +59,22 @@ class _State extends State<ProductRoute> {
         Future.wait([fetchSKU, fetchEAN, fetchImages, fetchShelf, fetchName]),
         (_) => SafeArea(
                 child: Column(children: [
-              Expanded(child: titleArea(fetchSKU), flex: 1),
-              Expanded(child: subtitleArea(fetchEAN), flex: 1),
-              Expanded(child: imageArea(fetchImages), flex: 7),
-              Spacer(flex: 1),
-              Expanded(child: shelfWidget(fetchShelf), flex: 1),
-              Expanded(child: nameWidget(fetchName), flex: 1)
-              // WMSAsyncWidget(this.product.getEAN(), (String name) => Text(name)), // barcode icon
+              Expanded(child: titleArea(fetchSKU), flex: 3),
+              Expanded(child: subtitleArea(fetchEAN), flex: 8),
+              Expanded(child: imageArea(fetchImages), flex: 37),
+              Spacer(flex: 2),
+              Expanded(child: shelfWidget(fetchShelf), flex: 4),
+              // Spacer(flex: 3),
+              Expanded(child: nameWidget(fetchName), flex: 4),
+              //Spacer(flex: 4),
+              ...eanAddButtonView(this.widget.eanAddButton)
             ])));
   }
 
+  List<Widget> eanAddButtonView(Widget eanAddButton) =>
+      eanAddButton is WMSEmptyWidget
+          ? [eanAddButton]
+          : [Expanded(child: eanAddButton, flex: 6), Spacer(flex: 3)];
   // double skuPadding() => this.size().height * 0.02;
 
   Widget titleArea(Future<String> title) => WMSAsyncWidget(

@@ -221,11 +221,6 @@ class _State extends State<SearchPage> {
         appBar:
             WMSAppBar("Lägg till ean", Colors.black, Colors.white, Colors.black)
                 .get(),
-        body: Column(children: [
-          Expanded(child: ProductRoute(product), flex: 15),
-          Spacer(flex: 1),
-          Expanded(child: confirmButton(), flex: 2),
-          Spacer(flex: 2),
-        ]));
+        body: ProductRoute(product, confirmButton()));
   }
 }
