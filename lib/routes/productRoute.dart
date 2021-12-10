@@ -60,8 +60,8 @@ class _State extends State<ProductRoute> {
         (_) => SafeArea(
                 child: Column(children: [
               Expanded(child: titleArea(fetchSKU), flex: 3),
-              Expanded(child: subtitleArea(fetchEAN), flex: 8),
-              Expanded(child: imageArea(fetchImages), flex: 37),
+              Expanded(child: subtitleArea(fetchEAN), flex: 4),
+              Expanded(child: imageArea(fetchImages), flex: 34),
               Spacer(flex: 2),
               Expanded(child: shelfWidget(fetchShelf), flex: 4),
               // Spacer(flex: 3),
@@ -74,7 +74,11 @@ class _State extends State<ProductRoute> {
   List<Widget> eanAddButtonView(Widget eanAddButton) =>
       eanAddButton is WMSEmptyWidget
           ? [eanAddButton]
-          : [Expanded(child: eanAddButton, flex: 6), Spacer(flex: 3)];
+          : [
+              Spacer(flex: 1),
+              Expanded(child: eanAddButton, flex: 5),
+              Spacer(flex: 3)
+            ];
   // double skuPadding() => this.size().height * 0.02;
 
   Widget titleArea(Future<String> title) => WMSAsyncWidget(
