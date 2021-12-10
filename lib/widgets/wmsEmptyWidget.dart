@@ -2,6 +2,8 @@
 import 'package:flutter/material.dart';
 
 class WMSEmptyWidget extends StatelessWidget {
+  const WMSEmptyWidget();
+
   @override
   Widget build(BuildContext context) => Container();
 }
