@@ -20,7 +20,7 @@ class Product extends AbstractProduct {
 
   @override
   Future<String> getEAN() async {
-    var ean = (await _warehouseSystem.attribute<String>(id, Attribute.ean))
+    var ean = (await _warehouseSystem.attribute<String>(id, Attributes.ean))
         ?.firstOrNull;
     return Utils.defaultString(ean, "-");
   }
@@ -29,14 +29,14 @@ class Product extends AbstractProduct {
 
   @override
   Future<List<String>> getImages() async {
-    var imgs = await _warehouseSystem.attribute<String>(id, Attribute.images);
+    var imgs = await _warehouseSystem.attribute<String>(id, Attributes.images);
     // potentially specify a fallback image, error image eg.
     return Utils.defaultImages(imgs).map((e) => katsumiImages + e).toList();
   }
 
   @override
   Future<String> getName() async {
-    var name = (await _warehouseSystem.attribute<String>(id, Attribute.name))
+    var name = (await _warehouseSystem.attribute<String>(id, Attributes.name))
         ?.firstOrNull;
     return Utils.defaultString(name, "-");
   }
@@ -44,14 +44,15 @@ class Product extends AbstractProduct {
   @override
   Future<String> getSKU() async {
     var sku =
-        (await _warehouseSystem.attribute(id, Attribute.sku))?.firstOrNull;
+        (await _warehouseSystem.attribute(id, Attributes.sku))?.firstOrNull;
     return Utils.defaultString(sku, "-");
   }
 
   @override
   Future<String> getShelf() async {
-    var shelf = (await _warehouseSystem.attribute<String?>(id, Attribute.shelf))
-        ?.firstOrNull;
+    var shelf =
+        (await _warehouseSystem.attribute<String?>(id, Attributes.shelf))
+            ?.firstOrNull;
     return Utils.defaultString(shelf, "-");
   }
 

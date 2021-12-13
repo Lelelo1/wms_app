@@ -113,18 +113,18 @@ class SQLQuery {
 
   // see table in magento: https://www.katsumi.se/index.php/yuDuMinD/catalog_product_attribute/index/key/e036b264c18e46443f82569948fa575c/
 
-  static String getAttribute(String entityId, String attributeCode) {
-    print("warehousesystem get " + attributeCode);
+  static String getAttribute(String entityId, Attribute attribute) {
+    print("warehousesystem get " + attribute);
 
-    if (attributeCode == Attribute.sku) {
+    if (attribute == Attributes.sku) {
       return _skuQuery(entityId);
     }
 
-    if (attributeCode == Attribute.images) {
+    if (attribute == Attributes.images) {
       return _imagesQuery(entityId);
     }
 
-    return _attributeQuery(entityId, attributeCode);
+    return _attributeQuery(entityId, attribute);
   }
 
   static _attributeQuery(String entityId, String attributeCode) =>

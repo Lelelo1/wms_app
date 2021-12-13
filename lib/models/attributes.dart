@@ -1,8 +1,10 @@
+typedef Attribute = String;
+
 // Katsumi match attributes in MySql Magento warehouse system, "Attributkod"
-class Attribute {
-  static String ean = "ean_code";
-  static String images = "images";
-  static String name = "name";
-  static String sku = "sku";
-  static String shelf = "c2c_hyllplats";
+class Attributes {
+  static Attribute ean = "ean_code";
+  static Attribute images = "images";
+  static Attribute name = "name";
+  static Attribute sku = "sku";
+  static Attribute shelf = "c2c_hyllplats";
 }
