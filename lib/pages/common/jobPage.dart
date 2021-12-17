@@ -2,22 +2,23 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:wms_app/mixins/feature.dart';
+import 'package:wms_app/mixins/transitions.dart';
 import 'package:wms_app/models/product.dart';
-import 'package:wms_app/pages/common/extendedPage.dart';
 import 'package:wms_app/pages/common/scanPage.dart';
-import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/views/scrollable.dart';
 import 'package:wms_app/widgets/wmsAppBar.dart';
 import 'package:wms_app/widgets/wmsEmptyWidget.dart';
-import 'package:wms_app/widgets/wmsScaffold.dart';
 
-class JobPage extends StatefulWidget with ExtendedPage {
+// can I used state and the setState call with product in 'StatelessWidget'
+// ignore: must_be_immutable
+class JobPage extends StatefulWidget with Transitions, Feature {
   JobPage(String name) {
     this.name = name;
   }
 
-  JobPage.all(String name, ContentFunc imageContent, ContentFunc fadeContent,
-      ContentFunc scrollContent) {
+  JobPage.all(String name, Content imageContent, Content fadeContent,
+      Content scrollContent) {
     this.name = name;
     this.imageContent = imageContent;
     this.imageContent = fadeContent;

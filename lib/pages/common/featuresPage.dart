@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:wms_app/models/product.dart';
-import 'package:wms_app/pages/common/abstractPage.dart';
+import 'package:wms_app/mixins/feature.dart';
 import 'package:wms_app/pages/common/jobPage.dart';
-import 'package:wms_app/pages/common/searchPage.dart';
-import 'package:wms_app/routes/productRoute.dart';
-import 'package:wms_app/routes/searchRoute.dart';
-import 'package:wms_app/utils.dart';
-import 'package:wms_app/widgets/wmsEmptyWidget.dart';
 
-class FeaturesPage extends StatefulWidget /* implements AbstractPage */ {
+// ignore: must_be_immutable
+class FeaturesPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _State();
   /*
@@ -49,7 +44,7 @@ class _State extends State<FeaturesPage> {
 
   // can't provide 'JobPage' as 'AbstractPage' despite being able to do so with
   // previous pages
-  Widget renderFeature(AbstractPage feature) {
+  Widget renderFeature(Feature feature) {
     return GestureDetector(
         child: Card(
             child: Center(
