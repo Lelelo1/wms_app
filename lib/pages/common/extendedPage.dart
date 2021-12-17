@@ -10,7 +10,7 @@ import 'package:wms_app/widgets/wmsEmptyWidget.dart';
 
 typedef ContentFunc = Widget Function([Product p, String ean]);
 
-class AbstractPage {
+class ExtendedPage {
   final workStore = WorkStore.instance;
 
   //Job get job;
