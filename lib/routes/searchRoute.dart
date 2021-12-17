@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:wms_app/pages/searchPage.dart';
+import 'package:wms_app/pages/common/searchPage.dart';
 
 class SearchRoute extends StatelessWidget {
   final SearchPage searchPage;

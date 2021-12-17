@@ -3,30 +3,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:wms_app/models/product.dart';
-import 'package:wms_app/pages/abstractPage.dart';
-import 'package:wms_app/pages/scanPage.dart';
+import 'package:wms_app/pages/common/abstractPage.dart';
+import 'package:wms_app/pages/common/scanPage.dart';
 import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/views/scrollable.dart';
 import 'package:wms_app/widgets/wmsAppBar.dart';
 import 'package:wms_app/widgets/wmsEmptyWidget.dart';
 import 'package:wms_app/widgets/wmsScaffold.dart';
 
-typedef Content = Widget Function([Product p, String ean]);
+class JobPage extends StatefulWidget with AbstractPage {
+  JobPage(String name) {
+    this.name = name;
+  }
 
-class JobPage extends StatefulWidget implements AbstractPage {
-  final workStore = WorkStore.instance;
-  // in the order they are shown
-  final Content overlayRoute; //bool instead
-  final Content fadeRoute;
-  final Content scrollRoute;
-
-  JobPage(this.name, this.overlayRoute, this.fadeRoute, this.scrollRoute);
+  JobPage.all(String name, ContentFunc imageContent, ContentFunc fadeContent,
+      ContentFunc scrollContent) {
+    this.name = name;
+    this.imageContent = imageContent;
+    this.imageContent = fadeContent;
+    this.scrollContent = scrollContent;
+  }
 
   @override
   State<StatefulWidget> createState() => _State();
-
-  @override
-  String name;
 }
 
 class _State extends State<JobPage> {
@@ -39,7 +38,8 @@ class _State extends State<JobPage> {
                 Colors.transparent, Colors.white)
             .get(),
         extendBodyBehindAppBar: true,
-        body: WMSScrollable(content(), this.widget.scrollRoute(this.product)));
+        body:
+            WMSScrollable(content(), this.widget.scrollContent(this.product)));
 
     //return WMSScaffold(this.widget.name, Color.fromARGB(255, 194, 66, 245))
     //    .get(WMSScrollable(content(), this.widget.scrollRoute(this.product)));
@@ -59,7 +59,7 @@ class _State extends State<JobPage> {
       this.product = product; // should always reflect the resulting scan
     });
 
-    fadeTransition(this.widget.fadeRoute(product));
+    fadeTransition(this.widget.fadeContent(product));
   }
 
   void fadeTransition(Widget searchRoute) {

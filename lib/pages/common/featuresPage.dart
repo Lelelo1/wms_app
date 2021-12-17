@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:wms_app/models/product.dart';
-import 'package:wms_app/pages/abstractPage.dart';
-import 'package:wms_app/pages/jobPage.dart';
-import 'package:wms_app/pages/searchPage.dart';
+import 'package:wms_app/pages/common/abstractPage.dart';
+import 'package:wms_app/pages/common/jobPage.dart';
+import 'package:wms_app/pages/common/searchPage.dart';
 import 'package:wms_app/routes/productRoute.dart';
 import 'package:wms_app/routes/searchRoute.dart';
 import 'package:wms_app/utils.dart';
@@ -30,20 +30,6 @@ class _State extends State<FeaturesPage> {
     );
   }
 
-  Widget primaryContent([Product p = const Product.empty(), String ean = ""]) =>
-      WMSEmptyWidget(); // to be placed in the CameraView area, like shelf for the 'return' job
-
-  Widget searchContent([Product p = const Product.empty(), String ean = ""]) =>
-      p.exists()
-          ? WMSEmptyWidget()
-          : SearchRoute(SearchPage("Lägg in streckoder i systemet", ean));
-
-  Widget productContent([Product p = const Product.empty(), String ean = ""]) =>
-      p.exists() ? ProductRoute(p) : WMSEmptyWidget();
-
-  AbstractPage returnPage() => JobPage("Lägg in streckkoder i systemet",
-      primaryContent, searchContent, productContent);
-
   renderContent() {
     return GridView.count(
       // Create a grid with 2 columns. If you change the scrollDirection to
@@ -52,10 +38,14 @@ class _State extends State<FeaturesPage> {
       // Generate 100 widgets that display their index in the List.
       children: [
         /*renderFeature(ProductPage("Produktinformation")),*/
-        renderFeature(returnPage())
+        renderFeature(JobPage(
+          "Standard",
+        ))
       ],
     );
   }
+
+// jobPage
 
   // can't provide 'JobPage' as 'AbstractPage' despite being able to do so with
   // previous pages

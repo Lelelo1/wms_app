@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
-import 'package:wms_app/pages/loadingPage.dart';
+import 'package:wms_app/widgets/wmsLoadingPage.dart';
 import 'package:wms_app/utils.dart';
 
 // page which has future builder contraint should probably be called content

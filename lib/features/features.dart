@@ -1,7 +1,7 @@
 // ui test for 'featurePage', potentially use some dependency inject to keep pages, and mock it
 // features.. should given/registered, and not contain widget imports..
 import 'package:flutter/material.dart';
-import 'package:wms_app/pages/abstractPage.dart';
+import 'package:wms_app/pages/common/abstractPage.dart';
 /*
 // move out, and remove featre folder..
 class Features {
