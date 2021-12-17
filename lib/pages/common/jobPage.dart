@@ -6,7 +6,7 @@ import 'package:wms_app/mixins/feature.dart';
 import 'package:wms_app/mixins/transitions.dart';
 import 'package:wms_app/models/product.dart';
 import 'package:wms_app/pages/common/scanPage.dart';
-import 'package:wms_app/views/scrollable.dart';
+import 'package:wms_app/views/extended/scrollable.dart';
 import 'package:wms_app/widgets/wmsAppBar.dart';
 import 'package:wms_app/widgets/wmsEmptyWidget.dart';
 
@@ -17,8 +17,8 @@ class JobPage extends StatefulWidget with Transitions, Feature {
     this.name = name;
   }
 
-  JobPage.all(String name, Content imageContent, Content fadeContent,
-      Content scrollContent) {
+  JobPage.all(String name, Transition imageContent, Transition fadeContent,
+      Transition scrollContent) {
     this.name = name;
     this.imageContent = imageContent;
     this.imageContent = fadeContent;
@@ -48,7 +48,8 @@ class _State extends State<JobPage> {
 
   // ScanPage should take primiryContent thet is displayed in the cameraview
 
-  Widget content() => ScanPage(this.successfullScan);
+  Widget content() =>
+      ScanPage(this.successfullScan, this.widget.imageContent, this.product);
 
   void successfullScan(String barcode) async {
     print("Successfull scaaaan!: " + barcode);

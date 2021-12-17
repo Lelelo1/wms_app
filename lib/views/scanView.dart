@@ -18,16 +18,8 @@ class ScanView extends StatefulWidget {
 
 class _State extends State<ScanView> {
   List<String> scannedBarcodes = [];
-  Size currentSize = Size.zero;
-
-  Size defaultSize = Size.zero;
-  Size enlargedSize = Size.zero;
-
   @override
   Widget build(BuildContext context) {
-    if (!hasCalculatedSizes()) {
-      calculateSizes();
-    }
     return Container(child: scanContent(), height: 320);
   }
 
@@ -104,15 +96,4 @@ class _State extends State<ScanView> {
     this.widget.scanned(barcode);
     // what should be shown in the scanview, what should be gotten, depending on which Job
   }
-
-  bool hasCalculatedSizes() =>
-      Utils.hasValue(this.defaultSize) && Utils.hasValue(this.enlargedSize);
-
-  void calculateSizes() {
-    var screenSize = MediaQuery.of(this.context).size;
-    this.defaultSize =
-        Size(screenSize.width, screenSize.height * this.widget.ratio);
-  }
-
-  Size getSize() => this.defaultSize;
 }

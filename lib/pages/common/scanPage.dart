@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:wms_app/mixins/transitions.dart';
+import 'package:wms_app/models/product.dart';
 import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/views/cameraView.dart';
+import 'package:wms_app/views/extended/stacked.dart';
 import 'package:wms_app/views/scanView.dart';
 import 'package:wms_app/widgets/wmsLoadingPage.dart';
 import 'package:async/async.dart';
@@ -11,11 +14,13 @@ class ScanPage extends StatefulWidget {
   final AsyncMemoizer<CameraView> _memoizer = AsyncMemoizer();
 
   final void Function(String product) onSuccesfullScan;
-
+  Transition imageContent;
   // seems to need same type: https://stackoverflow.com/questions/62731654/flutter-combine-multiple-futuret-tasks
   //FutureGroup<>
 
-  ScanPage(this.onSuccesfullScan);
+  Product
+      product; // should probably not be here, but 'wmsstacked' image content needs it
+  ScanPage(this.onSuccesfullScan, this.imageContent, this.product);
 
   @override
   _State createState() => _State();
@@ -26,6 +31,7 @@ class _State extends State<ScanPage> {
   //MediaQueryData mediaQueryData;
   // Future<Sequence> sequence;
   Future<CameraView>? cameraViewFuture;
+
   @override
   void initState() {
     this.cameraViewFuture = this.widget._memoizer.runOnce(() => CameraView());
@@ -48,7 +54,7 @@ class _State extends State<ScanPage> {
     return Scaffold(
         //appBar: WMSAppBar(this.widget.name).get(),
         body: Column(children: [
-          cameraView,
+          WMSStacked(cameraView, this.widget.imageContent(this.widget.product)),
           ScanView(0.44, this.widget.onSuccesfullScan)
         ] // camera view part of page and recontructed on 'scannedProducts' state change
             ),
@@ -56,7 +62,6 @@ class _State extends State<ScanPage> {
         resizeToAvoidBottomInset:
             false); // https://stackoverflow.com/questions/49840074/keyboard-pushes-the-content-up-resizes-the-screen
   }
-
   // animate scanview height changes..?
 
   @override
