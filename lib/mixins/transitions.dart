@@ -3,17 +3,27 @@ import 'package:wms_app/models/product.dart';
 import 'package:wms_app/pages/common/searchPage.dart';
 import 'package:wms_app/routes/productRoute.dart';
 import 'package:wms_app/routes/searchRoute.dart';
-import 'package:wms_app/widgets/wmsAsyncWidget.dart';
 import 'package:wms_app/widgets/wmsEmptyWidget.dart';
 
 typedef Transition = Widget Function([Product p, String ean]);
 
 class Transitions {
   Transition imageContent =
-      ([Product p = const Product.empty(), String ean = ""]) => p.exists()
-          ? Container(
-              child: Text(ean), color: Colors.red, width: 200, height: 200)
-          : WMSEmptyWidget();
+      ([Product p = const Product.empty(), String ean = ""]) => Row(children: [
+            Spacer(flex: 1),
+            Expanded(
+                flex: 1,
+                child: Column(children: [
+                  Spacer(flex: 10),
+                  Expanded(
+                      flex: 1,
+                      child: Text("sheeeeeeeelf",
+                          style: TextStyle(fontSize: 20, color: Colors.pink)))
+                ])),
+            Spacer(flex: 1)
+          ]);
+
+// consider using align above?
 
 /* Container(
                   child: Text(ean),
