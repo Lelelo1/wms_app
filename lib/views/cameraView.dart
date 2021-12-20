@@ -100,8 +100,7 @@ class _State extends State<CameraView> {
     var aspectRatio = size.width / size.height;
     var width = size.width; //this.widget.size.width;
 
-    return Flexible(
-        child: Container(
+    return Container(
       width: width,
       height: size.height,
       child: ClipRect(
@@ -117,7 +116,7 @@ class _State extends State<CameraView> {
           ),
         ),
       ),
-    ));
+    );
 
     //return camera(controller);
   }

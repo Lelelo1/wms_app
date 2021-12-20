@@ -54,8 +54,11 @@ class _State extends State<ScanPage> {
     return Scaffold(
         //appBar: WMSAppBar(this.widget.name).get(),
         body: Column(children: [
-          WMSStacked(cameraView, this.widget.imageContent(this.widget.product)),
-          ScanView(0.44, this.widget.onSuccesfullScan)
+          Expanded(
+              flex: 9,
+              child: WMSStacked(
+                  cameraView, this.widget.imageContent(this.widget.product))),
+          Expanded(flex: 7, child: ScanView(this.widget.onSuccesfullScan))
         ] // camera view part of page and recontructed on 'scannedProducts' state change
             ),
         extendBodyBehindAppBar: true,

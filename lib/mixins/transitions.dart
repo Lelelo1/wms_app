@@ -12,10 +12,7 @@ class Transitions {
   Transition imageContent =
       ([Product p = const Product.empty(), String ean = ""]) => p.exists()
           ? Container(
-              child: Text(ean),
-              color: Color.fromARGB(80, 40, 7, 100),
-              width: 200,
-              height: 200)
+              child: Text(ean), color: Colors.red, width: 200, height: 200)
           : WMSEmptyWidget();
 
 /* Container(

@@ -6,11 +6,9 @@ import '../utils.dart';
 //import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 class ScanView extends StatefulWidget {
-  double ratio;
-
   void Function(String barcode) scanned;
 
-  ScanView(this.ratio, this.scanned);
+  ScanView(this.scanned);
 
   @override
   State<StatefulWidget> createState() => _State();
