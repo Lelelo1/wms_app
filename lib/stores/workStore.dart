@@ -22,6 +22,9 @@ class WorkStore {
 
   Future<List<T>?> attribute<T>(int id, String attribute) =>
       _warehouseSystem.attribute<T>(id, attribute);
+
+  //String scannedBarcode = "";
+
 /*
   Sequence getRegistration() {
     return null;

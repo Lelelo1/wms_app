@@ -32,6 +32,8 @@ class _State extends State<ScanPage> {
   // Future<Sequence> sequence;
   Future<CameraView>? cameraViewFuture;
 
+  String ean = "";
+
   @override
   void initState() {
     this.cameraViewFuture = this.widget._memoizer.runOnce(() => CameraView());
@@ -56,9 +58,14 @@ class _State extends State<ScanPage> {
         body: Column(children: [
           Expanded(
               flex: 9,
-              child: WMSStacked(
-                  cameraView, this.widget.imageContent(this.widget.product))),
-          Expanded(flex: 7, child: ScanView(this.widget.onSuccesfullScan))
+              child: WMSStacked(cameraView,
+                  this.widget.imageContent(this.widget.product, ean))),
+          Expanded(
+              flex: 7,
+              child: ScanView((String barcode) {
+                this.ean = barcode;
+                this.widget.onSuccesfullScan(barcode);
+              }))
         ] // camera view part of page and recontructed on 'scannedProducts' state change
             ),
         extendBodyBehindAppBar: true,
