@@ -12,7 +12,6 @@ class WMSStacked extends StatelessWidget {
 
   Widget renderContent() => layer is WMSEmptyWidget ? content : renderLayer();
   Widget renderLayer() {
-    print("r e n d e r layer");
     return Stack(children: [this.content, this.layer]);
   }
 }

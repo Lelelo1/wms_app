@@ -13,12 +13,20 @@ typedef Transition = Widget Function([Product p, String ean]);
 class Transitions {
   static WorkStore store = WorkStore.instance;
 
-  Transition imageContent = (
-          [Product p = const Product.empty(), String ean = ""]) =>
-      Utils.hasValue(ean)
-          ? WMSAsyncWidget<String>(
-              p.getShelf(), (shelf) => _cameraContent(shelf))
-          : WMSEmptyWidget();
+  Transition imageContent =
+      ([Product p = const Product.empty(), String ean = ""]) {
+    print("rander with: " + p.id.toString());
+    return WMSAsyncWidget<String>(
+        defaultEmptyText(p, ean), (shelf) => _cameraContent(shelf));
+  };
+
+  static Future<String> defaultEmptyText(Product p, String ean) {
+    if (!p.exists()) {
+      return Future.sync(() => "");
+    }
+
+    return p.getShelf();
+  }
 
   static Widget _cameraContent(String text) => Column(children: [
         Spacer(flex: 12),
