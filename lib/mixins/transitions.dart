@@ -20,17 +20,12 @@ class Transitions {
               p.getShelf(), (shelf) => _cameraContent(shelf))
           : WMSEmptyWidget();
 
-  static Widget _cameraContent(String text) => Row(children: [
+  static Widget _cameraContent(String text) => Column(children: [
         Spacer(flex: 10),
         Expanded(
-            flex: 1,
-            child: Column(children: [
-              Spacer(flex: 10),
-              Expanded(
-                  flex: 1,
-                  child: Text(text, style: TextStyle(color: Colors.pink)))
-            ])),
-        Spacer(flex: 9)
+            flex: 2,
+            child:
+                Align(child: Text(text, style: TextStyle(color: Colors.pink))))
       ]);
 
 // consider using align above?
