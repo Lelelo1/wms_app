@@ -88,8 +88,8 @@ class _State extends State<ProductRoute> {
               style: TextStyle(fontSize: 25, fontWeight: FontWeight.w400))));
 
   Widget subtitleArea(Future<String> subtitle) => Row(children: [
-        WMSAsyncWidget(
-            subtitle, (String shelf) => WMSLabel(shelf, LineIcons.barcode)),
+        WMSAsyncWidget(subtitle,
+            (String subtitle) => WMSLabel(subtitle, LineIcons.barcode)),
         WMSAsyncWidget(Future.sync(() => this.widget.product.id.toString()),
             (String id) => WMSLabel(id, Icons.desktop_windows))
       ], mainAxisAlignment: MainAxisAlignment.center);

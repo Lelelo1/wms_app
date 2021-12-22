@@ -21,11 +21,12 @@ class Transitions {
           : WMSEmptyWidget();
 
   static Widget _cameraContent(String text) => Column(children: [
-        Spacer(flex: 10),
+        Spacer(flex: 12),
         Expanded(
-            flex: 2,
-            child:
-                Align(child: Text(text, style: TextStyle(color: Colors.pink))))
+            flex: 3,
+            child: Align(
+                child: Text(text,
+                    style: TextStyle(color: Colors.pink, fontSize: 28))))
       ]);
 
 // consider using align above?
