@@ -11,11 +11,6 @@ import 'package:wms_app/views/cameraView.dart';
 import 'package:wakelock/wakelock.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
-// test github rule
-// test pre-push bash current name:
-
-typedef Test = String;
-
 void main() async {
   /*
     const FirebaseOptions(
