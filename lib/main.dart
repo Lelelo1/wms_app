@@ -12,6 +12,9 @@ import 'package:wakelock/wakelock.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 // test github rule
+// test pre-push bash current name:
+
+typedef Test = String;
 
 void main() async {
   /*
@@ -105,11 +108,10 @@ class _AppState extends State<App> with WidgetsBindingObserver {
     }
   }
 }
-// pause camera when leaving app: 
+// pause camera when leaving app:
 // > java.lang.IllegalStateException: Handler (android.os.Handler) {8cf3bbf} sending message to a Handler on a dead thread
 // connect and reconnect
 // remove potential other WidgetsBinding
-
 
 // use of barcode scanning, the 'qr_code_scanner: ^0.3.5' dependency: https://pub.dev/packages/qr_code_scanner/license
 /*
