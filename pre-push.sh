@@ -6,7 +6,6 @@ echo $current_branch
 
 if [ $current_branch == 'dev' ]
 then
-echo "sajhsjash"
 exit 0 
 elif [ $current_branch == 'stage' ]
 then
