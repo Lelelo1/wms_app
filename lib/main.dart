@@ -32,6 +32,8 @@ void main() async {
   AppStore.injector = Module().initialise(Injector());
 
   //FirebaseCrashlytics.instance.crash();
+
+  // test
 }
 
 class App extends StatefulWidget {
