@@ -78,7 +78,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
             //MyHomePage(title: appName), // title is wthat is displayed on app bar
             Scaffold(
           body: JobPage(
-            "Standard",
+            "Se hyllplats",
           ),
         ));
     // 'resizeToAvoidBottomInset' prevent keyobard from pushing textfield, casuing BOTTOM OVERFLOWED BY x amount pixels by setting to false
