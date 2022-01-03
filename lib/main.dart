@@ -10,6 +10,7 @@ import 'package:wms_app/utils.dart';
 import 'package:wms_app/views/cameraView.dart';
 import 'package:wakelock/wakelock.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:git_info/git_info.dart';
 
 void main() async {
   /*
@@ -34,6 +35,10 @@ void main() async {
   //FirebaseCrashlytics.instance.crash();
 
   // test
+
+  GitInfo.get().then((info) {
+    print("wms_app: " + info.branch);
+  });
 }
 
 class App extends StatefulWidget {
