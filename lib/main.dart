@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:wms_app/pages/common/featuresPage.dart';
 import 'package:flutter_simple_dependency_injection/injector.dart';
+import 'package:wms_app/pages/common/jobPage.dart';
 import 'package:wms_app/secrets.dart';
 import 'package:wms_app/stores/appStore.dart';
 import 'package:wms_app/utils.dart';
@@ -83,7 +84,9 @@ class _AppState extends State<App> with WidgetsBindingObserver {
             // make home page eventually where the worker can go different areas, functionality described in 'Trello' eg
             //MyHomePage(title: appName), // title is wthat is displayed on app bar
             Scaffold(
-          body: FeaturesPage("Features"),
+          body: JobPage(
+            "Standard",
+          ),
         ));
     // 'resizeToAvoidBottomInset' prevent keyobard from pushing textfield, casuing BOTTOM OVERFLOWED BY x amount pixels by setting to false
   }

@@ -4,7 +4,6 @@ import 'package:wms_app/pages/common/searchPage.dart';
 import 'package:wms_app/routes/productRoute.dart';
 import 'package:wms_app/routes/searchRoute.dart';
 import 'package:wms_app/stores/workStore.dart';
-import 'package:wms_app/utils.dart';
 import 'package:wms_app/widgets/wmsAsyncWidget.dart';
 import 'package:wms_app/widgets/wmsEmptyWidget.dart';
 
@@ -15,7 +14,6 @@ class Transitions {
 
   Transition imageContent =
       ([Product p = const Product.empty(), String ean = ""]) {
-    print("rander with: " + p.id.toString());
     return WMSAsyncWidget<String>(
         defaultEmptyText(p, ean), (shelf) => _cameraContent(shelf));
   };
@@ -47,7 +45,7 @@ class Transitions {
 */
   Transition fadeContent = (
           [Product p = const Product.empty(), String ean = ""]) =>
-      p.exists() ? WMSEmptyWidget() : SearchRoute(SearchPage(ean));
+      p.exists() ? WMSEmptyWidget() : WMSEmptyWidget();
 
   Transition scrollContent = (
           [Product p = const Product.empty(), String ean = ""]) =>
