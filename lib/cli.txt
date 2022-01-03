@@ -1,0 +1,16 @@
+
+
+build ios --release
+
+1:419846545769:ios:d6a9d1198a993c17a19df8 
+1:419846545769:android:8140af26da4ca064a19df8
+
+firebase appdistribution:distribute test.ipa  \
+    --app 1:419846545769:ios:d6a9d1198a993c17a19df8  \
+    --release-notes "Bug fixes and improvements" --testers-file testers.txt
+
+/Users/lelelo1/Projects/wms_app/releases/version-1.0.txt
+
+// https://console.firebase.google.com/project/wmsapp-dce75/settings/general/ios:com.wetterek.wms
+
+/Users/lelelo1/Projects/wms_app/build/ios/iphoneos/Runner.app

@@ -1,9 +1,8 @@
 import 'dart:io';
 
+import 'package:git_info/git_info.dart';
 import 'package:mysql1/mysql1.dart';
-import 'package:wms_app/models/archivedProduct.dart';
 import 'package:wms_app/models/attributes.dart';
-import 'package:wms_app/models/flexibleProduct.dart';
 import 'package:wms_app/models/product.dart';
 import 'package:wms_app/remote/deserialization.dart';
 import 'package:wms_app/secrets.dart';
@@ -12,6 +11,11 @@ import '../utils.dart';
 
 // https://pub.dev/packages/mysql1
 class WarehouseSystem /*implements AbstractProductsSource */ {
+  static Map<String, String> databases = {
+    "dev": "katsumi-dev",
+    "prod": "katsumi-prod"
+  };
+
   Future<Results?> _interact<Results>(
       Future<Results>? Function(MySqlConnection? connection) action) async {
     MySqlConnection? connection;
@@ -29,16 +33,24 @@ class WarehouseSystem /*implements AbstractProductsSource */ {
     return result;
   }
 
+  static Future<String> getDatabase() async {
+    var branch = (await GitInfo.get()).branch;
+    var database = Utils.defaultString(databases[branch]);
+
+    return database;
+  }
+
   // needs internet permission android real device, otherwise: 'SocketException: OS Error: Connection refused'
   // https://stackoverflow.com/questions/55785581/socketexception-os-error-connection-refused-errno-111-in-flutter-using-djan
   // such permission is granted on install time: https://developer.android.com/training/basics/network-ops/connecting
   Future<MySqlConnection?> connect() async {
+    var database = await getDatabase();
     var settings = new ConnectionSettings(
         host: WMSMySql.host,
         port: WMSMySql.port,
         user: WMSMySql.user,
         password: WMSMySql.pass,
-        db: WMSMySql.db);
+        db: database);
 
     return await MySqlConnection.connect(settings);
   }
