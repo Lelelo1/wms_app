@@ -62,7 +62,7 @@ class _State extends State<JobPage> {
       this.product = product; // should always reflect the resulting scan
     });
 
-    fadeTransition(this.widget.fadeContent(product));
+    fadeTransition(this.widget.fadeContent(product, barcode));
   }
 
   void fadeTransition(Widget searchRoute) {
