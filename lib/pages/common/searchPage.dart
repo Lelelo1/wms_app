@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:wms_app/models/product.dart';
 import 'package:wms_app/routes/productRoute.dart';
 import 'package:wms_app/stores/workStore.dart';
-import 'package:wms_app/views/searchProductView.dart';
 import 'package:wms_app/widgets/wmsAppBar.dart';
 import 'package:wms_app/widgets/wmsAsyncWidget.dart';
 
