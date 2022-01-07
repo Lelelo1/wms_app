@@ -37,7 +37,8 @@ class CameraViewController {
     if (cameras.length == 0) {
       throw new Exception("You need a device with camera use WMS App");
     }
-    var cameraController = CameraController(cameras[0], ResolutionPreset.max);
+    var cameraController =
+        CameraController(cameras[0], ResolutionPreset.max, enableAudio: false);
     await cameraController.initialize();
     return cameraController;
   }
