@@ -14,8 +14,7 @@ typedef Transition = Widget Function(Product p, String ean);
 class Transitions {
   static WorkStore store = WorkStore.instance;
 
-  static Transition imageContent =
-      ([Product p = const Product.empty(), String ean = ""]) {
+  static Transition imageContent = (Product p, String ean) {
     return WMSAsyncWidget<String>(
         defaultEmptyText(p, ean), (shelf) => _cameraContent(shelf));
   };
@@ -45,8 +44,7 @@ class Transitions {
                   width: 200,
                   height: 200))
 */
-  static Transition fadeContent =
-      ([Product p = const Product.empty(), String ean = ""]) {
+  static Transition fadeContent = (Product p, String ean) {
     if (p.exists() || Utils.isNullOrEmpty(ean)) {
       return WMSEmptyWidget();
     }
@@ -54,11 +52,8 @@ class Transitions {
     return SearchRoute(SearchPage(ean));
   };
 
-  static Transition scrollContent = (
-          [Product p = const Product.empty(), String ean = ""]) =>
+  static Transition scrollContent = (Product p, String ean) =>
       p.exists() ? ProductRoute(p) : WMSEmptyWidget();
 
-  static Transition empty = (
-          [Product p = const Product.empty(), String ean = ""]) =>
-      WMSEmptyWidget();
+  static Transition empty = (Product p, String ean) => WMSEmptyWidget();
 }
