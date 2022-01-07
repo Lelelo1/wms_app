@@ -7,6 +7,8 @@ import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/widgets/wmsAsyncWidget.dart';
 import 'package:wms_app/widgets/wmsEmptyWidget.dart';
 
+import '../utils.dart';
+
 typedef Transition = Widget Function([Product p, String ean]);
 
 class Transitions {
@@ -43,9 +45,14 @@ class Transitions {
                   width: 200,
                   height: 200))
 */
-  Transition fadeContent = (
-          [Product p = const Product.empty(), String ean = ""]) =>
-      p.exists() ? WMSEmptyWidget() : WMSEmptyWidget();
+  Transition fadeContent =
+      ([Product p = const Product.empty(), String ean = ""]) {
+    if (p.exists() || Utils.isNullOrEmpty(ean)) {
+      return WMSEmptyWidget();
+    }
+
+    return SearchRoute(SearchPage(ean));
+  };
 
   Transition scrollContent = (
           [Product p = const Product.empty(), String ean = ""]) =>

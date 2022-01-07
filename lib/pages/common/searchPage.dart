@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:wms_app/models/product.dart';
 import 'package:wms_app/routes/productRoute.dart';
 import 'package:wms_app/stores/workStore.dart';
-import 'package:wms_app/views/searchProductView.dart';
 import 'package:wms_app/widgets/wmsAppBar.dart';
 import 'package:wms_app/widgets/wmsAsyncWidget.dart';
 
@@ -55,7 +54,7 @@ class _State extends State<SearchPage> {
           child: Container(
               child: (Column(children: [
                 renderTextField(),
-                Expanded(child: view(context))
+                Expanded(child: renderSuggestions(this.productSuggestions))
               ])),
               decoration:
                   BoxDecoration(color: Color.fromARGB(90, 255, 255, 255))),
@@ -117,12 +116,7 @@ class _State extends State<SearchPage> {
       enabledBorder: inputBorder(),
       focusedBorder: inputBorder());
 
-  Widget view(BuildContext context) {
-    return selectedSKU.isNotEmpty
-        ? confirmContent(context)
-        : renderSuggestions(this.productSuggestions);
-  }
-
+/*
   AbstractProduct _mockProduct = MockProduct(
       111111111,
       "eaneaneanean",
@@ -130,18 +124,7 @@ class _State extends State<SearchPage> {
       "1productnameproduct",
       "1skuskuskusku",
       "1Shelf-11-2");
-
-  Widget confirmContent(BuildContext context) {
-    // causes twice render when running whole below
-    var size = MediaQuery.of(context).size;
-    var width = size.width * 0.92;
-    //var height = size.height * 0.82;
-    return Column(children: [
-      SearchProductView(_mockProduct, width /*, height*/),
-      confirmButton()
-    ]);
-  }
-
+*/
   Color confirmButtonBodyColor = Color.fromARGB(180, 90, 57, 173);
 
   Widget confirmButton() {
