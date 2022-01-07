@@ -9,12 +9,12 @@ import 'package:wms_app/widgets/wmsEmptyWidget.dart';
 
 import '../utils.dart';
 
-typedef Transition = Widget Function([Product p, String ean]);
+typedef Transition = Widget Function(Product p, String ean);
 
 class Transitions {
   static WorkStore store = WorkStore.instance;
 
-  Transition imageContent =
+  static Transition imageContent =
       ([Product p = const Product.empty(), String ean = ""]) {
     return WMSAsyncWidget<String>(
         defaultEmptyText(p, ean), (shelf) => _cameraContent(shelf));
@@ -45,7 +45,7 @@ class Transitions {
                   width: 200,
                   height: 200))
 */
-  Transition fadeContent =
+  static Transition fadeContent =
       ([Product p = const Product.empty(), String ean = ""]) {
     if (p.exists() || Utils.isNullOrEmpty(ean)) {
       return WMSEmptyWidget();
@@ -54,7 +54,11 @@ class Transitions {
     return SearchRoute(SearchPage(ean));
   };
 
-  Transition scrollContent = (
+  static Transition scrollContent = (
           [Product p = const Product.empty(), String ean = ""]) =>
       p.exists() ? ProductRoute(p) : WMSEmptyWidget();
+
+  static Transition empty = (
+          [Product p = const Product.empty(), String ean = ""]) =>
+      WMSEmptyWidget();
 }

@@ -22,9 +22,13 @@ class JobPage extends StatefulWidget with Transitions, Feature {
       Transition scrollContent) {
     this.name = name;
     this.imageContent = imageContent;
-    this.imageContent = fadeContent;
+    this.fadeContent = fadeContent;
     this.scrollContent = scrollContent;
   }
+
+  Transition imageContent = Transitions.imageContent;
+  Transition fadeContent = Transitions.fadeContent;
+  Transition scrollContent = Transitions.scrollContent;
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -40,8 +44,8 @@ class _State extends State<JobPage> {
                 Colors.transparent, Colors.white)
             .get(),
         extendBodyBehindAppBar: true,
-        body:
-            WMSScrollable(content(), this.widget.scrollContent(this.product)));
+        body: WMSScrollable(
+            content(), this.widget.scrollContent(this.product, "")));
 
     //return WMSScaffold(this.widget.name, Color.fromARGB(255, 194, 66, 245))
     //    .get(WMSScrollable(content(), this.widget.scrollRoute(this.product)));
