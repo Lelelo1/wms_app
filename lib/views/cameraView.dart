@@ -75,6 +75,7 @@ class CameraView extends StatefulWidget {
   _State createState() => _State();
 }
 
+// teeeeeeesting!
 // WidgetsBindingObserver
 // needed to to detect app lifecycle events: https://medium.com/pharos-production/flutter-app-lifecycle-4b0ab4a4211a
 class _State extends State<CameraView> {
