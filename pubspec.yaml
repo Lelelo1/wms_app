@@ -35,7 +35,7 @@ dependencies:
   mysql1: ^0.19.2
   flutter_beep: ^0.3.0
   #flutter_vibrate: ^1.1.0 // not used. and versino can't be used since updating other packages
-  audioplayers: ^0.19.1
+  audioplayers: ^0.20.1
   # google_ml_kit: ^0.7.0 muliti usage camera, barcode, text and face
   google_ml_vision: ^0.0.6 #dysfunction textrecognition confidence score
   camera: ^0.9.4+3 
