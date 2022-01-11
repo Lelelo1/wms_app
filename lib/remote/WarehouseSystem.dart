@@ -6,7 +6,7 @@ import 'package:wms_app/models/attributes.dart';
 import 'package:wms_app/models/product.dart';
 import 'package:wms_app/remote/deserialization.dart';
 import 'package:wms_app/secrets.dart';
-import 'package:wms_app/version/versionWarehouseSystem.dart';
+import 'package:wms_app/version/versionWarehouseSystem.dart'
 
 import '../utils.dart';
 
