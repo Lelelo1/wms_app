@@ -117,4 +117,7 @@ app.*.symbols
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
 !/dev/ci/**/Gemfile.lock
 
+#secrets
 /lib/WMS_Secrets_Firebase.dart
+#will be dynamically by user dropbox link
+/lib/WMSMySqlConfig.dart
