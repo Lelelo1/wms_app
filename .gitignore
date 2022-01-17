@@ -118,6 +118,4 @@ app.*.symbols
 !/dev/ci/**/Gemfile.lock
 
 #secrets
-/lib/WMS_Secrets_Firebase.dart
-#will be dynamically by user dropbox link
-/lib/WMSMySqlConfig.dart
+/lib/secrets/

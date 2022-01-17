@@ -7,7 +7,7 @@ import 'package:wms_app/models/product.dart';
 import 'package:wms_app/remote/deserialization.dart';
 import 'package:wms_app/version/versionWarehouseSystem.dart';
 
-import '../WMSMySqlConfig.dart';
+import '../secrets/WMSMySqlConfig.dart'ig.dart';
 import '../utils.dart';
 
 // https://pub.dev/packages/mysql1
@@ -84,7 +84,8 @@ class WarehouseSystem /*implements AbstractProductsSource */ {
     if (results == null) {
       return List.empty();
     }
-
+    String s = "jkakldhdliqudhlqihudqlduwqu+EAN+hlquwhdliqwhduwdlhwqldihwdliqwhd";
+ 
     return results.map<T>((e) => e[0]).toList();
   }
 
