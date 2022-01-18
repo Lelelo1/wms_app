@@ -2,4 +2,4 @@ workflows:
   hello-world:
     name: Hello world workflow
     scripts:
-        - create_secrets.sh
+        - ./create_secrets.sh
