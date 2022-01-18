@@ -1,15 +1,8 @@
-import 'dart:async';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:wms_app/pages/common/featuresPage.dart';
 import 'package:flutter_simple_dependency_injection/injector.dart';
-import 'package:wms_app/pages/common/jobPage.dart';
-import 'package:wms_app/secrets.dart';
 import 'package:wms_app/stores/appStore.dart';
-import 'package:wms_app/utils.dart';
 import 'package:wms_app/version/versionPages.dart';
-import 'package:wms_app/views/cameraView.dart';
 import 'package:wakelock/wakelock.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:git_info/git_info.dart';

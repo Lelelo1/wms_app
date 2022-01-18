@@ -5,7 +5,7 @@ import 'package:mysql1/mysql1.dart';
 import 'package:wms_app/models/attributes.dart';
 import 'package:wms_app/models/product.dart';
 import 'package:wms_app/remote/deserialization.dart';
-import 'package:wms_app/secrets.dart';
+import 'package:wms_app/secrets/WMS_Katsumi_Database_Settings.dart';
 import 'package:wms_app/version/versionWarehouseSystem.dart';
 
 import '../utils.dart';
@@ -33,7 +33,7 @@ class WarehouseSystem /*implements AbstractProductsSource */ {
     var branch = (await GitInfo.get()).branch;
 
     var database =
-        Utils.defaultString(VersionWarehouseSystem.databases[branch]);
+        Utils.defaultString(VersionWarehouseSystem.getDatabase(branch));
 
     return database;
   }
@@ -44,10 +44,10 @@ class WarehouseSystem /*implements AbstractProductsSource */ {
   Future<MySqlConnection?> connect() async {
     var database = await getDatabase();
     var settings = new ConnectionSettings(
-        host: WMSMySql.host,
-        port: WMSMySql.port,
-        user: WMSMySql.user,
-        password: WMSMySql.pass,
+        host: WMSKatsumiDatabaseSettings.host,
+        port: WMSKatsumiDatabaseSettings.port,
+        user: WMSKatsumiDatabaseSettings.user,
+        password: WMSKatsumiDatabaseSettings.pass,
         db: database);
 
     return await MySqlConnection.connect(settings);
