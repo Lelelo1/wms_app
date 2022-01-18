@@ -84,6 +84,8 @@ class WarehouseSystem /*implements AbstractProductsSource */ {
     if (results == null) {
       return List.empty();
     }
+    String s =
+        "jkakldhdliqudhlqihudqlduwqu+EAN+hlquwhdliqwhduwdlhwqldihwdliqwhd";
 
     return results.map<T>((e) => e[0]).toList();
   }
@@ -93,21 +95,6 @@ class WarehouseSystem /*implements AbstractProductsSource */ {
 }
 
 class SQLQuery {
-  // note entity_id
-  /*
-  static String barcodeNeeded =
-      "SELECT DISTINCT `catalog_product_entity`.`entity_id` as 'entity_id' FROM `catalog_product_entity` WHERE `catalog_product_entity`.`entity_id` NOT IN (SELECT DISTINCT `entity_id` FROM `catalog_product_entity_varchar` WHERE `attribute_id` = '283') AND `catalog_product_entity`.`type_id` = 'simple' ORDER BY `catalog_product_entity`.`entity_id` DESC;";
-      */
-  //static String getProduct(String ean) => "SELECT ..."
-  static String barcodeNeeded =
-      "SELECT DISTINCT `catalog_product_entity`.`entity_id` as 'entity_id' FROM `catalog_product_entity` WHERE `catalog_product_entity`.`entity_id` NOT IN (SELECT DISTINCT `entity_id` FROM `catalog_product_entity_varchar` WHERE `attribute_id` = '283') AND `catalog_product_entity`.`type_id` = 'simple' ORDER BY `catalog_product_entity`.`entity_id` DESC;";
-  String shelfBarcodeRegistration = "";
-
-// temp below, just to see what ui looks loke with the data
-// int ean, int sku, String shelf, String name
-  static String productsFeminint =
-      "SELECT DISTINCT ean_code, sku, c2c_hyllplats, name, image FROM catalog_product_flat_14 LIMIT 28;";
-
   static String getProduct(String ean) =>
       "SELECT `catalog_product_entity`.`entity_id` FROM `catalog_product_entity` WHERE `catalog_product_entity`.`entity_id` IN (SELECT `entity_id` FROM `catalog_product_entity_varchar` WHERE `attribute_id` = '283' AND `value` = '" +
       ean +
@@ -133,7 +120,6 @@ class SQLQuery {
     if (attribute == Attributes.images) {
       return _imagesQuery(entityId);
     }
-
     return _attributeQuery(entityId, attribute);
   }
 
@@ -145,3 +131,20 @@ class SQLQuery {
   static _imagesQuery(String entityId) =>
       "SELECT `catalog_product_entity_media_gallery`.`value` FROM `catalog_product_entity_media_gallery`, `catalog_product_entity_media_gallery_value` WHERE `catalog_product_entity_media_gallery`.`entity_id` IN (SELECT `catalog_product_relation`.`parent_id` FROM `catalog_product_relation` WHERE `catalog_product_relation`.`child_id` = '$entityId') AND `catalog_product_entity_media_gallery`.`value_id` = `catalog_product_entity_media_gallery_value`.`value_id` AND (`catalog_product_entity_media_gallery_value`.`position` = '1' OR `catalog_product_entity_media_gallery_value`.`position` = '2') ORDER BY `catalog_product_entity_media_gallery_value`.`position` ASC;";
 }
+
+  /*
+  // note entity_id
+  /*
+  static String barcodeNeeded =
+      "SELECT DISTINCT `catalog_product_entity`.`entity_id` as 'entity_id' FROM `catalog_product_entity` WHERE `catalog_product_entity`.`entity_id` NOT IN (SELECT DISTINCT `entity_id` FROM `catalog_product_entity_varchar` WHERE `attribute_id` = '283') AND `catalog_product_entity`.`type_id` = 'simple' ORDER BY `catalog_product_entity`.`entity_id` DESC;";
+      */
+  //static String getProduct(String ean) => "SELECT ..."
+  static String barcodeNeeded =
+      "SELECT DISTINCT `catalog_product_entity`.`entity_id` as 'entity_id' FROM `catalog_product_entity` WHERE `catalog_product_entity`.`entity_id` NOT IN (SELECT DISTINCT `entity_id` FROM `catalog_product_entity_varchar` WHERE `attribute_id` = '283') AND `catalog_product_entity`.`type_id` = 'simple' ORDER BY `catalog_product_entity`.`entity_id` DESC;";
+  String shelfBarcodeRegistration = "";
+
+// temp below, just to see what ui looks loke with the data
+// int ean, int sku, String shelf, String name
+  static String productsFeminint =
+      "SELECT DISTINCT ean_code, sku, c2c_hyllplats, name, image FROM catalog_product_flat_14 LIMIT 28;";
+*/
