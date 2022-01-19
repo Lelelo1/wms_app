@@ -1,4 +1,5 @@
 
+#!/bin/bash
 
 #https://stackoverflow.com/questions/67964110/how-to-access-secrets-when-using-flutter-web-with-github-actions
 
