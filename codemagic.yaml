@@ -1,5 +1,48 @@
+# Automatically generated on 2022-01-19 UTC from https://codemagic.io/app/61dd74cbb31b296b46695a21/settings
+# Note that this configuration is not an exact match to UI settings. Review and adjust as necessary.
+
 workflows:
-  hello-world:
-    name: Hello world workflow
+  default-workflow:
+    name: Default Workflow
+    max_build_duration: 60
+    environment:
+      vars:
+        WMS_KATSUMI_DATABASE_SETTINGS: Y2xhc3MgV01TS2F0c3VtaURhdGFiYXNlU2V0dGluZ3MgewogIHN0YXRpYyBTdHJpbmcgaG9zdCA9ICJrYXRzdW1pLnNlIjsKICBzdGF0aWMgaW50IHBvcnQgPSAzMzA2OwogIHN0YXRpYyBTdHJpbmcgdXNlciA9ICJ1c2VyLXdtcyI7CiAgc3RhdGljIFN0cmluZyBwYXNzID0gInhMNGtZNSNVWlg4ZENxeSNxRVJnIjsKCiAgc3RhdGljIE1hcDxTdHJpbmcsIFN0cmluZz4gZGF0YWJhc2VzID0gewogICAgImRldiI6ICJrYXRzdW1pLWRldiIsCiAgICAic3RhZ2UiOiAia2F0c3VtaS1kZXYiLAogICAgInByb2QiOiAia2F0c3VtaSIKICB9Owp9
+        WMS_SECRETS_FIREBASE: Y2xhc3MgV01TRmlyZWJhc2UgewogIC8vIGZpcmViYXNlCiAgc3RhdGljIGNvbnN0IFN0cmluZyBhcGlJZCA9ICJKSEtKRzg3Njc2NWpoamhqaGd4aGdzaGdkNTQ1NDZqa2giOwogIHN0YXRpYyBjb25zdCBTdHJpbmcgYXBpS2V5ID0gImFqc2pTRzJKSGdzMjM3NkhKS1NzYXNkZGcyMzRKSEdkZTIzcXciOwogIHN0YXRpYyBjb25zdCBTdHJpbmcgbWVzc2FnaW5nU2VuZGVySWQgPSAiMjk4NzE2MjM4NzMyMyI7CgogIHN0YXRpYyBjb25zdCBTdHJpbmcgcHJvamVjdElkID0gIndtc2FwcC1kY2U3NSI7Cn0K
+      flutter: stable
+      xcode: latest
+      cocoapods: default
     scripts:
-        - bash ./scripts/create_secrets.sh
+      - |
+        # set up debug keystore
+        rm -f ~/.android/debug.keystore
+        keytool -genkeypair \
+          -alias androiddebugkey \
+          -keypass android \
+          -keystore ~/.android/debug.keystore \
+          -storepass android \
+          -dname 'CN=Android Debug,O=Android,C=US' \
+          -keyalg 'RSA' \
+          -keysize 2048 \
+          -validity 10000
+      - |
+        # set up local properties
+        echo "flutter.sdk=$HOME/programs/flutter" > "$FCI_BUILD_DIR/android/local.properties"
+      - "./create_secrets.sh"
+      - flutter packages pub get
+      - flutter build appbundle --debug
+      - find . -name "Podfile" -execdir pod install \;
+      - flutter build ios --debug --no-codesign
+    artifacts:
+      - build/**/outputs/apk/**/*.apk
+      - build/**/outputs/bundle/**/*.aab
+      - build/**/outputs/**/mapping.txt
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+      - '*.snap'
+      - build/windows/**/*.msix
+      - flutter_drive.log
+    publishing:
+      email:
+        recipients:
+          - lolole51@hotmail.com
