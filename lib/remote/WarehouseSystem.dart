@@ -33,7 +33,7 @@ class WarehouseSystem /*implements AbstractProductsSource */ {
     var branch = (await GitInfo.get()).branch;
 
     var database =
-        Utils.defaultString(VersionWarehouseSystem.getDatabase(branch));
+        Utils.defaultString(VersionWarehouseSystem.getDatabase("dev"));
 
     return database;
   }
