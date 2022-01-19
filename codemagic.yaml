@@ -28,7 +28,7 @@ workflows:
       - |
         # set up local properties
         echo "flutter.sdk=$HOME/programs/flutter" > "$FCI_BUILD_DIR/android/local.properties"
-      - "./create_secrets.sh"
+      - ./create_secrets.sh
       - flutter packages pub get
       - flutter build appbundle --debug
       - find . -name "Podfile" -execdir pod install \;
