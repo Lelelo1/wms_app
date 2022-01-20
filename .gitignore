@@ -38,7 +38,6 @@
 /dev/integration_tests/**/xcuserdata
 /dev/integration_tests/**/Pods
 /packages/flutter/coverage/
-version
 analysis_benchmark.json
 
 # packages file containing multi-root paths
@@ -117,5 +116,5 @@ app.*.symbols
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
 !/dev/ci/**/Gemfile.lock
 
+
 /lib/secrets/
-../lib/secrets/
