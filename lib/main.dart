@@ -8,14 +8,8 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:git_info/git_info.dart';
 
 void main() async {
-  /*
-    const FirebaseOptions(
-      apiKey: WMSFirebase.apiKey,
-      appId: WMSFirebase.apiId,
-      messagingSenderId: WMSFirebase.messagingSenderId,
-      projectId: WMSFirebase.projectId,
-    )
-  */
+  const String configuration = String.fromEnvironment("CONFIGURATION");
+  print("wms_app: " + configuration);
 
   WidgetsFlutterBinding.ensureInitialized();
 
