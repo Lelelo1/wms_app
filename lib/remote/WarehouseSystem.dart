@@ -6,7 +6,7 @@ import 'package:wms_app/models/attributes.dart';
 import 'package:wms_app/models/product.dart';
 import 'package:wms_app/remote/deserialization.dart';
 import 'package:wms_app/secrets/WMS_Katsumi_Database_Settings.dart';
-import 'package:wms_app/version/versionWarehouseSystem.dart';
+import 'package:wms_app/stores/versionStore.dart';
 
 import '../utils.dart';
 
@@ -29,20 +29,11 @@ class WarehouseSystem /*implements AbstractProductsSource */ {
     return result;
   }
 
-  static Future<String> getDatabase() async {
-    var branch = (await GitInfo.get()).branch;
-
-    var database =
-        Utils.defaultString(VersionWarehouseSystem.getDatabase("dev"));
-
-    return database;
-  }
-
   // needs internet permission android real device, otherwise: 'SocketException: OS Error: Connection refused'
   // https://stackoverflow.com/questions/55785581/socketexception-os-error-connection-refused-errno-111-in-flutter-using-djan
   // such permission is granted on install time: https://developer.android.com/training/basics/network-ops/connecting
   Future<MySqlConnection?> connect() async {
-    var database = await getDatabase();
+    var database = VersionStore.instance.getDatabase();
     var settings = new ConnectionSettings(
         host: WMSKatsumiDatabaseSettings.host,
         port: WMSKatsumiDatabaseSettings.port,

@@ -1,15 +1,13 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_simple_dependency_injection/injector.dart';
-import 'package:wms_app/stores/appStore.dart';
-import 'package:wms_app/version/versionPages.dart';
+import 'package:wms_app/models/configuration.dart';
+import 'package:wms_app/stores/versionStore.dart';
 import 'package:wakelock/wakelock.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:git_info/git_info.dart';
 
 void main() async {
   const String configuration = String.fromEnvironment("CONFIGURATION");
-  print("wms_app: " + configuration);
+  VersionStore.instance.setConfiguration(Configuration(configuration));
 
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -19,15 +17,16 @@ void main() async {
   runApp(App());
   // Screen.keepOn(true); package had not been updated since 2019
   Wakelock.enable();
-  AppStore.injector = Module().initialise(Injector());
 
   //FirebaseCrashlytics.instance.crash();
 
   // test
 
+/*
   GitInfo.get().then((info) {
     print("wms_app: " + info.branch);
   });
+  */
 }
 
 class App extends StatefulWidget {
@@ -72,7 +71,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
             // make home page eventually where the worker can go different areas, functionality described in 'Trello' eg
             //MyHomePage(title: appName), // title is wthat is displayed on app bar
             Scaffold(
-          body: VersionPages.startPage(),
+          body: VersionStore.instance.getStartPage(),
         ));
     // 'resizeToAvoidBottomInset' prevent keyobard from pushing textfield, casuing BOTTOM OVERFLOWED BY x amount pixels by setting to false
   }
