@@ -1,5 +1,5 @@
 
-flutter build apk --release
+flutter build apk --release --dart-define="CONFIGURATION=prod"
 
 # https://firebase.google.com/docs/app-distribution/android/distribute-cli
 
