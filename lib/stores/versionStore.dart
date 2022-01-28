@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:wms_app/mixins/transitions.dart';
 import 'package:wms_app/models/configuration.dart';
-import 'package:wms_app/pages/common/featuresPage.dart';
-import 'package:wms_app/pages/common/jobPage.dart';
+import 'package:wms_app/pages/featuresPage.dart';
+import 'package:wms_app/pages/jobPage.dart';
 import 'package:wms_app/secrets/WMS_Katsumi_Database_Settings.dart';
 
 class VersionStore {

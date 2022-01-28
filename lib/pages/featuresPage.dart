@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wms_app/mixins/feature.dart';
-import 'package:wms_app/pages/common/jobPage.dart';
+import 'package:wms_app/pages/jobPage.dart';
 
 // ignore: must_be_immutable
 class FeaturesPage extends StatefulWidget {

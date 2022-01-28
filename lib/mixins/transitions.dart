@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wms_app/models/product.dart';
-import 'package:wms_app/pages/common/searchPage.dart';
+import 'package:wms_app/pages/searchPage.dart';
 import 'package:wms_app/routes/productRoute.dart';
 import 'package:wms_app/routes/searchRoute.dart';
 import 'package:wms_app/stores/workStore.dart';

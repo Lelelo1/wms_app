@@ -5,7 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:wms_app/mixins/feature.dart';
 import 'package:wms_app/mixins/transitions.dart';
 import 'package:wms_app/models/product.dart';
-import 'package:wms_app/pages/common/scanPage.dart';
+import 'package:wms_app/pages/scanPage.dart';
 import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/views/extended/scrollable.dart';
 import 'package:wms_app/widgets/wmsAppBar.dart';
