@@ -5,15 +5,14 @@ import 'package:wms_app/stores/workStore.dart';
 
 abstract class WMSPage extends StatefulWidget {
   static final workStore = WorkStore.instance;
-  static final versionStore = VersionStore.instance;
 
-  static final String configuration = WMSPage.versionStore.configuration.value;
+  static final String configuration = VersionStore.getConfiguration().value;
 
   final String name;
 
-  abstract Transition Function() imageContent;
-  abstract Transition Function() fadeContent;
-  abstract Transition Function() scrollContent;
+  abstract final Transition Function() imageContent;
+  abstract final Transition Function() fadeContent;
+  abstract final Transition Function() scrollContent;
 
   WMSPage(this.name);
 }

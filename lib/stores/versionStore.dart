@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:wms_app/mixins/transitions.dart';
 import 'package:wms_app/models/configuration.dart';
 import 'package:wms_app/pages/featuresPage.dart';
 import 'package:wms_app/pages/returnPage.dart';
@@ -8,20 +7,13 @@ import 'package:wms_app/secrets/WMS_Katsumi_Database_Settings.dart';
 class VersionStore {
   static late VersionStore instance = VersionStore();
 
-  Configuration configuration = Configuration.none();
-  /*
-  Configuration get configuration {
-    return _configuration;
-  }
-  */
-  void setConfiguration(Configuration configuration) {
-    configuration = configuration;
-
-    print("wms_app: configuration: " + configuration.value);
+  static Configuration getConfiguration() {
+    var c = const String.fromEnvironment("CONFIGURATION");
+    return Configuration(c);
   }
 
   Widget getStartPage() {
-    if (configuration.value == "dev") {
+    if (getConfiguration().value == "dev") {
       return _dev();
     }
     return _release();
@@ -38,14 +30,14 @@ class VersionStore {
   String getDatabase() {
     var databases = WMSKatsumiDatabaseSettings.databases;
 
-    var hasDatabase = databases.containsKey(configuration.value);
+    var hasDatabase = databases.containsKey(getConfiguration().value);
 
     if (!hasDatabase) {
       throw Exception(
           "wms_app: katsumi warhouse database settings did not have database set to the following wms_app confuguration: " +
-              configuration.value);
+              getConfiguration().value);
     }
 
-    return databases[configuration.value] ?? "";
+    return databases[getConfiguration().value] ?? "";
   }
 }
