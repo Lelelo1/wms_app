@@ -2,33 +2,21 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:wms_app/mixins/feature.dart';
 import 'package:wms_app/mixins/transitions.dart';
 import 'package:wms_app/models/product.dart';
 import 'package:wms_app/pages/scanPage.dart';
 import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/views/extended/scrollable.dart';
+import 'package:wms_app/widgets/WMSPage.dart';
 import 'package:wms_app/widgets/wmsAppBar.dart';
 import 'package:wms_app/widgets/wmsEmptyWidget.dart';
 
 // can I used state and the setState call with product in 'StatelessWidget'
 // ignore: must_be_immutable
-class JobPage extends StatefulWidget with Transitions, Feature {
-  JobPage(String name) {
-    this.name = name;
-  }
-
-  JobPage.all(String name, Transition imageContent, Transition fadeContent,
-      Transition scrollContent) {
-    this.name = name;
-    this.imageContent = imageContent;
-    this.fadeContent = fadeContent;
-    this.scrollContent = scrollContent;
-  }
-
-  Transition imageContent = Transitions.imageContent;
-  Transition fadeContent = Transitions.fadeContent;
-  Transition scrollContent = Transitions.scrollContent;
+class JobPage extends WMSPage {
+  JobPage(String name, Transition imageContent, Transition fadeContent,
+      Transition scrollContent)
+      : super(name, imageContent, fadeContent, scrollContent);
 
   @override
   State<StatefulWidget> createState() => _State();
