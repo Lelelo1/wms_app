@@ -6,9 +6,6 @@ import 'package:wakelock/wakelock.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 void main() async {
-  const String configuration = String.fromEnvironment("CONFIGURATION");
-  VersionStore.instance.setConfiguration(Configuration(configuration));
-
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp();
