@@ -75,8 +75,6 @@ class WarehouseSystem /*implements AbstractProductsSource */ {
     if (results == null) {
       return List.empty();
     }
-    String s =
-        "jkakldhdliqudhlqihudqlduwqu+EAN+hlquwhdliqwhduwdlhwqldihwdliqwhd";
 
     return results.map<T>((e) => e[0]).toList();
   }
