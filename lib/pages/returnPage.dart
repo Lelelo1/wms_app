@@ -60,16 +60,20 @@ class _State extends State<ReturnPage> {
   void successfullScan(String scan) async {
     print("Successfull scaaaan!: " + scan);
 
+    // need some other way of detemin shelf
+    /*
     if (this.product.exists()) {
       shelfScan(scan);
       return;
     }
+    */
 
     barcodeScan(scan);
   }
 
   void barcodeScan(String barcode) async {
     var product = await WMSPage.workStore.fetchProduct(barcode);
+
     print(await product.futureToString());
 
     setState(() {

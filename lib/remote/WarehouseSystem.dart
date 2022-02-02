@@ -80,7 +80,7 @@ class WarehouseSystem /*implements AbstractProductsSource */ {
   }
 
   void setEAN(int id, String ean) async {
-    var q = SQLQuery._setEAN(id.toString(), ean);
+    var q = SQLQuery._updateEAN(id.toString(), ean);
     await _interact((connection) => connection?.query(q));
   }
 
@@ -127,6 +127,9 @@ class SQLQuery {
 
   static _setEAN(String entityId, String ean) =>
       "INSERT INTO `catalog_product_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES ('4', '283', '0', '$entityId', '$ean');";
+
+  static _updateEAN(String entityId, String ean) =>
+      "UPDATE `catalog_product_entity_varchar` SET `value` = '$ean' WHERE `catalog_product_entity_varchar`.`attribute_id` = '283' AND `catalog_product_entity_varchar`.`entity_id` = '$entityId'";
 }
 
   /*
