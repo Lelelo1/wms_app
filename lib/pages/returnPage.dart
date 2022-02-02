@@ -8,13 +8,14 @@ import 'package:wms_app/pages/scanPage.dart';
 import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/utils.dart';
 import 'package:wms_app/views/extended/scrollable.dart';
-import 'package:wms_app/widgets/WMSPage.dart';
+import 'package:wms_app/widgets/wmsPage.dart';
 import 'package:wms_app/widgets/wmsAppBar.dart';
 import 'package:wms_app/widgets/wmsEmptyWidget.dart';
+import 'package:wms_app/widgets/wmsTransitions.dart';
 
 // can I used state and the setState call with product in 'StatelessWidget'
 // ignore: must_be_immutable
-class ReturnPage extends WMSPage {
+class ReturnPage extends WMSPage implements WMSTransitions {
   @override
   Transition Function() imageContent = () => Transitions.imageContent;
 
@@ -68,7 +69,7 @@ class _State extends State<ReturnPage> {
   }
 
   void barcodeScan(String barcode) async {
-    var product = await WMSPage.workStore.product(barcode);
+    var product = await WMSPage.workStore.fetchProduct(barcode);
     print(await product.futureToString());
 
     setState(() {

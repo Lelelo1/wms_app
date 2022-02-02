@@ -44,9 +44,9 @@ class WarehouseSystem /*implements AbstractProductsSource */ {
     return await MySqlConnection.connect(settings);
   }
 
-  Future<Product> getProduct(String ean) async {
+  Future<Product> fetchProduct(String ean) async {
     Results? results;
-    var sql = SQLQuery.getProduct(ean);
+    var sql = SQLQuery.fetchProduct(ean);
     results = await _interact((connection) => connection?.query(sql));
     print("ean" + " " + results.toString());
     var products =
@@ -58,15 +58,15 @@ class WarehouseSystem /*implements AbstractProductsSource */ {
     return products[0];
   }
 
-  Future<List<Product>> getProductSuggestions(String text) async {
+  Future<List<Product>> fetchSuggestions(String text) async {
     var results = await _interact((connection) =>
-        connection?.query(SQLQuery.getProductSuggestions(text)));
+        connection?.query(SQLQuery.fetchProductSuggestions(text)));
 
     return Deserialization.products(results);
   }
 
-  Future<List<T>?> attribute<T>(int id, String attribute) async {
-    var q = SQLQuery.getAttribute(id.toString(), attribute);
+  Future<List<T>?> fetchAttribute<T>(int id, String attribute) async {
+    var q = SQLQuery.fetchAttribute(id.toString(), attribute);
     print("q..: " + q);
     var results = await _interact((connection) => connection?.query(q));
 
@@ -79,18 +79,23 @@ class WarehouseSystem /*implements AbstractProductsSource */ {
     return results.map<T>((e) => e[0]).toList();
   }
 
+  void setEAN(int id, String ean) async {
+    var q = SQLQuery._setEAN(id.toString(), ean);
+    await _interact((connection) => connection?.query(q));
+  }
+
   Future<dynamic>? disconnect(MySqlConnection? connection) =>
       connection?.close();
 }
 
 class SQLQuery {
-  static String getProduct(String ean) =>
+  static String fetchProduct(String ean) =>
       "SELECT `catalog_product_entity`.`entity_id` FROM `catalog_product_entity` WHERE `catalog_product_entity`.`entity_id` IN (SELECT `entity_id` FROM `catalog_product_entity_varchar` WHERE `attribute_id` = '283' AND `value` = '" +
       ean +
       "') ORDER BY `entity_id` DESC LIMIT 1;";
 
   // SELECT `catalog_product_entity`.`sku`FROM `catalog_product_entity` WHERE `catalog_product_entity`.`entity_id` = '<entity id>'
-  static String getProductSuggestions(String sku) {
+  static String fetchProductSuggestions(String sku) {
     // LIMIT 10
     return "SELECT `entity_id` FROM `catalog_product_entity` WHERE `sku` LIKE '%" +
         sku +
@@ -99,7 +104,7 @@ class SQLQuery {
 
   // see table in magento: https://www.katsumi.se/index.php/yuDuMinD/catalog_product_attribute/index/key/e036b264c18e46443f82569948fa575c/
 
-  static String getAttribute(String entityId, Attribute attribute) {
+  static String fetchAttribute(String entityId, Attribute attribute) {
     print("warehousesystem get " + attribute);
 
     if (attribute == Attributes.sku) {
@@ -119,6 +124,9 @@ class SQLQuery {
       "SELECT `catalog_product_entity`.`sku`FROM `catalog_product_entity` WHERE `catalog_product_entity`.`entity_id` = '$entityId'";
   static _imagesQuery(String entityId) =>
       "SELECT `catalog_product_entity_media_gallery`.`value` FROM `catalog_product_entity_media_gallery`, `catalog_product_entity_media_gallery_value` WHERE `catalog_product_entity_media_gallery`.`entity_id` IN (SELECT `catalog_product_relation`.`parent_id` FROM `catalog_product_relation` WHERE `catalog_product_relation`.`child_id` = '$entityId') AND `catalog_product_entity_media_gallery`.`value_id` = `catalog_product_entity_media_gallery_value`.`value_id` AND (`catalog_product_entity_media_gallery_value`.`position` = '1' OR `catalog_product_entity_media_gallery_value`.`position` = '2') ORDER BY `catalog_product_entity_media_gallery_value`.`position` ASC;";
+
+  static _setEAN(String entityId, String ean) =>
+      "INSERT INTO `catalog_product_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES ('4', '283', '0', '$entityId', '$ean');";
 }
 
   /*
