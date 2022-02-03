@@ -130,8 +130,11 @@ class SQLQuery {
   static _setEAN(String entityId, String ean) =>
       "INSERT INTO `catalog_product_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES ('4', '283', '0', '$entityId', '$ean');";
 
-  static _updateEAN(String entityId, String ean) =>
-      "UPDATE `catalog_product_entity_varchar` SET `value` = '$ean' WHERE `catalog_product_entity_varchar`.`attribute_id` = '283' AND `catalog_product_entity_varchar`.`entity_id` = '$entityId'";
+  //static _updateEAN(String entityId, String ean) =>
+  //    "UPDATE `catalog_product_entity_varchar` SET `value` = '$ean' WHERE `catalog_product_entity_varchar`.`attribute_id` = '283' AND `catalog_product_entity_varchar`.`entity_id` = '$entityId'";
+
+  static increaseAmountOfProduct(String entityId) =>
+      "UPDATE `cataloginventory_stock_item` SET `qty` = `qty` + '1' WHERE `item_id` = '$entityId';";
 }
 
   /*
