@@ -12,6 +12,7 @@ class SearchPage extends StatefulWidget implements WMSPage {
   final String name = "Lägg in streckoder i systemet";
   final Product product;
   final String ean;
+
   /*
   final void Function() pressedClose;
   final void Function(Product) pressedSubmit;
@@ -146,6 +147,9 @@ class _State extends State<SearchPage> {
               this.productSuggestions = [];
               this.text = "";
             });
+
+            Navigator.pop(context);
+            Navigator.pop(context);
           },
           elevation: 10,
           color: confirmButtonBodyColor,

@@ -1,5 +1,7 @@
 import 'package:wms_app/models/product.dart';
 import 'package:wms_app/remote/warehouseSystem.dart';
+import 'package:wms_app/widgets/wmsEmptyWidget.dart';
+import 'package:wms_app/widgets/wmsPage.dart';
 
 class WorkStore {
   static late WorkStore instance = WorkStore();
