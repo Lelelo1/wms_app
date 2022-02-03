@@ -130,13 +130,12 @@ class _State extends State<SearchPage> {
 */
   Color confirmButtonBodyColor = Color.fromARGB(180, 90, 57, 173);
 
-  Widget confirmButton() {
+  Widget confirmButton(Product selectedProduct) {
     return Container(
         child: MaterialButton(
           child: Text("Lägg till", style: TextStyle(color: Colors.white)),
-          onPressed: () {
-            var product = (this.widget.product).id;
-            WMSPage.workStore.setEAN(product, this.widget.ean);
+          onPressed: () async {
+            WMSPage.workStore.setEAN(selectedProduct.id, this.widget.ean);
             print("product with sku: " +
                 selectedSKU +
                 " was updated with ean: " +
@@ -208,6 +207,6 @@ class _State extends State<SearchPage> {
         appBar:
             WMSAppBar("Lägg till ean", Colors.black, Colors.white, Colors.black)
                 .get(),
-        body: ProductRoute(product, confirmButton()));
+        body: ProductRoute(product, confirmButton(product)));
   }
 }

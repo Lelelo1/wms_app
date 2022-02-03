@@ -80,7 +80,9 @@ class WarehouseSystem /*implements AbstractProductsSource */ {
   }
 
   void setEAN(int id, String ean) async {
-    var q = SQLQuery._updateEAN(id.toString(), ean);
+    var q = SQLQuery._setEAN(id.toString(), ean);
+    print("setEAN");
+    print(q);
     await _interact((connection) => connection?.query(q));
   }
 
@@ -99,7 +101,7 @@ class SQLQuery {
     // LIMIT 10
     return "SELECT `entity_id` FROM `catalog_product_entity` WHERE `sku` LIKE '%" +
         sku +
-        "%' LIMIT 20";
+        "%' AND `entity_id` NOT IN (SELECT `entity_id` FROM `catalog_product_entity_varchar` WHERE `attribute_id` = '283') LIMIT 20";
   }
 
   // see table in magento: https://www.katsumi.se/index.php/yuDuMinD/catalog_product_attribute/index/key/e036b264c18e46443f82569948fa575c/
