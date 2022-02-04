@@ -37,7 +37,7 @@ class ReturnPage extends WMSPage implements WMSTransitions {
 }
 
 class _State extends State<ReturnPage> {
-  Product product = Product.empty();
+  Product currentProduct = Product.empty();
   // note that can't rerender color in app bar without rerender the rest of the app...
   @override
   Widget build(BuildContext context) {
@@ -47,7 +47,7 @@ class _State extends State<ReturnPage> {
             .get(),
         extendBodyBehindAppBar: true,
         body: WMSScrollable(
-            content(), this.widget.scrollContent()(this.product, "")));
+            content(), this.widget.scrollContent()(this.currentProduct, "")));
 
     //return WMSScaffold(this.widget.name, Color.fromARGB(255, 194, 66, 245))
     //    .get(WMSScrollable(content(), this.widget.scrollRoute(this.product)));
@@ -55,15 +55,22 @@ class _State extends State<ReturnPage> {
 
   // ScanPage should take primiryContent thet is displayed in the cameraview
 
-  Widget content() =>
-      ScanPage(this.successfullScan, this.widget.imageContent(), this.product);
+  Widget content() => ScanPage(
+      this.successfullScan, this.widget.imageContent(), this.currentProduct);
 
   void successfullScan(String scanData) async {
     print("Successfull scaaaan!: " + scanData);
 
-    var product = ScanHandler.handleScanData(scanData);
-    setState(() {
-      product = product;
+    ScanHandler.handleScanData(scanData, this.currentProduct,
+        (Product product) async {
+      print("was barcode");
+      print(await product.futureToString());
+      setState(() {
+        this.currentProduct =
+            product; // should always reflect the resulting scan
+      });
+
+      fadeTransition(this.widget.fadeContent()(product, scanData));
     });
   }
 

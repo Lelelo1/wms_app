@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wms_app/mixins/transitions.dart';
 import 'package:wms_app/models/product.dart';
+import 'package:wms_app/remote/warehouseSystem.dart';
 import 'package:wms_app/routes/productRoute.dart';
 import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/widgets/wmsPage.dart';
@@ -101,7 +102,7 @@ class _State extends State<SearchPage> {
       );
 
   void setInputTextState(String text) async {
-    var suggestions = await WMSPage.workStore.fetchSuggestions(text);
+    var suggestions = await WarehouseSystem.instance.fetchSuggestions(text);
     setState(() {
       this.text = text;
       this.productSuggestions = suggestions;
@@ -136,7 +137,8 @@ class _State extends State<SearchPage> {
         child: MaterialButton(
           child: Text("Lägg till", style: TextStyle(color: Colors.white)),
           onPressed: () async {
-            WMSPage.workStore.setEAN(selectedProduct.id, this.widget.ean);
+            WarehouseSystem.instance
+                .setEAN(selectedProduct.id, this.widget.ean);
             print("product with sku: " +
                 selectedSKU +
                 " was updated with ean: " +

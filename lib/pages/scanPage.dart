@@ -27,7 +27,6 @@ class ScanPage extends StatefulWidget {
 }
 
 class _State extends State<ScanPage> {
-  WorkStore workStore = WorkStore.instance;
   //MediaQueryData mediaQueryData;
   // Future<Sequence> sequence;
   Future<CameraView>? cameraViewFuture;

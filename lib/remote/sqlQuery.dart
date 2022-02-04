@@ -47,7 +47,7 @@ class SQLQuery {
       "UPDATE `cataloginventory_stock_item` SET `qty` = `qty` + '1' WHERE `item_id` = '$entityId';";
 
   static findShelf(String scanData) =>
-      "SELECT `value` FROM `catalog_product_entity_varchar` WHERE `value` LIKE '%$scanData%'";
+      "SELECT `value` FROM `catalog_product_entity_varchar` WHERE `value` LIKE '%$scanData%' AND `attribute_id` = '198';";
 }
 
   /*

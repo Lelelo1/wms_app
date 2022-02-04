@@ -93,7 +93,7 @@ class WarehouseSystem /*implements AbstractProductsSource */ {
     await _interact((connection) => connection?.query(q));
   }
 
-  void incrimentAmountOfProducts(Product product) async {
+  void increaseAmountOfProducts(Product product) async {
     var q = SQLQuery.increaseAmountOfProduct(product.id.toString());
     print(q);
     await _interact((connection) => connection?.query(q));

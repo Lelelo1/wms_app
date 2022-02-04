@@ -14,8 +14,6 @@ import '../utils.dart';
 typedef Transition = Widget Function(Product p, String ean);
 
 class Transitions {
-  static WorkStore store = WorkStore.instance;
-
   static Transition imageContent = (Product p, String ean) {
     return WMSAsyncWidget<String>(
         defaultEmptyText(p, ean), (shelf) => _cameraContent(shelf));
