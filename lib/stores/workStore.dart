@@ -1,17 +1,21 @@
+
+// seems like ui can talk directly to warehousesystem now
+
+/*
 import 'package:wms_app/models/product.dart';
 import 'package:wms_app/remote/warehouseSystem.dart';
 import 'package:wms_app/widgets/wmsEmptyWidget.dart';
 import 'package:wms_app/widgets/wmsPage.dart';
 
 class WorkStore {
-  static late WorkStore instance = WorkStore();
+  static late WorkStore instance = WorkStore.instance;
 
-  /*Abstract*/ WarehouseSystem _warehouseSystem = WarehouseSystem();
+  WorkStore._();
 
   // how to interact with ui error message?
 
   Future<Product> fetchProduct(String ean) =>
-      _warehouseSystem.fetchProduct(ean);
+      WarehouseSystem.fetchProduct(ean);
 
   Future<List<Product>> fetchSuggestions(String text) async =>
       _warehouseSystem.fetchSuggestions(text);
@@ -33,3 +37,4 @@ class WorkStore {
   }
   */
 }
+*/

@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:wms_app/mixins/transitions.dart';
 import 'package:wms_app/models/product.dart';
 import 'package:wms_app/pages/scanPage.dart';
+import 'package:wms_app/services/scanHandler.dart';
 import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/utils.dart';
 import 'package:wms_app/views/extended/scrollable.dart';
@@ -57,45 +58,12 @@ class _State extends State<ReturnPage> {
   Widget content() =>
       ScanPage(this.successfullScan, this.widget.imageContent(), this.product);
 
-  void successfullScan(String scan) async {
-    print("Successfull scaaaan!: " + scan);
+  void successfullScan(String scanData) async {
+    print("Successfull scaaaan!: " + scanData);
 
-    // need some other way of detemin shelf
-    /*
-    if (this.product.exists()) {
-      shelfScan(scan);
-      return;
-    }
-    */
-
-    barcodeScan(scan);
-  }
-
-  void barcodeScan(String barcode) async {
-    var product = await WMSPage.workStore.fetchProduct(barcode);
-
-    print(await product.futureToString());
-
+    var product = ScanHandler.handleScanData(scanData);
     setState(() {
-      this.product = product; // should always reflect the resulting scan
-    });
-
-    fadeTransition(this.widget.fadeContent()(product, barcode));
-  }
-
-  void shelfScan(String scan) async {
-    print("print shelf scan!!");
-    var shelf = await this.product.getShelf();
-    if (shelf == "-") {
-      return; // prompt product not having assined shelf -> go to computer with product
-    }
-
-    if (scan != shelf) {
-      return; // user scans wrong shelf, should probably do do nothing
-    }
-
-    setState(() {
-      this.product = Product.empty();
+      product = product;
     });
   }
 
