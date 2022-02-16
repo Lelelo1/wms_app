@@ -44,7 +44,7 @@ class SQLQuery {
   //    "UPDATE `catalog_product_entity_varchar` SET `value` = '$ean' WHERE `catalog_product_entity_varchar`.`attribute_id` = '283' AND `catalog_product_entity_varchar`.`entity_id` = '$entityId'";
 
   static increaseAmountOfProduct(String entityId) =>
-      "UPDATE `cataloginventory_stock_item` SET `qty` = `qty` + '1' WHERE `item_id` = '$entityId';";
+      "UPDATE `cataloginventory_stock_item` SET `qty` = `qty` + '1' WHERE `product_id` = '$entityId';";
 
   static findShelf(String scanData) =>
       "SELECT `value` FROM `catalog_product_entity_varchar` WHERE `value` LIKE '%$scanData%' AND `attribute_id` = '198';";
