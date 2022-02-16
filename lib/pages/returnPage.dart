@@ -58,22 +58,6 @@ class _State extends State<ReturnPage> {
   Widget content() => ScanPage(
       this.successfullScan, this.widget.imageContent(), this.currentProduct);
 
-  void successfullScan(String scanData) async {
-    print("Successfull scaaaan!: " + scanData);
-
-    ScanHandler.handleScanData(scanData, this.currentProduct,
-        (Product product) async {
-      print("was barcode");
-      print(await product.futureToString());
-      setState(() {
-        this.currentProduct =
-            product; // should always reflect the resulting scan
-      });
-
-      fadeTransition(this.widget.fadeContent()(product, scanData));
-    });
-  }
-
   void fadeTransition(Widget searchRoute) {
     if (searchRoute is WMSEmptyWidget) {
       return;
@@ -81,6 +65,23 @@ class _State extends State<ReturnPage> {
 
     Navigator.push(
         context, PageRouteBuilder(pageBuilder: (_, __, ___) => searchRoute));
+  }
+
+  void productResultHandler(Product product, String scanData) async {
+    print("was barcode");
+    print(await product.futureToString());
+    setState(() {
+      this.currentProduct = product; // should always reflect the resulting scan
+    });
+
+    fadeTransition(this.widget.fadeContent()(product, scanData));
+  }
+
+  void successfullScan(String scanData) async {
+    print("Successfull scaaaan!: " + scanData);
+
+    ScanHandler.handleScanData(
+        scanData, this.currentProduct, productResultHandler);
   }
 }
 
