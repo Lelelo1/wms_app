@@ -10,15 +10,11 @@ class ScanHandler {
   static void handleScanData(String scanData, Product currentlyScannedProduct,
       Function(Product product) barcodeHandler) async {
     var asShelf = await _toQR(scanData);
+
     if (asShelf.isNotEmpty) {
       print("was qr: " + asShelf);
-      if (currentlyScannedProduct.exists()) {
-        print("increasing product amount");
-        warehouseSystem.increaseAmountOfProducts(currentlyScannedProduct);
-      } else {
-        // scanned a shelf without having a scanned product
-      }
-
+      increaseAmountProductExistsMatchingShelf(
+          asShelf, currentlyScannedProduct);
       return;
     }
 
@@ -34,5 +30,22 @@ class ScanHandler {
     } catch (exc) {
       return "";
     }
+  }
+
+  static void increaseAmountProductExistsMatchingShelf(
+      String shelf, Product product) async {
+    if (!product.exists()) {
+      return;
+    }
+    var productShelf = await product.getShelf();
+
+    var isMatchingShelf = shelf == productShelf;
+    print("isMatchig shelf " + shelf + " " + productShelf);
+    if (!isMatchingShelf) {
+      // signal wrong shelf to user...?
+      return;
+    }
+    print("increasing product amount");
+    warehouseSystem.increaseAmountOfProducts(product);
   }
 }

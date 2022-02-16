@@ -56,7 +56,6 @@ class WarehouseSystem /*implements AbstractProductsSource */ {
     Results? results;
     var sql = SQLQuery.fetchProduct(ean);
     results = await _interact((connection) => connection?.query(sql));
-    print("ean" + " " + results.toString());
     var products =
         Deserialization.products(results); // shoudl haev zero or one hit
 
