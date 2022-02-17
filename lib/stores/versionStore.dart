@@ -7,7 +7,7 @@ import 'package:wms_app/secrets/WMS_Katsumi_Database_Settings.dart';
 class VersionStore {
   static late VersionStore instance = VersionStore();
 
-  static Configuration getConfiguration() {
+  Configuration getConfiguration() {
     var c = const String.fromEnvironment("CONFIGURATION");
     return Configuration(c);
   }

@@ -4,7 +4,7 @@ class Configuration {
   String get value => _value;
 
   Configuration(String v) {
-    var isValid = v == "dev" || v == "stage" || v == "prod";
+    var isValid = v == "dev" || v == "prod";
 
     if (!isValid) {
       throw Exception(
