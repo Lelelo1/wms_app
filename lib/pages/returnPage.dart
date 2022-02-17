@@ -18,6 +18,9 @@ import 'package:wms_app/widgets/wmsTransitions.dart';
 // ignore: must_be_immutable
 class ReturnPage extends WMSPage implements WMSTransitions {
   @override
+  String name = "Retur";
+
+  @override
   Transition Function() imageContent = () => Transitions.imageContent;
 
   @override
@@ -25,8 +28,6 @@ class ReturnPage extends WMSPage implements WMSTransitions {
 
   @override
   Transition Function() scrollContent = () => Transitions.scrollContent;
-
-  ReturnPage(String name) : super(name);
 
   @override
   State<StatefulWidget> createState() => _State();

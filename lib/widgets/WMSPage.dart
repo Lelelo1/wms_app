@@ -5,7 +5,5 @@ import 'package:wms_app/stores/workStore.dart';
 abstract class WMSPage extends StatefulWidget {
   static final String configuration = VersionStore.getConfiguration().value;
 
-  final String name;
-
-  WMSPage(this.name);
+  abstract final String name;
 }

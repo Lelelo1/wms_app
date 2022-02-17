@@ -32,7 +32,7 @@ class _State extends State<FeaturesPage> {
       // horizontal, this produces 2 rows.
       crossAxisCount: 2,
       // Generate 100 widgets that display their index in the List.
-      children: [renderFeature(ReturnPage("standard dev"))],
+      children: [renderFeature(ReturnPage())],
     );
   }
 

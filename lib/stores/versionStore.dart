@@ -24,7 +24,7 @@ class VersionStore {
   }
 
   Widget _release() {
-    return ReturnPage("Se hyllplats");
+    return ReturnPage();
   }
 
   String getDatabase() {
