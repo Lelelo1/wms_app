@@ -21,14 +21,10 @@ class ReturnPage extends WMSPage implements WMSTransitions {
   Transition Function() imageContent = () => Transitions.imageContent;
 
   @override
-  Transition Function() fadeContent = () => WMSPage.configuration == "dev"
-      ? Transitions.fadeContent
-      : Transitions.empty;
+  Transition Function() fadeContent = () => Transitions.fadeContent;
 
   @override
-  Transition Function() scrollContent = () => WMSPage.configuration == "dev"
-      ? Transitions.scrollContent
-      : Transitions.empty;
+  Transition Function() scrollContent = () => Transitions.scrollContent;
 
   ReturnPage(String name) : super(name);
 
