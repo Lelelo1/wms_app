@@ -37,7 +37,6 @@ class _State extends State<ProductRoute> {
       // WMSAsyncWidget(this.product.getEAN(), (String name) => Text(name)), // barcode icon
     ]));
     */
-
     // give side padding
     return Row(children: [
       Spacer(flex: 1),

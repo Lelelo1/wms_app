@@ -14,8 +14,6 @@ import '../utils.dart';
 typedef Transition = Widget Function(Product p, String ean);
 
 class Transitions {
-  static WorkStore store = WorkStore.instance;
-
   static Transition imageContent = (Product p, String ean) {
     return WMSAsyncWidget<String>(
         defaultEmptyText(p, ean), (shelf) => _cameraContent(shelf));
@@ -59,12 +57,12 @@ class Transitions {
                   width: 200,
                   height: 200))
 */
-  static Transition fadeContent = (Product p, String ean) {
-    if (p.exists() || Utils.isNullOrEmpty(ean)) {
+  static Transition fadeContent = (Product product, String ean) {
+    if (product.exists() || Utils.isNullOrEmpty(ean)) {
       return WMSEmptyWidget();
     }
 
-    return SearchRoute(SearchPage(ean));
+    return SearchRoute(SearchPage(product, ean));
   };
 
   static Transition scrollContent = (Product p, String ean) =>

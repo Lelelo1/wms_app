@@ -1,21 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:wms_app/mixins/transitions.dart';
 import 'package:wms_app/models/product.dart';
+import 'package:wms_app/remote/warehouseSystem.dart';
 import 'package:wms_app/routes/productRoute.dart';
 import 'package:wms_app/stores/workStore.dart';
+import 'package:wms_app/widgets/wmsPage.dart';
 import 'package:wms_app/widgets/wmsAppBar.dart';
 import 'package:wms_app/widgets/wmsAsyncWidget.dart';
+import 'package:wms_app/widgets/wmsTransitions.dart';
 
-class SearchPage extends StatefulWidget {
+class SearchPage extends StatefulWidget implements WMSPage {
   final String name = "Lägg in streckoder i systemet";
-  final WorkStore workStore = WorkStore.instance;
+  final Product product;
   final String ean;
+
   /*
   final void Function() pressedClose;
   final void Function(Product) pressedSubmit;
   */
   // how to assign optiomal function default set default vale const
   //final TextEditingController _textController = TextEditingController();
-  SearchPage(this.ean);
+  SearchPage(this.product, this.ean);
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -97,7 +102,7 @@ class _State extends State<SearchPage> {
       );
 
   void setInputTextState(String text) async {
-    var suggestions = await this.widget.workStore.productSuggestions(text);
+    var suggestions = await WarehouseSystem.instance.fetchSuggestions(text);
     setState(() {
       this.text = text;
       this.productSuggestions = suggestions;
@@ -127,20 +132,26 @@ class _State extends State<SearchPage> {
 */
   Color confirmButtonBodyColor = Color.fromARGB(180, 90, 57, 173);
 
-  Widget confirmButton() {
+  Widget confirmButton(Product selectedProduct) {
     return Container(
         child: MaterialButton(
           child: Text("Lägg till", style: TextStyle(color: Colors.white)),
-          onPressed: () {
+          onPressed: () async {
+            WarehouseSystem.instance
+                .setEAN(selectedProduct.id, this.widget.ean);
             print("product with sku: " +
                 selectedSKU +
                 " was updated with ean: " +
                 this.widget.ean);
+
             setState(() {
               selectedSKU = "";
               this.productSuggestions = [];
               this.text = "";
             });
+
+            Navigator.pop(context);
+            Navigator.pop(context);
           },
           elevation: 10,
           color: confirmButtonBodyColor,
@@ -202,6 +213,6 @@ class _State extends State<SearchPage> {
         appBar:
             WMSAppBar("Lägg till ean", Colors.black, Colors.white, Colors.black)
                 .get(),
-        body: ProductRoute(product, confirmButton()));
+        body: ProductRoute(product, confirmButton(product)));
   }
 }

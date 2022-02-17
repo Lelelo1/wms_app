@@ -2,6 +2,7 @@
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wms_app/models/attributes.dart';
+import 'package:wms_app/remote/WarehouseSystem.dart';
 import 'package:wms_app/stores/workStore.dart';
 import '../utils.dart';
 import 'package:collection/collection.dart';
@@ -10,8 +11,6 @@ import 'package:collection/collection.dart';
 // is the reason for the null safety anyway
 
 class Product extends AbstractProduct {
-  static final _warehouseSystem = WorkStore.instance;
-
   Product(int id) : super(id);
 
   const Product.empty() : super.empty();
@@ -20,7 +19,8 @@ class Product extends AbstractProduct {
 
   @override
   Future<String> getEAN() async {
-    var ean = (await _warehouseSystem.attribute<String>(id, Attributes.ean))
+    var ean = (await WarehouseSystem.instance
+            .fetchAttribute<String>(id, Attributes.ean))
         ?.firstOrNull;
     return Utils.defaultString(ean, "-");
   }
@@ -29,14 +29,16 @@ class Product extends AbstractProduct {
 
   @override
   Future<List<String>> getImages() async {
-    var imgs = await _warehouseSystem.attribute<String>(id, Attributes.images);
+    var imgs = await WarehouseSystem.instance
+        .fetchAttribute<String>(id, Attributes.images);
     // potentially specify a fallback image, error image eg.
     return Utils.defaultImages(imgs).map((e) => katsumiImages + e).toList();
   }
 
   @override
   Future<String> getName() async {
-    var name = (await _warehouseSystem.attribute<String>(id, Attributes.name))
+    var name = (await WarehouseSystem.instance
+            .fetchAttribute<String>(id, Attributes.name))
         ?.firstOrNull;
     return Utils.defaultString(name, "-");
   }
@@ -44,15 +46,16 @@ class Product extends AbstractProduct {
   @override
   Future<String> getSKU() async {
     var sku =
-        (await _warehouseSystem.attribute(id, Attributes.sku))?.firstOrNull;
+        (await WarehouseSystem.instance.fetchAttribute(id, Attributes.sku))
+            ?.firstOrNull;
     return Utils.defaultString(sku, "-");
   }
 
   @override
   Future<String> getShelf() async {
-    var shelf =
-        (await _warehouseSystem.attribute<String?>(id, Attributes.shelf))
-            ?.firstOrNull;
+    var shelf = (await WarehouseSystem.instance
+            .fetchAttribute<String?>(id, Attributes.shelf))
+        ?.firstOrNull;
     return Utils.defaultString(shelf, "-");
   }
 

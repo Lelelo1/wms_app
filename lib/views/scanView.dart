@@ -82,16 +82,16 @@ class _State extends State<ScanView> {
     // need error handling...
   }
 
-  void gotBarcode(String barcode) async {
-    print("got barcode: " + barcode);
+  void gotBarcode(String scanData) async {
+    print("got scanData: " + scanData);
 
     CameraViewController.scanningSuccessfull();
 
     setState(() {
-      this.scannedBarcodes = [...this.scannedBarcodes, barcode];
+      this.scannedBarcodes = [...this.scannedBarcodes, scanData];
     });
 
-    this.widget.scanned(barcode);
+    this.widget.scanned(scanData);
     // what should be shown in the scanview, what should be gotten, depending on which Job
   }
 }

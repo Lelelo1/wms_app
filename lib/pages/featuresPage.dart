@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wms_app/mixins/transitions.dart';
 import 'package:wms_app/pages/returnPage.dart';
-import 'package:wms_app/widgets/WMSPage.dart';
+import 'package:wms_app/widgets/wmsPage.dart';
 
 // ignore: must_be_immutable
 class FeaturesPage extends StatefulWidget {
