@@ -11,7 +11,7 @@ class ScanHandler {
 
   static void handleScanData(String scanData, Product currentlyScannedProduct,
       ProductResultHandler productResultHandler) async {
-    var asShelf = await _toQR(scanData);
+    var asShelf = await warehouseSystem.findShelf(scanData);
 
     if (asShelf.isNotEmpty) {
       print("was qr: " + asShelf);
@@ -22,17 +22,6 @@ class ScanHandler {
 
     productResultHandler(
         await warehouseSystem.fetchProduct(scanData), scanData);
-  }
-
-  static Future<String> _toQR(String scanData) async {
-    try {
-      // removal of 'http://' part in wr code
-      var possibleShelf = scanData.split("//")[1];
-      var shelf = await warehouseSystem.findShelf(possibleShelf);
-      return shelf;
-    } catch (exc) {
-      return "";
-    }
   }
 
   static void increaseAmountProductExistsMatchingShelf(String shelf,
