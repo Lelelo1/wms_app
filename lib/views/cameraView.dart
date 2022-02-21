@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
@@ -60,9 +61,22 @@ class CameraViewController {
     }
     */
 
-    _audioCache
-        ?.play("sounds/scanner_beep.mp3"); // (should be able to use waw also)
+    _audioCache?.play(getScanSound()); // (should be able to use waw also)
   }
+
+  static String getScanSound() {
+    if (Platform.isIOS) {
+      return _iosScanSound;
+    } else if (Platform.isAndroid) {
+      return _androidScanSound;
+    }
+
+    // fallback to ios sound
+    return _iosScanSound;
+  }
+
+  static String _androidScanSound = "sounds/android_scanner_beep.mp3";
+  static String _iosScanSound = "sounds/ios_scanner_beep.mp3";
 
   static Future<XFile> takePhoto() async =>
       (await _cameraController).takePicture();
