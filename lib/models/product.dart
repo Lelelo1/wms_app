@@ -60,6 +60,14 @@ class Product extends AbstractProduct {
   }
 
   @override
+  Future<double> getQuanity() async {
+    var quantity =
+        (await WarehouseSystem.instance.fetchQuantity(id.toString()));
+
+    return quantity;
+  }
+
+  @override
   Future<void> setEAN(String ean) {
     // TODO: implement setEAN
     // set ean to the product in the warehousesystem
@@ -99,6 +107,7 @@ abstract class AbstractProduct {
   Future<String> getEAN();
   Future<String> getSKU();
   Future<String> getShelf();
+  Future<double> getQuanity();
   Future<String> getName();
   Future<List<String>> getImages();
 
@@ -140,6 +149,12 @@ class MockProduct implements AbstractProduct {
   Future<void> setEAN(String ean) {
     this._ean = ean;
     return Future.sync(() => null);
+  }
+
+  @override
+  Future<double> getQuanity() {
+    // TODO: implement getQuanity
+    throw UnimplementedError();
   }
 }
 

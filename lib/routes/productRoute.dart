@@ -38,6 +38,7 @@ class _State extends State<ProductRoute> {
     var fetchEAN = this.widget.product.getEAN();
     var fetchImages = this.widget.product.getImages();
     var fetchShelf = this.widget.product.getShelf();
+    var fetchQuantity = this.widget.product.getQuanity();
     var fetchName = this.widget.product.getName();
 
     return WMSAsyncWidget(
@@ -48,7 +49,7 @@ class _State extends State<ProductRoute> {
               Expanded(child: subtitleArea(fetchEAN), flex: 4),
               Expanded(child: imageArea(fetchImages), flex: 34),
               Spacer(flex: 2),
-              Expanded(child: bottomArea(fetchShelf), flex: 4),
+              Expanded(child: bottomArea(fetchShelf, fetchQuantity), flex: 4),
               // Spacer(flex: 3),
               Expanded(child: nameWidget(fetchName), flex: 4),
               //Spacer(flex: 4),
@@ -111,16 +112,20 @@ class _State extends State<ProductRoute> {
     );
   }
 
-  Widget bottomArea(Future<String> shelf) => WMSStacked(
-      Row(
-          children: [shelfWidget(shelf)],
-          mainAxisAlignment: MainAxisAlignment.center),
-      Row(
-          children: [shelfWidget(shelf)],
-          mainAxisAlignment: MainAxisAlignment.end));
+  Widget bottomArea(Future<String> shelf, Future<double> quantity) =>
+      WMSStacked(
+          Row(
+              children: [shelfWidget(shelf)],
+              mainAxisAlignment: MainAxisAlignment.center),
+          Row(
+              children: [quantityWidget(quantity)],
+              mainAxisAlignment: MainAxisAlignment.end));
 
   Widget shelfWidget(Future<String> shelf) => WMSAsyncWidget(
       shelf, (String shelf) => Text(shelf, style: TextStyle(fontSize: 18)));
+
+  Widget quantityWidget(Future<double> quantity) => WMSAsyncWidget<double>(
+      quantity, (double quantity) => Text(quantity.toString() + "st"));
 
   Widget nameWidget(Future<String> name) => WMSAsyncWidget(
       name,

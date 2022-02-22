@@ -12,13 +12,22 @@ class Deserialization {
     }
 
     var ids = results.map((e) => (e[0] as int)).toList();
-    print("ids...");
-    ids.forEach((element) {
-      print(element.toString());
-    });
     return ids.map((e) => Product(e)).toList();
   }
 
+  static double quantity(Results? results) {
+    if (results == null || results.isEmpty) {
+      return 0;
+    }
+
+    var ids = results.map((e) => (e[0] as double)).toList();
+
+    if (ids.isEmpty) {
+      return 0;
+    }
+
+    return ids[0];
+  }
   /*
   static List<String> toSkus(Results? results) {
     if (results == null || results.isEmpty) {

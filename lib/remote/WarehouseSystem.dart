@@ -116,4 +116,12 @@ class WarehouseSystem /*implements AbstractProductsSource */ {
 
     return shelfs[0];
   }
+
+  Future<double> fetchQuantity(String entityId) async {
+    var q = SQLQuery.quantity(entityId);
+    print("q..: " + q);
+    var results = await _interact((connection) => connection?.query(q));
+
+    return Deserialization.quantity(results);
+  }
 }

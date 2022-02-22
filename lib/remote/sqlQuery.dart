@@ -48,6 +48,8 @@ class SQLQuery {
 
   static findShelf(String scanData) =>
       "SELECT `value` FROM `catalog_product_entity_varchar` WHERE `value` LIKE '%$scanData%' AND `attribute_id` = '198';";
+  static quantity(String entityId) =>
+      "SELECT `qty` FROM `cataloginventory_stock_item` WHERE `cataloginventory_stock_item`.`product_id` = '$entityId';";
 }
 
   /*
