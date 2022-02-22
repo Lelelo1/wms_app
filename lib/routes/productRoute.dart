@@ -25,26 +25,11 @@ class _State extends State<ProductRoute> {
 
   @override
   Widget build(BuildContext context) {
-    /*
-    return SafeArea(
-        child: Column(children: [
-      Expanded(child: titleArea(), flex: 1),
-      Expanded(child: subtitleArea(), flex: 1),
-      Expanded(child: imageArea(), flex: 7),
-      Spacer(flex: 1),
-      Expanded(child: shelfWidget(), flex: 1),
-      Expanded(child: nameWidget(), flex: 1)
-      // WMSAsyncWidget(this.product.getEAN(), (String name) => Text(name)), // barcode icon
-    ]));
-    */
-    // give side padding
     return Row(children: [
       Spacer(flex: 1),
       Expanded(child: asyncProductRoute(), flex: 12),
       Spacer(flex: 1)
     ]);
-
-    //return asyncProductRoute();
   }
 
   WMSAsyncWidget asyncProductRoute() {
@@ -92,14 +77,6 @@ class _State extends State<ProductRoute> {
         WMSAsyncWidget(Future.sync(() => this.widget.product.id.toString()),
             (String id) => WMSLabel(id, Icons.desktop_windows))
       ], mainAxisAlignment: MainAxisAlignment.center);
-
-  //Size imageSize() => new Size(400, 400);
-  /*
-  EdgeInsets imagePadding() => EdgeInsets.only(
-      left: 5, top: skuPadding(), right: 5, bottom: skuPadding());
-  */
-
-  // width: double.infinity, fit: BoxFit.fitWidth: https://stackoverflow.com/questions/59362886/how-to-fit-an-image-to-column-width-in-flutter
 
   Widget imageArea(Future<List<String>> images) =>
       WMSAsyncWidget(images, (List<String> images) {
