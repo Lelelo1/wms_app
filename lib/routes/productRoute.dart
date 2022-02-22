@@ -5,6 +5,7 @@ import 'package:line_icons/line_icons.dart';
 import 'package:wms_app/models/flexibleProduct.dart';
 import 'package:wms_app/models/product.dart';
 import 'package:wms_app/utils.dart';
+import 'package:wms_app/views/extended/stacked.dart';
 import 'package:wms_app/widgets/wmsAsyncWidget.dart';
 import 'package:wms_app/widgets/wmsEmptyWidget.dart';
 import 'package:wms_app/widgets/wmsLabel.dart';
@@ -47,7 +48,7 @@ class _State extends State<ProductRoute> {
               Expanded(child: subtitleArea(fetchEAN), flex: 4),
               Expanded(child: imageArea(fetchImages), flex: 34),
               Spacer(flex: 2),
-              Expanded(child: shelfWidget(fetchShelf), flex: 4),
+              Expanded(child: bottomArea(fetchShelf), flex: 4),
               // Spacer(flex: 3),
               Expanded(child: nameWidget(fetchName), flex: 4),
               //Spacer(flex: 4),
@@ -109,6 +110,14 @@ class _State extends State<ProductRoute> {
       back: backImage,
     );
   }
+
+  Widget bottomArea(Future<String> shelf) => WMSStacked(
+      Row(
+          children: [shelfWidget(shelf)],
+          mainAxisAlignment: MainAxisAlignment.center),
+      Row(
+          children: [shelfWidget(shelf)],
+          mainAxisAlignment: MainAxisAlignment.end));
 
   Widget shelfWidget(Future<String> shelf) => WMSAsyncWidget(
       shelf, (String shelf) => Text(shelf, style: TextStyle(fontSize: 18)));
