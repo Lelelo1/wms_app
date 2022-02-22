@@ -125,7 +125,8 @@ class _State extends State<ProductRoute> {
       shelf, (String shelf) => Text(shelf, style: TextStyle(fontSize: 18)));
 
   Widget quantityWidget(Future<double> quantity) => WMSAsyncWidget<double>(
-      quantity, (double quantity) => Text(quantity.toString() + "st"));
+      quantity,
+      (double quantity) => Text((quantity.round().toString() + "st")));
 
   Widget nameWidget(Future<String> name) => WMSAsyncWidget(
       name,
