@@ -38,8 +38,12 @@ class Transitions {
   static Widget _shelfWidget(String shelf) => Align(
       child: Text(shelf, style: TextStyle(color: Colors.pink, fontSize: 32)));
 
-  static Widget _eanWidget(String ean) => Align(
-      child: Text(ean, style: TextStyle(color: Colors.pink, fontSize: 28)));
+  static String plusEmoji = "\u{2795}";
+  static Widget _eanWidget(String ean) => Center(
+          child: Row(children: [
+        Icon(Icons.add, color: Colors.white),
+        Text(ean, style: TextStyle(color: Colors.pink, fontSize: 26))
+      ], mainAxisAlignment: MainAxisAlignment.center));
 
   static Widget _scanSymbol(String text) {
     var iconData = text.isEmpty
