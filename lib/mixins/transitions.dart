@@ -16,28 +16,30 @@ typedef Transition = Widget Function(Product p, String ean);
 
 class Transitions {
   static Transition imageContent = (Product p, String ean) {
-    return WMSAsyncWidget<String>(
-        defaultEmptyText(p, ean), (shelf) => _cameraContent(shelf));
-  };
-
-  static Future<String> defaultEmptyText(Product p, String ean) {
-    if (!p.exists()) {
-      return Future.sync(() => "");
+    if (p.exists()) {
+      return WMSAsyncWidget<String>(p.getShelf(),
+          (shelf) => _cameraContent(_shelfWidget(shelf), _scanSymbol(shelf)));
     }
 
-    return p.getShelf();
-  }
+    if (ean.isNotEmpty) {
+      return _cameraContent(_eanWidget(ean), _scanSymbol(""));
+    }
 
-  static Widget _cameraContent(String shelf) {
+    return WMSEmptyWidget();
+  };
+
+  static Widget _cameraContent(Widget cameraContent, Widget scanSymbol) {
     return Column(children: [
       Spacer(flex: 12),
-      Expanded(
-          flex: 3, child: WMSStacked(_shelfText(shelf), _scanSymbol(shelf)))
+      Expanded(flex: 3, child: WMSStacked(cameraContent, scanSymbol))
     ]);
   }
 
-  static Widget _shelfText(String text) => Align(
-      child: Text(text, style: TextStyle(color: Colors.pink, fontSize: 32)));
+  static Widget _shelfWidget(String shelf) => Align(
+      child: Text(shelf, style: TextStyle(color: Colors.pink, fontSize: 32)));
+
+  static Widget _eanWidget(String ean) => Align(
+      child: Text(ean, style: TextStyle(color: Colors.pink, fontSize: 28)));
 
   static Widget _scanSymbol(String text) {
     var iconData = text.isEmpty
