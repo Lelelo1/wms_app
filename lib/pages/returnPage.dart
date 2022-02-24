@@ -21,13 +21,13 @@ class ReturnPage extends WMSPage implements WMSTransitions {
   String name = "Retur";
 
   @override
-  Transition Function() imageContent = () => Transitions.imageContent;
+  Transition imageContent = Transitions.imageContent;
 
   @override
-  Transition Function() fadeContent = () => Transitions.fadeContent;
+  Transition fadeContent = Transitions.fadeContent;
 
   @override
-  Transition Function() scrollContent = () => Transitions.scrollContent;
+  Transition scrollContent = Transitions.scrollContent;
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -44,7 +44,7 @@ class _State extends State<ReturnPage> {
             .get(),
         extendBodyBehindAppBar: true,
         body: WMSScrollable(
-            content(), this.widget.scrollContent()(this.currentProduct, "")));
+            content(), this.widget.scrollContent(this.currentProduct, "")));
 
     //return WMSScaffold(this.widget.name, Color.fromARGB(255, 194, 66, 245))
     //    .get(WMSScrollable(content(), this.widget.scrollRoute(this.product)));
@@ -53,7 +53,7 @@ class _State extends State<ReturnPage> {
   // ScanPage should take primiryContent thet is displayed in the cameraview
 
   Widget content() => ScanPage(
-      this.successfullScan, this.widget.imageContent(), this.currentProduct);
+      this.successfullScan, this.widget.imageContent, this.currentProduct);
 
   void fadeTransition(Widget searchRoute) {
     if (searchRoute is WMSEmptyWidget) {
@@ -71,7 +71,7 @@ class _State extends State<ReturnPage> {
       this.currentProduct = product; // should always reflect the resulting scan
     });
 
-    fadeTransition(this.widget.fadeContent()(product, scanData));
+    fadeTransition(this.widget.fadeContent(product, scanData));
   }
 
   void successfullScan(String scanData) async {
