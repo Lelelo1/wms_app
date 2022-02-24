@@ -11,33 +11,46 @@ import 'package:wms_app/widgets/wmsAsyncWidget.dart';
 import 'package:wms_app/widgets/wmsEmptyWidget.dart';
 import 'package:flutter/material.dart';
 import '../utils.dart';
+import 'package:touchable_opacity/touchable_opacity.dart';
 
 typedef Transition = Widget Function(Product p, String ean);
 
-class Transitions {
-  static Transition imageContent = (Product p, String ean) {
-    return WMSAsyncWidget<String>(
-        defaultEmptyText(p, ean), (shelf) => _cameraContent(shelf));
-  };
+typedef ImageContentTransition = Widget Function(
+    Product p, String ean, void Function() onPressAddEan);
 
-  static Future<String> defaultEmptyText(Product p, String ean) {
-    if (!p.exists()) {
-      return Future.sync(() => "");
+class Transitions {
+  static ImageContentTransition imageContent =
+      (Product p, String ean, void Function() onPressAddEan) {
+    if (p.exists()) {
+      return WMSAsyncWidget<String>(p.getShelf(),
+          (shelf) => _cameraContent(_shelfWidget(shelf), _scanSymbol(shelf)));
     }
 
-    return p.getShelf();
-  }
+    if (ean.isNotEmpty) {
+      return _cameraContent(_eanWidget(ean, onPressAddEan), _scanSymbol(""));
+    }
 
-  static Widget _cameraContent(String shelf) {
+    return WMSEmptyWidget();
+  };
+
+  static Widget _cameraContent(Widget cameraContent, Widget scanSymbol) {
     return Column(children: [
       Spacer(flex: 12),
-      Expanded(
-          flex: 3, child: WMSStacked(_shelfText(shelf), _scanSymbol(shelf)))
+      Expanded(flex: 3, child: WMSStacked(cameraContent, scanSymbol))
     ]);
   }
 
-  static Widget _shelfText(String text) => Align(
-      child: Text(text, style: TextStyle(color: Colors.pink, fontSize: 32)));
+  static Widget _shelfWidget(String shelf) => Align(
+      child: Text(shelf, style: TextStyle(color: Colors.pink, fontSize: 32)));
+
+  static String plusEmoji = "\u{2795}";
+  static Widget _eanWidget(String ean, void Function() onPressAddEan) => Center(
+      child: TouchableOpacity(
+          child: Row(children: [
+            Icon(Icons.add, color: Colors.white),
+            Text(ean, style: TextStyle(color: Colors.pink, fontSize: 26))
+          ], mainAxisAlignment: MainAxisAlignment.center),
+          onTap: onPressAddEan));
 
   static Widget _scanSymbol(String text) {
     var iconData = text.isEmpty
