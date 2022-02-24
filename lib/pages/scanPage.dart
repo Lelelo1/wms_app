@@ -5,6 +5,7 @@ import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/views/cameraView.dart';
 import 'package:wms_app/views/extended/stacked.dart';
 import 'package:wms_app/views/scanView.dart';
+import 'package:wms_app/widgets/wmsEmptyWidget.dart';
 import 'package:wms_app/widgets/wmsLoadingPage.dart';
 import 'package:async/async.dart';
 
@@ -14,13 +15,13 @@ class ScanPage extends StatefulWidget {
   final AsyncMemoizer<CameraView> _memoizer = AsyncMemoizer();
 
   final void Function(String product) onSuccesfullScan;
-  Transition imageContent;
-  // seems to need same type: https://stackoverflow.com/questions/62731654/flutter-combine-multiple-futuret-tasks
-  //FutureGroup<>
+  ImageContentTransition imageContent;
+  Transition fadeContent;
 
   Product
       product; // should probably not be here, but 'wmsstacked' image content needs it
-  ScanPage(this.onSuccesfullScan, this.imageContent, this.product);
+  ScanPage(
+      this.onSuccesfullScan, this.imageContent, this.product, this.fadeContent);
 
   @override
   _State createState() => _State();
@@ -57,8 +58,12 @@ class _State extends State<ScanPage> {
         body: Column(children: [
           Expanded(
               flex: 9,
-              child: WMSStacked(cameraView,
-                  this.widget.imageContent(this.widget.product, ean))),
+              child: WMSStacked(
+                  cameraView,
+                  this.widget.imageContent(this.widget.product, ean, () {
+                    fadeTransition(
+                        this.widget.fadeContent(this.widget.product, ean));
+                  }))),
           Expanded(
               flex: 7,
               child: ScanView((String barcode) {
@@ -85,4 +90,12 @@ class _State extends State<ScanPage> {
     return ProductView(product);
   }
   */
+  void fadeTransition(Widget searchRoute) {
+    if (searchRoute is WMSEmptyWidget) {
+      return;
+    }
+
+    Navigator.push(
+        context, PageRouteBuilder(pageBuilder: (_, __, ___) => searchRoute));
+  }
 }
