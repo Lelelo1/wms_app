@@ -11,18 +11,23 @@ import 'package:wms_app/widgets/wmsAsyncWidget.dart';
 import 'package:wms_app/widgets/wmsEmptyWidget.dart';
 import 'package:flutter/material.dart';
 import '../utils.dart';
+import 'package:touchable_opacity/touchable_opacity.dart';
 
 typedef Transition = Widget Function(Product p, String ean);
 
+typedef ImageContentTransition = Widget Function(
+    Product p, String ean, void Function() onPressAddEan);
+
 class Transitions {
-  static Transition imageContent = (Product p, String ean) {
+  static ImageContentTransition imageContent =
+      (Product p, String ean, void Function() onPressAddEan) {
     if (p.exists()) {
       return WMSAsyncWidget<String>(p.getShelf(),
           (shelf) => _cameraContent(_shelfWidget(shelf), _scanSymbol(shelf)));
     }
 
     if (ean.isNotEmpty) {
-      return _cameraContent(_eanWidget(ean), _scanSymbol(""));
+      return _cameraContent(_eanWidget(ean, onPressAddEan), _scanSymbol(""));
     }
 
     return WMSEmptyWidget();
@@ -39,11 +44,13 @@ class Transitions {
       child: Text(shelf, style: TextStyle(color: Colors.pink, fontSize: 32)));
 
   static String plusEmoji = "\u{2795}";
-  static Widget _eanWidget(String ean) => Center(
+  static Widget _eanWidget(String ean, void Function() onPressAddEan) => Center(
+      child: TouchableOpacity(
           child: Row(children: [
-        Icon(Icons.add, color: Colors.white),
-        Text(ean, style: TextStyle(color: Colors.pink, fontSize: 26))
-      ], mainAxisAlignment: MainAxisAlignment.center));
+            Icon(Icons.add, color: Colors.white),
+            Text(ean, style: TextStyle(color: Colors.pink, fontSize: 26))
+          ], mainAxisAlignment: MainAxisAlignment.center),
+          onTap: onPressAddEan));
 
   static Widget _scanSymbol(String text) {
     var iconData = text.isEmpty

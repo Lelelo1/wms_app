@@ -21,7 +21,7 @@ class ReturnPage extends WMSPage implements WMSTransitions {
   String name = "Retur";
 
   @override
-  Transition imageContent = Transitions.imageContent;
+  ImageContentTransition imageContent = Transitions.imageContent;
 
   @override
   Transition fadeContent = Transitions.fadeContent;
@@ -52,17 +52,8 @@ class _State extends State<ReturnPage> {
 
   // ScanPage should take primiryContent thet is displayed in the cameraview
 
-  Widget content() => ScanPage(
-      this.successfullScan, this.widget.imageContent, this.currentProduct);
-
-  void fadeTransition(Widget searchRoute) {
-    if (searchRoute is WMSEmptyWidget) {
-      return;
-    }
-
-    Navigator.push(
-        context, PageRouteBuilder(pageBuilder: (_, __, ___) => searchRoute));
-  }
+  Widget content() => ScanPage(this.successfullScan, this.widget.imageContent,
+      this.currentProduct, this.widget.fadeContent);
 
   void productResultHandler(Product product, String scanData) async {
     print("was barcode");
@@ -70,8 +61,6 @@ class _State extends State<ReturnPage> {
     setState(() {
       this.currentProduct = product; // should always reflect the resulting scan
     });
-
-    fadeTransition(this.widget.fadeContent(product, scanData));
   }
 
   void successfullScan(String scanData) async {
