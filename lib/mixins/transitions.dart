@@ -30,7 +30,7 @@ class Transitions {
       return _cameraContent(_eanWidget(ean, onPressAddEan), _scanSymbol(""));
     }
 
-    return WMSEmptyWidget();
+    return _cameraContent(_shelfWidget(""), _scanSymbol(""));
   };
 
   static Widget _cameraContent(Widget cameraContent, Widget scanSymbol) {
