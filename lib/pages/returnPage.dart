@@ -44,16 +44,15 @@ class _State extends State<ReturnPage> {
             .get(),
         extendBodyBehindAppBar: true,
         body: WMSScrollable(
-            content(), this.widget.scrollContent(this.currentProduct, "")));
+            ScanPage(this.successfullScan, this.widget.imageContent,
+                this.currentProduct, this.widget.fadeContent),
+            this.widget.scrollContent(this.currentProduct, "")));
 
     //return WMSScaffold(this.widget.name, Color.fromARGB(255, 194, 66, 245))
     //    .get(WMSScrollable(content(), this.widget.scrollRoute(this.product)));
   }
 
   // ScanPage should take primiryContent thet is displayed in the cameraview
-
-  Widget content() => ScanPage(this.successfullScan, this.widget.imageContent,
-      this.currentProduct, this.widget.fadeContent);
 
   void productResultHandler(Product product, String scanData) async {
     print("was barcode");
