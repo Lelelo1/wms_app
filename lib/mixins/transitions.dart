@@ -13,14 +13,15 @@ import 'package:flutter/material.dart';
 import '../utils.dart';
 import 'package:touchable_opacity/touchable_opacity.dart';
 
-typedef Transition = Widget Function(Product p, String ean);
+typedef Transition = Widget Function(String ean);
 
 typedef ImageContentTransition = Widget Function(
-    Product p, String ean, void Function() onPressAddEan);
+    String ean, void Function() onPressAddEan);
 
 class Transitions {
   static ImageContentTransition imageContent =
-      (Product p, String ean, void Function() onPressAddEan) {
+      (String ean, void Function() onPressAddEan) {
+    var p = WorkStore.instance.currentProduct;
     if (p.exists()) {
       return WMSAsyncWidget<String>(p.getShelf(),
           (shelf) => _cameraContent(_shelfWidget(shelf), _scanSymbol(shelf)));
@@ -65,16 +66,19 @@ class Transitions {
     ]));
   }
 
-  static Transition fadeContent = (Product product, String ean) {
-    if (product.exists() || Utils.isNullOrEmpty(ean)) {
+  static Transition fadeContent = (String ean) {
+    var p = WorkStore.instance.currentProduct;
+    if (p.exists() || Utils.isNullOrEmpty(ean)) {
       return WMSEmptyWidget();
     }
 
-    return SearchRoute(SearchPage(product, ean));
+    return SearchRoute(SearchPage(p, ean));
   };
 
-  static Transition scrollContent = (Product p, String ean) =>
-      p.exists() ? ProductRoute(p) : WMSEmptyWidget();
+  static Transition scrollContent = (String ean) {
+    var p = WorkStore.instance.currentProduct;
+    return p.exists() ? ProductRoute(p) : WMSEmptyWidget();
+  };
 
-  static Transition empty = (Product p, String ean) => WMSEmptyWidget();
+  static Transition empty = (String ean) => WMSEmptyWidget();
 }

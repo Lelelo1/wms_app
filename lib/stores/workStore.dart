@@ -6,13 +6,14 @@ class WorkStore {
   static late WorkStore instance = WorkStore._();
   WorkStore._();
 
-  Event<Product> _productEvent = Event<Product>();
-  Event<Product> get productEvent => _productEvent;
+  // can use 'EventArgs' since it required nullable object
+  Event _productEvent = Event();
+  Event get productEvent => _productEvent;
 
   Product _currentProduct = Product.empty();
   Product get currentProduct => _currentProduct;
   set currentProduct(Product product) {
     _currentProduct = product;
-    productEvent.broadcast(_currentProduct);
+    productEvent.broadcast();
   }
 }
