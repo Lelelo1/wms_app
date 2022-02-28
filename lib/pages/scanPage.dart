@@ -14,14 +14,12 @@ import 'package:async/async.dart';
 class ScanPage extends StatefulWidget {
   final AsyncMemoizer<CameraView> _memoizer = AsyncMemoizer();
 
-  final void Function(String product) onSuccesfullScan;
   ImageContentTransition imageContent;
   Transition fadeContent;
 
   Product
       product; // should probably not be here, but 'wmsstacked' image content needs it
-  ScanPage(
-      this.onSuccesfullScan, this.imageContent, this.product, this.fadeContent);
+  ScanPage(this.imageContent, this.product, this.fadeContent);
 
   @override
   _State createState() => _State();
@@ -68,7 +66,6 @@ class _State extends State<ScanPage> {
               flex: 7,
               child: ScanView((String barcode) {
                 this.ean = barcode;
-                this.widget.onSuccesfullScan(barcode);
               }))
         ] // camera view part of page and recontructed on 'scannedProducts' state change
             ),

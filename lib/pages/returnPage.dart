@@ -13,6 +13,7 @@ import 'package:wms_app/widgets/wmsPage.dart';
 import 'package:wms_app/widgets/wmsAppBar.dart';
 import 'package:wms_app/widgets/wmsEmptyWidget.dart';
 import 'package:wms_app/widgets/wmsTransitions.dart';
+import 'package:eventsubscriber/eventsubscriber.dart';
 
 // can I used state and the setState call with product in 'StatelessWidget'
 // ignore: must_be_immutable
@@ -36,6 +37,12 @@ class ReturnPage extends WMSPage implements WMSTransitions {
 class _State extends State<ReturnPage> {
   Product currentProduct = Product.empty();
   // note that can't rerender color in app bar without rerender the rest of the app...
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,13 +67,6 @@ class _State extends State<ReturnPage> {
     setState(() {
       this.currentProduct = product; // should always reflect the resulting scan
     });
-  }
-
-  void successfullScan(String scanData) async {
-    print("Successfull scaaaan!: " + scanData);
-
-    ScanHandler.handleScanData(
-        scanData, this.currentProduct, productResultHandler);
   }
 }
 

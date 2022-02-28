@@ -1,40 +1,18 @@
-
-// seems like ui can talk directly to warehousesystem now
-
-/*
 import 'package:wms_app/models/product.dart';
-import 'package:wms_app/remote/warehouseSystem.dart';
-import 'package:wms_app/widgets/wmsEmptyWidget.dart';
-import 'package:wms_app/widgets/wmsPage.dart';
+import 'package:event/event.dart';
+import 'package:wms_app/models/product.dart';
 
 class WorkStore {
-  static late WorkStore instance = WorkStore.instance;
-
+  static late WorkStore instance = WorkStore._();
   WorkStore._();
 
-  // how to interact with ui error message?
+  Event<Product> _productEvent = Event<Product>();
+  Event<Product> get productEvent => _productEvent;
 
-  Future<Product> fetchProduct(String ean) =>
-      WarehouseSystem.fetchProduct(ean);
-
-  Future<List<Product>> fetchSuggestions(String text) async =>
-      _warehouseSystem.fetchSuggestions(text);
-
-  Future<List<T>?> attribute<T>(int id, String attribute) =>
-      _warehouseSystem.fetchAttribute<T>(id, attribute);
-
-  void setEAN(int id, String ean) => _warehouseSystem.setEAN(id, ean);
-
-  //String scannedBarcode = "";
-
-/*
-  Sequence getRegistration() {
-    return null;
+  Product _currentProduct = Product.empty();
+  Product get currentProduct => _currentProduct;
+  set currentProduct(Product product) {
+    _currentProduct = product;
+    productEvent.broadcast(_currentProduct);
   }
-
-  Sequence getCounting() {
-    return null;
-  }
-  */
 }
-*/

@@ -1,5 +1,6 @@
 // partially made for debugging scanning
 import 'package:flutter/material.dart';
+import 'package:wms_app/services/scanHandler.dart';
 import 'package:wms_app/services/visionService.dart';
 import 'package:wms_app/views/cameraView.dart';
 import '../utils.dart';
@@ -66,12 +67,9 @@ class _State extends State<ScanView> {
     String barcode;
     var streamImage = CameraViewController.streamImage;
     if (streamImage != null) {
-      barcode = await visionSevice.analyzeBarcodeFromBytes(
-          ImageUtils.concatenatePlanes(streamImage.planes),
-          ImageUtils.imageData(streamImage));
     } else {
-      barcode = await visionSevice.analyzeBarcodeFromFilePath(
-          (await CameraViewController.takePhoto()).path);
+      var path = (await CameraViewController.takePhoto()).path;
+      ScanHandler.scan(path);
     }
 
     if (Utils.isNullOrEmpty(barcode)) {
