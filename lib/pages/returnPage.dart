@@ -35,7 +35,6 @@ class ReturnPage extends WMSPage implements WMSTransitions {
 }
 
 class _State extends State<ReturnPage> {
-  Product currentProduct = Product.empty();
   // note that can't rerender color in app bar without rerender the rest of the app...
 
   @override
@@ -54,23 +53,8 @@ class _State extends State<ReturnPage> {
             EventSubscriber(
                 event: WorkStore.instance.productEvent,
                 handler: (BuildContext c, _) => ScanPage(
-                    this.widget.imageContent,
-                    this.currentProduct,
-                    this.widget.fadeContent)),
-            this.widget.scrollContent(this.currentProduct, "")));
-
-    //return WMSScaffold(this.widget.name, Color.fromARGB(255, 194, 66, 245))
-    //    .get(WMSScrollable(content(), this.widget.scrollRoute(this.product)));
-  }
-
-  // ScanPage should take primiryContent thet is displayed in the cameraview
-
-  void productResultHandler(Product product, String scanData) async {
-    print("was barcode");
-    print(await product.futureToString());
-    setState(() {
-      this.currentProduct = product; // should always reflect the resulting scan
-    });
+                    this.widget.imageContent, this.widget.fadeContent)),
+            this.widget.scrollContent("")));
   }
 }
 

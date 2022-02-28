@@ -14,7 +14,6 @@ typedef Scan = Function(String scan, bool successfull);
 String emptyMsg = "ignored scan. no event handler added";
 
 class ScanHandler {
-
   static late WarehouseSystem warehouseSystem = WarehouseSystem.instance;
   static late VisionService visionService = VisionService.instance;
 
@@ -31,47 +30,34 @@ class ScanHandler {
     if (scanResult.isEmpty) {
       return;
     }
-  
-    var product = await asProduct(scanResult);
-    if(product.exists()) {
-
+    
+    if(await isMatchingShelf(scanResult)) {
+      warehouseSystem.increaseAmountOfProducts(WorkStore.instance.currentProduct);
     }
+
+    var product = await warehouseSystem.fetchProduct(scanResult);
+    if (product.exists()) {
+      WorkStore.instance.currentProduct = product;
+      return;
+    }
+
+    
+    if(shelf)
   }
 
-  static Future<Product> asProduct(String scanResult) async {
-    return  await warehouseSystem.fetchProduct(scanData);
-  }
+  static Future<bool> isMatchingShelf(String scanResult) async {
+    
+    var currentProduct = WorkStore.instance.currentProduct;
 
-  static void asShelf(String scanResult) async {
+    if(!currentProduct.exists()) {
+      return false;
+    }
+    
     var shelf = await warehouseSystem.findShelf(scanResult);
-    if (shelf.isEmpty) {
-      return;
+    
+    if(shelf.isEmpty) {
+      return false;
     }
-
-  }
-
-  static void handleScanData(String scanData, Product currentlyScannedProduct,
-      ProductResultHandler productResultHandler) async {
-    var product = 
-    if (product.exists()) {}
-  }
-
-  static void increaseAmountProductExistsMatchingShelf(
-      String shelf) async {
-    if (!product.exists()) {
-      return;
-    }
-    var productShelf = await product.getShelf();
-
-    var isMatchingShelf = shelf == productShelf;
-    if (!isMatchingShelf) {
-      // signal wrong shelf to user...?
-      return;
-    }
-    print("increasing product amount");
-    warehouseSystem.increaseAmountOfProducts(product);
-
-    // reset remove current from ui/unselect
-    onQR(shelf, true);
+    return shelf == await currentProduct.getShelf();
   }
 }

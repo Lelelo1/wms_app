@@ -17,9 +17,7 @@ class ScanPage extends StatefulWidget {
   ImageContentTransition imageContent;
   Transition fadeContent;
 
-  Product
-      product; // should probably not be here, but 'wmsstacked' image content needs it
-  ScanPage(this.imageContent, this.product, this.fadeContent);
+  ScanPage(this.imageContent, this.fadeContent);
 
   @override
   _State createState() => _State();
@@ -58,9 +56,8 @@ class _State extends State<ScanPage> {
               flex: 9,
               child: WMSStacked(
                   cameraView,
-                  this.widget.imageContent(this.widget.product, ean, () {
-                    fadeTransition(
-                        this.widget.fadeContent(this.widget.product, ean));
+                  this.widget.imageContent(ean, () {
+                    fadeTransition(this.widget.fadeContent(ean));
                   }))),
           Expanded(
               flex: 7,
