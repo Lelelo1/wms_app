@@ -38,11 +38,6 @@ class _State extends State<ReturnPage> {
   // note that can't rerender color in app bar without rerender the rest of the app...
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: WMSAppBar(this.widget.name, Color.fromARGB(255, 194, 66, 245),

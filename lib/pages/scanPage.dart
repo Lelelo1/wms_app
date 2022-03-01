@@ -70,7 +70,6 @@ class _State extends State<ScanPage> {
 
   @override
   Widget build(BuildContext context) {
-    print("scanPage build");
     return futureBuilder();
   }
 
