@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:event/event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
@@ -47,9 +48,24 @@ class _State extends State<ReturnPage> {
         body: WMSScrollable(
             EventSubscriber(
                 event: WorkStore.instance.productEvent,
-                handler: (BuildContext c, _) => ScanPage(
-                    this.widget.imageContent, this.widget.fadeContent)),
-            this.widget.scrollContent("")));
+                handler: (BuildContext c, _) => ScanPage(imageContentWidget())),
+            this.widget.scrollContent()));
+  }
+
+  Widget imageContentWidget() {
+    return this.widget.imageContent(() {
+      fadeTransition();
+    });
+  }
+
+  void fadeTransition() {
+    var searchRoute = this.widget.fadeContent();
+    if (searchRoute is WMSEmptyWidget) {
+      return;
+    }
+
+    Navigator.push(
+        context, PageRouteBuilder(pageBuilder: (_, __, ___) => searchRoute));
   }
 }
 

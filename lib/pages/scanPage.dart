@@ -13,11 +13,9 @@ import 'package:async/async.dart';
 
 class ScanPage extends StatefulWidget {
   final AsyncMemoizer<CameraView> _memoizer = AsyncMemoizer();
+  final Widget imageContent;
 
-  ImageContentTransition imageContent;
-  Transition fadeContent;
-
-  ScanPage(this.imageContent, this.fadeContent);
+  ScanPage(this.imageContent);
 
   @override
   _State createState() => _State();
@@ -27,8 +25,6 @@ class _State extends State<ScanPage> {
   //MediaQueryData mediaQueryData;
   // Future<Sequence> sequence;
   Future<CameraView>? cameraViewFuture;
-
-  String ean = "";
 
   @override
   void initState() {
@@ -53,12 +49,7 @@ class _State extends State<ScanPage> {
         //appBar: WMSAppBar(this.widget.name).get(),
         body: Column(children: [
           Expanded(
-              flex: 9,
-              child: WMSStacked(
-                  cameraView,
-                  this.widget.imageContent(ean, () {
-                    fadeTransition(this.widget.fadeContent(ean));
-                  }))),
+              flex: 9, child: WMSStacked(cameraView, this.widget.imageContent)),
           Expanded(flex: 7, child: ScanView())
         ] // camera view part of page and recontructed on 'scannedProducts' state change
             ),

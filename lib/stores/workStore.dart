@@ -17,5 +17,7 @@ class WorkStore {
     productEvent.broadcast();
   }
 
+  String currentEAN = "";
+
   // Be mindful when depending on multiple events in the same render hiercarchy
 }

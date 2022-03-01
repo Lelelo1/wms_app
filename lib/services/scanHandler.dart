@@ -42,6 +42,8 @@ class ScanHandler {
       return;
     }
 
+    WorkStore.instance.currentEAN = scanResult;
+
     var product = await handleAsProduct(scanResult);
     WorkStore.instance.currentProduct = product;
     // need to signal to pages th eresult and status for pages like return
