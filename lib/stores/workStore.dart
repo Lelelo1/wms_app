@@ -16,4 +16,12 @@ class WorkStore {
     _currentProduct = product;
     productEvent.broadcast();
   }
+
+  Event scanResultEvent = Event();
+  String _currentScanResult = "";
+  String get currentScanResult => _currentScanResult;
+  set currentScanResult(String scanResult) {
+    _currentScanResult = scanResult;
+    scanResultEvent.broadcast();
+  }
 }

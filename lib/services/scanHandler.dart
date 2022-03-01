@@ -1,4 +1,5 @@
 import 'package:camera/camera.dart';
+import 'package:event/event.dart';
 import 'package:flutter/material.dart';
 import 'package:wms_app/models/product.dart';
 import 'package:wms_app/remote/WarehouseSystem.dart';
@@ -30,34 +31,45 @@ class ScanHandler {
     if (scanResult.isEmpty) {
       return;
     }
-    
-    if(await isMatchingShelf(scanResult)) {
-      warehouseSystem.increaseAmountOfProducts(WorkStore.instance.currentProduct);
-    }
+    WorkStore.instance.currentScanResult = scanResult;
 
-    var product = await warehouseSystem.fetchProduct(scanResult);
-    if (product.exists()) {
-      WorkStore.instance.currentProduct = product;
+    bool wasShelf = await handleAsShelf(scanResult);
+    if (wasShelf) {
       return;
     }
 
-    
-    if(shelf)
+    var product = await handleAsProduct(scanResult);
+    WorkStore.instance.currentProduct = product;
+    // need to signal to pages th eresult and status for pages like return
+  }
+
+  static Future<bool> handleAsShelf(String scanResult) async {
+    if (await isMatchingShelf(scanResult)) {
+      warehouseSystem
+          .increaseAmountOfProducts(WorkStore.instance.currentProduct);
+      WorkStore.instance.currentProduct = Product.empty();
+      return true;
+    }
+    return false;
   }
 
   static Future<bool> isMatchingShelf(String scanResult) async {
-    
     var currentProduct = WorkStore.instance.currentProduct;
 
-    if(!currentProduct.exists()) {
+    if (!currentProduct.exists()) {
       return false;
     }
-    
+
     var shelf = await warehouseSystem.findShelf(scanResult);
-    
-    if(shelf.isEmpty) {
+
+    if (shelf.isEmpty) {
       return false;
     }
     return shelf == await currentProduct.getShelf();
+  }
+
+  static Future<Product> handleAsProduct(String scanResult) async {
+    var product = await warehouseSystem.fetchProduct(scanResult);
+    return product;
   }
 }
