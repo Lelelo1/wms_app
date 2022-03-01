@@ -59,11 +59,7 @@ class _State extends State<ScanPage> {
                   this.widget.imageContent(ean, () {
                     fadeTransition(this.widget.fadeContent(ean));
                   }))),
-          Expanded(
-              flex: 7,
-              child: ScanView((String barcode) {
-                this.ean = barcode;
-              }))
+          Expanded(flex: 7, child: ScanView())
         ] // camera view part of page and recontructed on 'scannedProducts' state change
             ),
         extendBodyBehindAppBar: true,

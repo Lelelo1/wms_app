@@ -18,20 +18,24 @@ class ScanHandler {
   static late WarehouseSystem warehouseSystem = WarehouseSystem.instance;
   static late VisionService visionService = VisionService.instance;
 
-  static void scan(String filePath) async {
+  static void scan(String filePath,
+      void Function(String scanResult) scanResultCallback) async {
     // can also use ...
 /*     barcode = await visionSevice.analyzeBarcodeFromBytes(
           ImageUtils.concatenatePlanes(streamImage.planes),
           ImageUtils.imageData(streamImage)); */
     if (filePath.isEmpty) {
+      scanResultCallback("");
       return;
     }
 
     var scanResult = await visionService.analyzeBarcodeFromFilePath(filePath);
     if (scanResult.isEmpty) {
+      scanResultCallback(scanResult);
       return;
     }
-    WorkStore.instance.currentScanResult = scanResult;
+
+    scanResultCallback(scanResult);
 
     bool wasShelf = await handleAsShelf(scanResult);
     if (wasShelf) {

@@ -7,9 +7,7 @@ import '../utils.dart';
 //import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 class ScanView extends StatefulWidget {
-  void Function(String barcode) scanned;
-
-  ScanView(this.scanned);
+  ScanView();
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -24,13 +22,7 @@ class _State extends State<ScanView> {
 
   Column scanContent() =>
       Column(children: [/*header(),*/ scanButton(), ...scannedProducts()]);
-  /*
-  Widget header([String shelf = "D-3-2-C"]) {
-    return Container(
-        child: Center(child: Text(shelf, style: TextStyle(fontSize: 30))),
-        color: Colors.white);
-  }
-  */
+
   Widget scanButton() {
     return Padding(
         child: Column(children: [
@@ -63,33 +55,20 @@ class _State extends State<ScanView> {
   }
 
   void scan() async {
-    var visionSevice = VisionService.instance;
-    String barcode;
-    var streamImage = CameraViewController.streamImage;
-    if (streamImage != null) {
-    } else {
-      var path = (await CameraViewController.takePhoto()).path;
-      ScanHandler.scan(path);
-    }
-
-    if (Utils.isNullOrEmpty(barcode)) {
-      return;
-    }
-
-    gotBarcode(barcode);
+    var path = (await CameraViewController.takePhoto()).path;
+    ScanHandler.scan(path, scanResult);
     // need error handling...
   }
 
-  void gotBarcode(String scanData) async {
-    print("got scanData: " + scanData);
+  void scanResult(String scanResult) {
+    if (scanResult.isEmpty) {
+      return;
+    }
 
     CameraViewController.scanningSuccessfull();
 
     setState(() {
-      this.scannedBarcodes = [...this.scannedBarcodes, scanData];
+      this.scannedBarcodes = [...this.scannedBarcodes, scanResult];
     });
-
-    this.widget.scanned(scanData);
-    // what should be shown in the scanview, what should be gotten, depending on which Job
   }
 }
