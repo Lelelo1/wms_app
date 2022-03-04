@@ -22,15 +22,19 @@ class Transitions {
     var ean = WorkStore.instance.currentEAN;
     var p = WorkStore.instance.currentProduct;
     if (p.exists()) {
-      return WMSAsyncWidget<String>(p.getShelf(),
-          (shelf) => _cameraContent(_shelfWidget(shelf), _scanSymbol(shelf)));
+      return WMSAsyncWidget<String>(
+          p.getShelf(),
+          (shelf) => _cameraContent(_shelfWidget(shelf),
+              _scanSymbol(MaterialCommunityIcons.qrcode_scan)));
     }
 
     if (ean.isNotEmpty) {
-      return _cameraContent(_eanWidget(ean, onPressAddEan), _scanSymbol(""));
+      return _cameraContent(_eanWidget(ean, onPressAddEan),
+          _scanSymbol(MaterialCommunityIcons.barcode_scan));
     }
 
-    return _cameraContent(_shelfWidget(""), _scanSymbol(""));
+    return _cameraContent(
+        _shelfWidget(""), _scanSymbol(MaterialCommunityIcons.barcode_scan));
   };
 
   static Widget _cameraContent(Widget cameraContent, Widget scanSymbol) {
@@ -52,15 +56,11 @@ class Transitions {
           ], mainAxisAlignment: MainAxisAlignment.center),
           onTap: onPressAddEan));
 
-  static Widget _scanSymbol(String text) {
-    var iconData = text.isEmpty
-        ? MaterialCommunityIcons.barcode_scan
-        : MaterialCommunityIcons.qrcode_scan;
-
+  static Widget _scanSymbol(IconData symbol) {
     return Align(
         child: Row(children: [
       Spacer(flex: 20),
-      Icon(iconData, size: 35, color: Colors.white),
+      Icon(symbol, size: 35, color: Colors.white),
       Spacer(flex: 1)
     ]));
   }

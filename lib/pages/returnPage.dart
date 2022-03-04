@@ -1,14 +1,10 @@
 import 'dart:ui';
-import 'package:event/event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:wms_app/mixins/transitions.dart';
-import 'package:wms_app/models/product.dart';
 import 'package:wms_app/pages/scanPage.dart';
-import 'package:wms_app/services/scanHandler.dart';
 import 'package:wms_app/stores/workStore.dart';
-import 'package:wms_app/utils.dart';
 import 'package:wms_app/views/extended/scrollable.dart';
 import 'package:wms_app/widgets/wmsPage.dart';
 import 'package:wms_app/widgets/wmsAppBar.dart';
