@@ -77,6 +77,7 @@ class Transitions {
 
   static Transition scrollContent = () {
     var p = WorkStore.instance.currentProduct;
+    print("scroll content!!");
     return p.exists() ? ProductRoute(p) : WMSEmptyWidget();
   };
 
