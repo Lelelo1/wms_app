@@ -1,7 +1,3 @@
-import 'package:camera/camera.dart';
-import 'package:event/event.dart';
-import 'package:flutter/material.dart';
-import 'package:wms_app/models/attributes.dart';
 import 'package:wms_app/models/product.dart';
 import 'package:wms_app/remote/WarehouseSystem.dart';
 import 'package:wms_app/services/visionService.dart';
@@ -38,16 +34,21 @@ class ScanHandler {
 
     scanResultCallback(scanResult);
 
-    bool wasShelf = await handleAsShelf(scanResult);
+    var shelf = await warehouseSystem.findShelf(scanResult);
+    bool wasShelf = await handleAsShelf(shelf);
     if (wasShelf) {
+      WorkStore.instance.currentProduct = Product.empty();
       return;
     }
 
     WorkStore.instance.currentEAN = scanResult;
 
     var product = await handleAsProduct(scanResult);
-    WorkStore.instance.currentProduct = product;
-    // need to signal to pages th eresult and status for pages like return
+    if (product.exists()) {
+      WorkStore.instance.currentProduct = product;
+    }
+
+    // otherwise could be wrong shelf or other qr
   }
 
   static Future<bool> handleAsShelf(String scanResult) async {

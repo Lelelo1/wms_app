@@ -14,6 +14,9 @@ class WorkStore {
   Product get currentProduct => _currentProduct;
   set currentProduct(Product product) {
     _currentProduct = product;
+    if (!product.exists()) {
+      currentEAN = "";
+    }
     productEvent.broadcast();
   }
 
