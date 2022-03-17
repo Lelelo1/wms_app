@@ -46,14 +46,12 @@ class _State extends State<ReturnPage> {
         body: WMSScrollable(
             EventSubscriber(
                 event: WorkStore.instance.productEvent,
-                handler: (BuildContext c, _) {
-                  imageContent();
-                  return ScanPage();
-                }),
+                handler: (BuildContext c, _) =>
+                    Transitions.imageContent(fadeContent)),
             this.widget.scrollContent()));
   }
 
-  void imageContent() async {
+  void fadeContent() async {
     var product = WorkStore.instance.currentProduct;
     var ean = await product.getEAN();
     if (!product.exists() || Utils.isNullOrEmpty(ean)) {
