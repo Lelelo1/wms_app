@@ -7,8 +7,6 @@ import '../utils.dart';
 
 typedef ProductResultHandler = void Function(Product product, String scanData);
 
-typedef Scan = Function(String scan, bool successfull);
-
 String emptyMsg = "ignored scan. no event handler added";
 
 class ScanHandler {
@@ -34,10 +32,12 @@ class ScanHandler {
 
     scanResultCallback(scanResult);
 
-    var shelf = await warehouseSystem.findShelf(scanResult);
-    bool wasShelf = await handleAsShelf(shelf);
+    if (isShelf(scanResult)) {
+      var handled = await handleAsShelf(scanResult.toShelf(shelfPrefix));
+    }
+
     if (wasShelf) {
-      WorkStore.instance.currentProduct = Product.empty();
+      print("waas shelf");
       return;
     }
 
@@ -52,9 +52,11 @@ class ScanHandler {
   }
 
   static Future<bool> handleAsShelf(String scanResult) async {
+    print("handle as shelf");
     if (await isMatchingShelf(scanResult)) {
       warehouseSystem
           .increaseAmountOfProducts(WorkStore.instance.currentProduct);
+      print("was matching shelf!");
       WorkStore.instance.currentProduct = Product.empty();
       return true;
     }
@@ -62,23 +64,6 @@ class ScanHandler {
   }
 
 // remake!
-  static Future<bool> isMatchingShelf(String shelf) async {
-    var currentProduct = WorkStore.instance.currentProduct;
-
-    if (!currentProduct.exists()) {
-      return false;
-    }
-
-    var productEAN = await currentProduct.getEAN();
-
-    if (productEAN.isEmpty) {
-      return false;
-    }
-
-    var productShelf = await currentProduct.getShelf();
-
-    return shelf == productShelf;
-  }
 
   static Future<Product> handleAsProduct(String scanResult) async {
     var product = await warehouseSystem.fetchProduct(scanResult);

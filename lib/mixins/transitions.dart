@@ -20,16 +20,21 @@ class Transitions {
   static ImageContentTransition imageContent = (void Function() onPressAddEan) {
     var ean = WorkStore.instance.currentEAN;
     var p = WorkStore.instance.currentProduct;
+
+    if (!p.exists()) {
+      if (ean.isNotEmpty) {
+        return _cameraContent(_eanWidget(ean, onPressAddEan),
+            _scanSymbol(MaterialCommunityIcons.barcode_scan));
+      }
+      print("return empty widget!!");
+      return WMSEmptyWidget();
+    }
+
     if (p.exists()) {
       return WMSAsyncWidget<String>(
           p.getShelf(),
           (shelf) => _cameraContent(_shelfWidget(shelf),
               _scanSymbol(MaterialCommunityIcons.qrcode_scan)));
-    }
-
-    if (ean.isNotEmpty) {
-      return _cameraContent(_eanWidget(ean, onPressAddEan),
-          _scanSymbol(MaterialCommunityIcons.barcode_scan));
     }
 
     return _cameraContent(
@@ -63,16 +68,6 @@ class Transitions {
       Spacer(flex: 1)
     ]));
   }
-
-  static Transition fadeContent = () {
-    var ean = WorkStore.instance.currentEAN;
-    var p = WorkStore.instance.currentProduct;
-    if (p.exists() || Utils.isNullOrEmpty(ean)) {
-      return WMSEmptyWidget();
-    }
-
-    return SearchRoute(SearchPage(p, ean));
-  };
 
   static Transition scrollContent = () {
     var p = WorkStore.instance.currentProduct;

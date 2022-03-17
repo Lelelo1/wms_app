@@ -23,4 +23,18 @@ class WorkStore {
   String currentEAN = "";
 
   // Be mindful when depending on multiple events in the same render hiercarchy
+
+  Future<bool> isMatchingShelf(String shelf) async {
+    var currentProduct = WorkStore.instance.currentProduct;
+
+    if (!currentProduct.exists()) {
+      print("product don't exist!");
+      WorkStore.instance.currentProduct = Product.empty();
+      return false;
+    }
+
+    var productShelf = await currentProduct.getShelf();
+    print(productShelf + " izz " + shelf);
+    return shelf == productShelf;
+  }
 }
