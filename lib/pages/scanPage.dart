@@ -63,19 +63,4 @@ class _State extends State<ScanPage> {
   Widget build(BuildContext context) {
     return futureBuilder();
   }
-
-  // some sort of view that shows db sku suggestions, from image local sku.
-  /*
-  Widget productView(Product product) {
-    return ProductView(product);
-  }
-  */
-  void fadeTransition(Widget searchRoute) {
-    if (searchRoute is WMSEmptyWidget) {
-      return;
-    }
-
-    Navigator.push(
-        context, PageRouteBuilder(pageBuilder: (_, __, ___) => searchRoute));
-  }
 }

@@ -28,13 +28,11 @@ class WorkStore {
     var currentProduct = WorkStore.instance.currentProduct;
 
     if (!currentProduct.exists()) {
-      print("product don't exist!");
       WorkStore.instance.currentProduct = Product.empty();
       return false;
     }
 
     var productShelf = await currentProduct.getShelf();
-    print(productShelf + " izz " + shelf);
     return shelf == productShelf;
   }
 }

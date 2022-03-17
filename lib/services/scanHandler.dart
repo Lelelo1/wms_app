@@ -13,60 +13,51 @@ class ScanHandler {
   static late WarehouseSystem warehouseSystem = WarehouseSystem.instance;
   static late VisionService visionService = VisionService.instance;
 
-  static void scan(String filePath,
-      void Function(String scanResult) scanResultCallback) async {
+  static Future<String> scan(String filePath) async {
     // can also use ...
 /*     barcode = await visionSevice.analyzeBarcodeFromBytes(
           ImageUtils.concatenatePlanes(streamImage.planes),
           ImageUtils.imageData(streamImage)); */
     if (filePath.isEmpty) {
-      scanResultCallback("");
-      return;
+      return Future.sync(() => "");
     }
 
     var scanResult = await visionService.analyzeBarcodeFromFilePath(filePath);
     if (scanResult.isEmpty) {
-      scanResultCallback(scanResult);
-      return;
+      return Future.sync(() => "");
     }
-
-    scanResultCallback(scanResult);
-
-    if (isShelf(scanResult)) {
-      var handled = await handleAsShelf(scanResult.toShelf(shelfPrefix));
-    }
-
-    if (wasShelf) {
-      print("waas shelf");
-      return;
-    }
-
-    WorkStore.instance.currentEAN = scanResult;
 
     var product = await handleAsProduct(scanResult);
     if (product.exists()) {
       WorkStore.instance.currentProduct = product;
+      return Future.sync(() => scanResult);
     }
 
-    // otherwise could be wrong shelf or other qr
-  }
-
-  static Future<bool> handleAsShelf(String scanResult) async {
-    print("handle as shelf");
-    if (await isMatchingShelf(scanResult)) {
-      warehouseSystem
-          .increaseAmountOfProducts(WorkStore.instance.currentProduct);
-      print("was matching shelf!");
-      WorkStore.instance.currentProduct = Product.empty();
-      return true;
+    if (!_isShelf(scanResult)) {
+      return Future.sync(() => scanResult);
     }
-    return false;
+
+    var match = await WorkStore.instance.isMatchingShelf(scanResult);
+    if (!match) {
+      return scanResult;
+    }
+
+    handleAsShelf(scanResult);
   }
 
-// remake!
+  static void handleAsShelf(String scanResult) async {
+    warehouseSystem.increaseAmountOfProducts(WorkStore.instance.currentProduct);
+    WorkStore.instance.currentProduct = Product.empty();
+  }
 
   static Future<Product> handleAsProduct(String scanResult) async {
     var product = await warehouseSystem.fetchProduct(scanResult);
     return product;
+  }
+
+  static final String shelfPrefix = "shelf:";
+
+  static bool _isShelf(String scanData) {
+    return scanData.contains(shelfPrefix);
   }
 }
