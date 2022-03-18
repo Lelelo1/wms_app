@@ -46,4 +46,9 @@ class WorkStore {
 
   Event _scanDataEvent = Event();
   Event get scanDataEvent => _scanDataEvent;
+
+  void clearAll() {
+    this.currentProduct = Product.empty();
+    this._scanData = [];
+  }
 }
