@@ -1,14 +1,9 @@
+import 'package:eventsubscriber/eventsubscriber.dart';
 import 'package:flutter/material.dart';
 import 'package:wms_app/mixins/transitions.dart';
-import 'package:wms_app/models/product.dart';
 import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/views/cameraView.dart';
-import 'package:wms_app/views/extended/stacked.dart';
 import 'package:wms_app/views/scanView.dart';
-import 'package:wms_app/widgets/wmsEmptyWidget.dart';
-import 'package:wms_app/widgets/wmsImageContent.dart';
-import 'package:wms_app/widgets/wmsLoadingPage.dart';
-import 'package:async/async.dart';
 
 // https://medium.com/saugo360/flutter-my-futurebuilder-keeps-firing-6e774830bc2
 
@@ -53,7 +48,11 @@ class _State extends State<ScanPage> {
         //appBar: WMSAppBar(this.widget.name).get(),
         body: Column(children: [
           Expanded(flex: 7, child: CameraView(this.widget.imageContent)),
-          Expanded(flex: 6, child: ScanView())
+          Expanded(
+              flex: 6,
+              child: EventSubscriber(
+                  event: WorkStore.instance.scanDataEvent,
+                  handler: (_, __) => ScanView()))
         ] // camera view part of page and recontructed on 'scannedProducts' state change
             ),
         extendBodyBehindAppBar: true,

@@ -1,7 +1,10 @@
+import 'dart:ffi';
+
 import 'package:wms_app/models/product.dart';
 import 'package:wms_app/remote/WarehouseSystem.dart';
 import 'package:wms_app/services/visionService.dart';
 import 'package:wms_app/stores/workStore.dart';
+import 'package:wms_app/views/cameraView.dart';
 
 import '../utils.dart';
 
@@ -13,38 +16,39 @@ class ScanHandler {
   static late WarehouseSystem warehouseSystem = WarehouseSystem.instance;
   static late VisionService visionService = VisionService.instance;
 
-  static Future<String> scan(String filePath) async {
+  static void scan(String filePath) async {
     // can also use ...
 /*     barcode = await visionSevice.analyzeBarcodeFromBytes(
           ImageUtils.concatenatePlanes(streamImage.planes),
           ImageUtils.imageData(streamImage)); */
     if (filePath.isEmpty) {
-      return Future.sync(() => "");
+      return;
     }
 
     var scanResult = await visionService.analyzeBarcodeFromFilePath(filePath);
     if (scanResult.isEmpty) {
-      return Future.sync(() => "");
+      return;
     }
+
+    CameraViewController.scanningSuccessfull();
+    WorkStore.instance.addScanData(scanResult);
 
     var product = await handleAsProduct(scanResult);
     if (product.exists()) {
       WorkStore.instance.currentProduct = product;
-      return Future.sync(() => scanResult);
+      return;
     }
 
     if (!_isShelf(scanResult)) {
-      return Future.sync(() => scanResult);
+      return;
     }
 
     var match = await WorkStore.instance.isMatchingShelf(scanResult);
     if (!match) {
-      return scanResult;
+      return;
     }
 
     handleAsShelf(scanResult);
-
-    return Future(() => scanResult);
   }
 
   static void handleAsShelf(String scanResult) async {

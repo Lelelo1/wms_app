@@ -35,4 +35,15 @@ class WorkStore {
     var productShelf = await currentProduct.getShelf();
     return shelf == productShelf;
   }
+
+  List<String> _scanData = [];
+  void addScanData(String scanData) {
+    _scanData.add(scanData);
+    _scanDataEvent.broadcast();
+  }
+
+  List<String> get scanData => _scanData;
+
+  Event _scanDataEvent = Event();
+  Event get scanDataEvent => _scanDataEvent;
 }
