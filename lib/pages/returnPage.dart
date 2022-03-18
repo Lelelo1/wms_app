@@ -40,14 +40,18 @@ class _State extends State<ReturnPage> {
                 Colors.transparent, Colors.white)
             .get(),
         extendBodyBehindAppBar: true,
-        body: WMSScrollable(
-            ScanPage(Transitions.imageContent(fadeContent)),
-            EventSubscriber(
-                event: WorkStore.instance.productEvent,
-                handler: (BuildContext c, _) {
-                  var p = WorkStore.instance.currentProduct;
-                  return p.exists() ? ProductRoute(p) : WMSEmptyWidget();
-                })));
+        body: EventSubscriber(
+            event: WorkStore.instance.productEvent,
+            handler: (_, __) {
+              var product = WorkStore.instance.currentProduct;
+              var productView =
+                  product.exists() ? ProductRoute(product) : WMSEmptyWidget();
+              var imageContent = Transitions.imageContent(fadeContent);
+              var scrollable =
+                  WMSScrollable(ScanPage(imageContent), productView);
+
+              return scrollable;
+            }));
   }
 
   void fadeContent() async {
@@ -63,7 +67,5 @@ class _State extends State<ReturnPage> {
                 SearchRoute(SearchPage(product, ean))));
   }
 }
-
-
 
 // previously have tried SwitchTranstion to change widget inside with when doing view transition
