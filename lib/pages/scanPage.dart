@@ -6,13 +6,14 @@ import 'package:wms_app/views/cameraView.dart';
 import 'package:wms_app/views/extended/stacked.dart';
 import 'package:wms_app/views/scanView.dart';
 import 'package:wms_app/widgets/wmsEmptyWidget.dart';
+import 'package:wms_app/widgets/wmsImageContent.dart';
 import 'package:wms_app/widgets/wmsLoadingPage.dart';
 import 'package:async/async.dart';
 
 // https://medium.com/saugo360/flutter-my-futurebuilder-keeps-firing-6e774830bc2
 
 class ScanPage extends StatefulWidget {
-  final AsyncMemoizer<CameraView> _memoizer = AsyncMemoizer();
+  //final AsyncMemoizer<CameraView> _memoizer = AsyncMemoizer();
   final Widget imageContent;
 
   ScanPage(this.imageContent);
@@ -26,12 +27,14 @@ class _State extends State<ScanPage> {
   // Future<Sequence> sequence;
   Future<CameraView>? cameraViewFuture;
 
+/*
   @override
   void initState() {
     this.cameraViewFuture = this.widget._memoizer.runOnce(() => CameraView());
     super.initState();
   }
-
+*/
+/*
   // alls pages should have future builder, more or less
   FutureBuilder futureBuilder() => FutureBuilder<CameraView>(
       future: this.cameraViewFuture,
@@ -43,14 +46,14 @@ class _State extends State<ScanPage> {
         //return page(snapshot.data);
         return page(snapshot.data ?? Container());
       });
+      */
   // conditional renderering, searchView
-  Widget page(Widget cameraView) {
+  Widget page() {
     return Scaffold(
         //appBar: WMSAppBar(this.widget.name).get(),
         body: Column(children: [
-          Expanded(
-              flex: 9, child: WMSStacked(cameraView, this.widget.imageContent)),
-          Expanded(flex: 7, child: ScanView())
+          Expanded(flex: 7, child: CameraView(this.widget.imageContent)),
+          Expanded(flex: 6, child: ScanView())
         ] // camera view part of page and recontructed on 'scannedProducts' state change
             ),
         extendBodyBehindAppBar: true,
@@ -61,6 +64,6 @@ class _State extends State<ScanPage> {
 
   @override
   Widget build(BuildContext context) {
-    return futureBuilder();
+    return page();
   }
 }

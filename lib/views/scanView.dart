@@ -56,8 +56,10 @@ class _State extends State<ScanView> {
 
   void scan() async {
     var path = (await CameraViewController.takePhoto()).path;
-    ScanHandler.scan(path, scanResult);
-    // need error handling...
+    var result = ScanHandler.scan(path);
+    setState(() {
+      
+    });
   }
 
   void scanResult(String scanResult) {

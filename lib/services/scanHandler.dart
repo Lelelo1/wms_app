@@ -43,6 +43,8 @@ class ScanHandler {
     }
 
     handleAsShelf(scanResult);
+
+    return Future(() => scanResult);
   }
 
   static void handleAsShelf(String scanResult) async {

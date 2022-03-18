@@ -1,10 +1,14 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:eventsubscriber/eventsubscriber.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
+import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/widgets/wmsLoadingPage.dart';
 import 'package:wms_app/utils.dart';
+
+import 'extended/stacked.dart';
 
 // page which has future builder contraint should probably be called content
 // the loagingage loadingcontent
@@ -83,8 +87,9 @@ class CameraViewController {
 }
 
 class CameraView extends StatefulWidget {
+  Widget cameraContent;
   Size? size;
-  CameraView([this.size]);
+  CameraView(this.cameraContent, [this.size]);
   @override
   _State createState() => _State();
 }
@@ -115,23 +120,27 @@ class _State extends State<CameraView> {
     var aspectRatio = size.width / size.height;
     var width = size.width; //this.widget.size.width;
 
-    return Container(
-      width: width,
-      height: size.height,
-      child: ClipRect(
-        child: OverflowBox(
-          alignment: Alignment.center,
-          child: FittedBox(
-            fit: BoxFit.fitWidth,
-            child: Container(
-              width: width,
-              height: width / aspectRatio,
-              child: CameraPreview(controller), // this is my CameraPreview
+    return WMSStacked(
+        Container(
+          width: width,
+          height: size.height,
+          child: ClipRect(
+            child: OverflowBox(
+              alignment: Alignment.center,
+              child: FittedBox(
+                fit: BoxFit.fitWidth,
+                child: Container(
+                  width: width,
+                  height: width / aspectRatio,
+                  child: CameraPreview(controller), // this is my CameraPreview
+                ),
+              ),
             ),
           ),
         ),
-      ),
-    );
+        EventSubscriber(
+            event: WorkStore.instance.productEvent,
+            handler: (BuildContext c, _) => this.widget.cameraContent));
 
     //return camera(controller);
   }

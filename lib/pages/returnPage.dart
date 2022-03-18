@@ -5,10 +5,13 @@ import 'package:flutter/widgets.dart';
 import 'package:wms_app/mixins/transitions.dart';
 import 'package:wms_app/pages/scanPage.dart';
 import 'package:wms_app/pages/searchPage.dart';
+import 'package:wms_app/routes/productRoute.dart';
 import 'package:wms_app/routes/searchRoute.dart';
 import 'package:wms_app/stores/workStore.dart';
+import 'package:wms_app/views/cameraView.dart';
 import 'package:wms_app/views/extended/scrollable.dart';
 import 'package:wms_app/widgets/wmsAsyncWidget.dart';
+import 'package:wms_app/widgets/wmsImageContent.dart';
 import 'package:wms_app/widgets/wmsPage.dart';
 import 'package:wms_app/widgets/wmsAppBar.dart';
 import 'package:wms_app/widgets/wmsEmptyWidget.dart';
@@ -19,15 +22,9 @@ import '../utils.dart';
 
 // can I used state and the setState call with product in 'StatelessWidget'
 // ignore: must_be_immutable
-class ReturnPage extends WMSPage implements WMSTransitions {
+class ReturnPage extends WMSPage {
   @override
   String name = "Retur";
-
-  @override
-  ImageContentTransition imageContent = Transitions.imageContent;
-
-  @override
-  Transition scrollContent = Transitions.scrollContent;
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -44,11 +41,13 @@ class _State extends State<ReturnPage> {
             .get(),
         extendBodyBehindAppBar: true,
         body: WMSScrollable(
+            ScanPage(Transitions.imageContent(fadeContent)),
             EventSubscriber(
                 event: WorkStore.instance.productEvent,
-                handler: (BuildContext c, _) =>
-                    Transitions.imageContent(fadeContent)),
-            this.widget.scrollContent()));
+                handler: (BuildContext c, _) {
+                  var p = WorkStore.instance.currentProduct;
+                  return p.exists() ? ProductRoute(p) : WMSEmptyWidget();
+                })));
   }
 
   void fadeContent() async {
