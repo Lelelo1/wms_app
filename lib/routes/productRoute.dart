@@ -26,12 +26,11 @@ class _State extends State<ProductRoute> {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-        child: Row(children: [
+    return Row(children: [
       Spacer(flex: 1),
       Expanded(child: asyncProductRoute(), flex: 12),
       Spacer(flex: 1)
-    ]));
+    ]);
   }
 
   WMSAsyncWidget asyncProductRoute() {
