@@ -56,8 +56,9 @@ class _State extends State<ReturnPage> {
 
   void fadeContent() async {
     var product = WorkStore.instance.currentProduct;
-    var ean = await product.getEAN();
-    if (!product.exists() || Utils.isNullOrEmpty(ean)) {
+    var ean = WorkStore.instance.currentEAN;
+    print("fadeContent!!");
+    if (product.exists() || Utils.isNullOrEmpty(ean)) {
       return;
     }
     Navigator.push(
