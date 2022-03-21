@@ -21,15 +21,6 @@ class Transitions {
     var ean = WorkStore.instance.currentEAN;
     var p = WorkStore.instance.currentProduct;
 
-    if (!p.exists()) {
-      if (ean.isNotEmpty) {
-        return _cameraContent(_eanWidget(ean, onPressAddEan),
-            _scanSymbol(MaterialCommunityIcons.barcode_scan));
-      }
-      print("return empty widget!!");
-      return WMSEmptyWidget();
-    }
-
     if (p.exists()) {
       return WMSAsyncWidget<String>(
           p.getShelf(),
@@ -37,8 +28,13 @@ class Transitions {
               _scanSymbol(MaterialCommunityIcons.qrcode_scan)));
     }
 
+    if (ean.isNotEmpty) {
+      return _cameraContent(_eanWidget(ean, onPressAddEan),
+          _scanSymbol(MaterialCommunityIcons.barcode_scan));
+    }
+
     return _cameraContent(
-        _shelfWidget(""), _scanSymbol(MaterialCommunityIcons.barcode_scan));
+        WMSEmptyWidget(), _scanSymbol(MaterialCommunityIcons.barcode_scan));
   };
 
   static Widget _cameraContent(Widget cameraContent, Widget scanSymbol) {

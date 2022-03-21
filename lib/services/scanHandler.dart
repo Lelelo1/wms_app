@@ -31,6 +31,7 @@ class ScanHandler {
     }
 
     CameraViewController.scanningSuccessfull();
+
     WorkStore.instance.addScanData(scanResult);
 
     var product = await handleAsProduct(scanResult);
@@ -40,6 +41,8 @@ class ScanHandler {
     }
 
     if (!_isShelf(scanResult)) {
+      WorkStore.instance.currentEAN = scanResult;
+      WorkStore.instance.currentProduct = Product.empty();
       return;
     }
 

@@ -14,9 +14,6 @@ class WorkStore {
   Product get currentProduct => _currentProduct;
   set currentProduct(Product product) {
     _currentProduct = product;
-    if (!product.exists()) {
-      currentEAN = "";
-    }
     productEvent.broadcast();
   }
 
@@ -49,6 +46,7 @@ class WorkStore {
 
   void clearAll() {
     this.currentProduct = Product.empty();
+    this.currentEAN = "";
     this._scanData = [];
   }
 }
