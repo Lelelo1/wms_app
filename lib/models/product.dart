@@ -57,7 +57,12 @@ class Product extends AbstractProduct {
     var shelf = (await WarehouseSystem.instance
             .fetchAttribute<String?>(id, Attributes.shelf))
         ?.firstOrNull;
-    return Utils.defaultString(shelf, "-");
+    var s = Utils.defaultString(shelf, "-");
+    if (s == "-") {
+      return s;
+    }
+
+    return AbstractProduct.shelfPrefix + s;
   }
 
   @override
@@ -116,6 +121,8 @@ abstract class AbstractProduct extends EventArgs {
 
   AbstractProduct(this.id);
   AbstractProduct.empty([this.id = 0]);
+
+  static const String shelfPrefix = "shelf:";
 }
 
 class MockProduct implements AbstractProduct {

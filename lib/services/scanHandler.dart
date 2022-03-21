@@ -56,7 +56,7 @@ class ScanHandler {
 
   static void handleAsShelf(String scanResult) async {
     warehouseSystem.increaseAmountOfProducts(WorkStore.instance.currentProduct);
-    WorkStore.instance.currentProduct = Product.empty();
+    WorkStore.instance.clearAll();
   }
 
   static Future<Product> handleAsProduct(String scanResult) async {
@@ -64,9 +64,7 @@ class ScanHandler {
     return product;
   }
 
-  static final String shelfPrefix = "shelf:";
-
   static bool _isShelf(String scanData) {
-    return scanData.contains(shelfPrefix);
+    return scanData.contains(AbstractProduct.shelfPrefix);
   }
 }
