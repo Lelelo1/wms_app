@@ -52,7 +52,7 @@ class ScanHandler {
     if (lastProduct.exists()) {
       var lastProductShelf = await lastProduct.getShelf();
       print("lastProductShelf: " + lastProductShelf);
-      if (lastProductShelf == AbstractProduct.assignShelf) {
+      if (lastProductShelf.contains(AbstractProduct.assignShelf)) {
         WorkStore.instance.assignShelfEvent.broadcast();
         return;
       }
