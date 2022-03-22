@@ -24,7 +24,8 @@ class Transitions {
     if (p.exists()) {
       return WMSAsyncWidget<String>(
           p.getShelf(),
-          (shelf) => _cameraContent(_shelfWidget(shelf),
+          (shelf) => _cameraContent(
+              _shelfWidget(shelf.replaceAll(AbstractProduct.shelfPrefix, "")),
               _scanSymbol(MaterialCommunityIcons.qrcode_scan)));
     }
 
