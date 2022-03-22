@@ -123,6 +123,8 @@ abstract class AbstractProduct extends EventArgs {
   AbstractProduct.empty([this.id = 0]);
 
   static const String shelfPrefix = "shelf:";
+
+  static const assignShelf = "S-3-1"; //"BEST";
 }
 
 class MockProduct implements AbstractProduct {

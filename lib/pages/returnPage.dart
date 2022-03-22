@@ -17,7 +17,7 @@ import 'package:wms_app/widgets/wmsAppBar.dart';
 import 'package:wms_app/widgets/wmsEmptyWidget.dart';
 import 'package:wms_app/widgets/wmsTransitions.dart';
 import 'package:eventsubscriber/eventsubscriber.dart';
-
+import 'package:rflutter_alert/rflutter_alert.dart';
 import '../utils.dart';
 
 // can I used state and the setState call with product in 'StatelessWidget'
@@ -32,6 +32,18 @@ class ReturnPage extends WMSPage {
 
 class _State extends State<ReturnPage> {
   // note that can't rerender color in app bar without rerender the rest of the app...
+
+  @override
+  void initState() {
+    WorkStore.instance.assignShelfEvent.subscribe((args) {
+      Alert(
+              context: this.context,
+              desc:
+                  "Vill du lägga till hyllplatsen B-3-1-4 till produkten 'namn'")
+          .show();
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

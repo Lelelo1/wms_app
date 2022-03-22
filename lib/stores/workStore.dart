@@ -49,4 +49,7 @@ class WorkStore {
     this.currentEAN = "";
     this._scanData = [];
   }
+
+  Event _assignShelfEvent = Event();
+  Event get assignShelfEvent => _assignShelfEvent;
 }

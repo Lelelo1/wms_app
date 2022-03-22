@@ -33,6 +33,7 @@ class ScanHandler {
     CameraViewController.scanningSuccessfull();
 
     WorkStore.instance.addScanData(scanResult);
+    var lastProduct = WorkStore.instance.currentProduct;
 
     var product = await handleAsProduct(scanResult);
     if (product.exists()) {
@@ -44,6 +45,17 @@ class ScanHandler {
       WorkStore.instance.currentEAN = scanResult;
       WorkStore.instance.currentProduct = Product.empty();
       return;
+    }
+
+    // hanlding case when product scanned pevisouly needs shelf assigned to it
+
+    if (lastProduct.exists()) {
+      var lastProductShelf = await lastProduct.getShelf();
+      print("lastProductShelf: " + lastProductShelf);
+      if (lastProductShelf == AbstractProduct.assignShelf) {
+        WorkStore.instance.assignShelfEvent.broadcast();
+        return;
+      }
     }
 
     var match = await WorkStore.instance.isMatchingShelf(scanResult);
