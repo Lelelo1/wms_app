@@ -1,21 +1,20 @@
 // partially made for debugging scanning
 import 'package:flutter/material.dart';
+import 'package:wms_app/services/scanHandler.dart';
 import 'package:wms_app/services/visionService.dart';
+import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/views/cameraView.dart';
 import '../utils.dart';
 //import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 class ScanView extends StatefulWidget {
-  void Function(String barcode) scanned;
-
-  ScanView(this.scanned);
+  ScanView();
 
   @override
   State<StatefulWidget> createState() => _State();
 }
 
 class _State extends State<ScanView> {
-  List<String> scannedBarcodes = [];
   @override
   Widget build(BuildContext context) {
     return Container(child: scanContent(), height: 320);
@@ -23,13 +22,7 @@ class _State extends State<ScanView> {
 
   Column scanContent() =>
       Column(children: [/*header(),*/ scanButton(), ...scannedProducts()]);
-  /*
-  Widget header([String shelf = "D-3-2-C"]) {
-    return Container(
-        child: Center(child: Text(shelf, style: TextStyle(fontSize: 30))),
-        color: Colors.white);
-  }
-  */
+
   Widget scanButton() {
     return Padding(
         child: Column(children: [
@@ -50,48 +43,19 @@ class _State extends State<ScanView> {
   }
 
   List<Widget> scannedProducts() {
-    if (this.scannedBarcodes.isEmpty) {
+    if (WorkStore.instance.scanData.isEmpty) {
       return [Container()];
     }
 
-    var occurrences = Utils.occurence(this.scannedBarcodes);
-    return Utils.occurence(this.scannedBarcodes)
+    var occurrences = Utils.occurence(WorkStore.instance.scanData);
+    return Utils.occurence(WorkStore.instance.scanData)
         .keys
         .map((b) => Text(b + ": " + occurrences[b].toString()))
         .toList();
   }
 
   void scan() async {
-    var visionSevice = VisionService.instance;
-    String barcode;
-    var streamImage = CameraViewController.streamImage;
-    if (streamImage != null) {
-      barcode = await visionSevice.analyzeBarcodeFromBytes(
-          ImageUtils.concatenatePlanes(streamImage.planes),
-          ImageUtils.imageData(streamImage));
-    } else {
-      barcode = await visionSevice.analyzeBarcodeFromFilePath(
-          (await CameraViewController.takePhoto()).path);
-    }
-
-    if (Utils.isNullOrEmpty(barcode)) {
-      return;
-    }
-
-    gotBarcode(barcode);
-    // need error handling...
-  }
-
-  void gotBarcode(String scanData) async {
-    print("got scanData: " + scanData);
-
-    CameraViewController.scanningSuccessfull();
-
-    setState(() {
-      this.scannedBarcodes = [...this.scannedBarcodes, scanData];
-    });
-
-    this.widget.scanned(scanData);
-    // what should be shown in the scanview, what should be gotten, depending on which Job
+    var path = (await CameraViewController.takePhoto()).path;
+    ScanHandler.scan(path);
   }
 }

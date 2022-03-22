@@ -1,40 +1,52 @@
-
-// seems like ui can talk directly to warehousesystem now
-
-/*
 import 'package:wms_app/models/product.dart';
-import 'package:wms_app/remote/warehouseSystem.dart';
-import 'package:wms_app/widgets/wmsEmptyWidget.dart';
-import 'package:wms_app/widgets/wmsPage.dart';
+import 'package:event/event.dart';
+import 'package:wms_app/models/product.dart';
 
 class WorkStore {
-  static late WorkStore instance = WorkStore.instance;
-
+  static late WorkStore instance = WorkStore._();
   WorkStore._();
 
-  // how to interact with ui error message?
+  // can use 'EventArgs' since it required nullable object
+  Event _productEvent = Event();
+  Event get productEvent => _productEvent;
 
-  Future<Product> fetchProduct(String ean) =>
-      WarehouseSystem.fetchProduct(ean);
-
-  Future<List<Product>> fetchSuggestions(String text) async =>
-      _warehouseSystem.fetchSuggestions(text);
-
-  Future<List<T>?> attribute<T>(int id, String attribute) =>
-      _warehouseSystem.fetchAttribute<T>(id, attribute);
-
-  void setEAN(int id, String ean) => _warehouseSystem.setEAN(id, ean);
-
-  //String scannedBarcode = "";
-
-/*
-  Sequence getRegistration() {
-    return null;
+  Product _currentProduct = Product.empty();
+  Product get currentProduct => _currentProduct;
+  set currentProduct(Product product) {
+    _currentProduct = product;
+    productEvent.broadcast();
   }
 
-  Sequence getCounting() {
-    return null;
+  String currentEAN = "";
+
+  // Be mindful when depending on multiple events in the same render hiercarchy
+
+  Future<bool> isMatchingShelf(String shelf) async {
+    var currentProduct = WorkStore.instance.currentProduct;
+
+    if (!currentProduct.exists()) {
+      WorkStore.instance.currentProduct = Product.empty();
+      return false;
+    }
+
+    var productShelf = await currentProduct.getShelf();
+    return shelf == productShelf;
   }
-  */
+
+  List<String> _scanData = [];
+  void addScanData(String scanData) {
+    _scanData.add(scanData);
+    _scanDataEvent.broadcast();
+  }
+
+  List<String> get scanData => _scanData;
+
+  Event _scanDataEvent = Event();
+  Event get scanDataEvent => _scanDataEvent;
+
+  void clearAll() {
+    this.currentProduct = Product.empty();
+    this.currentEAN = "";
+    this._scanData = [];
+  }
 }
-*/

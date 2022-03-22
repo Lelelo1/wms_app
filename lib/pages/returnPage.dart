@@ -3,39 +3,36 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:wms_app/mixins/transitions.dart';
-import 'package:wms_app/models/product.dart';
 import 'package:wms_app/pages/scanPage.dart';
-import 'package:wms_app/services/scanHandler.dart';
+import 'package:wms_app/pages/searchPage.dart';
+import 'package:wms_app/routes/productRoute.dart';
+import 'package:wms_app/routes/searchRoute.dart';
 import 'package:wms_app/stores/workStore.dart';
-import 'package:wms_app/utils.dart';
+import 'package:wms_app/views/cameraView.dart';
 import 'package:wms_app/views/extended/scrollable.dart';
+import 'package:wms_app/widgets/wmsAsyncWidget.dart';
+import 'package:wms_app/widgets/wmsImageContent.dart';
 import 'package:wms_app/widgets/wmsPage.dart';
 import 'package:wms_app/widgets/wmsAppBar.dart';
 import 'package:wms_app/widgets/wmsEmptyWidget.dart';
 import 'package:wms_app/widgets/wmsTransitions.dart';
+import 'package:eventsubscriber/eventsubscriber.dart';
+
+import '../utils.dart';
 
 // can I used state and the setState call with product in 'StatelessWidget'
 // ignore: must_be_immutable
-class ReturnPage extends WMSPage implements WMSTransitions {
+class ReturnPage extends WMSPage {
   @override
   String name = "Retur";
-
-  @override
-  ImageContentTransition imageContent = Transitions.imageContent;
-
-  @override
-  Transition fadeContent = Transitions.fadeContent;
-
-  @override
-  Transition scrollContent = Transitions.scrollContent;
 
   @override
   State<StatefulWidget> createState() => _State();
 }
 
 class _State extends State<ReturnPage> {
-  Product currentProduct = Product.empty();
   // note that can't rerender color in app bar without rerender the rest of the app...
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,30 +40,32 @@ class _State extends State<ReturnPage> {
                 Colors.transparent, Colors.white)
             .get(),
         extendBodyBehindAppBar: true,
-        body: WMSScrollable(
-            ScanPage(this.successfullScan, this.widget.imageContent,
-                this.currentProduct, this.widget.fadeContent),
-            this.widget.scrollContent(this.currentProduct, "")));
+        body: EventSubscriber(
+            event: WorkStore.instance.productEvent,
+            handler: (_, __) {
+              var product = WorkStore.instance.currentProduct;
+              var productView =
+                  product.exists() ? ProductRoute(product) : WMSEmptyWidget();
+              var imageContent = Transitions.imageContent(fadeContent);
+              var scrollable =
+                  WMSScrollable(ScanPage(imageContent), productView);
 
-    //return WMSScaffold(this.widget.name, Color.fromARGB(255, 194, 66, 245))
-    //    .get(WMSScrollable(content(), this.widget.scrollRoute(this.product)));
+              return scrollable;
+            }));
   }
 
-  // ScanPage should take primiryContent thet is displayed in the cameraview
-
-  void productResultHandler(Product product, String scanData) async {
-    print("was barcode");
-    print(await product.futureToString());
-    setState(() {
-      this.currentProduct = product; // should always reflect the resulting scan
-    });
-  }
-
-  void successfullScan(String scanData) async {
-    print("Successfull scaaaan!: " + scanData);
-
-    ScanHandler.handleScanData(
-        scanData, this.currentProduct, productResultHandler);
+  void fadeContent() async {
+    var product = WorkStore.instance.currentProduct;
+    var ean = WorkStore.instance.currentEAN;
+    print("fadeContent!!");
+    if (product.exists() || Utils.isNullOrEmpty(ean)) {
+      return;
+    }
+    Navigator.push(
+        context,
+        PageRouteBuilder(
+            pageBuilder: (_, __, ___) =>
+                SearchRoute(SearchPage(product, ean))));
   }
 }
 

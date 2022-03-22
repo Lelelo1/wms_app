@@ -1,5 +1,6 @@
 // having objects tied directly to warehousesystem/database
 
+import 'package:event/event.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wms_app/models/attributes.dart';
 import 'package:wms_app/remote/WarehouseSystem.dart';
@@ -13,7 +14,7 @@ import 'package:collection/collection.dart';
 class Product extends AbstractProduct {
   Product(int id) : super(id);
 
-  const Product.empty() : super.empty();
+  Product.empty() : super.empty();
 
   bool exists() => id > 0;
 
@@ -56,7 +57,12 @@ class Product extends AbstractProduct {
     var shelf = (await WarehouseSystem.instance
             .fetchAttribute<String?>(id, Attributes.shelf))
         ?.firstOrNull;
-    return Utils.defaultString(shelf, "-");
+    var s = Utils.defaultString(shelf, "-");
+    if (s == "-") {
+      return s;
+    }
+
+    return AbstractProduct.shelfPrefix + s;
   }
 
   @override
@@ -102,7 +108,7 @@ class Product extends AbstractProduct {
   }
 }
 
-abstract class AbstractProduct {
+abstract class AbstractProduct extends EventArgs {
   final int id;
   Future<String> getEAN();
   Future<String> getSKU();
@@ -114,7 +120,9 @@ abstract class AbstractProduct {
   Future<void> setEAN(String ean);
 
   AbstractProduct(this.id);
-  const AbstractProduct.empty([this.id = 0]);
+  AbstractProduct.empty([this.id = 0]);
+
+  static const String shelfPrefix = "shelf:";
 }
 
 class MockProduct implements AbstractProduct {

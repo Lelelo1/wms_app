@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wms_app/mixins/transitions.dart';
 import 'package:wms_app/pages/returnPage.dart';
+import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/widgets/wmsPage.dart';
 
 // ignore: must_be_immutable
@@ -54,6 +55,7 @@ class _State extends State<FeaturesPage> {
   }
 
   void tapFeature(Widget to) async {
+    WorkStore.instance.clearAll();
     Navigator.push(this.context, MaterialPageRoute(builder: (context) => to));
   }
 }

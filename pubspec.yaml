@@ -40,8 +40,6 @@ dependencies:
   google_ml_vision: ^0.0.6 #dysfunction textrecognition confidence score
   camera: ^0.9.4+3 
   rflutter_alert: ^2.0.4
-  mobx: ^2.0.5
-  flutter_mobx: ^2.0.2
   line_icons: ^2.0.1
   flip_card: ^0.6.0
   #screen: ^0.0.5 not being updated:
@@ -52,6 +50,8 @@ dependencies:
   git_info: ^1.1.2
   flutter_font_icons: ^2.2.4
   touchable_opacity: ^1.2.0
+  event: ^2.0.5
+  eventsubscriber: ^2.0.0
 
 dev_dependencies:
   integration_test:

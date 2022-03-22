@@ -9,28 +9,33 @@ import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/views/extended/stacked.dart';
 import 'package:wms_app/widgets/wmsAsyncWidget.dart';
 import 'package:wms_app/widgets/wmsEmptyWidget.dart';
-import 'package:flutter/material.dart';
 import '../utils.dart';
 import 'package:touchable_opacity/touchable_opacity.dart';
 
-typedef Transition = Widget Function(Product p, String ean);
+typedef Transition = Widget Function();
 
-typedef ImageContentTransition = Widget Function(
-    Product p, String ean, void Function() onPressAddEan);
+typedef ImageContentTransition = Widget Function(void Function() onPressAddEan);
 
 class Transitions {
-  static ImageContentTransition imageContent =
-      (Product p, String ean, void Function() onPressAddEan) {
+  static ImageContentTransition imageContent = (void Function() onPressAddEan) {
+    var ean = WorkStore.instance.currentEAN;
+    var p = WorkStore.instance.currentProduct;
+
     if (p.exists()) {
-      return WMSAsyncWidget<String>(p.getShelf(),
-          (shelf) => _cameraContent(_shelfWidget(shelf), _scanSymbol(shelf)));
+      return WMSAsyncWidget<String>(
+          p.getShelf(),
+          (shelf) => _cameraContent(
+              _shelfWidget(shelf.replaceAll(AbstractProduct.shelfPrefix, "")),
+              _scanSymbol(MaterialCommunityIcons.qrcode_scan)));
     }
 
     if (ean.isNotEmpty) {
-      return _cameraContent(_eanWidget(ean, onPressAddEan), _scanSymbol(""));
+      return _cameraContent(_eanWidget(ean, onPressAddEan),
+          _scanSymbol(MaterialCommunityIcons.barcode_scan));
     }
 
-    return _cameraContent(_shelfWidget(""), _scanSymbol(""));
+    return _cameraContent(
+        WMSEmptyWidget(), _scanSymbol(MaterialCommunityIcons.barcode_scan));
   };
 
   static Widget _cameraContent(Widget cameraContent, Widget scanSymbol) {
@@ -52,29 +57,14 @@ class Transitions {
           ], mainAxisAlignment: MainAxisAlignment.center),
           onTap: onPressAddEan));
 
-  static Widget _scanSymbol(String text) {
-    var iconData = text.isEmpty
-        ? MaterialCommunityIcons.barcode_scan
-        : MaterialCommunityIcons.qrcode_scan;
-
+  static Widget _scanSymbol(IconData symbol) {
     return Align(
         child: Row(children: [
       Spacer(flex: 20),
-      Icon(iconData, size: 35, color: Colors.white),
+      Icon(symbol, size: 35, color: Colors.white),
       Spacer(flex: 1)
     ]));
   }
 
-  static Transition fadeContent = (Product product, String ean) {
-    if (product.exists() || Utils.isNullOrEmpty(ean)) {
-      return WMSEmptyWidget();
-    }
-
-    return SearchRoute(SearchPage(product, ean));
-  };
-
-  static Transition scrollContent = (Product p, String ean) =>
-      p.exists() ? ProductRoute(p) : WMSEmptyWidget();
-
-  static Transition empty = (Product p, String ean) => WMSEmptyWidget();
+  static Transition empty = () => WMSEmptyWidget();
 }

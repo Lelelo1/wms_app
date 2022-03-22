@@ -9,7 +9,11 @@ import 'package:flutter/material.dart';
 import 'package:google_ml_vision/google_ml_vision.dart';
 import 'package:mysql1/mysql1.dart';
 import 'package:wms_app/models/product.dart';
+import 'package:wms_app/services/scanHandler.dart';
 import 'package:wms_app/widgets/wmsEmptyWidget.dart';
+
+typedef Scan = String;
+typedef QR = String;
 
 class Utils {
   // for better readability, there is a javascript
@@ -149,4 +153,8 @@ extension StatefulWidgetExtensions on State {
 
 extension SizeExtensions on Size {
   Size modified(double h) => new Size(this.width, this.height * h);
+}
+
+extension ScanExtension on Scan {
+  String toShelf(String prefix) => this.replaceAll(prefix, "");
 }
