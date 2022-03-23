@@ -44,12 +44,15 @@ class WorkStore {
   Event _scanDataEvent = Event();
   Event get scanDataEvent => _scanDataEvent;
 
+  Event _assignShelfEvent = Event();
+  Event get assignShelfEvent => _assignShelfEvent;
+
+  String currentShelf = "";
+
   void clearAll() {
     this.currentProduct = Product.empty();
     this.currentEAN = "";
     this._scanData = [];
+    this.currentShelf = "";
   }
-
-  Event _assignShelfEvent = Event();
-  Event get assignShelfEvent => _assignShelfEvent;
 }

@@ -48,6 +48,8 @@ class ScanHandler {
       return;
     }
 
+    WorkStore.instance.currentShelf = scanResult;
+
     // hanlding case when product scanned pevisouly needs shelf assigned to it
     print("lastProduct: " + await lastProduct.futureToString());
     if (lastProduct.exists()) {
