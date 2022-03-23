@@ -38,6 +38,7 @@ class ScanHandler {
     var product = await handleAsProduct(scanResult);
     if (product.exists()) {
       WorkStore.instance.currentProduct = product;
+      print("currentProduct is : " + await product.getName());
       return;
     }
 
@@ -48,11 +49,12 @@ class ScanHandler {
     }
 
     // hanlding case when product scanned pevisouly needs shelf assigned to it
-
+    print("lastProduct: " + await lastProduct.futureToString());
     if (lastProduct.exists()) {
       var lastProductShelf = await lastProduct.getShelf();
       print("lastProductShelf: " + lastProductShelf);
       if (lastProductShelf.contains(AbstractProduct.assignShelf)) {
+        print("broadcast assignshelf!");
         WorkStore.instance.assignShelfEvent.broadcast();
         return;
       }
