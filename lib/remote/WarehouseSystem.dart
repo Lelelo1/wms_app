@@ -55,6 +55,7 @@ class WarehouseSystem /*implements AbstractProductsSource */ {
   Future<Product> fetchProduct(String ean) async {
     Results? results;
     var sql = SQLQuery.fetchProduct(ean);
+    print(sql);
     results = await _interact((connection) => connection?.query(sql));
     var products =
         Deserialization.products(results); // shoudl haev zero or one hit
@@ -123,5 +124,11 @@ class WarehouseSystem /*implements AbstractProductsSource */ {
     var results = await _interact((connection) => connection?.query(q));
 
     return Deserialization.quantity(results);
+  }
+
+  Future<void> setShelf(Product product, String shelf) async {
+    var q = SQLQuery.setShelf(product.id.toString(), shelf);
+    print("q..: " + q);
+    await _interact((connection) => connection?.query(q));
   }
 }

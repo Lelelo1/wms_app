@@ -1,7 +1,7 @@
 import 'dart:ffi';
 
 import 'package:wms_app/models/product.dart';
-import 'package:wms_app/remote/WarehouseSystem.dart';
+import 'package:wms_app/remote/warehouseSystem.dart';
 import 'package:wms_app/services/visionService.dart';
 import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/views/cameraView.dart';

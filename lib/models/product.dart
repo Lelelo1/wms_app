@@ -3,7 +3,7 @@
 import 'package:event/event.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wms_app/models/attributes.dart';
-import 'package:wms_app/remote/WarehouseSystem.dart';
+import 'package:wms_app/remote/warehouseSystem.dart';
 import 'package:wms_app/stores/workStore.dart';
 import '../utils.dart';
 import 'package:collection/collection.dart';
@@ -124,7 +124,7 @@ abstract class AbstractProduct extends EventArgs {
 
   static const String shelfPrefix = "shelf:";
 
-  static const assignShelf = "S-3-1"; //"BEST";
+  static const assignShelf = "BEST";
 }
 
 class MockProduct implements AbstractProduct {

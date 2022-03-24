@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:wms_app/mixins/transitions.dart';
 import 'package:wms_app/pages/scanPage.dart';
 import 'package:wms_app/pages/searchPage.dart';
+import 'package:wms_app/remote/WarehouseSystem.dart';
 import 'package:wms_app/routes/productRoute.dart';
 import 'package:wms_app/routes/searchRoute.dart';
 import 'package:wms_app/services/scanHandler.dart';
@@ -37,7 +38,8 @@ class _State extends State<ReturnPage> {
   @override
   void initState() {
     WorkStore.instance.assignShelfEvent.subscribe((args) async {
-      var productName = await WorkStore.instance.currentProduct.getName();
+      var product = WorkStore.instance.currentProduct;
+      var productName = await product.getName();
       var shelf = WorkStore.instance.currentShelf;
       Alert(
           context: this.context,
@@ -46,7 +48,7 @@ class _State extends State<ReturnPage> {
           buttons: [
             DialogButton(
               onPressed: () {
-                // post shelf to product
+                WarehouseSystem.instance.setShelf(product, shelf);
                 ScanHandler.scan(shelf);
                 Navigator.pop(context);
               },
