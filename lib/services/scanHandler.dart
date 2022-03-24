@@ -1,18 +1,16 @@
-import 'dart:ffi';
-
 import 'package:wms_app/models/product.dart';
-import 'package:wms_app/remote/WarehouseSystem.dart';
+import 'package:wms_app/remote/warehouseSystem.dart';
 import 'package:wms_app/services/visionService.dart';
 import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/views/cameraView.dart';
-
-import '../utils.dart';
 
 typedef ProductResultHandler = void Function(Product product, String scanData);
 
 String emptyMsg = "ignored scan. no event handler added";
 
 class ScanHandler {
+  static const String shelfPrefix = "shelf:";
+
   static late WarehouseSystem warehouseSystem = WarehouseSystem.instance;
   static late VisionService visionService = VisionService.instance;
 
@@ -32,11 +30,17 @@ class ScanHandler {
 
     CameraViewController.scanningSuccessfull();
 
-    WorkStore.instance.addScanData(scanResult);
+    handleScanResult(scanResult);
+  }
 
-    var product = await handleAsProduct(scanResult);
+  static void handleScanResult(String scanResult) async {
+    WorkStore.instance.addScanData(scanResult);
+    var lastProduct = WorkStore.instance.currentProduct;
+
+    var product = await _handleAsProduct(scanResult);
     if (product.exists()) {
       WorkStore.instance.currentProduct = product;
+      print("currentProduct is : " + await product.getName());
       return;
     }
 
@@ -46,25 +50,41 @@ class ScanHandler {
       return;
     }
 
-    var match = await WorkStore.instance.isMatchingShelf(scanResult);
+    var shelf = removeShelfPrefix(scanResult);
+    WorkStore.instance.currentShelf = shelf;
+
+    // hanlding case when product scanned pevisouly needs shelf assigned to it
+    print("lastProduct: " + await lastProduct.futureToString());
+    if (lastProduct.exists()) {
+      var lastProductShelf = await lastProduct.getShelf();
+      if (lastProductShelf.contains(AbstractProduct.assignShelf)) {
+        WorkStore.instance.assignShelfEvent.broadcast();
+        return;
+      }
+    }
+
+    var match = await WorkStore.instance.isMatchingShelf(shelf);
     if (!match) {
       return;
     }
 
-    handleAsShelf(scanResult);
+    _handleAsShelf(shelf);
   }
 
-  static void handleAsShelf(String scanResult) async {
+  static void _handleAsShelf(String scanResult) async {
     warehouseSystem.increaseAmountOfProducts(WorkStore.instance.currentProduct);
     WorkStore.instance.clearAll();
   }
 
-  static Future<Product> handleAsProduct(String scanResult) async {
+  static Future<Product> _handleAsProduct(String scanResult) async {
     var product = await warehouseSystem.fetchProduct(scanResult);
     return product;
   }
 
   static bool _isShelf(String scanData) {
-    return scanData.contains(AbstractProduct.shelfPrefix);
+    return scanData.contains(shelfPrefix);
   }
+
+  static String removeShelfPrefix(String shelf) =>
+      shelf.replaceAll(shelfPrefix, "");
 }

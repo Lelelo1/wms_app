@@ -9,6 +9,9 @@ class VersionStore {
 
   Configuration getConfiguration() {
     var c = const String.fromEnvironment("CONFIGURATION");
+    if (c.isEmpty) {
+      return Configuration("dev");
+    }
     return Configuration(c);
   }
 

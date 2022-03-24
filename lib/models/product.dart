@@ -3,7 +3,7 @@
 import 'package:event/event.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wms_app/models/attributes.dart';
-import 'package:wms_app/remote/WarehouseSystem.dart';
+import 'package:wms_app/remote/warehouseSystem.dart';
 import 'package:wms_app/stores/workStore.dart';
 import '../utils.dart';
 import 'package:collection/collection.dart';
@@ -57,12 +57,7 @@ class Product extends AbstractProduct {
     var shelf = (await WarehouseSystem.instance
             .fetchAttribute<String?>(id, Attributes.shelf))
         ?.firstOrNull;
-    var s = Utils.defaultString(shelf, "-");
-    if (s == "-") {
-      return s;
-    }
-
-    return AbstractProduct.shelfPrefix + s;
+    return Utils.defaultString(shelf, "-");
   }
 
   @override
@@ -122,7 +117,7 @@ abstract class AbstractProduct extends EventArgs {
   AbstractProduct(this.id);
   AbstractProduct.empty([this.id = 0]);
 
-  static const String shelfPrefix = "shelf:";
+  static const assignShelf = "BEST";
 }
 
 class MockProduct implements AbstractProduct {

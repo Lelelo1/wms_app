@@ -50,6 +50,9 @@ class SQLQuery {
       "SELECT `value` FROM `catalog_product_entity_varchar` WHERE `value` LIKE '%$scanData%' AND `attribute_id` = '198';";
   static quantity(String entityId) =>
       "SELECT `qty` FROM `cataloginventory_stock_item` WHERE `cataloginventory_stock_item`.`product_id` = '$entityId';";
+
+  static setShelf(String entityId, String shelf) =>
+      "UPDATE `catalog_product_entity_varchar` SET `value` = '$shelf' WHERE `catalog_product_entity_varchar`.`entity_id` = '$entityId' AND `catalog_product_entity_varchar`.`attribute_id` = 198;";
 }
 
   /*
