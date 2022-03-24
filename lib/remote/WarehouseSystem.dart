@@ -127,8 +127,7 @@ class WarehouseSystem /*implements AbstractProductsSource */ {
   }
 
   Future<void> setShelf(Product product, String shelf) async {
-    var q = SQLQuery.setShelf(
-        product.id.toString(), AbstractProduct.removeShelfPrefix(shelf));
+    var q = SQLQuery.setShelf(product.id.toString(), shelf);
     print("q..: " + q);
     await _interact((connection) => connection?.query(q));
   }
