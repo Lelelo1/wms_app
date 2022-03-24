@@ -125,6 +125,9 @@ abstract class AbstractProduct extends EventArgs {
   static const String shelfPrefix = "shelf:";
 
   static const assignShelf = "BEST";
+
+  static String removeShelfPrefix(String shelf) =>
+      shelf.replaceAll(shelfPrefix, "");
 }
 
 class MockProduct implements AbstractProduct {
