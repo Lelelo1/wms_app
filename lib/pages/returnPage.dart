@@ -47,9 +47,9 @@ class _State extends State<ReturnPage> {
               "Vill du lägga till hyllplatsen $shelf till produkten $productName",
           buttons: [
             DialogButton(
-              onPressed: () {
-                WarehouseSystem.instance.setShelf(product, shelf);
-                ScanHandler.scan(shelf);
+              onPressed: () async {
+                await WarehouseSystem.instance.setShelf(product, shelf);
+                ScanHandler.handleScanResult(ScanHandler.shelfPrefix + shelf);
                 Navigator.pop(context);
               },
               child: Text("Ja"),

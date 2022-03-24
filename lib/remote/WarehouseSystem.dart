@@ -126,9 +126,9 @@ class WarehouseSystem /*implements AbstractProductsSource */ {
     return Deserialization.quantity(results);
   }
 
-  Future<void> setShelf(Product product, String shelf) async {
+  Future<void> setShelf(Product product, String shelf) {
     var q = SQLQuery.setShelf(product.id.toString(), shelf);
     print("q..: " + q);
-    await _interact((connection) => connection?.query(q));
+    return _interact((connection) => connection?.query(q));
   }
 }

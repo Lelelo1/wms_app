@@ -30,10 +30,14 @@ class ScanHandler {
 
     CameraViewController.scanningSuccessfull();
 
+    handleScanResult(scanResult);
+  }
+
+  static void handleScanResult(String scanResult) async {
     WorkStore.instance.addScanData(scanResult);
     var lastProduct = WorkStore.instance.currentProduct;
 
-    var product = await handleAsProduct(scanResult);
+    var product = await _handleAsProduct(scanResult);
     if (product.exists()) {
       WorkStore.instance.currentProduct = product;
       print("currentProduct is : " + await product.getName());
@@ -64,15 +68,15 @@ class ScanHandler {
       return;
     }
 
-    handleAsShelf(shelf);
+    _handleAsShelf(shelf);
   }
 
-  static void handleAsShelf(String scanResult) async {
+  static void _handleAsShelf(String scanResult) async {
     warehouseSystem.increaseAmountOfProducts(WorkStore.instance.currentProduct);
     WorkStore.instance.clearAll();
   }
 
-  static Future<Product> handleAsProduct(String scanResult) async {
+  static Future<Product> _handleAsProduct(String scanResult) async {
     var product = await warehouseSystem.fetchProduct(scanResult);
     return product;
   }
