@@ -1,0 +1,7 @@
+
+{
+    "getAttribute" : ["", "productId"],
+    "getSKU" : ["", "productId"],
+    "setEAN" : ["", "productId", "ean"]
+
+}

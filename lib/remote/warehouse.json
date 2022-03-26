@@ -1,0 +1,7 @@
+
+{
+    "getAttribute" : ["SELECT `catalog_product_entity_varchar`.`value` FROM `catalog_product_entity_varchar` WHERE `catalog_product_entity_varchar`.`attribute_id` IN (SELECT `eav_attribute`.`attribute_id` FROM `eav_attribute` WHERE `eav_attribute`.`attribute_code` = '$attributeCode') AND `catalog_product_entity_varchar`.`entity_id` = '<productId>' AND `catalog_product_entity_varchar`. `store_id` = '0';", "productId"],
+    "getSKU" : ["SELECT `catalog_product_entity`.`sku`FROM `catalog_product_entity` WHERE `catalog_product_entity`.`entity_id` = '<productId>'", "productId"],
+    "setEAN" : ["INSERT INTO `catalog_product_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES ('4', '283', '0', '<productId>', '<ean>');", "productId", "ean"]
+
+}
