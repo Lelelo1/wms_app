@@ -1,5 +1,5 @@
-class AutoGenerate {
-  AutoGenerate({
+class Warehouse {
+  Warehouse({
     required this.commentScanning,
     required this.getProduct,
     required this.productSuggestions,
@@ -28,7 +28,7 @@ class AutoGenerate {
   late final List<String> getQuantity;
   late final List<String> setEAN;
 
-  AutoGenerate.fromJson(Map<String, dynamic> json) {
+  Warehouse.fromJson(Map<String, dynamic> json) {
     commentScanning = List.castFrom<dynamic, String>(json['commentScanning']);
     getProduct = List.castFrom<dynamic, String>(json['getProduct']);
     productSuggestions =
