@@ -1,21 +1,19 @@
 
 {
 
-    "_scanning": ["scanning based ean barcodes and qr"],
+    "commentScanning": ["scanning based ean barcodes and qr"],
     "getProduct": ["SELECT `catalog_product_entity`.`entity_id` FROM `catalog_product_entity` WHERE `catalog_product_entity`.`entity_id` IN (SELECT `entity_id` FROM `catalog_product_entity_varchar` WHERE `attribute_id` = '283' AND `value` = '<ean>') ORDER BY `entity_id` DESC LIMIT 1;", "ean"],
     "productSuggestions": ["SELECT `entity_id` FROM `catalog_product_entity` WHERE `sku` LIKE '%<sku>%' AND `entity_id` NOT IN (SELECT `entity_id` FROM `catalog_product_entity_varchar` WHERE `attribute_id` = '283') LIMIT 20", "sku"],
     "findShelf": ["SELECT `value` FROM `catalog_product_entity_varchar` WHERE `value` LIKE '%<shelf>%' AND `attribute_id` = '198';", "shelf"],
     "increaseQuantity": ["UPDATE `cataloginventory_stock_item` SET `qty` = `qty` + '1' WHERE `product_id` = '<productId>';", "productId"],
 
-    "_productAttributes" : "below are needed getters and setters for product based on productId",
+    "commentProductAttributes" : "below are needed getters and setters for product based on productId",
     "getEAN" : ["SELECT `catalog_product_entity_varchar`.`value` FROM `catalog_product_entity_varchar` WHERE `catalog_product_entity_varchar`.`attribute_id` IN (SELECT `eav_attribute`.`attribute_id` FROM `eav_attribute` WHERE `eav_attribute`.`attribute_code` = 'ean_code') AND `catalog_product_entity_varchar`.`entity_id` = '<productId>' AND `catalog_product_entity_varchar`. `store_id` = '0';", "productId"],
     "getName" : ["SELECT `catalog_product_entity_varchar`.`value` FROM `catalog_product_entity_varchar` WHERE `catalog_product_entity_varchar`.`attribute_id` IN (SELECT `eav_attribute`.`attribute_id` FROM `eav_attribute` WHERE `eav_attribute`.`attribute_code` = 'name') AND `catalog_product_entity_varchar`.`entity_id` = '<productId>' AND `catalog_product_entity_varchar`. `store_id` = '0';", "productId"],
     "getShelf" : ["SELECT `catalog_product_entity_varchar`.`value` FROM `catalog_product_entity_varchar` WHERE `catalog_product_entity_varchar`.`attribute_id` IN (SELECT `eav_attribute`.`attribute_id` FROM `eav_attribute` WHERE `eav_attribute`.`attribute_code` = 'shelf') AND `catalog_product_entity_varchar`.`entity_id` = '<productId>' AND `catalog_product_entity_varchar`. `store_id` = '0';", "productId"],
     "getSKU" : ["SELECT `catalog_product_entity`.`sku`FROM `catalog_product_entity` WHERE `catalog_product_entity`.`entity_id` = '<productId>'", "productId"],
     "getImages": ["SELECT `catalog_product_entity_media_gallery`.`value` FROM `catalog_product_entity_media_gallery`, `catalog_product_entity_media_gallery_value` WHERE `catalog_product_entity_media_gallery`.`entity_id` IN (SELECT `catalog_product_relation`.`parent_id` FROM `catalog_product_relation` WHERE `catalog_product_relation`.`child_id` = '<productId>') AND `catalog_product_entity_media_gallery`.`value_id` = `catalog_product_entity_media_gallery_value`.`value_id` AND (`catalog_product_entity_media_gallery_value`.`position` = '1' OR `catalog_product_entity_media_gallery_value`.`position` = '2') ORDER BY `catalog_product_entity_media_gallery_value`.`position` ASC;", "productId"],
     "getQuantity": ["SELECT `qty` FROM `cataloginventory_stock_item` WHERE `cataloginventory_stock_item`.`product_id` = '<productId>';", "productId"],
-
-    "_productSettersComment" : "below are needed attribute setters based on product id",
     "setEAN" : ["INSERT INTO `catalog_product_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES ('4', '283', '0', '<productId>', '<ean>');", "productId", "ean"]
     
 }
