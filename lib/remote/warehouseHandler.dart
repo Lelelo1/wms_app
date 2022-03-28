@@ -4,6 +4,6 @@ class WarehouseQueries {
   Warehouse _warehouse;
   WarehouseQueries(this._warehouse);
 
-  String getProductQuery(String ean) => _warehouse.getProduct.
-
+  String getProductQuery(String ean) =>
+      _warehouse.getProduct.first.replaceAll("<$ean>", ean);
 }

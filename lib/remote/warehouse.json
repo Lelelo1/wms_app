@@ -3,7 +3,7 @@
 
     "commentScanning": ["scanning based ean barcodes and qr"],
     "getProduct": ["SELECT `catalog_product_entity`.`entity_id` FROM `catalog_product_entity` WHERE `catalog_product_entity`.`entity_id` IN (SELECT `entity_id` FROM `catalog_product_entity_varchar` WHERE `attribute_id` = '283' AND `value` = '<ean>') ORDER BY `entity_id` DESC LIMIT 1;", "ean"],
-    "productSuggestions": ["SELECT `entity_id` FROM `catalog_product_entity` WHERE `sku` LIKE '%<sku>%' AND `entity_id` NOT IN (SELECT `entity_id` FROM `catalog_product_entity_varchar` WHERE `attribute_id` = '283') LIMIT 20", "sku"],
+    "getProductSuggestions": ["SELECT `entity_id` FROM `catalog_product_entity` WHERE `sku` LIKE '%<sku>%' AND `entity_id` NOT IN (SELECT `entity_id` FROM `catalog_product_entity_varchar` WHERE `attribute_id` = '283') LIMIT 20", "sku"],
     "findShelf": ["SELECT `value` FROM `catalog_product_entity_varchar` WHERE `value` LIKE '%<shelf>%' AND `attribute_id` = '198';", "shelf"],
     "increaseQuantity": ["UPDATE `cataloginventory_stock_item` SET `qty` = `qty` + '1' WHERE `product_id` = '<productId>';", "productId"],
 
