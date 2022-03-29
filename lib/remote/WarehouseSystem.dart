@@ -51,6 +51,21 @@ class WarehouseSystem /*implements AbstractProductsSource */ {
 
   Future<dynamic>? disconnect(MySqlConnection? connection) =>
       connection?.close();
+
+  Future<List<T>> request<T>(String query) async {
+    Results? results;
+    results = await _interact((connection) => connection?.query(query));
+
+    return deserialize<T>(results);
+  }
+
+  List<T> deserialize<T>(Results? results) {
+    if (results == null || results.isEmpty) {
+      return List.empty();
+    }
+    return results.map((e) => (e[0] as T)).toList();
+  }
+
   /*
   Future<Product> fetchProduct(String ean) async {
     Results? results;
