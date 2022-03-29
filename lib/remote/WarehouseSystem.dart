@@ -8,16 +8,12 @@ import 'package:wms_app/remote/deserialization.dart';
 import 'package:wms_app/remote/sqlQuery.dart';
 import 'package:wms_app/secrets/WMS_Katsumi_Database_Settings.dart';
 import 'package:wms_app/stores/versionStore.dart';
-
+import 'package:wms_app/remote/warehouseQueries.dart';
 import '../utils.dart';
 
 // https://pub.dev/packages/mysql1
 class WarehouseSystem /*implements AbstractProductsSource */ {
-  static late WarehouseSystem instance = WarehouseSystem._();
-
-  WarehouseSystem._();
-
-  Future<Results?> _interact<Results>(
+  static Future<Results?> interact<Results>(
       Future<Results>? Function(MySqlConnection? connection) action) async {
     MySqlConnection? connection;
     try {
@@ -37,7 +33,7 @@ class WarehouseSystem /*implements AbstractProductsSource */ {
   // needs internet permission android real device, otherwise: 'SocketException: OS Error: Connection refused'
   // https://stackoverflow.com/questions/55785581/socketexception-os-error-connection-refused-errno-111-in-flutter-using-djan
   // such permission is granted on install time: https://developer.android.com/training/basics/network-ops/connecting
-  Future<MySqlConnection?> connect() async {
+  static Future<MySqlConnection?> connect() async {
     var database = VersionStore.instance.getDatabase();
     var settings = new ConnectionSettings(
         host: WMSKatsumiDatabaseSettings.host,
@@ -49,17 +45,10 @@ class WarehouseSystem /*implements AbstractProductsSource */ {
     return await MySqlConnection.connect(settings);
   }
 
-  Future<dynamic>? disconnect(MySqlConnection? connection) =>
+  static Future<dynamic>? disconnect(MySqlConnection? connection) =>
       connection?.close();
 
-  Future<List<T>> request<T>(String query) async {
-    Results? results;
-    results = await _interact((connection) => connection?.query(query));
-
-    return deserialize<T>(results);
-  }
-
-  List<T> deserialize<T>(Results? results) {
+  static List<T> deserialize<T>(Results? results) {
     if (results == null || results.isEmpty) {
       return List.empty();
     }
@@ -140,4 +129,14 @@ class WarehouseSystem /*implements AbstractProductsSource */ {
     return Deserialization.quantity(results);
   }
   */
+}
+
+extension QueryExtensions on Query {
+  Future<List<T>> request<T>() async {
+    Results? results;
+    results =
+        await WarehouseSystem.interact((connection) => connection?.query(this));
+
+    return WarehouseSystem.deserialize<T>(results);
+  }
 }

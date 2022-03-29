@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wms_app/mixins/transitions.dart';
 import 'package:wms_app/models/product.dart';
+import 'package:wms_app/remote/warehouseQueries.dart';
 import 'package:wms_app/remote/warehouseSystem.dart';
 import 'package:wms_app/routes/productRoute.dart';
 import 'package:wms_app/stores/workStore.dart';
@@ -102,7 +103,8 @@ class _State extends State<SearchPage> {
       );
 
   void setInputTextState(String text) async {
-    var suggestions = await WarehouseSystem.instance.
+    var suggestions =
+        WarehouseQueries.instance.getProductSuggestionsQuery(text).request();
     setState(() {
       this.text = text;
       this.productSuggestions = suggestions;
