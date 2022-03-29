@@ -102,7 +102,7 @@ class _State extends State<SearchPage> {
       );
 
   void setInputTextState(String text) async {
-    var suggestions = await WarehouseSystem.instance.fetchSuggestions(text);
+    var suggestions = await WarehouseSystem.instance.
     setState(() {
       this.text = text;
       this.productSuggestions = suggestions;

@@ -1,33 +1,35 @@
 import 'package:wms_app/models/warehouse.dart';
 
-class WarehouseQueries {
-  Warehouse _warehouse;
-  WarehouseQueries(this._warehouse);
+typedef Query = String;
 
-  String getProductQuery(String ean) => _warehouse.getProduct.build([ean]);
-  String getProductSuggestionsQuery(String sku) =>
+class WarehouseQueries {
+  static late WarehouseQueries instance;
+  Warehouse _warehouse;
+  WarehouseQueries._(this._warehouse);
+
+  Query getProductQuery(String ean) => _warehouse.getProduct.build([ean]);
+  Query getProductSuggestionsQuery(String sku) =>
       _warehouse.getProductSuggestions.build([sku]);
-  String findShelfQuery(String shelf) => _warehouse.findShelf.build([shelf]);
-  String increaseQuantity(String productId) =>
+  Query findShelfQuery(String shelf) => _warehouse.findShelf.build([shelf]);
+  Query increaseQuantity(String productId) =>
       _warehouse.increaseQuantity.build([productId]);
 
   // product attributes:
-  String getEANQuery(String productId) => _warehouse.getEAN.build([productId]);
-  String getNameQuery(String productId) =>
-      _warehouse.getName.build([productId]);
-  String getShelfQuery(String productId) =>
+  Query getEANQuery(String productId) => _warehouse.getEAN.build([productId]);
+  Query getNameQuery(String productId) => _warehouse.getName.build([productId]);
+  Query getShelfQuery(String productId) =>
       _warehouse.getShelf.build([productId]);
-  String getSKUQuery(String productId) => _warehouse.getSKU.build([productId]);
-  String getImagesQuery(String productId) =>
+  Query getSKUQuery(String productId) => _warehouse.getSKU.build([productId]);
+  Query getImagesQuery(String productId) =>
       _warehouse.getImages.build([productId]);
-  String getQuantityQuery(String productId) =>
+  Query getQuantityQuery(String productId) =>
       _warehouse.getQuantity.build([productId]);
-  String setEANQuery(String productId, String ean) =>
+  Query setEANQuery(String productId, String ean) =>
       _warehouse.setEAN.build([productId, ean]);
 }
 
 extension QueryExtensions on List<String> {
-  String build([List<String> values = const []]) {
+  Query build([List<String> values = const []]) {
     var query = this.first;
     this.remove(query);
 
