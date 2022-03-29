@@ -2,7 +2,7 @@ class Warehouse {
   Warehouse({
     required this.commentScanning,
     required this.getProduct,
-    required this.productSuggestions,
+    required this.getProductSuggestions,
     required this.findShelf,
     required this.increaseQuantity,
     required this.commentProductAttributes,
@@ -16,7 +16,7 @@ class Warehouse {
   });
   late final List<String> commentScanning;
   late final List<String> getProduct;
-  late final List<String> productSuggestions;
+  late final List<String> getProductSuggestions;
   late final List<String> findShelf;
   late final List<String> increaseQuantity;
   late final String commentProductAttributes;
@@ -31,7 +31,7 @@ class Warehouse {
   Warehouse.fromJson(Map<String, dynamic> json) {
     commentScanning = List.castFrom<dynamic, String>(json['commentScanning']);
     getProduct = List.castFrom<dynamic, String>(json['getProduct']);
-    productSuggestions =
+    getProductSuggestions =
         List.castFrom<dynamic, String>(json['productSuggestions']);
     findShelf = List.castFrom<dynamic, String>(json['findShelf']);
     increaseQuantity = List.castFrom<dynamic, String>(json['increaseQuantity']);
@@ -49,7 +49,7 @@ class Warehouse {
     final _data = <String, dynamic>{};
     _data['commentScanning'] = commentScanning;
     _data['getProduct'] = getProduct;
-    _data['productSuggestions'] = productSuggestions;
+    _data['getProductSuggestions'] = getProductSuggestions;
     _data['findShelf'] = findShelf;
     _data['increaseQuantity'] = increaseQuantity;
     _data['commentProductAttributes'] = commentProductAttributes;

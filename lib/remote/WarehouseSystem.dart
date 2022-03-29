@@ -51,7 +51,7 @@ class WarehouseSystem /*implements AbstractProductsSource */ {
 
   Future<dynamic>? disconnect(MySqlConnection? connection) =>
       connection?.close();
-
+  /*
   Future<Product> fetchProduct(String ean) async {
     Results? results;
     var sql = SQLQuery.fetchProduct(ean);
@@ -124,4 +124,5 @@ class WarehouseSystem /*implements AbstractProductsSource */ {
 
     return Deserialization.quantity(results);
   }
+  */
 }
