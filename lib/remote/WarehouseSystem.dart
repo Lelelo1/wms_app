@@ -94,9 +94,15 @@ class WarehouseSystem /*implements AbstractProductsSource */ {
   }
 
   void increaseAmountOfProducts(Product product) async {
-    var q = SQLQuery.increaseAmountOfProduct(product.id.toString());
-    print(q);
-    await _interact((connection) => connection?.query(q));
+    var increaseQuery = SQLQuery.increaseAmountOfProduct(product.id.toString());
+    increaseQuery.forEach((q) {
+      print(q);
+    });
+    await _interact((connection) {
+      increaseQuery.forEach((q) {
+        connection?.query(q);
+      });
+    });
   }
 
   Future<String> findShelf(String scanData) async {

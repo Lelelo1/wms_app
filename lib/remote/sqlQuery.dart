@@ -43,8 +43,12 @@ class SQLQuery {
   //static _updateEAN(String entityId, String ean) =>
   //    "UPDATE `catalog_product_entity_varchar` SET `value` = '$ean' WHERE `catalog_product_entity_varchar`.`attribute_id` = '283' AND `catalog_product_entity_varchar`.`entity_id` = '$entityId'";
 
-  static increaseAmountOfProduct(String entityId) =>
-      "UPDATE `cataloginventory_stock_item` SET `qty` = CASE WHEN `qty` > '9000' THEN '1' ELSE `qty` + '1' END WHERE `product_id` = '$entityId';UPDATE `cataloginventory_stock_status` SET `stock_status` = '1' WHERE `product_id` = '$entityId';UPDATE `cataloginventory_stock_status_idx` SET `stock_status` = '1' WHERE `product_id` = '$entityId';UPDATE `cataloginventory_stock_item` SET `is_in_stock` = '1' WHERE `product_id` = '$entityId';";
+  static List<String> increaseAmountOfProduct(String entityId) => [
+        "UPDATE `cataloginventory_stock_item` SET `qty` = CASE WHEN `qty` > '9000' THEN '1' ELSE `qty` + '1' END WHERE `product_id` = '$entityId';",
+        "UPDATE `cataloginventory_stock_status` SET `stock_status` = '1' WHERE `product_id` = '$entityId';",
+        "UPDATE `cataloginventory_stock_status_idx` SET `stock_status` = '1' WHERE `product_id` = '$entityId';",
+        "UPDATE `cataloginventory_stock_item` SET `is_in_stock` = '1' WHERE `product_id` = '$entityId';"
+      ];
 
   static findShelf(String scanData) =>
       "SELECT `value` FROM `catalog_product_entity_varchar` WHERE `value` LIKE '%$scanData%' AND `attribute_id` = '198';";
