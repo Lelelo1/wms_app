@@ -1,10 +1,19 @@
 import 'package:wms_app/models/attributes.dart';
 
 class SQLQuery {
-  static String fetchProduct(String ean) =>
-      "SELECT `catalog_product_entity`.`entity_id` FROM `catalog_product_entity` WHERE `catalog_product_entity`.`entity_id` IN (SELECT `entity_id` FROM `catalog_product_entity_varchar` WHERE `attribute_id` = '283' AND `value` = '" +
-      ean +
-      "') ORDER BY `entity_id` DESC LIMIT 1;";
+  static Map<String, String> idMap = {
+    "tableName": "catalog_product_entity",
+    "productId": "entity_id",
+    "attributeCode": "283"
+  };
+  static String fetchProduct(String ean) {
+    var productTable = idMap["tableName"];
+    var productId = idMap["productId"];
+    var attributeCode = idMap["attributeCode"];
+    var q =
+        "SELECT `$productTable`.`$productId` FROM `$productTable` WHERE `$productTable`.`$productId` IN (SELECT `$productId` FROM `$productTable` WHERE `$productId` = $attributeCode' AND `value` = '$ean') ORDER BY `$productId` DESC LIMIT 1;";
+    return q;
+  }
 
   // SELECT `catalog_product_entity`.`sku`FROM `catalog_product_entity` WHERE `catalog_product_entity`.`entity_id` = '<entity id>'
   static String fetchProductSuggestions(String sku) {
