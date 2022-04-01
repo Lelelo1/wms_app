@@ -1,15 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_font_icons/flutter_font_icons.dart';
-import 'package:line_icons/line_icons.dart';
-import 'package:wms_app/models/product.dart';
-import 'package:wms_app/pages/searchPage.dart';
-import 'package:wms_app/routes/productRoute.dart';
-import 'package:wms_app/routes/searchRoute.dart';
 import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/views/extended/stacked.dart';
 import 'package:wms_app/widgets/wmsAsyncWidget.dart';
 import 'package:wms_app/widgets/wmsEmptyWidget.dart';
-import '../utils.dart';
 import 'package:touchable_opacity/touchable_opacity.dart';
 
 typedef Transition = Widget Function();

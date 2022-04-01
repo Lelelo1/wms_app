@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wms_app/mixins/transitions.dart';
+import 'package:wms_app/content/transitions.dart';
 import 'package:wms_app/pages/returnPage.dart';
 import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/widgets/wmsPage.dart';

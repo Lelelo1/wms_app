@@ -2,7 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:wms_app/mixins/transitions.dart';
+import 'package:wms_app/content/transitions.dart';
 import 'package:wms_app/pages/scanPage.dart';
 import 'package:wms_app/pages/searchPage.dart';
 import 'package:wms_app/remote/warehouseSystem.dart';
