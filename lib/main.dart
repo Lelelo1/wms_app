@@ -1,6 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:wms_app/models/configuration.dart';
+import 'package:wms_app/services/navigationService.dart';
 import 'package:wms_app/stores/versionStore.dart';
 import 'package:wakelock/wakelock.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -53,6 +53,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+        navigatorKey: NavigationService.navigatorKey,
         title: this.widget.appName, // does not do anything inside the app
         theme: ThemeData(
           // This is the theme of your application.

@@ -12,8 +12,6 @@ import 'package:wms_app/services/scanHandler.dart';
 import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/views/cameraView.dart';
 import 'package:wms_app/views/extended/scrollable.dart';
-import 'package:wms_app/widgets/wmsAsyncWidget.dart';
-import 'package:wms_app/widgets/wmsImageContent.dart';
 import 'package:wms_app/widgets/wmsPage.dart';
 import 'package:wms_app/widgets/wmsAppBar.dart';
 import 'package:wms_app/widgets/wmsEmptyWidget.dart';
@@ -36,37 +34,9 @@ class _State extends State<ReturnPage> {
   // note that can't rerender color in app bar without rerender the rest of the app...
 
   @override
-  void initState() {
-    WorkStore.instance.assignShelfEvent.subscribe((args) async {
-      var product = WorkStore.instance.currentProduct;
-      var productName = await product.getName();
-      var shelf = WorkStore.instance.currentShelf;
-      Alert(
-          context: this.context,
-          desc:
-              "Vill du lägga till hyllplatsen $shelf till produkten $productName",
-          buttons: [
-            DialogButton(
-              onPressed: () async {
-                await WarehouseSystem.instance.setShelf(product, shelf);
-                ScanHandler.handleScanResult(ScanHandler.shelfPrefix + shelf);
-                Navigator.pop(context);
-              },
-              child: Text("Ja"),
-            ),
-            DialogButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text("Nej"),
-            )
-          ]).show();
-    });
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    this.widget.init(context);
+
     return Scaffold(
         appBar: WMSAppBar(this.widget.name, Color.fromARGB(255, 194, 66, 245),
                 Colors.transparent, Colors.white)

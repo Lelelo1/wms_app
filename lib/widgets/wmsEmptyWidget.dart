@@ -10,6 +10,11 @@ class WMSEmptyWidget extends StatefulWidget implements WMSPage {
   final String name = "";
 
   const WMSEmptyWidget();
+
+  @override
+  void init(BuildContext context) {
+    // ignore
+  }
 }
 
 class _State extends State<WMSEmptyWidget> {
