@@ -8,13 +8,20 @@ import 'package:wms_app/stores/workStore.dart';
 import '../utils.dart';
 import 'package:collection/collection.dart';
 
+import 'abstractProduct.dart';
+
 // potentially remove the '?' operator so default values can used. Which I guess
 // is the reason for the null safety anyway
 
 class Product extends AbstractProduct {
-  Product(int id) : super(id);
+  @override
+  int id = 0;
 
-  Product.empty() : super.empty();
+  Product(this.id);
+
+  Product.empty() {
+    id = 0;
+  }
 
   bool exists() => id > 0;
 
@@ -103,62 +110,5 @@ class Product extends AbstractProduct {
   }
 }
 
-abstract class AbstractProduct extends EventArgs {
-  final int id;
-  Future<String> getEAN();
-  Future<String> getSKU();
-  Future<String> getShelf();
-  Future<double> getQuanity();
-  Future<String> getName();
-  Future<List<String>> getImages();
-
-  Future<void> setEAN(String ean);
-
-  AbstractProduct(this.id);
-  AbstractProduct.empty([this.id = 0]);
-
-  static const assignShelf = "BEST";
-}
-
-class MockProduct implements AbstractProduct {
-  @override
-  int id;
-
-  MockProduct(
-      this.id, this._ean, this._imgs, this._name, this._sku, this._shelf);
-
-  String _ean;
-  List<String> _imgs;
-  String _name;
-  String _sku;
-  String _shelf;
-
-  @override
-  Future<String> getEAN() => Future.sync(() => _ean);
-
-  @override
-  Future<List<String>> getImages() => Future.sync(() => _imgs);
-
-  @override
-  Future<String> getName() => Future.sync(() => _name);
-
-  @override
-  Future<String> getSKU() => Future.sync(() => _sku);
-
-  @override
-  Future<String> getShelf() => Future.sync(() => _shelf);
-
-  @override
-  Future<void> setEAN(String ean) {
-    this._ean = ean;
-    return Future.sync(() => null);
-  }
-
-  @override
-  Future<double> getQuanity() {
-    // TODO: implement getQuanity
-    throw UnimplementedError();
-  }
-}
 
 // create mock abstract source
