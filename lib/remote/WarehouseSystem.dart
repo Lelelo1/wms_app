@@ -4,6 +4,7 @@ import 'package:git_info/git_info.dart';
 import 'package:mysql1/mysql1.dart';
 import 'package:wms_app/models/attributes.dart';
 import 'package:wms_app/models/product.dart';
+import 'package:wms_app/remote/abstractWarehouseSystem.dart';
 import 'package:wms_app/remote/deserialization.dart';
 import 'package:wms_app/remote/sqlQuery.dart';
 import 'package:wms_app/secrets/WMS_Katsumi_Database_Settings.dart';
@@ -12,7 +13,7 @@ import 'package:wms_app/stores/versionStore.dart';
 import '../utils.dart';
 
 // https://pub.dev/packages/mysql1
-class WarehouseSystem /*implements AbstractProductsSource */ {
+class WarehouseSystem implements AbstractWarehouseSystem {
   static late WarehouseSystem instance = WarehouseSystem._();
 
   WarehouseSystem._();

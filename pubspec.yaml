@@ -52,6 +52,7 @@ dependencies:
   touchable_opacity: ^1.2.0
   event: ^2.0.5
   eventsubscriber: ^2.0.0
+  sqflite: ^2.0.2
 
 dev_dependencies:
   integration_test:
