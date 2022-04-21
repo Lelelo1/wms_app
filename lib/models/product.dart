@@ -3,6 +3,8 @@
 import 'package:event/event.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wms_app/models/attributes.dart';
+import 'package:wms_app/remote/remoteHandler.dart';
+import 'package:wms_app/remote/sqlQuery.dart';
 import 'package:wms_app/remote/warehouseSystem.dart';
 import 'package:wms_app/stores/workStore.dart';
 import '../utils.dart';
@@ -27,59 +29,49 @@ class Product extends AbstractProduct {
 
   @override
   Future<String> getEAN() async {
-    var ean = (await WarehouseSystem.instance
-            .fetchAttribute<String>(id, Attributes.ean))
-        ?.firstOrNull;
-    return Utils.defaultString(ean, "-");
+    var eanHits = await Connect.remoteSql<String>(
+        SQLQuery.fetchAttribute(id.toString(), Attributes.ean));
+    return firstStringDefaultTo(eanHits);
   }
 
   static String katsumiImages = "https://www.katsumi.se/media/catalog/product/";
 
   @override
   Future<List<String>> getImages() async {
-    var imgs = await WarehouseSystem.instance
-        .fetchAttribute<String>(id, Attributes.images);
+    var imgs = await Connect.remoteSql<String>(
+        SQLQuery.fetchAttribute(id.toString(), Attributes.images));
     // potentially specify a fallback image, error image eg.
-    return Utils.defaultImages(imgs).map((e) => katsumiImages + e).toList();
+    return imgs.map((e) => katsumiImages + e).toList();
   }
 
   @override
   Future<String> getName() async {
-    var name = (await WarehouseSystem.instance
-            .fetchAttribute<String>(id, Attributes.name))
-        ?.firstOrNull;
-    return Utils.defaultString(name, "-");
+    var nameHits = await Connect.remoteSql<String>(
+        SQLQuery.fetchAttribute(id.toString(), Attributes.name));
+
+    return firstStringDefaultTo(nameHits, "-");
   }
 
   @override
   Future<String> getSKU() async {
-    var sku =
-        (await WarehouseSystem.instance.fetchAttribute(id, Attributes.sku))
-            ?.firstOrNull;
-    return Utils.defaultString(sku, "-");
+    var skuHits = await Connect.remoteSql<String>(
+        SQLQuery.fetchAttribute(id.toString(), Attributes.sku));
+    return firstStringDefaultTo(skuHits, "-");
   }
 
   @override
   Future<String> getShelf() async {
-    var shelf = (await WarehouseSystem.instance
-            .fetchAttribute<String?>(id, Attributes.shelf))
-        ?.firstOrNull;
-    return Utils.defaultString(shelf, "-");
+    var shelfHits = await Connect.remoteSql<String>(
+        SQLQuery.fetchAttribute(id.toString(), Attributes.shelf));
+
+    return firstStringDefaultTo(shelfHits, "-");
   }
 
   @override
   Future<double> getQuanity() async {
-    var quantity =
-        (await WarehouseSystem.instance.fetchQuantity(id.toString()));
-
-    return quantity;
-  }
-
-  @override
-  Future<void> setEAN(String ean) {
-    // TODO: implement setEAN
-    // set ean to the product in the warehousesystem
-    return Future.sync(() => null);
+    var quantityHits =
+        await Connect.remoteSql<double>(SQLQuery.quantity(id.toString()));
+    return firstDoubleDefaultTo(quantityHits);
   }
 
   Future<String> futureToString() async {
@@ -107,6 +99,18 @@ class Product extends AbstractProduct {
   @override
   String toString() {
     throw "not supported. use futureToString instead";
+  }
+
+  static Product oneFromIds(List<int> ids) {
+    if (ids.isEmpty) {
+      return Product.empty();
+    }
+
+    return Product(ids.last);
+  }
+
+  static List<Product> manyFromIds(List<int> ids) {
+    return ids.map((e) => Product(e)).toList();
   }
 }
 

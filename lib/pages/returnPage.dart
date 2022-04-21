@@ -5,6 +5,8 @@ import 'package:flutter/widgets.dart';
 import 'package:wms_app/content/transitions.dart';
 import 'package:wms_app/pages/scanPage.dart';
 import 'package:wms_app/pages/searchPage.dart';
+import 'package:wms_app/remote/remoteHandler.dart';
+import 'package:wms_app/remote/sqlQuery.dart';
 import 'package:wms_app/remote/warehouseSystem.dart';
 import 'package:wms_app/routes/productRoute.dart';
 import 'package:wms_app/routes/searchRoute.dart';
@@ -48,7 +50,8 @@ class _State extends State<ReturnPage> {
           buttons: [
             DialogButton(
               onPressed: () async {
-                await WarehouseSystem.instance.setShelf(product, shelf);
+                await Connect.remoteSql(
+                    SQLQuery.setShelf(product.id.toString(), shelf));
                 ScanHandler.handleScanResult(ScanHandler.shelfPrefix + shelf);
                 Navigator.pop(context);
               },

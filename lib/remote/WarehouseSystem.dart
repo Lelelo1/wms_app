@@ -11,47 +11,15 @@ import 'package:wms_app/secrets/WMS_Katsumi_Database_Settings.dart';
 import 'package:wms_app/stores/versionStore.dart';
 
 import '../utils.dart';
-
+/*
 // https://pub.dev/packages/mysql1
 class WarehouseSystem implements AbstractWarehouseSystem {
   static late WarehouseSystem instance = WarehouseSystem._();
 
   WarehouseSystem._();
-
-  Future<Results?> _interact<Results>(
-      Future<Results>? Function(MySqlConnection? connection) action) async {
-    MySqlConnection? connection;
-    try {
-      connection = await connect();
-    } on Exception catch (exception) {
-      print("failed interact. did not connect...");
-      print(exception.toString());
-      return null;
-    }
-
-    print("interact got connection, preforming action");
-    var result = await action(connection);
-    disconnect(connection);
-    return result;
+  
   }
 
-  // needs internet permission android real device, otherwise: 'SocketException: OS Error: Connection refused'
-  // https://stackoverflow.com/questions/55785581/socketexception-os-error-connection-refused-errno-111-in-flutter-using-djan
-  // such permission is granted on install time: https://developer.android.com/training/basics/network-ops/connecting
-  Future<MySqlConnection?> connect() async {
-    var database = VersionStore.instance.getDatabase();
-    var settings = new ConnectionSettings(
-        host: WMSKatsumiDatabaseSettings.host,
-        port: WMSKatsumiDatabaseSettings.port,
-        user: WMSKatsumiDatabaseSettings.user,
-        password: WMSKatsumiDatabaseSettings.pass,
-        db: database);
-
-    return await MySqlConnection.connect(settings);
-  }
-
-  Future<dynamic>? disconnect(MySqlConnection? connection) =>
-      connection?.close();
 
   Future<Product> fetchProduct(String ean) async {
     Results? results;
@@ -139,3 +107,4 @@ class WarehouseSystem implements AbstractWarehouseSystem {
     return _interact((connection) => connection?.query(q));
   }
 }
+*/

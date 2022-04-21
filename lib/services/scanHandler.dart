@@ -1,5 +1,7 @@
+import 'package:wms_app/models/abstractProduct.dart';
 import 'package:wms_app/models/product.dart';
-import 'package:wms_app/remote/warehouseSystem.dart';
+import 'package:wms_app/remote/remoteHandler.dart';
+import 'package:wms_app/remote/sqlQuery.dart';
 import 'package:wms_app/services/visionService.dart';
 import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/views/cameraView.dart';
@@ -11,7 +13,6 @@ String emptyMsg = "ignored scan. no event handler added";
 class ScanHandler {
   static const String shelfPrefix = "shelf:";
 
-  static late WarehouseSystem warehouseSystem = WarehouseSystem.instance;
   static late VisionService visionService = VisionService.instance;
 
   static void scan(String filePath) async {
@@ -64,6 +65,7 @@ class ScanHandler {
     }
 
     var match = await WorkStore.instance.isMatchingShelf(shelf);
+    print("is matching shelf: " + match.toString());
     if (!match) {
       return;
     }
@@ -72,12 +74,19 @@ class ScanHandler {
   }
 
   static void _handleAsShelf(String scanResult) async {
-    warehouseSystem.increaseAmountOfProducts(WorkStore.instance.currentProduct);
+    SQLQuery.increaseAmountOfProduct(
+            WorkStore.instance.currentProduct.id.toString())
+        .forEach((sqlStatement) async {
+      print(sqlStatement);
+      await Connect.remoteSql(sqlStatement);
+    });
     WorkStore.instance.clearAll();
   }
 
   static Future<Product> _handleAsProduct(String scanResult) async {
-    var product = await warehouseSystem.fetchProduct(scanResult);
+    var productIds =
+        await Connect.remoteSql<int>(SQLQuery.fetchProduct(scanResult));
+    var product = Product.oneFromIds(productIds);
     return product;
   }
 
