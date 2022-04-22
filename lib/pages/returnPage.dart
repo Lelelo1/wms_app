@@ -1,7 +1,4 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 import 'package:wms_app/content/transitions.dart';
 import 'package:wms_app/pages/scanPage.dart';
 import 'package:wms_app/pages/searchPage.dart';
@@ -11,7 +8,7 @@ import 'package:wms_app/services/scanHandler.dart';
 import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/utils.dart';
 import 'package:wms_app/views/extended/scrollable.dart';
-import 'package:wms_app/warehouseSystem/sqlQuery.dart';
+import 'package:wms_app/warehouseSystem/wsSqlQuery.dart';
 import 'package:wms_app/warehouseSystem/wsInteract.dart';
 import 'package:wms_app/widgets/wmsPage.dart';
 import 'package:wms_app/widgets/wmsAppBar.dart';
@@ -45,8 +42,8 @@ class _State extends State<ReturnPage> {
           buttons: [
             DialogButton(
               onPressed: () async {
-                await Connect.remoteSql(
-                    SQLQuery.setShelf(product.id.toString(), shelf));
+                await Connect.remoteSql(WorkStore.instance.queries
+                    .setShelf(product.id.toString(), shelf));
                 ScanHandler.handleScanResult(ScanHandler.shelfPrefix + shelf);
                 Navigator.pop(context);
               },

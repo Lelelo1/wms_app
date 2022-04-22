@@ -3,7 +3,7 @@ import 'package:wms_app/models/product.dart';
 import 'package:wms_app/services/visionService.dart';
 import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/views/cameraView.dart';
-import 'package:wms_app/warehouseSystem/sqlQuery.dart';
+import 'package:wms_app/warehouseSystem/wsSqlQuery.dart';
 import 'package:wms_app/warehouseSystem/wsInteract.dart';
 
 typedef ProductResultHandler = void Function(Product product, String scanData);
@@ -74,7 +74,8 @@ class ScanHandler {
   }
 
   static void _handleAsShelf(String scanResult) async {
-    SQLQuery.increaseAmountOfProduct(
+    WorkStore.instance.queries
+        .increaseAmountOfProduct(
             WorkStore.instance.currentProduct.id.toString())
         .forEach((sqlStatement) async {
       print(sqlStatement);
@@ -84,8 +85,8 @@ class ScanHandler {
   }
 
   static Future<Product> _handleAsProduct(String scanResult) async {
-    var productIds =
-        await Connect.remoteSql<int>(SQLQuery.fetchProduct(scanResult));
+    var productIds = await Connect.remoteSql<int>(
+        WorkStore.instance.queries.fetchProduct(scanResult));
     var product = Product.oneFromIds(productIds);
     return product;
   }

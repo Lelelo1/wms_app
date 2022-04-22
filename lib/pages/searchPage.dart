@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wms_app/models/product.dart';
 import 'package:wms_app/routes/productRoute.dart';
-import 'package:wms_app/warehouseSystem/sqlQuery.dart';
+import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/warehouseSystem/wsInteract.dart';
 import 'package:wms_app/widgets/wmsPage.dart';
 import 'package:wms_app/widgets/wmsAppBar.dart';
@@ -100,8 +100,8 @@ class _State extends State<SearchPage> {
       );
 
   void setInputTextState(String text) async {
-    var suggestedIds =
-        await Connect.remoteSql<int>(SQLQuery.fetchProductSuggestions(text));
+    var suggestedIds = await Connect.remoteSql<int>(
+        WorkStore.instance.queries.fetchProductSuggestions(text));
     setState(() {
       this.text = text;
       this.productSuggestions = Product.manyFromIds(suggestedIds);
@@ -136,8 +136,8 @@ class _State extends State<SearchPage> {
         child: MaterialButton(
           child: Text("Lägg till", style: TextStyle(color: Colors.white)),
           onPressed: () async {
-            Connect.remoteSql(SQLQuery.setEAN(
-                selectedProduct.id.toString(), this.widget.ean));
+            Connect.remoteSql(WorkStore.instance.queries
+                .setEAN(selectedProduct.id.toString(), this.widget.ean));
             print("product with sku: " +
                 selectedSKU +
                 " was updated with ean: " +
