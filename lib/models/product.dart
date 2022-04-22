@@ -1,15 +1,11 @@
 // having objects tied directly to warehousesystem/database
 
-import 'package:event/event.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wms_app/models/attributes.dart';
-import 'package:wms_app/remote/remoteHandler.dart';
-import 'package:wms_app/remote/sqlQuery.dart';
-import 'package:wms_app/remote/warehouseSystem.dart';
-import 'package:wms_app/stores/workStore.dart';
 import '../utils.dart';
-import 'package:collection/collection.dart';
 
+import '../warehouseSystem/sqlQuery.dart';
+import '../warehouseSystem/wsInteract.dart';
 import 'abstractProduct.dart';
 
 // potentially remove the '?' operator so default values can used. Which I guess

@@ -5,24 +5,19 @@ import 'package:flutter/widgets.dart';
 import 'package:wms_app/content/transitions.dart';
 import 'package:wms_app/pages/scanPage.dart';
 import 'package:wms_app/pages/searchPage.dart';
-import 'package:wms_app/remote/remoteHandler.dart';
-import 'package:wms_app/remote/sqlQuery.dart';
-import 'package:wms_app/remote/warehouseSystem.dart';
 import 'package:wms_app/routes/productRoute.dart';
 import 'package:wms_app/routes/searchRoute.dart';
 import 'package:wms_app/services/scanHandler.dart';
 import 'package:wms_app/stores/workStore.dart';
-import 'package:wms_app/views/cameraView.dart';
+import 'package:wms_app/utils.dart';
 import 'package:wms_app/views/extended/scrollable.dart';
-import 'package:wms_app/widgets/wmsAsyncWidget.dart';
-import 'package:wms_app/widgets/wmsImageContent.dart';
+import 'package:wms_app/warehouseSystem/sqlQuery.dart';
+import 'package:wms_app/warehouseSystem/wsInteract.dart';
 import 'package:wms_app/widgets/wmsPage.dart';
 import 'package:wms_app/widgets/wmsAppBar.dart';
 import 'package:wms_app/widgets/wmsEmptyWidget.dart';
-import 'package:wms_app/widgets/wmsTransitions.dart';
 import 'package:eventsubscriber/eventsubscriber.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
-import '../utils.dart';
 
 // can I used state and the setState call with product in 'StatelessWidget'
 // ignore: must_be_immutable
@@ -92,7 +87,6 @@ class _State extends State<ReturnPage> {
   void fadeContent() async {
     var product = WorkStore.instance.currentProduct;
     var ean = WorkStore.instance.currentEAN;
-    print("fadeContent!!");
     if (product.exists() || Utils.isNullOrEmpty(ean)) {
       return;
     }

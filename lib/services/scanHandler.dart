@@ -1,10 +1,10 @@
 import 'package:wms_app/models/abstractProduct.dart';
 import 'package:wms_app/models/product.dart';
-import 'package:wms_app/remote/remoteHandler.dart';
-import 'package:wms_app/remote/sqlQuery.dart';
 import 'package:wms_app/services/visionService.dart';
 import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/views/cameraView.dart';
+import 'package:wms_app/warehouseSystem/sqlQuery.dart';
+import 'package:wms_app/warehouseSystem/wsInteract.dart';
 
 typedef ProductResultHandler = void Function(Product product, String scanData);
 

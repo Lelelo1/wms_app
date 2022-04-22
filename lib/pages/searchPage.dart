@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:wms_app/content/transitions.dart';
 import 'package:wms_app/models/product.dart';
-import 'package:wms_app/remote/remoteHandler.dart';
-import 'package:wms_app/remote/sqlQuery.dart';
-import 'package:wms_app/remote/warehouseSystem.dart';
 import 'package:wms_app/routes/productRoute.dart';
-import 'package:wms_app/stores/workStore.dart';
+import 'package:wms_app/warehouseSystem/sqlQuery.dart';
+import 'package:wms_app/warehouseSystem/wsInteract.dart';
 import 'package:wms_app/widgets/wmsPage.dart';
 import 'package:wms_app/widgets/wmsAppBar.dart';
 import 'package:wms_app/widgets/wmsAsyncWidget.dart';
-import 'package:wms_app/widgets/wmsTransitions.dart';
 
 class SearchPage extends StatefulWidget implements WMSPage {
   final String name = "Lägg in streckoder i systemet";

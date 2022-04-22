@@ -4,7 +4,7 @@ import 'package:wms_app/models/flexibleProduct.dart';
 import 'package:wms_app/models/product.dart';
 
 //
-
+/*
 class Deserialization {
   static List<Product> products(Results? results) {
     if (results == null || results.isEmpty) {
@@ -44,3 +44,4 @@ class Deserialization {
   }
   */
 }
+*/
