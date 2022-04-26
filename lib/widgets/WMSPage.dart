@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:event/event.dart';
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:wms_app/content/transitions.dart';
@@ -47,4 +48,9 @@ class WMSPage extends StatelessWidget {
     ScanHandler.handleScanResult(ScanHandler.shelfPrefix + shelf);
     Navigator.pop(context);
   }
+=======
+
+abstract class WMSPage extends StatefulWidget {
+  abstract final String name;
+>>>>>>> b6950dab9bda66d44fce582e96c6a0f5b05211bd
 }

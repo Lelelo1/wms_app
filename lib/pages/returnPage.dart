@@ -1,24 +1,28 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+=======
+>>>>>>> b6950dab9bda66d44fce582e96c6a0f5b05211bd
 import 'package:wms_app/content/transitions.dart';
 import 'package:wms_app/pages/scanPage.dart';
 import 'package:wms_app/pages/searchPage.dart';
-import 'package:wms_app/remote/warehouseSystem.dart';
 import 'package:wms_app/routes/productRoute.dart';
 import 'package:wms_app/routes/searchRoute.dart';
 import 'package:wms_app/services/scanHandler.dart';
 import 'package:wms_app/stores/workStore.dart';
-import 'package:wms_app/views/cameraView.dart';
+import 'package:wms_app/utils.dart';
 import 'package:wms_app/views/extended/scrollable.dart';
+<<<<<<< HEAD
+=======
+import 'package:wms_app/warehouseSystem/wsSqlQuery.dart';
+import 'package:wms_app/warehouseSystem/wsInteract.dart';
+>>>>>>> b6950dab9bda66d44fce582e96c6a0f5b05211bd
 import 'package:wms_app/widgets/wmsPage.dart';
 import 'package:wms_app/widgets/wmsAppBar.dart';
 import 'package:wms_app/widgets/wmsEmptyWidget.dart';
-import 'package:wms_app/widgets/wmsTransitions.dart';
 import 'package:eventsubscriber/eventsubscriber.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
-import '../utils.dart';
 
 // can I used state and the setState call with product in 'StatelessWidget'
 // ignore: must_be_immutable
@@ -34,6 +38,40 @@ class _State extends State<ReturnPage> {
   // note that can't rerender color in app bar without rerender the rest of the app...
 
   @override
+<<<<<<< HEAD
+=======
+  void initState() {
+    WorkStore.instance.assignShelfEvent.subscribe((args) async {
+      var product = WorkStore.instance.currentProduct;
+      var productName = await product.getName();
+      var shelf = WorkStore.instance.currentShelf;
+      Alert(
+          context: this.context,
+          desc:
+              "Vill du lägga till hyllplatsen $shelf till produkten $productName",
+          buttons: [
+            DialogButton(
+              onPressed: () async {
+                await Connect.remoteSql(WorkStore.instance.queries
+                    .setShelf(product.id.toString(), shelf));
+                ScanHandler.handleScanResult(ScanHandler.shelfPrefix + shelf);
+                Navigator.pop(context);
+              },
+              child: Text("Ja"),
+            ),
+            DialogButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text("Nej"),
+            )
+          ]).show();
+    });
+    super.initState();
+  }
+
+  @override
+>>>>>>> b6950dab9bda66d44fce582e96c6a0f5b05211bd
   Widget build(BuildContext context) {
     this.widget.init(context);
 
@@ -59,7 +97,6 @@ class _State extends State<ReturnPage> {
   void fadeContent() async {
     var product = WorkStore.instance.currentProduct;
     var ean = WorkStore.instance.currentEAN;
-    print("fadeContent!!");
     if (product.exists() || Utils.isNullOrEmpty(ean)) {
       return;
     }

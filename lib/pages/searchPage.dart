@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'package:wms_app/content/transitions.dart';
+=======
+>>>>>>> b6950dab9bda66d44fce582e96c6a0f5b05211bd
 import 'package:wms_app/models/product.dart';
-import 'package:wms_app/remote/warehouseSystem.dart';
 import 'package:wms_app/routes/productRoute.dart';
 import 'package:wms_app/stores/workStore.dart';
+import 'package:wms_app/warehouseSystem/wsInteract.dart';
 import 'package:wms_app/widgets/wmsPage.dart';
 import 'package:wms_app/widgets/wmsAppBar.dart';
 import 'package:wms_app/widgets/wmsAsyncWidget.dart';
-import 'package:wms_app/widgets/wmsTransitions.dart';
 
 class SearchPage extends StatefulWidget implements WMSPage {
   final String name = "Lägg in streckoder i systemet";
@@ -102,10 +104,11 @@ class _State extends State<SearchPage> {
       );
 
   void setInputTextState(String text) async {
-    var suggestions = await WarehouseSystem.instance.fetchSuggestions(text);
+    var suggestedIds = await Connect.remoteSql<int>(
+        WorkStore.instance.queries.fetchProductSuggestions(text));
     setState(() {
       this.text = text;
-      this.productSuggestions = suggestions;
+      this.productSuggestions = Product.manyFromIds(suggestedIds);
     });
   }
 
@@ -137,8 +140,8 @@ class _State extends State<SearchPage> {
         child: MaterialButton(
           child: Text("Lägg till", style: TextStyle(color: Colors.white)),
           onPressed: () async {
-            WarehouseSystem.instance
-                .setEAN(selectedProduct.id, this.widget.ean);
+            Connect.remoteSql(WorkStore.instance.queries
+                .setEAN(selectedProduct.id.toString(), this.widget.ean));
             print("product with sku: " +
                 selectedSKU +
                 " was updated with ean: " +

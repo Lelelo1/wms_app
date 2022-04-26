@@ -40,14 +40,8 @@ class Utils {
         "Utils isNullOrEmpty is not supperted for type " + T.toString());
   }
 
-  // needed for null safety, just like primitives in other languages
-  static String defaultString(String? value, [String to = '']) => value ?? to;
   static int defaultInt(int? value) => value ?? 0;
   static double defaultDouble(double? value) => value ?? 0;
-
-  static List<String> defaultImages(List<String>? images,
-          [List<String> to = const []]) =>
-      images ?? to;
 
   // https://stackoverflow.com/questions/55579906/how-to-count-items-occurence-in-a-list
   static Map occurence<T>(List<T> list) {
@@ -90,6 +84,7 @@ class Utils {
 
 }
 
+/*
 // needed beacuse of null safeety strings
 // I actually don't think is needed, if I make sure 'String' is used everywhere instead of 'String?'
 extension StringNullSafetyExtensions on String? {
@@ -103,15 +98,17 @@ extension StringNullSafetyExtensions on String? {
   String prependSafe(String? string) =>
       Utils.defaultString(string) + Utils.defaultString(this);
 }
-
+*/
 extension StringExtensions on String {
   String append(String string) => this + string;
 
   String prepend(String string) => string + this;
 
+/*
   String appendSafe(String? string) => this + Utils.defaultString(string);
 
   String prependSafe(String? string) => Utils.defaultString(string) + this;
+  */
 }
 
 class ImageUtils {
