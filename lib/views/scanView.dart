@@ -33,7 +33,7 @@ class _State extends State<ScanView> {
                       RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(18.0))),
                 ),
-                child: Text('Scanna'),
+                child: Text('Skanna'),
                 onPressed: scan,
               ),
               width: 170,

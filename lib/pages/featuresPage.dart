@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:wms_app/content/transitions.dart';
+import 'package:wms_app/pages/collect/ordersPage.dart';
 import 'package:wms_app/pages/returnPage.dart';
 import 'package:wms_app/stores/workStore.dart';
-import 'package:wms_app/widgets/wmsPage.dart';
+import 'package:wms_app/widgets/WMSPage.dart';
 
 // ignore: must_be_immutable
 class FeaturesPage extends StatefulWidget {
@@ -33,7 +33,7 @@ class _State extends State<FeaturesPage> {
       // horizontal, this produces 2 rows.
       crossAxisCount: 2,
       // Generate 100 widgets that display their index in the List.
-      children: [renderFeature(ReturnPage())],
+      children: [renderFeature(ReturnPage()), renderFeature(OrdersPage())],
     );
   }
 

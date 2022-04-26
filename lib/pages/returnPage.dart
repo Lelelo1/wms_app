@@ -8,9 +8,8 @@ import 'package:wms_app/services/scanHandler.dart';
 import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/utils.dart';
 import 'package:wms_app/views/extended/scrollable.dart';
-import 'package:wms_app/warehouseSystem/wsSqlQuery.dart';
 import 'package:wms_app/warehouseSystem/wsInteract.dart';
-import 'package:wms_app/widgets/wmsPage.dart';
+import 'package:wms_app/widgets/WMSPage.dart';
 import 'package:wms_app/widgets/wmsAppBar.dart';
 import 'package:wms_app/widgets/wmsEmptyWidget.dart';
 import 'package:eventsubscriber/eventsubscriber.dart';
@@ -20,7 +19,7 @@ import 'package:rflutter_alert/rflutter_alert.dart';
 // ignore: must_be_immutable
 class ReturnPage extends WMSPage {
   @override
-  String name = "Retur";
+  final String name = "Retur";
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -30,8 +29,6 @@ class _State extends State<ReturnPage> {
   // note that can't rerender color in app bar without rerender the rest of the app...
 
   @override
-<<<<<<< HEAD
-=======
   void initState() {
     WorkStore.instance.assignShelfEvent.subscribe((args) async {
       var product = WorkStore.instance.currentProduct;
@@ -63,10 +60,7 @@ class _State extends State<ReturnPage> {
   }
 
   @override
->>>>>>> b6950dab9bda66d44fce582e96c6a0f5b05211bd
   Widget build(BuildContext context) {
-    this.widget.init(context);
-
     return Scaffold(
         appBar: WMSAppBar(this.widget.name, Color.fromARGB(255, 194, 66, 245),
                 Colors.transparent, Colors.white)
