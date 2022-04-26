@@ -1,9 +1,4 @@
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
-=======
->>>>>>> b6950dab9bda66d44fce582e96c6a0f5b05211bd
 import 'package:wms_app/content/transitions.dart';
 import 'package:wms_app/pages/scanPage.dart';
 import 'package:wms_app/pages/searchPage.dart';
@@ -13,11 +8,8 @@ import 'package:wms_app/services/scanHandler.dart';
 import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/utils.dart';
 import 'package:wms_app/views/extended/scrollable.dart';
-<<<<<<< HEAD
-=======
 import 'package:wms_app/warehouseSystem/wsSqlQuery.dart';
 import 'package:wms_app/warehouseSystem/wsInteract.dart';
->>>>>>> b6950dab9bda66d44fce582e96c6a0f5b05211bd
 import 'package:wms_app/widgets/wmsPage.dart';
 import 'package:wms_app/widgets/wmsAppBar.dart';
 import 'package:wms_app/widgets/wmsEmptyWidget.dart';

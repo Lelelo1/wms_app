@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
-import 'package:wms_app/content/transitions.dart';
-=======
->>>>>>> b6950dab9bda66d44fce582e96c6a0f5b05211bd
 import 'package:wms_app/models/product.dart';
 import 'package:wms_app/routes/productRoute.dart';
 import 'package:wms_app/stores/workStore.dart';
