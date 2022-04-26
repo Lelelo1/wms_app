@@ -52,7 +52,7 @@ class VisionService {
 
     // return one of the barcodes arbitarily
     var value = barcodes[0].rawValue;
-    return Utils.defaultString(value);
+    return value ?? "";
   }
   /*
   String? extractBarcodeFromText(VisionText visionText) {

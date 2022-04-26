@@ -1,78 +1,74 @@
 // having objects tied directly to warehousesystem/database
 
-import 'package:event/event.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wms_app/models/attributes.dart';
-import 'package:wms_app/remote/warehouseSystem.dart';
 import 'package:wms_app/stores/workStore.dart';
 import '../utils.dart';
-import 'package:collection/collection.dart';
+
+import '../warehouseSystem/wsSqlQuery.dart';
+import '../warehouseSystem/wsInteract.dart';
+import 'abstractProduct.dart';
 
 // potentially remove the '?' operator so default values can used. Which I guess
 // is the reason for the null safety anyway
 
 class Product extends AbstractProduct {
-  Product(int id) : super(id);
+  @override
+  int id = 0;
 
-  Product.empty() : super.empty();
+  Product(this.id);
+
+  Product.empty() {
+    id = 0;
+  }
 
   bool exists() => id > 0;
 
   @override
   Future<String> getEAN() async {
-    var ean = (await WarehouseSystem.instance
-            .fetchAttribute<String>(id, Attributes.ean))
-        ?.firstOrNull;
-    return Utils.defaultString(ean, "-");
+    var eanHits = await Connect.remoteSql<String>(WorkStore.instance.queries
+        .fetchAttribute(id.toString(), KatsumiAttributes.ean));
+    return firstStringDefaultTo(eanHits);
   }
 
   static String katsumiImages = "https://www.katsumi.se/media/catalog/product/";
 
   @override
   Future<List<String>> getImages() async {
-    var imgs = await WarehouseSystem.instance
-        .fetchAttribute<String>(id, Attributes.images);
+    var imgs = await Connect.remoteSql<String>(WorkStore.instance.queries
+        .fetchAttribute(id.toString(), KatsumiAttributes.images));
     // potentially specify a fallback image, error image eg.
-    return Utils.defaultImages(imgs).map((e) => katsumiImages + e).toList();
+    return imgs.map((e) => katsumiImages + e).toList();
   }
 
   @override
   Future<String> getName() async {
-    var name = (await WarehouseSystem.instance
-            .fetchAttribute<String>(id, Attributes.name))
-        ?.firstOrNull;
-    return Utils.defaultString(name, "-");
+    var nameHits = await Connect.remoteSql<String>(WorkStore.instance.queries
+        .fetchAttribute(id.toString(), KatsumiAttributes.name));
+
+    return firstStringDefaultTo(nameHits, "-");
   }
 
   @override
   Future<String> getSKU() async {
-    var sku =
-        (await WarehouseSystem.instance.fetchAttribute(id, Attributes.sku))
-            ?.firstOrNull;
-    return Utils.defaultString(sku, "-");
+    var skuHits = await Connect.remoteSql<String>(WorkStore.instance.queries
+        .fetchAttribute(id.toString(), KatsumiAttributes.sku));
+    return firstStringDefaultTo(skuHits, "-");
   }
 
   @override
   Future<String> getShelf() async {
-    var shelf = (await WarehouseSystem.instance
-            .fetchAttribute<String?>(id, Attributes.shelf))
-        ?.firstOrNull;
-    return Utils.defaultString(shelf, "-");
+    var shelfHits = await Connect.remoteSql<String>(WorkStore.instance.queries
+        .fetchAttribute(id.toString(), KatsumiAttributes.shelf));
+
+    return firstStringDefaultTo(shelfHits, "-");
   }
 
   @override
   Future<double> getQuanity() async {
-    var quantity =
-        (await WarehouseSystem.instance.fetchQuantity(id.toString()));
-
-    return quantity;
-  }
-
-  @override
-  Future<void> setEAN(String ean) {
-    // TODO: implement setEAN
-    // set ean to the product in the warehousesystem
-    return Future.sync(() => null);
+    var quantityHits = await Connect.remoteSql<double>(
+        WorkStore.instance.queries.quantity(id.toString()));
+    return firstDoubleDefaultTo(quantityHits);
   }
 
   Future<String> futureToString() async {
@@ -101,64 +97,19 @@ class Product extends AbstractProduct {
   String toString() {
     throw "not supported. use futureToString instead";
   }
-}
 
-abstract class AbstractProduct extends EventArgs {
-  final int id;
-  Future<String> getEAN();
-  Future<String> getSKU();
-  Future<String> getShelf();
-  Future<double> getQuanity();
-  Future<String> getName();
-  Future<List<String>> getImages();
+  static Product oneFromIds(List<int> ids) {
+    if (ids.isEmpty) {
+      return Product.empty();
+    }
 
-  Future<void> setEAN(String ean);
-
-  AbstractProduct(this.id);
-  AbstractProduct.empty([this.id = 0]);
-
-  static const assignShelf = "BEST";
-}
-
-class MockProduct implements AbstractProduct {
-  @override
-  int id;
-
-  MockProduct(
-      this.id, this._ean, this._imgs, this._name, this._sku, this._shelf);
-
-  String _ean;
-  List<String> _imgs;
-  String _name;
-  String _sku;
-  String _shelf;
-
-  @override
-  Future<String> getEAN() => Future.sync(() => _ean);
-
-  @override
-  Future<List<String>> getImages() => Future.sync(() => _imgs);
-
-  @override
-  Future<String> getName() => Future.sync(() => _name);
-
-  @override
-  Future<String> getSKU() => Future.sync(() => _sku);
-
-  @override
-  Future<String> getShelf() => Future.sync(() => _shelf);
-
-  @override
-  Future<void> setEAN(String ean) {
-    this._ean = ean;
-    return Future.sync(() => null);
+    return Product(ids.last);
   }
 
-  @override
-  Future<double> getQuanity() {
-    // TODO: implement getQuanity
-    throw UnimplementedError();
+  static List<Product> manyFromIds(List<int> ids) {
+    return ids.map((e) => Product(e)).toList();
   }
 }
+
 
 // create mock abstract source

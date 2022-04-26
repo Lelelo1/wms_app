@@ -1,6 +1,6 @@
 import 'package:eventsubscriber/eventsubscriber.dart';
 import 'package:flutter/material.dart';
-import 'package:wms_app/mixins/transitions.dart';
+import 'package:wms_app/content/transitions.dart';
 import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/views/cameraView.dart';
 import 'package:wms_app/views/scanView.dart';

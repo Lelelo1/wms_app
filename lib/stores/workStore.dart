@@ -1,6 +1,8 @@
 import 'package:wms_app/models/product.dart';
 import 'package:event/event.dart';
 import 'package:wms_app/models/product.dart';
+import 'package:wms_app/warehouseSystem/wsMapping.dart';
+import 'package:wms_app/warehouseSystem/wsSqlQuery.dart';
 
 class WorkStore {
   static late WorkStore instance = WorkStore._();
@@ -55,4 +57,6 @@ class WorkStore {
     this._scanData = [];
     this.currentShelf = "";
   }
+
+  WSSQLQueries queries = WSSQLQueries(Mapping());
 }
