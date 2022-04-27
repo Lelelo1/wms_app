@@ -66,6 +66,12 @@ class WSSQLQueries {
 
   setShelf(String entityId, String shelf) =>
       "UPDATE `catalog_product_entity_varchar` SET `value` = '$shelf' WHERE `catalog_product_entity_varchar`.`entity_id` = '$entityId' AND `catalog_product_entity_varchar`.`attribute_id` = 198;";
+
+  // get correct status from Valentin and use flag
+  getCustomerOrders() =>
+      "SELECT entity_id FROM `sales_flat_order` WHERE status <> 'complete' ORDER BY created_at DESC";
+  getCustomerOrderFlag(String order_id) =>
+      "SELECT flag_id FROM `amasty_order_flag` WHERE order_id = $order_id";
 }
 
   /*
