@@ -1,3 +1,4 @@
+import 'package:wms_app/models/customerOrder.dart';
 import 'package:wms_app/models/product.dart';
 import 'package:event/event.dart';
 import 'package:wms_app/models/product.dart';
@@ -59,4 +60,8 @@ class WorkStore {
   }
 
   WSSQLQueries queries = WSSQLQueries(Mapping());
+
+  List<CustomerOrder> testCollectCustomerCorders = [
+    CustomerOrder(0, [154394, 158066, 142508, 31881])
+  ];
 }
