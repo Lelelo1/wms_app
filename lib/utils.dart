@@ -12,6 +12,7 @@ import 'package:wms_app/models/product.dart';
 import 'package:wms_app/services/scanHandler.dart';
 import 'package:wms_app/widgets/wmsEmptyWidget.dart';
 
+// IS THIS USED?? WHy is there 2 utils files?
 typedef Scan = String;
 typedef QR = String;
 

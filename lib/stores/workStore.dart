@@ -60,8 +60,4 @@ class WorkStore {
   }
 
   WSSQLQueries queries = WSSQLQueries(Mapping());
-
-  List<CustomerOrder> testCollectCustomerCorders = [
-    CustomerOrder(0, [154394, 158066, 142508, 31881])
-  ];
 }

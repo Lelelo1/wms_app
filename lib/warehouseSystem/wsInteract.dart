@@ -2,7 +2,7 @@ import 'package:mysql1/mysql1.dart';
 import 'package:wms_app/secrets/WMS_Katsumi_Database_Settings.dart';
 import 'package:wms_app/stores/versionStore.dart';
 
-class Connect {
+class WSInteract {
   static ConnectionSettings _connectionSettings = new ConnectionSettings(
       host: WMSKatsumiDatabaseSettings.host,
       port: WMSKatsumiDatabaseSettings.port,
@@ -12,6 +12,7 @@ class Connect {
 
   static Future<List<T>> remoteSql<T>(String sql) async {
     var remote = await MySqlConnection.connect(_connectionSettings);
+    print(sql);
     var results = await remote.query(sql);
     var data = Deserialize.remote<T>(results);
 

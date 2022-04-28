@@ -79,13 +79,13 @@ class ScanHandler {
             WorkStore.instance.currentProduct.id.toString())
         .forEach((sqlStatement) async {
       print(sqlStatement);
-      await Connect.remoteSql(sqlStatement);
+      await WSInteract.remoteSql(sqlStatement);
     });
     WorkStore.instance.clearAll();
   }
 
   static Future<Product> _handleAsProduct(String scanResult) async {
-    var productIds = await Connect.remoteSql<int>(
+    var productIds = await WSInteract.remoteSql<int>(
         WorkStore.instance.queries.fetchProduct(scanResult));
     var product = Product.oneFromIds(productIds);
     return product;

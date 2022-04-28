@@ -100,7 +100,7 @@ class _State extends State<SearchPage> {
       );
 
   void setInputTextState(String text) async {
-    var suggestedIds = await Connect.remoteSql<int>(
+    var suggestedIds = await WSInteract.remoteSql<int>(
         WorkStore.instance.queries.fetchProductSuggestions(text));
     setState(() {
       this.text = text;
@@ -136,7 +136,7 @@ class _State extends State<SearchPage> {
         child: MaterialButton(
           child: Text("Lägg till", style: TextStyle(color: Colors.white)),
           onPressed: () async {
-            Connect.remoteSql(WorkStore.instance.queries
+            WSInteract.remoteSql(WorkStore.instance.queries
                 .setEAN(selectedProduct.id.toString(), this.widget.ean));
             print("product with sku: " +
                 selectedSKU +

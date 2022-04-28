@@ -5,6 +5,7 @@ import 'package:wms_app/models/attributes.dart';
 import 'package:wms_app/stores/workStore.dart';
 import '../utils.dart';
 
+import '../utils/default.dart';
 import '../warehouseSystem/wsSqlQuery.dart';
 import '../warehouseSystem/wsInteract.dart';
 import 'abstractProduct.dart';
@@ -26,16 +27,16 @@ class Product extends AbstractProduct {
 
   @override
   Future<String> getEAN() async {
-    var eanHits = await Connect.remoteSql<String>(WorkStore.instance.queries
+    var eanHits = await WSInteract.remoteSql<String>(WorkStore.instance.queries
         .fetchAttribute(id.toString(), KatsumiAttributes.ean));
-    return firstStringDefaultTo(eanHits);
+    return Default.firstStringDefaultTo(eanHits);
   }
 
   static String katsumiImages = "https://www.katsumi.se/media/catalog/product/";
 
   @override
   Future<List<String>> getImages() async {
-    var imgs = await Connect.remoteSql<String>(WorkStore.instance.queries
+    var imgs = await WSInteract.remoteSql<String>(WorkStore.instance.queries
         .fetchAttribute(id.toString(), KatsumiAttributes.images));
     // potentially specify a fallback image, error image eg.
     return imgs.map((e) => katsumiImages + e).toList();
@@ -43,32 +44,33 @@ class Product extends AbstractProduct {
 
   @override
   Future<String> getName() async {
-    var nameHits = await Connect.remoteSql<String>(WorkStore.instance.queries
+    var nameHits = await WSInteract.remoteSql<String>(WorkStore.instance.queries
         .fetchAttribute(id.toString(), KatsumiAttributes.name));
 
-    return firstStringDefaultTo(nameHits, "-");
+    return Default.firstStringDefaultTo(nameHits, "-");
   }
 
   @override
   Future<String> getSKU() async {
-    var skuHits = await Connect.remoteSql<String>(WorkStore.instance.queries
+    var skuHits = await WSInteract.remoteSql<String>(WorkStore.instance.queries
         .fetchAttribute(id.toString(), KatsumiAttributes.sku));
-    return firstStringDefaultTo(skuHits, "-");
+    return Default.firstStringDefaultTo(skuHits, "-");
   }
 
   @override
   Future<String> getShelf() async {
-    var shelfHits = await Connect.remoteSql<String>(WorkStore.instance.queries
+    var shelfHits = await WSInteract.remoteSql<String>(WorkStore
+        .instance.queries
         .fetchAttribute(id.toString(), KatsumiAttributes.shelf));
 
-    return firstStringDefaultTo(shelfHits, "-");
+    return Default.firstStringDefaultTo(shelfHits, "-");
   }
 
   @override
   Future<double> getQuanity() async {
-    var quantityHits = await Connect.remoteSql<double>(
+    var quantityHits = await WSInteract.remoteSql<double>(
         WorkStore.instance.queries.quantity(id.toString()));
-    return firstDoubleDefaultTo(quantityHits);
+    return Default.firstDoubleDefaultTo(quantityHits);
   }
 
   Future<String> futureToString() async {

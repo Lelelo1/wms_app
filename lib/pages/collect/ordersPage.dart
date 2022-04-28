@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:wms_app/models/customerOrder.dart';
+import 'package:wms_app/stores/workStore.dart';
+import 'package:wms_app/warehouseSystem/wsInteract.dart';
 import 'package:wms_app/widgets/WMSPage.dart';
 import 'package:wms_app/widgets/wmsAppBar.dart';
+import 'package:wms_app/widgets/wmsAsyncWidget.dart';
+import 'package:wms_app/widgets/wmsEmptyWidget.dart';
 
 class OrdersPage extends WMSPage {
   @override
@@ -31,17 +36,34 @@ class _State extends State<OrdersPage> {
                 children: [
               Flexible(
                   flex: 5,
-                  child: Column(children: [
-                    ...testOrders
-                        .map((e) => Container(
-                            child: Text(e, textAlign: TextAlign.center),
-                            alignment: Alignment.center))
-                        .toList()
-                  ])),
+                  child: asyncCustomerOrdersList(futureCustomerOrdersList())),
               Flexible(
                   flex: 2,
                   child:
                       ElevatedButton(child: Text("haahaha"), onPressed: () {}))
             ])));
   }
+
+  Future<List<CustomerOrder>> futureCustomerOrdersList() async {
+    var query = WorkStore.instance.queries.customerOrders.getCustomerOrders();
+    var ids = await WSInteract.remoteSql<int>(query);
+    return ids.map((e) => CustomerOrder(e)).toList();
+  }
+
+  WMSAsyncWidget asyncCustomerOrdersList(
+          Future<List<CustomerOrder>> futureCustomerOrder) =>
+      WMSAsyncWidget<List<CustomerOrder>>(
+          futureCustomerOrder,
+          (customerOrders) => Column(
+              children:
+                  customerOrders.map((e) => customerOrderWidget(e)).toList()));
+
+  Widget customerOrderWidget(CustomerOrder customerOrder) => Card(
+          child: Row(children: [
+        Column(children: [
+          WMSAsyncWidget<String>(
+              customerOrder.getCustomerName(), (name) => Text(name))
+        ]),
+        Text(customerOrder.id.toString())
+      ]));
 }
