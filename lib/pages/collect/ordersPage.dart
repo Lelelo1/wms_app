@@ -55,17 +55,40 @@ class _State extends State<OrdersPage> {
       WMSAsyncWidget<List<CustomerOrder>>(
           futureCustomerOrder,
           (customerOrders) => Column(
-              children:
-                  customerOrders.map((e) => customerOrderWidget(e)).toList()));
+              children: customerOrders
+                  .map((e) => asyncCustomerOrderWidget(e))
+                  .toList()));
 
-  Widget customerOrderWidget(CustomerOrder customerOrder) => Card(
-          child: Row(children: [
-        Column(children: [
-          WMSAsyncWidget<String>(
-              customerOrder.getCustomerName(), (name) => Text(name)),
-          WMSAsyncWidget<List<int>>(customerOrder.getProducts(),
-              (ps) => Text(ps.length.toString() + "st"))
-        ]),
-        Text(customerOrder.id.toString())
-      ]));
+  Widget asyncCustomerOrderWidget(CustomerOrder customerOrder) {
+    var id = customerOrder.id;
+    var getName = customerOrder.getCustomerName();
+    var getProducts = customerOrder.getProducts();
+
+    Future.wait([getName, getProducts]);
+
+    return Card(
+        child: ListTile(
+      leading: Checkbox(value: false, onChanged: selection),
+      title: customerNameWidget(getName),
+      subtitle: customerOrderProductsWidget(getProducts),
+      trailing: customerOrderId(id),
+    ));
+  }
+
+  void selection(bool? b) {}
+
+  Widget customerNameWidget(Future<String> fcn) =>
+      WMSAsyncWidget<String>(fcn, (n) => Text(n));
+  Widget customerOrderProductsWidget(Future<List<int>> fps) =>
+      WMSAsyncWidget<List<int>>(fps, (ps) => Text(ps.length.toString() + "st"));
+  Widget customerOrderId(int id) => Text(id.toString());
 }
+
+
+
+
+//WMSAsyncWidget<String>(
+ //           customerOrder.getCustomerName(), (name) => Text(name))
+
+//WMSAsyncWidget<List<int>>(customerOrder.getProducts(),
+            //  (ps) => Text(ps.length.toString() + "st"))
