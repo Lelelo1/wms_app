@@ -80,13 +80,15 @@ class WSCustomerOrderQueries {
       "SELECT flag_id FROM `amasty_order_flag` WHERE order_id = '$orderId'";
 
   String getCustomerFirstName(String orderId) =>
-      "SELECT customer_firstname FROM `sales_flat_order`WHERE entity_id = '$orderId'";
+      "SELECT customer_firstname FROM `sales_flat_order` WHERE entity_id = '$orderId'";
 
   String getCustomerLastName(String orderId) =>
-      "SELECT customer_lastname FROM `sales_flat_order`WHERE entity_id = '$orderId'";
+      "SELECT customer_lastname FROM `sales_flat_order` WHERE entity_id = '$orderId'";
 
   String getProducts(String orderId) =>
       "SELECT product_id FROM `sales_flat_order_item` WHERE order_id = '$orderId'";
+  String getIncrementId(String orderId) =>
+      "SELECT increment_id FROM `sales_flat_order` WHERE entity_id = $orderId";
 }
 
   /*

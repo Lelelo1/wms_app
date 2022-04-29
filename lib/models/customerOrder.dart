@@ -23,11 +23,7 @@ class CustomerOrder {
         .instance.queries.customerOrders
         .getCustomerLastName(id.toString()));
 
-    if (r.isEmpty) {
-      return "-";
-    }
-
-    return Default.firstStringDefaultTo(r);
+    return Default.firstStringDefaultTo(r, "-");
   }
 
   Future<String> getCustomerName() {
@@ -44,5 +40,12 @@ class CustomerOrder {
         WorkStore.instance.queries.customerOrders.getProducts(id.toString()));
 
     return r;
+  }
+
+  Future<String> getIncrementId() async {
+    var r = await WSInteract.remoteSql<String>(WorkStore
+        .instance.queries.customerOrders
+        .getIncrementId(id.toString()));
+    return Default.firstStringDefaultTo(r, "-");
   }
 }

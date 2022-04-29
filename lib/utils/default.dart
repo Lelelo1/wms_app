@@ -20,4 +20,12 @@ class Default {
 
     return values.first;
   }
+
+  static int firstIntDefaultTo(List<int> values, [int to = 0]) {
+    if (values.isEmpty) {
+      return to;
+    }
+
+    return values.first;
+  }
 }
