@@ -13,10 +13,18 @@ class WSInteract {
   static Future<List<T>> remoteSql<T>(String sql) async {
     var remote = await MySqlConnection.connect(_connectionSettings);
     print(sql);
-    var results = await remote.query(sql);
-    var data = Deserialize.remote<T>(results);
 
-    remote.close();
+    var data = List<T>.empty();
+
+    try {
+      var results = await remote.query(sql);
+      data = Deserialize.remote<T>(results); // crash;
+    } catch (e) {
+      print("failed query...");
+      print(sql);
+      print("---------------");
+    }
+    remote.close(); // <----- !
     return data;
   }
 /*

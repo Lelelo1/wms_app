@@ -62,7 +62,9 @@ class _State extends State<OrdersPage> {
           child: Row(children: [
         Column(children: [
           WMSAsyncWidget<String>(
-              customerOrder.getCustomerName(), (name) => Text(name))
+              customerOrder.getCustomerName(), (name) => Text(name)),
+          WMSAsyncWidget<List<int>>(customerOrder.getProducts(),
+              (ps) => Text(ps.length.toString() + "st"))
         ]),
         Text(customerOrder.id.toString())
       ]));

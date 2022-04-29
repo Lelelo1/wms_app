@@ -6,16 +6,37 @@ class CustomerOrder {
   final int id;
   CustomerOrder(this.id);
 
-  Future<String> getCustomerName() async {
+  Future<String> _getCustomerFirstName() async {
     var r = await WSInteract.remoteSql<String>(WorkStore
         .instance.queries.customerOrders
-        .getCustomerName(id.toString()));
+        .getCustomerFirstName(id.toString()));
 
     if (r.isEmpty) {
       return "-";
     }
 
     return Default.firstStringDefaultTo(r);
+  }
+
+  Future<String> _getCustomerLastName() async {
+    var r = await WSInteract.remoteSql<String>(WorkStore
+        .instance.queries.customerOrders
+        .getCustomerLastName(id.toString()));
+
+    if (r.isEmpty) {
+      return "-";
+    }
+
+    return Default.firstStringDefaultTo(r);
+  }
+
+  Future<String> getCustomerName() {
+    return Future.sync(() async {
+      var firstName = await _getCustomerFirstName();
+      var lastName = await _getCustomerLastName();
+
+      return firstName + " " + lastName;
+    });
   }
 
   Future<List<int>> getProducts() async {

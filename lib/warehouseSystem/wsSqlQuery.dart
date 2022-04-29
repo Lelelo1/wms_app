@@ -79,8 +79,12 @@ class WSCustomerOrderQueries {
   String getCustomerOrderFlag(String orderId) =>
       "SELECT flag_id FROM `amasty_order_flag` WHERE order_id = '$orderId'";
 
-  String getCustomerName(String orderId) =>
-      "SELECT name FROM `sales_flat_order`WHERE entity_id = '$orderId' AND WHERE name <> NULL";
+  String getCustomerFirstName(String orderId) =>
+      "SELECT customer_firstname FROM `sales_flat_order`WHERE entity_id = '$orderId'";
+
+  String getCustomerLastName(String orderId) =>
+      "SELECT customer_lastname FROM `sales_flat_order`WHERE entity_id = '$orderId'";
+
   String getProducts(String orderId) =>
       "SELECT product_id FROM `sales_flat_order_item` WHERE order_id = '$orderId'";
 }
