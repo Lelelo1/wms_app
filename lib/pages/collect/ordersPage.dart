@@ -30,9 +30,10 @@ class _State extends State<OrdersPage> {
         appBar: WMSAppBar(
                 "Välj beställningar", Colors.black, Colors.white, Colors.black)
             .get(),
-        body: SafeArea(
-            child: SingleChildScrollView(
-                child: asyncCustomerOrdersList(futureCustomerOrdersList()))));
+        body: Column(children: [
+          Expanded(child: asyncCustomerOrdersList(futureCustomerOrdersList())),
+          confirmCustomerOrdersButton()
+        ]));
   }
 
   Future<List<CustomerOrder>> futureCustomerOrdersList() async {
@@ -45,10 +46,11 @@ class _State extends State<OrdersPage> {
           Future<List<CustomerOrder>> futureCustomerOrder) =>
       WMSAsyncWidget<List<CustomerOrder>>(
           futureCustomerOrder,
-          (customerOrders) => Column(
-              children: customerOrders
-                  .map((e) => asyncCustomerOrderWidget(e))
-                  .toList()));
+          (customerOrders) => ListView(children: [
+                ...customerOrders
+                    .map((e) => asyncCustomerOrderWidget(e))
+                    .toList()
+              ]));
 
   Widget asyncCustomerOrderWidget(CustomerOrder customerOrder) {
     var id = customerOrder.id;
@@ -73,6 +75,9 @@ class _State extends State<OrdersPage> {
   Widget customerOrderProductsWidget(Future<List<int>> fps) =>
       WMSAsyncWidget<List<int>>(fps, (ps) => Text(ps.length.toString() + "st"));
   Widget customerOrderId(int id) => Text(id.toString());
+
+  Widget confirmCustomerOrdersButton() =>
+      ElevatedButton(child: Text("Bekräfta"), onPressed: () {});
 }
 
 
