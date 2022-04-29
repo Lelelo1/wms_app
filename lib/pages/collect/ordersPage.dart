@@ -31,17 +31,8 @@ class _State extends State<OrdersPage> {
                 "Välj beställningar", Colors.black, Colors.white, Colors.black)
             .get(),
         body: SafeArea(
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-              Flexible(
-                  flex: 5,
-                  child: asyncCustomerOrdersList(futureCustomerOrdersList())),
-              Flexible(
-                  flex: 2,
-                  child:
-                      ElevatedButton(child: Text("haahaha"), onPressed: () {}))
-            ])));
+            child: SingleChildScrollView(
+                child: asyncCustomerOrdersList(futureCustomerOrdersList()))));
   }
 
   Future<List<CustomerOrder>> futureCustomerOrdersList() async {
