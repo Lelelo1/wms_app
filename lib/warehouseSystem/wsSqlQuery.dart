@@ -74,7 +74,7 @@ class WSSQLQueries {
 
 class WSCustomerOrderQueries {
   String getCustomerOrders() =>
-      "SELECT entity_id FROM `sales_flat_order` WHERE status <> 'complete' ORDER BY created_at DESC LIMIT 10";
+      "SELECT entity_id FROM `sales_flat_order` WHERE status <> 'complete' OR status <> 'canceled' OR status <> 'closed' OR status <> 'pendingpayment' ORDER BY created_at DESC LIMIT 10";
 
   String getCustomerOrderFlag(String orderId) =>
       "SELECT flag_id FROM `amasty_order_flag` WHERE order_id = '$orderId'";
