@@ -57,26 +57,24 @@ class _State extends State<OrdersPage> {
     var getProducts = customerOrder.getProducts();
     var getIncrementId = customerOrder.getIncrementId();
 
-    Future.wait([getName, getProducts, getIncrementId]);
-
     // use wms async widget. can't call getName and getIncrementiId both otherwsie
-    return Card(
-        child: ListTile(
-      leading: Checkbox(value: false, onChanged: selection),
-      title: customerNameWidget(getName),
-      subtitle: customerOrderProductsWidget(getProducts),
-      trailing: customerOrderIncrementId(getIncrementId),
-    ));
+    return WMSAsyncWidget<List<Object>>(
+        Future.wait([getName, getProducts, getIncrementId]),
+        (f) => Card(
+            child: ListTile(
+                leading: Checkbox(value: false, onChanged: selection),
+                title: customerNameWidget(f[0] as String),
+                subtitle: customerOrderProductsWidget(f[1] as List<int>),
+                trailing: customerOrderIncrementId(f[2] as String))));
   }
 
   void selection(bool? b) {}
 
-  Widget customerNameWidget(Future<String> fcn) =>
-      WMSAsyncWidget<String>(fcn, (n) => Text(n));
-  Widget customerOrderProductsWidget(Future<List<int>> fps) =>
-      WMSAsyncWidget<List<int>>(fps, (ps) => Text(ps.length.toString() + "st"));
-  Widget customerOrderIncrementId(Future<String> fid) =>
-      WMSAsyncWidget<String>(fid, (id) => Text(id));
+  Widget customerNameWidget(String name) => Text(name);
+  Widget customerOrderProductsWidget(List<int> ps) =>
+      Text(ps.length.toString() + "st");
+
+  Widget customerOrderIncrementId(String fid) => Text(fid);
 
   Widget confirmCustomerOrdersButton() =>
       ElevatedButton(child: Text("Bekräfta"), onPressed: () {});
