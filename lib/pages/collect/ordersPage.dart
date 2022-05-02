@@ -53,19 +53,19 @@ class _State extends State<OrdersPage> {
               ]));
 
   Widget asyncCustomerOrderWidget(CustomerOrder customerOrder) {
-    var getName = customerOrder.getCustomerName();
-    var getProducts = customerOrder.getProducts();
-    var getIncrementId = customerOrder.getIncrementId();
-
-    // use wms async widget. can't call getName and getIncrementiId both otherwsie
-    return WMSAsyncWidget<List<Object>>(
-        Future.wait([getName, getProducts, getIncrementId]),
+    return WMSAsyncWidget<List<dynamic>>(
+        Future.wait([
+          customerOrder.getCustomerName(),
+          customerOrder.getProducts(),
+          customerOrder.getIncrementId()
+        ]),
         (f) => Card(
-            child: ListTile(
-                leading: Checkbox(value: false, onChanged: selection),
-                title: customerNameWidget(f[0] as String),
-                subtitle: customerOrderProductsWidget(f[1] as List<int>),
-                trailing: customerOrderIncrementId(f[2] as String))));
+                child: ListTile(
+              leading: Checkbox(value: false, onChanged: selection),
+              title: customerNameWidget(f[0]),
+              subtitle: customerOrderProductsWidget(f[1]),
+              trailing: customerOrderIncrementId(f[2]),
+            )));
   }
 
   void selection(bool? b) {}

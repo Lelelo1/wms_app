@@ -38,7 +38,6 @@ class CustomerOrder {
   Future<List<int>> getProducts() async {
     var r = await WSInteract.remoteSql<int>(
         WorkStore.instance.queries.customerOrders.getProducts(id.toString()));
-
     return r;
   }
 
@@ -46,6 +45,7 @@ class CustomerOrder {
     var r = await WSInteract.remoteSql<String>(WorkStore
         .instance.queries.customerOrders
         .getIncrementId(id.toString()));
-    return Default.firstStringDefaultTo(r, "-");
+    print("r is : " + r.toString());
+    return Default.firstStringDefaultTo(r);
   }
 }

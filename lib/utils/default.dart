@@ -28,4 +28,24 @@ class Default {
 
     return values.first;
   }
+
+  static T nullSafe<T>(dynamic dyn) {
+    if (dyn is String) {
+      return defaultString(dyn) as T;
+    }
+
+    if (dyn is int) {
+      return defaultInt(dyn) as T;
+    }
+
+    return dyn as T;
+  }
+
+  static String defaultString(dynamic dyn) {
+    return dyn == null ? "" : dyn as String;
+  }
+
+  static int defaultInt(dynamic dyn) {
+    return dyn == Null ? 0 : dyn as int;
+  }
 }

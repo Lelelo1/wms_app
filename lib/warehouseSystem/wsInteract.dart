@@ -1,6 +1,7 @@
 import 'package:mysql1/mysql1.dart';
 import 'package:wms_app/secrets/WMS_Katsumi_Database_Settings.dart';
 import 'package:wms_app/stores/versionStore.dart';
+import 'package:wms_app/utils/default.dart';
 
 class WSInteract {
   static ConnectionSettings _connectionSettings = new ConnectionSettings(
@@ -18,12 +19,16 @@ class WSInteract {
 
     try {
       var results = await remote.query(sql);
-      data = Deserialize.remote<T>(results); // crash;
+      data = Deserialize.remote<T>(results);
     } catch (e) {
       print("failed query...");
       print(sql);
+      print(e);
       print("---------------");
     }
+
+    print(data);
+
     remote.close(); // <----- !
     return data;
   }
@@ -48,6 +53,6 @@ class Deserialize<T> {
       return List.empty();
     }
 
-    return results.map((e) => (e[0] as T)).toList();
+    return results.map((e) => Default.nullSafe<T>(e[0])).toList();
   }
 }
