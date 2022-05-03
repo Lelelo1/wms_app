@@ -30,13 +30,15 @@ class Default {
   }
 
   static T nullSafe<T>(dynamic dyn) {
-    if (dyn is String) {
+    /*
+    if (dyn is String?) {
       return defaultString(dyn) as T;
     }
 
-    if (dyn is int) {
+    if (dyn is int?) {
       return defaultInt(dyn) as T;
     }
+    */
 
     return dyn as T;
   }

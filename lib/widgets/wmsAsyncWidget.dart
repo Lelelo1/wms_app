@@ -15,6 +15,7 @@ class WMSAsyncWidget<T> extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Container(); // placeolder until render with async data is finished;;
         }
+
         return render(snapshot.data);
       });
 }
