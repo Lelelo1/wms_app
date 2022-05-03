@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wms_app/models/customerOrder.dart';
+import 'package:wms_app/pages/collect/collectPage.dart';
 import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/warehouseSystem/wsInteract.dart';
 import 'package:wms_app/widgets/WMSPage.dart';
@@ -78,8 +79,11 @@ class _State extends State<OrdersPage> {
 
   Widget confirmCustomerOrdersButton(BuildContext context) => ElevatedButton(
       child: Text("Bekräfta"),
-      onPressed: () {
-        WorkStore.instance.printPage(context);
+      onPressed: () async {
+        var printed = await WorkStore.instance.printPage(context);
+        // if(printed)
+        Navigator.push(context,
+            PageRouteBuilder(pageBuilder: (_, __, ___) => CollectPage()));
       });
 }
 

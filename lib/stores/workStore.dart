@@ -65,7 +65,7 @@ class WorkStore {
 
   WSSQLQueries queries = WSSQLQueries(Mapping());
 
-  void printPage(BuildContext context) async {
+  Future<bool> printPage(BuildContext context) {
     final doc = pw.Document();
 
     doc.addPage(pw.Page(
@@ -76,7 +76,7 @@ class WorkStore {
           ); // Center
         }));
 
-    await Printing.layoutPdf(
+    return Printing.layoutPdf(
         onLayout: (PdfPageFormat format) async => doc.save());
   }
 }
