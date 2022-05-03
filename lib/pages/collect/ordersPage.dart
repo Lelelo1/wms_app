@@ -32,7 +32,7 @@ class _State extends State<OrdersPage> {
             .get(),
         body: Column(children: [
           Expanded(child: asyncCustomerOrdersList(futureCustomerOrdersList())),
-          confirmCustomerOrdersButton()
+          confirmCustomerOrdersButton(context)
         ]));
   }
 
@@ -76,8 +76,11 @@ class _State extends State<OrdersPage> {
 
   Widget customerOrderIncrementId(String fid) => Text(fid);
 
-  Widget confirmCustomerOrdersButton() =>
-      ElevatedButton(child: Text("Bekräfta"), onPressed: () {});
+  Widget confirmCustomerOrdersButton(BuildContext context) => ElevatedButton(
+      child: Text("Bekräfta"),
+      onPressed: () {
+        WorkStore.instance.printPage(context);
+      });
 }
 
 

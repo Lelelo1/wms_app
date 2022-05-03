@@ -1,9 +1,13 @@
+import 'package:flutter/material.dart';
+import 'package:pdf/pdf.dart';
+import 'package:printing/printing.dart';
 import 'package:wms_app/models/customerOrder.dart';
 import 'package:wms_app/models/product.dart';
 import 'package:event/event.dart';
 import 'package:wms_app/models/product.dart';
 import 'package:wms_app/warehouseSystem/wsMapping.dart';
 import 'package:wms_app/warehouseSystem/wsSqlQuery.dart';
+import 'package:pdf/widgets.dart' as pw;
 
 class WorkStore {
   static late WorkStore instance = WorkStore._();
@@ -60,4 +64,19 @@ class WorkStore {
   }
 
   WSSQLQueries queries = WSSQLQueries(Mapping());
+
+  void printPage(BuildContext context) async {
+    final doc = pw.Document();
+
+    doc.addPage(pw.Page(
+        pageFormat: PdfPageFormat.a4,
+        build: (pw.Context context) {
+          return pw.Center(
+            child: pw.Text('Hello World'),
+          ); // Center
+        }));
+
+    await Printing.layoutPdf(
+        onLayout: (PdfPageFormat format) async => doc.save());
+  }
 }
