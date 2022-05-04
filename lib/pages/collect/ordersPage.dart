@@ -7,6 +7,7 @@ import 'package:wms_app/warehouseSystem/wsInteract.dart';
 import 'package:wms_app/widgets/WMSPage.dart';
 import 'package:wms_app/widgets/wmsAppBar.dart';
 import 'package:wms_app/widgets/wmsAsyncWidget.dart';
+import 'package:wms_app/widgets/wmsCardCustomerOrderChecker.dart';
 import 'package:wms_app/widgets/wmsEmptyWidget.dart';
 
 class OrdersPage extends WMSPage {
@@ -52,45 +53,9 @@ class _State extends State<OrdersPage> {
           futureCustomerOrder,
           (customerOrders) => ListView(children: [
                 ...customerOrders
-                    .map((e) => asyncCustomerOrderWidget(e))
+                    .map((e) => WMSCardCustomerOrderChecker(e))
                     .toList()
               ]));
-
-  Widget asyncCustomerOrderWidget(CustomerOrder customerOrder) {
-    return WMSAsyncWidget<List<dynamic>>(
-        Future.wait([
-          customerOrder.getCustomerName(),
-          customerOrder.getProducts(),
-          customerOrder.getIncrementId()
-        ]),
-        (f) => Card(
-                child: ListTile(
-              leading: Checkbox(
-                  value: workStore.isSelectedCustomerOrder(customerOrder),
-                  onChanged: (bool? b) {
-                    var selected = Default.nullSafe<bool>(b);
-                    if (selected) {
-                      if (!workStore.isSelectedCustomerOrder(customerOrder)) {
-                        workStore.selectCustomerOrder(customerOrder);
-                      }
-                    } else {
-                      if (workStore.isSelectedCustomerOrder(customerOrder)) {
-                        workStore.unselectCustomerOrder(customerOrder);
-                      }
-                    }
-                    setState(() {});
-                  }),
-              title: customerNameWidget(f[0]),
-              subtitle: customerOrderProductsWidget(f[1]),
-              trailing: customerOrderIncrementId(f[2]),
-            )));
-  }
-
-  Widget customerNameWidget(String name) => Text(name);
-  Widget customerOrderProductsWidget(List<int> ps) =>
-      Text(ps.length.toString() + "st");
-
-  Widget customerOrderIncrementId(String fid) => Text(fid);
 
   Widget confirmCustomerOrdersButton(BuildContext context) => ElevatedButton(
       child: Text("Bekräfta"),
