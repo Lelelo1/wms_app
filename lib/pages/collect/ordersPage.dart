@@ -7,7 +7,7 @@ import 'package:wms_app/warehouseSystem/wsInteract.dart';
 import 'package:wms_app/widgets/WMSPage.dart';
 import 'package:wms_app/widgets/wmsAppBar.dart';
 import 'package:wms_app/widgets/wmsAsyncWidget.dart';
-import 'package:wms_app/widgets/wmsCardCustomerOrderChecker.dart';
+import 'package:wms_app/widgets/wmsCardChecker.dart';
 import 'package:wms_app/widgets/wmsEmptyWidget.dart';
 
 class OrdersPage extends WMSPage {
@@ -52,9 +52,28 @@ class _State extends State<OrdersPage> {
       WMSAsyncWidget<List<CustomerOrder>>(
           futureCustomerOrder,
           (customerOrders) => ListView(children: [
-                ...customerOrders
-                    .map((e) => WMSCardCustomerOrderChecker(e))
-                    .toList()
+                ...customerOrders.map((e) => WMSAsyncWidget<List<dynamic>>(
+                    Future.wait([
+                      e.getCustomerName(),
+                      e.getProducts(),
+                      e.getIncrementId()
+                    ]),
+                    (f) => WMSCardChecker(
+                            f[0],
+                            e.formatCustomerOrderProducts(f[1]),
+                            f[2],
+                            () => workStore.isSelectedCustomerOrder(e),
+                            (checked) {
+                          if (checked) {
+                            if (!workStore.isSelectedCustomerOrder(e)) {
+                              workStore.selectCustomerOrder(e);
+                            }
+                          } else {
+                            if (workStore.isSelectedCustomerOrder(e)) {
+                              workStore.unselectCustomerOrder(e);
+                            }
+                          }
+                        })))
               ]));
 
   Widget confirmCustomerOrdersButton(BuildContext context) => ElevatedButton(

@@ -48,4 +48,8 @@ class CustomerOrder {
     print("r is : " + r.toString());
     return Default.firstStringDefaultTo(r);
   }
+
+  String formatCustomerOrderProducts(List<dynamic> f) {
+    return f.length.toString() + "st";
+  }
 }
