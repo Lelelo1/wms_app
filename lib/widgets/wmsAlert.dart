@@ -5,7 +5,6 @@ import 'package:flutter/widgets.dart';
 import 'package:wms_app/content/transitions.dart';
 import 'package:wms_app/pages/scanPage.dart';
 import 'package:wms_app/pages/searchPage.dart';
-import 'package:wms_app/remote/warehouseSystem.dart';
 import 'package:wms_app/routes/productRoute.dart';
 import 'package:wms_app/routes/searchRoute.dart';
 import 'package:wms_app/services/navigationService.dart';

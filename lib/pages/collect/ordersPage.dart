@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wms_app/models/customerOrder.dart';
 import 'package:wms_app/pages/collect/collectPage.dart';
 import 'package:wms_app/stores/workStore.dart';
+import 'package:wms_app/utils/default.dart';
 import 'package:wms_app/warehouseSystem/wsInteract.dart';
 import 'package:wms_app/widgets/WMSPage.dart';
 import 'package:wms_app/widgets/wmsAppBar.dart';
@@ -24,6 +25,8 @@ class _State extends State<OrdersPage> {
     "Emma Hanssom",
     "Marcus Olsson",
   ];
+
+  WorkStore workStore = WorkStore.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -62,14 +65,26 @@ class _State extends State<OrdersPage> {
         ]),
         (f) => Card(
                 child: ListTile(
-              leading: Checkbox(value: false, onChanged: selection),
+              leading: Checkbox(
+                  value: workStore.isSelectedCustomerOrder(customerOrder),
+                  onChanged: (bool? b) {
+                    var selected = Default.nullSafe<bool>(b);
+                    if (selected) {
+                      if (!workStore.isSelectedCustomerOrder(customerOrder)) {
+                        workStore.selectCustomerOrder(customerOrder);
+                      }
+                    } else {
+                      if (workStore.isSelectedCustomerOrder(customerOrder)) {
+                        workStore.unselectCustomerOrder(customerOrder);
+                      }
+                    }
+                    setState(() {});
+                  }),
               title: customerNameWidget(f[0]),
               subtitle: customerOrderProductsWidget(f[1]),
               trailing: customerOrderIncrementId(f[2]),
             )));
   }
-
-  void selection(bool? b) {}
 
   Widget customerNameWidget(String name) => Text(name);
   Widget customerOrderProductsWidget(List<int> ps) =>

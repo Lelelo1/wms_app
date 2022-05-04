@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
 import 'package:wms_app/models/customerOrder.dart';
+import 'package:wms_app/models/customerOrder.dart';
+import 'package:wms_app/models/customerOrder.dart';
 import 'package:wms_app/models/product.dart';
 import 'package:event/event.dart';
 import 'package:wms_app/models/product.dart';
@@ -79,4 +81,18 @@ class WorkStore {
     return Printing.layoutPdf(
         onLayout: (PdfPageFormat format) async => doc.save());
   }
+
+  Iterable<CustomerOrder> _selectedCustomerOrders = [];
+  Iterable<CustomerOrder> get selectedCustomerOrders => _selectedCustomerOrders;
+  void selectCustomerOrder(CustomerOrder customerOrder) {
+    _selectedCustomerOrders = [..._selectedCustomerOrders, customerOrder];
+  }
+
+  void unselectCustomerOrder(CustomerOrder customerOrder) {
+    _selectedCustomerOrders = _selectedCustomerOrders
+        .where((element) => element.id != customerOrder.id);
+  }
+
+  bool isSelectedCustomerOrder(CustomerOrder customerOrder) =>
+      _selectedCustomerOrders.map((e) => e.id).contains(customerOrder.id);
 }

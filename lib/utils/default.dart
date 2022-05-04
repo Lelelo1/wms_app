@@ -30,24 +30,30 @@ class Default {
   }
 
   static T nullSafe<T>(dynamic dyn) {
-    /*
     if (dyn is String?) {
-      return defaultString(dyn) as T;
+      return _defaultString(dyn) as T;
     }
 
     if (dyn is int?) {
-      return defaultInt(dyn) as T;
+      return _defaultInt(dyn) as T;
     }
-    */
+
+    if (dyn is bool?) {
+      return _defaultBool(dyn) as T;
+    }
 
     return dyn as T;
   }
 
-  static String defaultString(dynamic dyn) {
+  static String _defaultString(dynamic dyn) {
     return dyn == null ? "" : dyn as String;
   }
 
-  static int defaultInt(dynamic dyn) {
-    return dyn == Null ? 0 : dyn as int;
+  static int _defaultInt(dynamic dyn) {
+    return dyn == null ? 0 : dyn as int;
+  }
+
+  static bool _defaultBool(dynamic dyn) {
+    return dyn == null ? false : dyn;
   }
 }
