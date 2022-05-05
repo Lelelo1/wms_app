@@ -76,9 +76,6 @@ class WSCustomerOrderQueries {
   String getCustomerOrders() =>
       "SELECT entity_id FROM `sales_flat_order` WHERE status = 'pending' OR status = 'pendingpreorder' OR status = 'processing' OR status = 'processingpreorder' ORDER BY created_at DESC LIMIT 35";
 
-  String getCustomerOrderFlag(String orderId) =>
-      "SELECT flag_id FROM `amasty_order_flag` WHERE order_id = '$orderId'";
-
   String getCustomerFirstName(String orderId) =>
       "SELECT customer_firstname FROM `sales_flat_order` WHERE entity_id = '$orderId'";
 
