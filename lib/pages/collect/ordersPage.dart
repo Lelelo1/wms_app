@@ -55,12 +55,12 @@ class _State extends State<OrdersPage> {
                 ...customerOrders.map((e) => WMSAsyncWidget<List<dynamic>>(
                     Future.wait([
                       e.getCustomerName(),
-                      e.getProducts(),
+                      e.getTotalProductsQuantity(),
                       e.getIncrementId()
                     ]),
                     (f) => WMSCardChecker(
                             f[0],
-                            e.formatCustomerOrderProducts(f[1]),
+                            e.formatCustomerOrderProductsQuantity(f[1]),
                             f[2],
                             () => workStore.isSelectedCustomerOrder(e),
                             (checked) {
