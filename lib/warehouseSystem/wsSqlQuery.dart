@@ -83,7 +83,7 @@ class WSCustomerOrderQueries {
       "SELECT customer_lastname FROM `sales_flat_order` WHERE entity_id = '$orderId'";
 
   String getProducts(String orderId) =>
-      "SELECT product_id FROM `sales_flat_order_item` WHERE order_id = '$orderId'";
+      "SELECT product_id FROM `sales_flat_order_item` WHERE order_id = '$orderId' AND product_type = 'simple'";
   String getIncrementId(String orderId) =>
       "SELECT increment_id FROM `sales_flat_order` WHERE entity_id = $orderId";
   String getProductQuantity(String orderId, String productId) =>
