@@ -55,7 +55,6 @@ class CustomerOrder {
         .instance.queries.customerOrders
         .getProductQuantity(id.toString(), productId.toString()));
     var rp = Default.firstDoubleDefaultTo(r);
-    print(id.toString() + " " + rp.toString());
     return rp;
   }
 
