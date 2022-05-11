@@ -42,7 +42,8 @@ class _State extends State<OrdersPage> {
   }
 
   Future<List<CustomerOrder>> futureCustomerOrdersList() async {
-    var query = WorkStore.instance.queries.customerOrders.getCustomerOrders();
+    var query =
+        WorkStore.instance.queries.customerOrders.getAvailableCustomerOrders();
     var ids = await WSInteract.remoteSql<int>(query);
     return ids.map((e) => CustomerOrder(e)).toList();
   }
