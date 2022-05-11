@@ -88,6 +88,10 @@ class WSCustomerOrderQueries {
       "SELECT increment_id FROM `sales_flat_order` WHERE entity_id = $orderId";
   String getProductQuantity(String orderId, String productId) =>
       "SELECT qty_ordered FROM `sales_flat_order_item` WHERE order_id = '$orderId' AND product_id = '$productId'";
+  String setAsPicked(String orderId, String productId) =>
+      "UPDATE `sales_flat_order_item` SET 0 WHERE entity_id == '$orderId' AND product_id = '$productId' AND qty_picked = NULL";
+  String getIsPicked(String orderId, String productId) =>
+      "SELECT product_id FROM `sales_flat_order_item` WHERE entity_id == '$orderId' AND product_id = '$productId' AND qty_picked <> NULL ";
 }
 
   /*

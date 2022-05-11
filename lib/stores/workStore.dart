@@ -2,11 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
 import 'package:wms_app/models/customerOrder.dart';
-import 'package:wms_app/models/customerOrder.dart';
-import 'package:wms_app/models/customerOrder.dart';
 import 'package:wms_app/models/product.dart';
 import 'package:event/event.dart';
-import 'package:wms_app/models/product.dart';
 import 'package:wms_app/warehouseSystem/wsMapping.dart';
 import 'package:wms_app/warehouseSystem/wsSqlQuery.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -84,13 +81,21 @@ class WorkStore {
 
   Iterable<CustomerOrder> _selectedCustomerOrders = [];
   Iterable<CustomerOrder> get selectedCustomerOrders => _selectedCustomerOrders;
-  void selectCustomerOrder(CustomerOrder customerOrder) {
+  void _selectCustomerOrder(CustomerOrder customerOrder) {
     _selectedCustomerOrders = [..._selectedCustomerOrders, customerOrder];
   }
 
-  void unselectCustomerOrder(CustomerOrder customerOrder) {
+  void _unselectCustomerOrder(CustomerOrder customerOrder) {
     _selectedCustomerOrders = _selectedCustomerOrders
         .where((element) => element.id != customerOrder.id);
+  }
+
+  void setCustomerOrderSelected(bool selected, CustomerOrder customerOrder) {
+    if (isSelectedCustomerOrder(customerOrder)) {
+      _selectCustomerOrder(customerOrder);
+    } else {
+      _unselectCustomerOrder(customerOrder);
+    }
   }
 
   bool isSelectedCustomerOrder(CustomerOrder customerOrder) =>

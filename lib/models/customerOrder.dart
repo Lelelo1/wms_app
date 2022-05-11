@@ -2,6 +2,7 @@ import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/utils/default.dart';
 import 'package:wms_app/warehouseSystem/wsInteract.dart';
 import 'package:collection/collection.dart';
+import 'package:wms_app/warehouseSystem/wsSqlQuery.dart';
 
 class CustomerOrder {
   final int id;
@@ -68,4 +69,21 @@ class CustomerOrder {
   String formatCustomerOrderProductsQuantity(dynamic f) {
     return (f as double).round().toString() + "st";
   }
+
+  // handle selected and not selected
+  void selectCustomerOrderProduct(String productId, bool selected) {
+    var isPicked = WSInteract.remoteSql<bool>(WorkStore
+        .instance.queries.customerOrders
+        .getIsPicked(id.toString(), productId));
+
+    if (selected == isPicked) {
+      // might have been picked by someone else
+      return;
+    }
+
+    WSInteract.remoteSql(WorkStore.instance.queries.customerOrders
+        .setAsPicked(id.toString(), productId));
+  }
+
+  bool isPicked(int? qtyPicked) => qtyPicked != null;
 }
