@@ -64,7 +64,9 @@ class _State extends State<OrdersPage> {
                             e.formatCustomerOrderProductsQuantity(f[1]),
                             f[2],
                             () => workStore.isSelectedCustomerOrder(e),
-                            (checked) {workStore.setCustomerOrderSelected(checked, e);}))
+                            (checked) {
+                          workStore.setCustomerOrderSelected(checked, e);
+                        })))
               ]));
 
   Widget confirmCustomerOrdersButton(BuildContext context) => ElevatedButton(

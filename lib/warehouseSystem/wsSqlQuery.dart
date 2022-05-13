@@ -74,7 +74,9 @@ class WSSQLQueries {
 
 class WSCustomerOrderQueries {
   String getAvailableCustomerOrders() =>
-      "SELECT entity_id FROM `sales_flat_order` WHERE status = 'pending' OR status = 'pendingpreorder' OR status = 'processing' OR status = 'processingpreorder' AND (SELECT qty_picked IN sales_flat_order_item WHERE qty_picked = NULL) ORDER BY created_at DESC LIMIT 35";
+      "SELECT entity_id FROM `sales_flat_order` WHERE status = 'pending' OR status = 'pendingpreorder' OR status = 'processing' OR status = 'processingpreorder' AND `sales_flat_order`.`entity_id` IN (SELECT order_id FROM sales_flat_order_item WHERE qty_picked <> NULL) ORDER BY created_at DESC LIMIT 35";
+
+  String getIsCustomerChosen() => "";
 
   String getCustomerFirstName(String orderId) =>
       "SELECT customer_firstname FROM `sales_flat_order` WHERE entity_id = '$orderId'";
@@ -88,10 +90,10 @@ class WSCustomerOrderQueries {
       "SELECT increment_id FROM `sales_flat_order` WHERE entity_id = $orderId";
   String getProductQuantity(String orderId, String productId) =>
       "SELECT qty_ordered FROM `sales_flat_order_item` WHERE order_id = '$orderId' AND product_id = '$productId'";
-  String setAsPicked(String orderId, String productId) =>
-      "UPDATE `sales_flat_order_item` SET 0 WHERE entity_id == '$orderId' AND product_id = '$productId' AND qty_picked = NULL";
-  String getIsPicked(String orderId, String productId) =>
-      "SELECT product_id FROM `sales_flat_order_item` WHERE entity_id == '$orderId' AND product_id = '$productId' AND qty_picked <> NULL ";
+  String setQtyPicked(String orderId, String productId, int? qtyPicked) =>
+      "UPDATE `sales_flat_order_item` SET 0 WHERE entity_id = '$orderId' AND product_id = '$productId' AND qty_picked = $qtyPicked";
+  String getQtyPicked(String orderId, String productId) =>
+      "SELECT `qty_picked` FROM `sales_flat_order_item` WHERE entity_id = '$orderId' AND product_id = '$productId' AND qty_picked <> NULL ";
 }
 
   /*

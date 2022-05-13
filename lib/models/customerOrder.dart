@@ -69,12 +69,25 @@ class CustomerOrder {
   String formatCustomerOrderProductsQuantity(dynamic f) {
     return (f as double).round().toString() + "st";
   }
+/*
+  static Future<List<CustomerOrder>> fetch() async  {
+    var customerOrders = await WSInteract.remoteSql<int>(
+        WorkStore.instance.queries.customerOrders.getCustomerOrders());
 
+    var s = customerOrders.map((e) => );
+    WSInteract.remoteSql<int?>(WorkStore.instance.queries.customerOrders.getQtyPicked(orderId, productId))
+  }
+  */
+/*
   // handle selected and not selected
-  void selectCustomerOrderProduct(String productId, bool selected) {
-    var isPicked = WSInteract.remoteSql<bool>(WorkStore
-        .instance.queries.customerOrders
-        .getIsPicked(id.toString(), productId));
+  void setQtyPicked(String productId, int qtyPicked) {
+
+    if (qtyPicked == qty) {
+      print("productId: " +
+          productId.toString() +
+          "was already changed by somone");
+      return;
+    }
 
     if (selected == isPicked) {
       // might have been picked by someone else
@@ -82,8 +95,9 @@ class CustomerOrder {
     }
 
     WSInteract.remoteSql(WorkStore.instance.queries.customerOrders
-        .setAsPicked(id.toString(), productId));
+        .setQtyPicked(id.toString(), productId));
   }
 
   bool isPicked(int? qtyPicked) => qtyPicked != null;
+  */
 }

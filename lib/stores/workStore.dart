@@ -79,6 +79,7 @@ class WorkStore {
         onLayout: (PdfPageFormat format) async => doc.save());
   }
 
+/*
   Iterable<CustomerOrder> _selectedCustomerOrders = [];
   Iterable<CustomerOrder> get selectedCustomerOrders => _selectedCustomerOrders;
   void _selectCustomerOrder(CustomerOrder customerOrder) {
@@ -98,6 +99,8 @@ class WorkStore {
     }
   }
 
+  
   bool isSelectedCustomerOrder(CustomerOrder customerOrder) =>
       _selectedCustomerOrders.map((e) => e.id).contains(customerOrder.id);
+      */
 }
