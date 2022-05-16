@@ -56,4 +56,12 @@ class Default {
   static bool _defaultBool(dynamic dyn) {
     return dyn == null ? false : dyn;
   }
+
+  static int? firstNullableIntDefaultTo(List<int?> values, [int? to]) {
+    if (values.isEmpty) {
+      return to;
+    }
+
+    return values.first;
+  }
 }

@@ -1,3 +1,4 @@
+import 'package:wms_app/models/product.dart';
 import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/utils/default.dart';
 import 'package:wms_app/warehouseSystem/wsInteract.dart';
@@ -69,35 +70,52 @@ class CustomerOrder {
   String formatCustomerOrderProductsQuantity(dynamic f) {
     return (f as double).round().toString() + "st";
   }
-/*
-  static Future<List<CustomerOrder>> fetch() async  {
-    var customerOrders = await WSInteract.remoteSql<int>(
-        WorkStore.instance.queries.customerOrders.getCustomerOrders());
 
-    var s = customerOrders.map((e) => );
-    WSInteract.remoteSql<int?>(WorkStore.instance.queries.customerOrders.getQtyPicked(orderId, productId))
+  Future<bool> getIsAvailable() async {
+    var productIds = await getProducts();
+    var quantitiesPicked =
+        await Future.wait(productIds.map((p) => _getQtyPicked(p)));
+
+    var isAvailable = quantitiesPicked.any((e) => e == null);
+
+    return isAvailable;
   }
-  */
-/*
-  // handle selected and not selected
-  void setQtyPicked(String productId, int qtyPicked) {
 
-    if (qtyPicked == qty) {
-      print("productId: " +
-          productId.toString() +
-          "was already changed by somone");
-      return;
-    }
+  Future<int?> _getQtyPicked(int productId) async {
+    var r = await WSInteract.remoteSql<int?>(WorkStore
+        .instance.queries.customerOrders
+        .getQtyPicked(id.toString(), productId.toString()));
+    return Default.firstNullableIntDefaultTo(r);
+  }
 
-    if (selected == isPicked) {
-      // might have been picked by someone else
-      return;
-    }
-
+  void setQtyPicked(String productId, int? qty) {
     WSInteract.remoteSql(WorkStore.instance.queries.customerOrders
-        .setQtyPicked(id.toString(), productId));
+        .setQtyPicked(id.toString(), productId, qty));
   }
 
-  bool isPicked(int? qtyPicked) => qtyPicked != null;
-  */
+  Future<bool> setQtyPickedFromChecked(bool isChecked) async {
+    var productIds = await getProducts();
+    var checked = await Future.wait(
+        productIds.map((p) => _setQtyPickedFromChecked(p, isChecked)));
+    return checked.contains(false);
+  }
+
+  Future<bool> _setQtyPickedFromChecked(int productId, bool isChecked) async {
+    var currentQtyPicked = await _getQtyPicked(productId);
+
+    if (currentQtyPicked == null || currentQtyPicked == 0) {
+      var setQty = isChecked ? 0 : null;
+      WSInteract.remoteSql(WorkStore.instance.queries.customerOrders
+          .setQtyPicked(id.toString(), productId.toString(), setQty));
+      return true;
+    }
+
+    print("A picking for order with order_id: " +
+        id.toString() +
+        " incriment_id: " +
+        await getIncrementId() +
+        " was already started. It should not appear in the list of available picking orders");
+
+    return false;
+  }
 }

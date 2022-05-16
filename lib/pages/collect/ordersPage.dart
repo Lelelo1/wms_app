@@ -57,16 +57,15 @@ class _State extends State<OrdersPage> {
                     Future.wait([
                       e.getCustomerName(),
                       e.getTotalProductsQuantity(),
-                      e.getIncrementId()
+                      e.getIncrementId(),
+                      e.getIsAvailable(),
                     ]),
                     (f) => WMSCardChecker(
-                            f[0],
-                            e.formatCustomerOrderProductsQuantity(f[1]),
-                            f[2],
-                            () => workStore.isSelectedCustomerOrder(e),
-                            (checked) {
-                          workStore.setCustomerOrderSelected(checked, e);
-                        })))
+                        f[0],
+                        e.formatCustomerOrderProductsQuantity(f[1]),
+                        f[2],
+                        () => !f[3],
+                        e.setQtyPickedFromChecked)))
               ]));
 
   Widget confirmCustomerOrdersButton(BuildContext context) => ElevatedButton(
