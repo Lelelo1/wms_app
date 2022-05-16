@@ -91,9 +91,9 @@ class WSCustomerOrderQueries {
   String getProductQuantity(String orderId, String productId) =>
       "SELECT qty_ordered FROM `sales_flat_order_item` WHERE order_id = '$orderId' AND product_id = '$productId'";
   String setQtyPicked(String orderId, String productId, int? qtyPicked) =>
-      "UPDATE `sales_flat_order_item` SET 0 WHERE entity_id = '$orderId' AND product_id = '$productId' AND qty_picked = $qtyPicked";
+      "UPDATE `sales_flat_order_item` SET `qty_picked` = '$qtyPicked' WHERE order_id = '$orderId' AND product_id = '$productId' AND qty_picked = '$qtyPicked'";
   String getQtyPicked(String orderId, String productId) =>
-      "SELECT `qty_picked` FROM `sales_flat_order_item` WHERE entity_id = '$orderId' AND product_id = '$productId' AND qty_picked <> NULL ";
+      "SELECT `qty_picked` FROM `sales_flat_order_item` WHERE order_id = '$orderId' AND product_id = '$productId' AND qty_picked <> NULL ";
 }
 
   /*
