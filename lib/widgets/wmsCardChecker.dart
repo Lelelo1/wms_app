@@ -21,14 +21,18 @@ class _State extends State<WMSCardChecker> {
   @override
   Widget build(BuildContext context) {
     return WMSAsyncWidget<bool>(this.widget.isChecked(), (bool isChecked) {
-      return Card(
-          child: Checkbox(
-              value: isChecked,
-              onChanged: (bool? b) async {
-                var checked = Default.nullSafe<bool>(b);
-                await this.widget.onChecked(checked);
-                setState(() {});
-              }));
+      return ListTile(
+        leading: Checkbox(
+            value: isChecked,
+            onChanged: (bool? b) async {
+              var checked = Default.nullSafe<bool>(b);
+              await this.widget.onChecked(checked);
+              setState(() {});
+            }),
+        title: Text(this.widget.title),
+        subtitle: Text(this.widget.subtitle),
+        trailing: Text(this.widget.trailing),
+      );
     });
   }
 
