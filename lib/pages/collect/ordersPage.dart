@@ -58,13 +58,12 @@ class _State extends State<OrdersPage> {
                       e.getCustomerName(),
                       e.getTotalProductsQuantity(),
                       e.getIncrementId(),
-                      e.getIsAvailable(),
                     ]),
                     (f) => WMSCardChecker(
                         f[0],
                         e.formatCustomerOrderProductsQuantity(f[1]),
                         f[2],
-                        () => !f[3],
+                        e.getIsSelected,
                         e.setQtyPickedFromChecked)))
               ]));
 

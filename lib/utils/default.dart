@@ -30,6 +30,7 @@ class Default {
   }
 
   static T nullSafe<T>(dynamic dyn) {
+    /*
     if (dyn is String?) {
       return _defaultString(dyn) as T;
     }
@@ -41,7 +42,7 @@ class Default {
     if (dyn is bool?) {
       return _defaultBool(dyn) as T;
     }
-
+  */
     return dyn as T;
   }
 
@@ -63,5 +64,22 @@ class Default {
     }
 
     return values.first;
+  }
+
+  static int? convertToNullableInt(String? nullableString) {
+    if (nullableString == null || nullableString.isEmpty) {
+      return null;
+    }
+    var string = nullableString;
+    print("string: " + string);
+    return 0; //int.tryParse(string);
+  }
+
+  static String? convertToNullableString(int? nullableInt) {
+    if (nullableInt == null) {
+      return null;
+    }
+
+    return nullableInt.toString();
   }
 }

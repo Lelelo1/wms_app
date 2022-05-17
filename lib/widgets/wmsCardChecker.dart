@@ -8,8 +8,8 @@ class WMSCardChecker extends StatefulWidget {
   final String title;
   final String subtitle;
   final String trailing;
-  final bool Function() isChecked;
-  final void Function(bool checked) onChecked;
+  final Future<bool> Function() isChecked;
+  final Future Function(bool checked) onChecked;
   WMSCardChecker(
       this.title, this.subtitle, this.trailing, this.isChecked, this.onChecked);
 
@@ -20,21 +20,15 @@ class WMSCardChecker extends StatefulWidget {
 class _State extends State<WMSCardChecker> {
   @override
   Widget build(BuildContext context) {
-    return StatefulBuilder(
-        builder: (BuildContext context, StateSetter stateSetter) {
+    return WMSAsyncWidget<bool>(this.widget.isChecked(), (bool isChecked) {
       return Card(
-          child: ListTile(
-        leading: Checkbox(
-            value: this.widget.isChecked(),
-            onChanged: (bool? b) {
-              var checked = Default.nullSafe<bool>(b);
-              this.widget.onChecked(checked);
-              setState(() {});
-            }),
-        title: Text(this.widget.title),
-        subtitle: Text(this.widget.subtitle),
-        trailing: Text(this.widget.trailing),
-      ));
+          child: Checkbox(
+              value: isChecked,
+              onChanged: (bool? b) async {
+                var checked = Default.nullSafe<bool>(b);
+                await this.widget.onChecked(checked);
+                setState(() {});
+              }));
     });
   }
 

@@ -71,14 +71,14 @@ class CustomerOrder {
     return (f as double).round().toString() + "st";
   }
 
-  Future<bool> getIsAvailable() async {
+  Future<bool> getIsSelected() async {
     var productIds = await getProducts();
     var quantitiesPicked =
         await Future.wait(productIds.map((p) => _getQtyPicked(p)));
-
+    print("as: " + quantitiesPicked.toString());
     var isAvailable = quantitiesPicked.any((e) => e == null);
 
-    return isAvailable;
+    return !isAvailable;
   }
 
   Future<int?> _getQtyPicked(int productId) async {
@@ -97,7 +97,7 @@ class CustomerOrder {
     var productIds = await getProducts();
     var checked = await Future.wait(
         productIds.map((p) => _setQtyPickedFromChecked(p, isChecked)));
-    return checked.contains(false);
+    return checked.contains(true);
   }
 
   Future<bool> _setQtyPickedFromChecked(int productId, bool isChecked) async {
