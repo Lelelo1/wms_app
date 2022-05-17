@@ -73,10 +73,8 @@ class WSSQLQueries {
 }
 
 class WSCustomerOrderQueries {
-  String getAvailableCustomerOrders() =>
-      "SELECT entity_id FROM `sales_flat_order` WHERE status = 'pending' OR status = 'pendingpreorder' OR status = 'processing' OR status = 'processingpreorder' AND `sales_flat_order`.`entity_id` IN (SELECT order_id FROM sales_flat_order_item WHERE qty_picked <> NULL) ORDER BY created_at DESC LIMIT 12";
-
-  String getIsCustomerChosen() => "";
+  String getPossibleCustomerOrders() =>
+      "SELECT entity_id FROM `sales_flat_order` WHERE status = 'pending' OR status = 'pendingpreorder' OR status = 'processing' OR status = 'processingpreorder' ORDER BY created_at DESC LIMIT 12";
 
   String getCustomerFirstName(String orderId) =>
       "SELECT customer_firstname FROM `sales_flat_order` WHERE entity_id = '$orderId'";

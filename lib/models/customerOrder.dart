@@ -75,10 +75,21 @@ class CustomerOrder {
     var productIds = await getProducts();
     var quantitiesPicked =
         await Future.wait(productIds.map((p) => _getQtyPicked(p)));
-    print("as: " + quantitiesPicked.toString());
     var isAvailable = quantitiesPicked.any((e) => e == null);
 
     return !isAvailable;
+  }
+
+  Future<bool> getIsBeingCollected() async {
+    var productIds = await getProducts();
+    var quantitiesPicked =
+        await Future.wait(productIds.map((p) => _getQtyPicked(p)));
+    var isBeingCollected = quantitiesPicked.any((e) {
+      var qtyPicked = e ?? 0;
+      return qtyPicked > 0;
+    });
+
+    return isBeingCollected;
   }
 
   Future<int?> _getQtyPicked(int productId) async {
