@@ -47,11 +47,13 @@ dependencies:
   # wrong placing these here? // https://firebase.flutter.dev/docs/crashlytics/overview/
   firebase_core: "^1.10.0"
   firebase_crashlytics: "^2.3.0"
-  git_info: ^1.1.2
   flutter_font_icons: ^2.2.4
   touchable_opacity: ^1.2.0
   event: ^2.0.5
   eventsubscriber: ^2.0.0
+  synchronized: ^3.0.0+2
+  printing: ^5.8.0
+  pdf: ^3.7.4
 
 dev_dependencies:
   
@@ -64,9 +66,6 @@ flutter:
   assets: 
   - assets/images/
   - assets/sounds/
-  - .git/HEAD         # This file points out the current branch of the project.
-  - .git/ORIG_HEAD    # This file points to the commit id at origin (last commit id of the remote repository).
-  - .git/refs/heads/  # This directory includes files for each branch which points to the last commit id (local repo).
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

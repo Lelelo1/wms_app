@@ -1,6 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:wms_app/models/customerOrder.dart';
+import 'package:wms_app/pages/collect/collectPage.dart';
+import 'package:wms_app/stores/workStore.dart';
+import 'package:wms_app/utils/default.dart';
+import 'package:wms_app/warehouseSystem/wsInteract.dart';
 import 'package:wms_app/widgets/WMSPage.dart';
 import 'package:wms_app/widgets/wmsAppBar.dart';
+import 'package:wms_app/widgets/wmsAsyncWidget.dart';
+import 'package:wms_app/widgets/wmsCardChecker.dart';
+import 'package:wms_app/widgets/wmsEmptyWidget.dart';
 
 class OrdersPage extends WMSPage {
   @override
@@ -19,29 +27,73 @@ class _State extends State<OrdersPage> {
     "Marcus Olsson",
   ];
 
+  WorkStore workStore = WorkStore.instance;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: WMSAppBar(
                 "Välj beställningar", Colors.black, Colors.white, Colors.black)
             .get(),
-        body: SafeArea(
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-              Flexible(
-                  flex: 5,
-                  child: Column(children: [
-                    ...testOrders
-                        .map((e) => Container(
-                            child: Text(e, textAlign: TextAlign.center),
-                            alignment: Alignment.center))
-                        .toList()
-                  ])),
-              Flexible(
-                  flex: 2,
-                  child:
-                      ElevatedButton(child: Text("haahaha"), onPressed: () {}))
-            ])));
+        body: Column(children: [
+          Expanded(child: asyncCustomerOrdersList(futureCustomerOrdersList())),
+          confirmCustomerOrdersButton(context)
+        ]));
   }
+
+  Future<List<CustomerOrder>> futureCustomerOrdersList() async {
+    var query =
+        WorkStore.instance.queries.customerOrders.getPossibleCustomerOrders();
+    var customerOrders = await WSInteract.remoteSql<int>(query)
+        .then((ids) => ids.map((id) => CustomerOrder(id)));
+
+    var allCustomerOrders = await Future.wait(customerOrders.map((e) async {
+      var isSelected = await e.getIsBeingCollected();
+      return isSelected ? null : e;
+    }));
+
+    var availableCustomerOrders = allCustomerOrders
+        .where((e) => e != null)
+        .cast<CustomerOrder>()
+        .toList();
+
+    return Future.sync(() => availableCustomerOrders);
+  }
+
+  WMSAsyncWidget asyncCustomerOrdersList(
+          Future<List<CustomerOrder>> futureCustomerOrder) =>
+      WMSAsyncWidget<List<CustomerOrder>>(
+          futureCustomerOrder,
+          (customerOrders) => ListView(children: [
+                ...customerOrders.map((e) => WMSAsyncWidget<List<dynamic>>(
+                    Future.wait([
+                      e.getCustomerName(),
+                      e.getTotalProductsQuantity(),
+                      e.getIncrementId(),
+                    ]),
+                    (f) => WMSCardChecker(
+                        f[0],
+                        e.formatCustomerOrderProductsQuantity(f[1]),
+                        f[2],
+                        e.getIsSelected,
+                        e.setQtyPickedFromChecked)))
+              ]));
+
+  Widget confirmCustomerOrdersButton(BuildContext context) => ElevatedButton(
+      child: Text("Bekräfta"),
+      onPressed: () async {
+        var printed = await WorkStore.instance.printPage(context);
+        // if(printed)
+        Navigator.push(context,
+            PageRouteBuilder(pageBuilder: (_, __, ___) => CollectPage()));
+      });
 }
+
+
+
+
+//WMSAsyncWidget<String>(
+ //           customerOrder.getCustomerName(), (name) => Text(name))
+
+//WMSAsyncWidget<List<int>>(customerOrder.getProducts(),
+            //  (ps) => Text(ps.length.toString() + "st"))
