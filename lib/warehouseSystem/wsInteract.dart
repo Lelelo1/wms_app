@@ -60,6 +60,12 @@ class Deserialize<T> {
       return List.empty();
     }
 
+    results.forEach((element) {
+      element.fields.forEach((key, value) {
+        print("key: " + key.toString() + ", " + value.toString());
+      });
+    });
+
     return results.map((e) => Default.nullSafe<T>(e[0])).toList();
   }
 }
