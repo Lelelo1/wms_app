@@ -74,29 +74,23 @@ class WSSQLQueries {
 
 class WSCustomerOrderQueries {
   String getPossibleCustomerOrders() =>
-      "SELECT entity_id FROM `sales_flat_order` WHERE status = 'pending' OR status = 'pendingpreorder' OR status = 'processing' OR status = 'processingpreorder' ORDER BY created_at DESC LIMIT 12";
-
-  String getCustomerFirstName(String orderId) =>
-      "SELECT customer_firstname FROM `sales_flat_order` WHERE entity_id = '$orderId'";
-
-  String getCustomerLastName(String orderId) =>
-      "SELECT customer_lastname FROM `sales_flat_order` WHERE entity_id = '$orderId'";
+      "SELECT entity_id, customer_firstname, customer_lastname, increment_id FROM `sales_flat_order`, WHERE status = 'pending' OR status = 'pendingpreorder' OR status = 'processing' OR status = 'processingpreorder' ORDER BY created_at DESC LIMIT 12";
 
   String getProducts(String orderId) =>
       "SELECT product_id FROM `sales_flat_order_item` WHERE order_id = '$orderId' AND product_type = 'simple'";
-  String getIncrementId(String orderId) =>
-      "SELECT increment_id FROM `sales_flat_order` WHERE entity_id = $orderId";
+
   String getProductQuantity(String orderId, String productId) =>
       "SELECT qty_ordered FROM `sales_flat_order_item` WHERE order_id = '$orderId' AND product_id = '$productId'";
+
+  String getQtyPicked(String orderId, String productId) =>
+      "SELECT `qty_picked` FROM `sales_flat_order_item` WHERE order_id = '$orderId' AND product_id = '$productId' ";
+
   String setQtyPicked(String orderId, String productId, int? qtyPicked) {
     if (qtyPicked == null) {
       return "UPDATE `sales_flat_order_item` SET `qty_picked` = NULL WHERE order_id = '$orderId' AND product_id = '$productId'";
     }
     return "UPDATE `sales_flat_order_item` SET `qty_picked` = '$qtyPicked' WHERE order_id = '$orderId' AND product_id = '$productId'";
   }
-
-  String getQtyPicked(String orderId, String productId) =>
-      "SELECT `qty_picked` FROM `sales_flat_order_item` WHERE order_id = '$orderId' AND product_id = '$productId' ";
 }
 
   /*

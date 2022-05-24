@@ -1,4 +1,5 @@
 import 'package:mysql1/mysql1.dart';
+import 'package:wms_app/models/model.dart';
 import 'package:wms_app/secrets/WMS_Katsumi_Database_Settings.dart';
 import 'package:wms_app/stores/versionStore.dart';
 import 'package:wms_app/utils/default.dart';
@@ -34,18 +35,14 @@ class WSInteract {
           return data;
         }
       });
-
-/*
-  static Future<List<T>> localSql<T>(String sql) async {
-    var local = await openDatabase("");
-    var s = await local.query(sql);
-    //var results = await remote.query(sql);
-    //var data = Deserialize.remote<T>(results);
-
-    // close
-    return List.empty();
+      
+  static Future<M> fetchModel<M extends Model>(Model model) {
+    model.
   }
-  */
+
+  // local sql for emebedded test sample mock database...
+
+
 }
 
 enum ConnectionType { remote, local }

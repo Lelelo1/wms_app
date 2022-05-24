@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wms_app/pages/collect/ordersPage.dart';
 import 'package:wms_app/pages/returnPage.dart';
 import 'package:wms_app/stores/workStore.dart';
-import 'package:wms_app/widgets/WMSPage.dart';
+import 'package:wms_app/widgets/wmsPage.dart';
 
 // ignore: must_be_immutable
 class FeaturesPage extends StatefulWidget {

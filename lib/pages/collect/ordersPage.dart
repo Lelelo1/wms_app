@@ -4,7 +4,7 @@ import 'package:wms_app/pages/collect/collectPage.dart';
 import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/utils/default.dart';
 import 'package:wms_app/warehouseSystem/wsInteract.dart';
-import 'package:wms_app/widgets/WMSPage.dart';
+import 'package:wms_app/widgets/wmsPage.dart';
 import 'package:wms_app/widgets/wmsAppBar.dart';
 import 'package:wms_app/widgets/wmsAsyncWidget.dart';
 import 'package:wms_app/widgets/wmsCardChecker.dart';
