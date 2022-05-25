@@ -10,7 +10,7 @@ class WMSCardCheckerProps extends WMSProps<WMSCardCheckerProps> {
   final String subtitle;
   final String trailing;
   final bool isChecked;
-  final bool onChecked;
+  final void Function(bool) onChecked;
 
   WMSCardCheckerProps(this.title, this.subtitle, this.trailing, this.isChecked,
       this.onChecked, this.create);

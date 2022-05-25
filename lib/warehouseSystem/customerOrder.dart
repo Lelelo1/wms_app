@@ -53,9 +53,9 @@ class CustomerOrder implements WMSCardCheckerProps {
   static String _fetchQuery =
       "SELECT entity_id, customer_firstname, customer_lastname, increment_id, product_id FROM sales_flat_order_item item JOIN sales_flat_order magentoOrder ON item.order_id = magentoOrder.entity_id WHERE magentoOrder.status = 'pending' OR magentoOrder.status = 'pendingpreorder' OR magentoOrder.status = 'processing' OR magentoOrder.status = 'processingpreorder' AND item.product_type = 'simple' ORDER BY magentoOrder.created_at LIMIT 12;";
 
-  static Future<Iterable<CustomerOrder>> fetch() async {
+  static Future<List<CustomerOrder>> fetch() async {
     var models = await WSInteract.remoteSql(_fetchQuery);
 
-    return models.map((attributes) => CustomerOrder._(attributes));
+    return models.map((attributes) => CustomerOrder._(attributes)).toList();
   }
 }

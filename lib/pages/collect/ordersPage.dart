@@ -36,44 +36,17 @@ class _State extends State<OrdersPage> {
                 "Välj beställningar", Colors.black, Colors.white, Colors.black)
             .get(),
         body: Column(children: [
-          Expanded(child: asyncCustomerOrdersList(futureCustomerOrdersList())),
+          Expanded(child: asyncCustomerOrdersList(CustomerOrder.fetch())),
           confirmCustomerOrdersButton(context)
         ]));
-  }
-
-  Future<List<CustomerOrder>> futureCustomerOrdersList() async {
-    var query =
-        WorkStore.instance.queries.customerOrders.getPossibleCustomerOrders();
-    var customerOrders = await WSInteract.remoteSql<int>(query)
-        .then((ids) => ids.map((id) => CustomerOrder(id)));
-
-    var allCustomerOrders = await Future.wait(customerOrders.map((e) async {
-      var isSelected = await e.getIsBeingCollected();
-      return isSelected ? null : e;
-    }));
-
-    var availableCustomerOrders = allCustomerOrders
-        .where((e) => e != null)
-        .cast<CustomerOrder>()
-        .toList();
-
-    return Future.sync(() => availableCustomerOrders);
   }
 
   WMSAsyncWidget asyncCustomerOrdersList(
           Future<List<CustomerOrder>> futureCustomerOrder) =>
       WMSAsyncWidget<List<CustomerOrder>>(
           futureCustomerOrder,
-          (customerOrders) => ListView(children: [
-                ...customerOrders.map((e) => WMSAsyncWidget<CustomerOrder>(
-                    WSInteract.,
-                    (f) => WMSCardChecker(
-                        f[0],
-                        e.formatCustomerOrderProductsQuantity(f[1]),
-                        f[2],
-                        e.getIsSelected,
-                        e.setQtyPickedFromChecked)))
-              ]));
+          (customerOrders) => ListView(
+              children: [...customerOrders.map((c) => WMSCardChecker(c))]));
 
   Widget confirmCustomerOrdersButton(BuildContext context) => ElevatedButton(
       child: Text("Bekräfta"),
