@@ -1,10 +1,9 @@
-import 'package:wms_app/models/model.dart';
 import 'package:wms_app/warehouseSystem/wsInteract.dart';
 import 'package:wms_app/widgets/wmsCardChecker.dart';
 
-class CustomerOrder implements Model, WMSCardCheckerProps {
+class CustomerOrder implements WMSCardCheckerProps {
   Map<String, dynamic> _attributes;
-  CustomerOrder(this._attributes);
+  CustomerOrder._(this._attributes);
 
   int get id => _attributes["entity_id"];
   String get firstName => _attributes["customer_firstname"];
@@ -37,6 +36,7 @@ class CustomerOrder implements Model, WMSCardCheckerProps {
   @override
   WMSCardCheckerProps Function() get create => () => CustomerOrder(_attributes);
 
+/*
   static Future<CustomerOrder> setQtyPicked(
       String orderId, String productId, int? qtyPicked) async {
     var value = qtyPicked == null ? "NULL" : '$qtyPicked';
@@ -48,12 +48,14 @@ class CustomerOrder implements Model, WMSCardCheckerProps {
     await WSInteract.remoteSql(sql);
   }
 
-  @override
-  set create(WMSCardCheckerProps Function() _create) {
-    // TODO: implement create
-  }
+*/
 
-  @override
-  String fetchQuery =
+  static String _fetchQuery =
       "SELECT entity_id, customer_firstname, customer_lastname, increment_id, product_id FROM sales_flat_order_item item JOIN sales_flat_order magentoOrder ON item.order_id = magentoOrder.entity_id WHERE magentoOrder.status = 'pending' OR magentoOrder.status = 'pendingpreorder' OR magentoOrder.status = 'processing' OR magentoOrder.status = 'processingpreorder' AND item.product_type = 'simple' ORDER BY magentoOrder.created_at LIMIT 12;";
+
+  static Future<Iterable<CustomerOrder>> fetch() async {
+    var models = await WSInteract.remoteSql(_fetchQuery);
+
+    return models.map((attributes) => CustomerOrder._(attributes));
+  }
 }

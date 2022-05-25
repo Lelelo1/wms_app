@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:wms_app/models/customerOrder.dart';
 import 'package:wms_app/pages/collect/collectPage.dart';
 import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/utils/default.dart';
+import 'package:wms_app/warehouseSystem/customerOrder.dart';
 import 'package:wms_app/warehouseSystem/wsInteract.dart';
 import 'package:wms_app/widgets/wmsPage.dart';
 import 'package:wms_app/widgets/wmsAppBar.dart';
@@ -65,12 +65,8 @@ class _State extends State<OrdersPage> {
       WMSAsyncWidget<List<CustomerOrder>>(
           futureCustomerOrder,
           (customerOrders) => ListView(children: [
-                ...customerOrders.map((e) => WMSAsyncWidget<List<dynamic>>(
-                    Future.wait([
-                      e.getCustomerName(),
-                      e.getTotalProductsQuantity(),
-                      e.getIncrementId(),
-                    ]),
+                ...customerOrders.map((e) => WMSAsyncWidget<CustomerOrder>(
+                    WSInteract.,
                     (f) => WMSCardChecker(
                         f[0],
                         e.formatCustomerOrderProductsQuantity(f[1]),
