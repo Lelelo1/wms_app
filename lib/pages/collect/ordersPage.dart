@@ -46,7 +46,7 @@ class _State extends State<OrdersPage> {
       WMSAsyncWidget<List<CustomerOrder>>(
           futureCustomerOrder,
           (customerOrders) => ListView(
-              children: [...customerOrders.map((c) => WMSCardChecker(c))]));
+              children: [...customerOrders.map(WMSCardChecker.create)]));
 
   Widget confirmCustomerOrdersButton(BuildContext context) => ElevatedButton(
       child: Text("Bekräfta"),

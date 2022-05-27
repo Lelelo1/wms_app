@@ -36,19 +36,19 @@ class CustomerOrder implements WMSCardCheckerProps {
   @override
   WMSCardCheckerProps Function() get create => () => CustomerOrder(_attributes);
 
-/*
-  static Future<CustomerOrder> setQtyPicked(
+
+  Future<CustomerOrder> setQtyPicked(
       String orderId, String productId, int? qtyPicked) async {
     var value = qtyPicked == null ? "NULL" : '$qtyPicked';
 
     var sql = "UPDATE `sales_flat_order_item` SET `qty_picked` = "
         '$value'
         "  WHERE order_id = '$orderId' AND product_id = '$productId'";
-
+  
     await WSInteract.remoteSql(sql);
   }
 
-*/
+
 
   static String _fetchQuery =
       "SELECT entity_id, customer_firstname, customer_lastname, increment_id, product_id FROM sales_flat_order_item item JOIN sales_flat_order magentoOrder ON item.order_id = magentoOrder.entity_id WHERE magentoOrder.status = 'pending' OR magentoOrder.status = 'pendingpreorder' OR magentoOrder.status = 'processing' OR magentoOrder.status = 'processingpreorder' AND item.product_type = 'simple' ORDER BY magentoOrder.created_at LIMIT 12;";

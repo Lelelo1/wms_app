@@ -5,46 +5,37 @@ import 'package:wms_app/utils/default.dart';
 import 'package:wms_app/widgets/wmsAsyncWidget.dart';
 import 'package:wms_app/widgets/wmsProps.dart';
 
-class WMSCardCheckerProps extends WMSProps<WMSCardCheckerProps> {
+abstract class WMSCardCheckerProps extends WMSProps<WMSCardCheckerProps> {
   final String title;
   final String subtitle;
   final String trailing;
   final bool isChecked;
-  final void Function(bool) onChecked;
+  void onChecked(bool checked);
 
-  WMSCardCheckerProps(this.title, this.subtitle, this.trailing, this.isChecked,
-      this.onChecked, this.create);
-
-  @override
-  WMSCardCheckerProps Function() create;
+  WMSCardCheckerProps(this.title, this.subtitle, this.trailing, this.isChecked);
 }
 
-class WMSCardChecker<P extends WMSCardCheckerProps> extends StatefulWidget {
+class WMSCardChecker<P extends WMSCardCheckerProps> {
   final WMSCardCheckerProps props;
   WMSCardChecker(this.props);
 
-  @override
-  State<StatefulWidget> createState() => _State();
-}
-
-class _State extends State<WMSCardChecker> {
-  @override
-  Widget build(BuildContext context) {
-    return WMSAsyncWidget<bool>(this.widget.props.isChecked(),
-        (bool isChecked) {
-      return ListTile(
-        leading: Checkbox(
-            value: isChecked,
-            onChanged: (bool? b) async {
-              var checked = Default.nullSafe<bool>(b);
-              await this.widget.props.onChecked(checked);
-              setState(() {});
-            }),
-        title: Text(this.widget.props.title),
-        subtitle: Text(this.widget.props.subtitle),
-        trailing: Text(this.widget.props.trailing),
-      );
-    });
+  static StatefulBuilder create(WMSCardCheckerProps props) {
+    var p = props;
+    return StatefulBuilder(
+        builder: (_, setState) => ListTile(
+              leading: Checkbox(
+                  value: p.isChecked,
+                  onChanged: (bool? b) async {
+                    var checked = Default.nullSafe<bool>(b);
+                    var newProps = await p.update();
+                    setState(() {
+                      p = newProps;
+                    });
+                  }),
+              title: Text(p.title),
+              subtitle: Text(p.subtitle),
+              trailing: Text(p.trailing),
+            ));
   }
 
   Widget customerNameWidget(String name) => Text(name);

@@ -1,3 +1,3 @@
 abstract class WMSProps<T> {
-  abstract Future<T> Function() update;
+  Future<T> update();
 }
