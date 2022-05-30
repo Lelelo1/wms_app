@@ -1,5 +1,5 @@
 // having objects tied directly to warehousesystem/database
-
+/*
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wms_app/models/attributes.dart';
 import 'package:wms_app/stores/workStore.dart';
@@ -113,5 +113,5 @@ class Product extends AbstractProduct {
   }
 }
 
-
+*/
 // create mock abstract source
