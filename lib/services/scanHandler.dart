@@ -87,7 +87,7 @@ class ScanHandler {
   static Future<Product> _handleAsProduct(String scanResult) async {
     var productIds = await WSInteract.remoteSql<int>(
         WorkStore.instance.queries.fetchProduct(scanResult));
-    var product = Product.oneFromIds(productIds);
+    var product = Product.oneFromIds(productIds.toList());
     return product;
   }
 

@@ -30,25 +30,18 @@ class CustomerOrder implements WMSCardCheckerProps {
   bool get isChecked => quantityPicked != null;
 
   @override
-  // TODO: implement onChecked
-  bool get onChecked => true;
+  WMSCardCheckerProps Function() get create =>
+      () => CustomerOrder._(_attributes);
 
-  @override
-  WMSCardCheckerProps Function() get create => () => CustomerOrder(_attributes);
-
-
-  Future<CustomerOrder> setQtyPicked(
-      String orderId, String productId, int? qtyPicked) async {
+  void setQtyPicked(String orderId, String productId, int? qtyPicked) async {
     var value = qtyPicked == null ? "NULL" : '$qtyPicked';
 
     var sql = "UPDATE `sales_flat_order_item` SET `qty_picked` = "
         '$value'
         "  WHERE order_id = '$orderId' AND product_id = '$productId'";
-  
+
     await WSInteract.remoteSql(sql);
   }
-
-
 
   static String _fetchQuery =
       "SELECT entity_id, customer_firstname, customer_lastname, increment_id, product_id FROM sales_flat_order_item item JOIN sales_flat_order magentoOrder ON item.order_id = magentoOrder.entity_id WHERE magentoOrder.status = 'pending' OR magentoOrder.status = 'pendingpreorder' OR magentoOrder.status = 'processing' OR magentoOrder.status = 'processingpreorder' AND item.product_type = 'simple' ORDER BY magentoOrder.created_at LIMIT 12;";
@@ -57,5 +50,16 @@ class CustomerOrder implements WMSCardCheckerProps {
     var models = await WSInteract.remoteSql(_fetchQuery);
 
     return models.map((attributes) => CustomerOrder._(attributes)).toList();
+  }
+
+  @override
+  void onChecked(bool checked) {
+    // TODO: implement onChecked
+  }
+
+  @override
+  Future<WMSCardCheckerProps> update() {
+    // TODO: implement update
+    throw UnimplementedError();
   }
 }

@@ -104,7 +104,7 @@ class _State extends State<SearchPage> {
         WorkStore.instance.queries.fetchProductSuggestions(text));
     setState(() {
       this.text = text;
-      this.productSuggestions = Product.manyFromIds(suggestedIds);
+      this.productSuggestions = Product.manyFromIds(suggestedIds.toList());
     });
   }
 
