@@ -8,6 +8,9 @@ class WSSQLQueries {
   String fetchProduct(String ean) => mapping.fetchProductSubject.sql((s) =>
       "SELECT `${s.tables[0]}`.`${s.attributes[0].name}` FROM `${s.tables[0]}` WHERE `${s.tables[0]}`.`${s.attributes[0].name}` IN (SELECT `${s.attributes[0].name}` FROM `${s.tables[1]}` WHERE `${s.attributes[1].name}`  AND `value` = '$ean') ORDER BY `${s.attributes[0].name}` DESC LIMIT 1;");
 
+  // test ean 889501092529
+  //String id = "SELECT "
+
   /*
   static String fetchProduct(String ean) =>
       "SELECT `catalog_product_entity`.`entity_id` FROM `catalog_product_entity` WHERE `catalog_product_entity`.`entity_id` IN (SELECT `entity_id` FROM `catalog_product_entity_varchar` WHERE `attribute_id` = '283' AND `value` = '" +

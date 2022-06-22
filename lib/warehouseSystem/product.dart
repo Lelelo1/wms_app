@@ -16,4 +16,9 @@ class Product {
   String get shelf => _attributes["c2c_hyllplats"];
 
   int get quantity => _attributes["qty"];
+
+  static _fetchQuery(int ean) => ""
+  static Future<Product> fetch(int ean) {
+
+  }
 }

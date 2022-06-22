@@ -112,6 +112,30 @@ class Product extends AbstractProduct {
     return ids.map((e) => Product(e)).toList();
   }
 }
-
 */
-// create mock abstract source
+
+import 'package:wms_app/warehouseSystem/wsInteract.dart';
+
+class Product {
+  Map<String, dynamic> _attributes;
+  Product._(this._attributes);
+
+  int get id => _attributes["entity_id"];
+
+  static String katsumiProductImagesBaseUrl =
+      "https://www.katsumi.se/media/catalog/product/";
+  List<String> get images => (_attributes["image"] as List<String>)
+      .map((e) => katsumiProductImagesBaseUrl + e)
+      .toList();
+
+  static Future<List<Product>> fetch() async {
+    var models = await WSInteract.remoteSql("");
+
+    return models.map((attributes) => Product._(attributes)).toList();
+  }
+
+  static Product empty() {
+    var emptyAttributes = {"entity_id": "", "images": []};
+    return Product._(emptyAttributes);
+  }
+}
