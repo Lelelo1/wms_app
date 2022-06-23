@@ -1,10 +1,7 @@
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:wms_app/models/flexibleProduct.dart';
 import 'package:wms_app/models/product.dart';
-import 'package:wms_app/utils.dart';
 import 'package:wms_app/views/extended/stacked.dart';
 import 'package:wms_app/widgets/wmsAsyncWidget.dart';
 import 'package:wms_app/widgets/wmsEmptyWidget.dart';
@@ -33,7 +30,8 @@ class _State extends State<ProductRoute> {
     ]);
   }
 
-  WMSAsyncWidget asyncProductRoute() {
+  SafeArea asyncProductRoute() {
+    /*
     var fetchSKU = this.widget.product.getSKU();
     var fetchEAN = this.widget.product.getEAN();
     var fetchImages = this.widget.product.getImages();
@@ -55,6 +53,18 @@ class _State extends State<ProductRoute> {
               //Spacer(flex: 4),
               ...eanAddButtonView(this.widget.eanAddButton)
             ])));
+            */
+    return SafeArea(
+        child: Column(children: [
+      //Expanded(child: titleArea(fetchSKU), flex: 3),
+      Expanded(
+          child: subtitleArea(this.widget.product.ean.toString()), flex: 4),
+      Expanded(child: imageArea(this.widget.product.images), flex: 34),
+      Spacer(flex: 2),
+      //Expanded(child: bottomArea(fetchShelf, fetchQuantity), flex: 4),
+      //Expanded(child: nameWidget(fetchName), flex: 4),
+      ...eanAddButtonView(this.widget.eanAddButton)
+    ]));
   }
 
   List<Widget> eanAddButtonView(Widget eanAddButton) =>
@@ -66,7 +76,7 @@ class _State extends State<ProductRoute> {
               Spacer(flex: 3)
             ];
   // double skuPadding() => this.size().height * 0.02;
-
+/*
   Widget titleArea(Future<String> title) => WMSAsyncWidget(
       title,
       (String sku) => FittedBox(
@@ -89,7 +99,6 @@ class _State extends State<ProductRoute> {
         return flipImage(images);
       });
 
-  // move to uu effect folder/package
   Widget flipImage(List<String> imgs) {
     print("imgs..");
 
@@ -132,16 +141,40 @@ class _State extends State<ProductRoute> {
       name,
       (String name) => Text(name,
           style: TextStyle(fontSize: 15), textAlign: TextAlign.center));
+*/
 
-  // Future.sync(() => "mockShelf")
+  Widget subtitleArea(String subtitle) => Row(children: [
+        WMSLabel(subtitle, LineIcons.barcode),
+        WMSLabel(this.widget.product.id.toString(), Icons.desktop_windows)
+      ], mainAxisAlignment: MainAxisAlignment.center);
 
-  // do some common text aliging with padding, and also common fotsize, large title medium title, normal fontsize eg
+  Widget imageArea(List<String> images) {
+    if (images.isEmpty) {
+      return Image.asset("assets/images/product_placeholder.png",
+          width: double.infinity, fit: BoxFit.fitWidth);
+    }
+    return flipImage(images);
+  }
 
-  // icons for every attribute?
-  // sku:
-  // id -> Icons.desktop_windows
-  // ean -> LineIcons.barcode)
-  // shelf -> Icon(LineIcons.warehouse // cound't find anny better...
-  // (img)
-  // Icon(Icons.text_format) // can be made better
+  Widget flipImage(List<String> imgs) {
+    print("imgs..");
+
+    imgs.forEach((element) {
+      print(element);
+    });
+
+    var frontImage = Image.network(imgs[0]);
+    if (imgs.length == 1) {
+      return frontImage;
+    }
+
+    var backImage = Image.network(imgs[1]);
+    return FlipCard(
+      fill: Fill
+          .fillBack, // Fill the back side of the card to make in the same size as the front.
+      direction: FlipDirection.HORIZONTAL, // default
+      front: frontImage,
+      back: backImage,
+    );
+  }
 }

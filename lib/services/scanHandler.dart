@@ -38,32 +38,33 @@ class ScanHandler {
     WorkStore.instance.addScanData(scanResult);
     var lastProduct = WorkStore.instance.currentProduct;
 
-    var product = await _handleAsProduct(scanResult);
-    if (product.exists()) {
+    var product = await Product.fetchFromEAN(scanResult);
+    if (product.exists) {
       WorkStore.instance.currentProduct = product;
-      print("currentProduct is : " + await product.getName());
+      //print("currentProduct is : " + await product.getName());
       return;
     }
 
     if (!_isShelf(scanResult)) {
       WorkStore.instance.currentEAN = scanResult;
-      WorkStore.instance.currentProduct = Product.empty();
+      WorkStore.instance.currentProduct = Product.empty;
       return;
     }
 
     var shelf = removeShelfPrefix(scanResult);
     WorkStore.instance.currentShelf = shelf;
 
+/*
     // hanlding case when product scanned pevisouly needs shelf assigned to it
     print("lastProduct: " + await lastProduct.futureToString());
-    if (lastProduct.exists()) {
+    if (lastProduct.exists) {
       var lastProductShelf = await lastProduct.getShelf();
       if (lastProductShelf.contains(AbstractProduct.assignShelf)) {
         WorkStore.instance.assignShelfEvent.broadcast();
         return;
       }
     }
-
+*/
     var match = await WorkStore.instance.isMatchingShelf(shelf);
     print("is matching shelf: " + match.toString());
     if (!match) {
@@ -82,13 +83,6 @@ class ScanHandler {
       await WSInteract.remoteSql(sqlStatement);
     });
     WorkStore.instance.clearAll();
-  }
-
-  static Future<Product> _handleAsProduct(String scanResult) async {
-    var productIds = await WSInteract.remoteSql<int>(
-        WorkStore.instance.queries.fetchProduct(scanResult));
-    var product = Product.oneFromIds(productIds.toList());
-    return product;
   }
 
   static bool _isShelf(String scanData) {

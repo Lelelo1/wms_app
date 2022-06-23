@@ -120,7 +120,9 @@ class Product {
   Map<String, dynamic> _attributes;
   Product._(this._attributes);
 
-  int get id => _attributes["entity_id"];
+  int get id => _attributes["id"];
+
+  int get ean => _attributes["ean"];
 
   static String katsumiProductImagesBaseUrl =
       "https://www.katsumi.se/media/catalog/product/";
@@ -128,14 +130,42 @@ class Product {
       .map((e) => katsumiProductImagesBaseUrl + e)
       .toList();
 
+  // not int sql yet
+
+  String get name => _attributes["name"];
+
+  String get sku => _attributes["sku"];
+
+  bool get exists => id != 0;
+
+  static String query =
+      "SELECT @id := v.entity_id FROM catalog_product_entity_varchar v JOIN catalog_product_entity p ON v.entity_id = p.entity_id WHERE v.attribute_id = 283 AND v.value = <>; SELECT @ean := v.value FROM catalog_product_entity_varchar v WHERE v.entity_id = @id AND v.attribute_id = 283; SELECT @image := g.value FROM catalog_product_entity_media_gallery g, catalog_product_entity_media_gallery_value gv WHERE g.entity_id IN (SELECT r.parent_id FROM catalog_product_relation r WHERE r.child_id = @id) AND g.value_id = gv.`value_id` AND (gv.position = '1' OR gv.position = '2') ORDER BY gv.position ASC;SELECT @id, @ean, @image;";
+
+/*
   static Future<List<Product>> fetch() async {
-    var models = await WSInteract.remoteSql("");
+    var models = await WSInteract.remoteSql(query);
 
     return models.map((attributes) => Product._(attributes)).toList();
   }
+*/
 
-  static Product empty() {
-    var emptyAttributes = {"entity_id": "", "images": []};
-    return Product._(emptyAttributes);
+  static Future<Product> fetchFromEAN(String ean) async {
+    var models = await WSInteract.remoteSql<Model>(query);
+    query = query.replaceAll(RegExp("<>"), "889501092529");
+
+    if (models.isEmpty) {
+      return empty;
+    }
+
+    return models.map((attributes) => Product._(attributes)).first;
   }
+
+  static Model _emptyAttributes = {
+    "id": 0,
+    "ean": 0,
+    "image": [],
+    "name": "",
+    "sku: ": ""
+  };
+  static Product get empty => Product._(_emptyAttributes);
 }

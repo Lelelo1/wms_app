@@ -10,6 +10,7 @@ class CustomerOrder {
   CustomerOrder(this.id);
 
   Future<String> _getCustomerFirstName() async {
+    /*
     var r = await WSInteract.remoteSql<String>(WorkStore
         .instance.queries.customerOrders
         .getCustomerFirstName(id.toString()));
@@ -17,10 +18,10 @@ class CustomerOrder {
     if (r.isEmpty) {
       return "-";
     }
-
-    return Default.firstStringDefaultTo(r);
+*/
+    return ""; //Default.firstStringDefaultTo(r);
   }
-
+/*
   Future<String> _getCustomerLastName() async {
     var r = await WSInteract.remoteSql<String>(WorkStore
         .instance.queries.customerOrders
@@ -28,21 +29,22 @@ class CustomerOrder {
 
     return Default.firstStringDefaultTo(r, "-");
   }
+  */
 
   Future<String> getCustomerName() {
     return Future.sync(() async {
-      var firstName = await _getCustomerFirstName();
-      var lastName = await _getCustomerLastName();
+      //var firstName = await _getCustomerFirstName();
+      //var lastName = await _getCustomerLastName();
 
-      return firstName + " " + lastName;
+      return "customer name"; //firstName + " " + lastName;
     });
   }
 
   Future<List<int>> getProducts() async {
-    var r = await WSInteract.remoteSql<int>(
+    /*var r = await WSInteract.remoteSql<int>(
         WorkStore.instance.queries.customerOrders.getProducts(id.toString()));
-
-    return r;
+    */
+    return [];
   }
 
   Future<double> getTotalProductsQuantity() async {
@@ -53,18 +55,22 @@ class CustomerOrder {
   }
 
   Future<double> getProductQuantity(int productId) async {
+    /*
     var r = await WSInteract.remoteSql<double>(WorkStore
         .instance.queries.customerOrders
         .getProductQuantity(id.toString(), productId.toString()));
     var rp = Default.firstDoubleDefaultTo(r);
-    return rp;
+    */
+    return 0;
   }
 
   Future<String> getIncrementId() async {
+    /*
     var r = await WSInteract.remoteSql<String>(WorkStore
         .instance.queries.customerOrders
         .getIncrementId(id.toString()));
-    return Default.firstStringDefaultTo(r);
+        */
+    return ""; //Default.firstStringDefaultTo(r);
   }
 
   String formatCustomerOrderProductsQuantity(dynamic f) {
@@ -96,7 +102,7 @@ class CustomerOrder {
     var r = await WSInteract.remoteSql<int?>(WorkStore
         .instance.queries.customerOrders
         .getQtyPicked(id.toString(), productId.toString()));
-    return Default.firstNullableIntDefaultTo(r);
+    return 0; //Default.firstNullableIntDefaultTo(r);
   }
 
   void setQtyPicked(String productId, int? qty) {

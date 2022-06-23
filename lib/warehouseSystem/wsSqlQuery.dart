@@ -27,7 +27,7 @@ class WSSQLQueries {
   }
 
   // see table in magento: https://www.katsumi.se/index.php/yuDuMinD/catalog_product_attribute/index/key/e036b264c18e46443f82569948fa575c/
-
+/*
   String fetchAttribute(String entityId, KatsumiAttribute attribute) {
     print("warehousesystem get " + attribute);
 
@@ -48,7 +48,7 @@ class WSSQLQueries {
       "SELECT `catalog_product_entity`.`sku`FROM `catalog_product_entity` WHERE `catalog_product_entity`.`entity_id` = '$entityId'";
   _imagesQuery(String entityId) =>
       "SELECT `catalog_product_entity_media_gallery`.`value` FROM `catalog_product_entity_media_gallery`, `catalog_product_entity_media_gallery_value` WHERE `catalog_product_entity_media_gallery`.`entity_id` IN (SELECT `catalog_product_relation`.`parent_id` FROM `catalog_product_relation` WHERE `catalog_product_relation`.`child_id` = '$entityId') AND `catalog_product_entity_media_gallery`.`value_id` = `catalog_product_entity_media_gallery_value`.`value_id` AND (`catalog_product_entity_media_gallery_value`.`position` = '1' OR `catalog_product_entity_media_gallery_value`.`position` = '2') ORDER BY `catalog_product_entity_media_gallery_value`.`position` ASC;";
-
+*/
   setEAN(String entityId, String ean) =>
       "INSERT INTO `catalog_product_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES ('4', '283', '0', '$entityId', '$ean');";
 

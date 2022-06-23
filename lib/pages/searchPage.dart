@@ -104,7 +104,8 @@ class _State extends State<SearchPage> {
         WorkStore.instance.queries.fetchProductSuggestions(text));
     setState(() {
       this.text = text;
-      this.productSuggestions = Product.manyFromIds(suggestedIds.toList());
+      this.productSuggestions = [];
+      /*Product.manyFromIds(suggestedIds.toList())*/;
     });
   }
 
@@ -120,15 +121,6 @@ class _State extends State<SearchPage> {
       enabledBorder: inputBorder(),
       focusedBorder: inputBorder());
 
-/*
-  AbstractProduct _mockProduct = MockProduct(
-      111111111,
-      "eaneaneanean",
-      ["assets/images/product_placeholder.png"],
-      "1productnameproduct",
-      "1skuskuskusku",
-      "1Shelf-11-2");
-*/
   Color confirmButtonBodyColor = Color.fromARGB(180, 90, 57, 173);
 
   Widget confirmButton(Product selectedProduct) {
@@ -183,26 +175,24 @@ class _State extends State<SearchPage> {
   Widget renderSuggestion(Product suggestion) {
     //var sku = await suggestion.getSKU();
 
+    var sku = "add sku";
     return Container(
-        child: WMSAsyncWidget<String>(
-            suggestion.getSKU(),
-            (sku) => MaterialButton(
-                  child: Align(
-                      child: Text(sku, style: TextStyle(fontSize: 17)),
-                      alignment: Alignment.centerLeft),
-                  onPressed: () {
-                    print("pressed " + sku);
-                    Navigator.push(
-                        this.context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                searchProductRoute(suggestion)));
-                    return;
-                  },
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15)),
-                  padding: EdgeInsets.only(left: this.textLeftPadding),
-                )),
+        child: MaterialButton(
+          child: Align(
+              child: Text(sku, style: TextStyle(fontSize: 17)),
+              alignment: Alignment.centerLeft),
+          onPressed: () {
+            print("pressed " + sku);
+            Navigator.push(
+                this.context,
+                MaterialPageRoute(
+                    builder: (context) => searchProductRoute(suggestion)));
+            return;
+          },
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          padding: EdgeInsets.only(left: this.textLeftPadding),
+        ),
         height: 50,
         color: Color.fromARGB(40, 120, 120, 120));
   }

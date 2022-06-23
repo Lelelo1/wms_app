@@ -30,14 +30,14 @@ class _State extends State<CollectPage> {
 
   @override
   void initState() {
-    WorkStore.instance.assignShelfEvent.subscribe((args) async {
+    WorkStore.instance.assignShelfEvent.subscribe((args) {
       var product = WorkStore.instance.currentProduct;
-      var productName = await product.getName();
+
       var shelf = WorkStore.instance.currentShelf;
       Alert(
           context: this.context,
-          desc:
-              "Vill du lägga till hyllplatsen $shelf till produkten $productName",
+          desc: "Vill du lägga till hyllplatsen $shelf till produkten" +
+              product.name,
           buttons: [
             DialogButton(
               onPressed: () async {
@@ -71,7 +71,7 @@ class _State extends State<CollectPage> {
             handler: (_, __) {
               var product = WorkStore.instance.currentProduct;
               var productView =
-                  product.exists() ? ProductRoute(product) : WMSEmptyWidget();
+                  product.exists ? ProductRoute(product) : WMSEmptyWidget();
               var imageContent = Transitions.imageContent(fadeContent);
               var scrollable =
                   WMSScrollable(ScanPage(imageContent), productView);
@@ -83,7 +83,7 @@ class _State extends State<CollectPage> {
   void fadeContent() async {
     var product = WorkStore.instance.currentProduct;
     var ean = WorkStore.instance.currentEAN;
-    if (product.exists() || Utils.isNullOrEmpty(ean)) {
+    if (product.exists || Utils.isNullOrEmpty(ean)) {
       return;
     }
     Navigator.push(
