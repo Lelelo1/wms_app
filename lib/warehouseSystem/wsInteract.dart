@@ -23,7 +23,7 @@ class WSInteract {
 
         Iterable<Model> data = Iterable.empty();
         try {
-          var results = await remote.queryMulti(sql, []);
+          var results = await remote.query(sql);
 
           data = results.map((row) => row.fields).cast<Model>();
           remote.close();
