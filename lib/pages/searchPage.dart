@@ -100,10 +100,12 @@ class _State extends State<SearchPage> {
       );
 
   void setInputTextState(String text) async {
+    /*
     var suggestedIds = await WSInteract.remoteSql<int>(
         WorkStore.instance.queries.fetchProductSuggestions(text));
+        */
     setState(() {
-      this.text = text;
+      this.text = ""; //text;
       this.productSuggestions = [];
       /*Product.manyFromIds(suggestedIds.toList())*/;
     });

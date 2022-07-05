@@ -323,10 +323,12 @@ packages:
   mysql_client:
     dependency: "direct main"
     description:
-      name: mysql_client
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.19"
+      path: "."
+      ref: HEAD
+      resolved-ref: "47d5d85fd86fa1f3544eca7b22fb7f4d4b3c7a0c"
+      url: "https://github.com/zim32/mysql.dart.git"
+    source: git
+    version: "0.0.22"
   path:
     dependency: transitive
     description:

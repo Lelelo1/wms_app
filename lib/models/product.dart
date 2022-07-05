@@ -116,6 +116,8 @@ class Product extends AbstractProduct {
 
 import 'package:wms_app/warehouseSystem/wsInteract.dart';
 
+import '../types.dart';
+
 class Product {
   Map<String, dynamic> _attributes;
   Product._(this._attributes);
@@ -138,8 +140,8 @@ class Product {
 
   bool get exists => id != 0;
 
-  static String query =
-      "DELIMITER ; SELECT @id := v.entity_id FROM catalog_product_entity_varchar v JOIN catalog_product_entity p ON v.entity_id = p.entity_id WHERE v.attribute_id = '283' AND v.value = '889501092529'; SELECT @ean := v.value FROM catalog_product_entity_varchar v WHERE v.entity_id = @id AND v.attribute_id = '283'; (SELECT @image := g.value FROM catalog_product_entity_media_gallery g, catalog_product_entity_media_gallery_value gv WHERE g.entity_id IN (SELECT r.parent_id FROM catalog_product_relation r WHERE r.child_id = @id) AND g.value_id = gv.`value_id` AND (gv.position = '1' OR gv.position = '2') ORDER BY gv.position ASC); SELECT @id, @ean, @image;";
+  static String query() =>
+      "SELECT @id := v.entity_id FROM catalog_product_entity_varchar v JOIN catalog_product_entity p ON v.entity_id = p.entity_id WHERE v.attribute_id = '283' AND v.value = '889501092529' LIMIT 1; SELECT @ean := v.value FROM catalog_product_entity_varchar v WHERE v.entity_id = @id AND v.attribute_id = '283' LIMIT 1; (SELECT @image_front := g.value FROM catalog_product_entity_media_gallery g, catalog_product_entity_media_gallery_value gv WHERE g.entity_id IN (SELECT r.parent_id FROM catalog_product_relation r WHERE r.child_id = @id) AND g.value_id = gv.`value_id` AND (gv.position = '1') ORDER BY gv.position ASC) LIMIT 1; (SELECT @image_back := g.value FROM catalog_product_entity_media_gallery g, catalog_product_entity_media_gallery_value gv WHERE g.entity_id IN (SELECT r.parent_id FROM catalog_product_relation r WHERE r.child_id = @id) AND g.value_id = gv.`value_id` AND (gv.position = '2') ORDER BY gv.position ASC) LIMIT 1; SELECT @id, @ean, @image_front, @image_back;";
 
 /*
   static Future<List<Product>> fetch() async {
@@ -150,9 +152,9 @@ class Product {
 */
 
   static Future<Product> fetchFromEAN(String ean) async {
-    query = query.replaceFirstMapped("<>", (match) => ean);
+    var q = query().replaceFirstMapped("<>", (match) => ean);
 
-    var models = await WSInteract.remoteSql<Model>(query);
+    var models = await WSInteract.remoteSql(q);
 
     if (models.isEmpty) {
       return empty;

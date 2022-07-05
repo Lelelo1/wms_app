@@ -1,16 +1,14 @@
 import 'dart:collection';
-import 'dart:io';
 import 'dart:typed_data';
-import 'dart:ui';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_ml_vision/google_ml_vision.dart';
 import 'package:mysql1/mysql1.dart';
-import 'package:wms_app/models/product.dart';
-import 'package:wms_app/services/scanHandler.dart';
-import 'package:wms_app/widgets/wmsEmptyWidget.dart';
+import 'package:mysql_client/mysql_client.dart';
+
+import 'types.dart';
 
 // IS THIS USED?? WHy is there 2 utils files?
 typedef Scan = String;
@@ -155,4 +153,41 @@ extension SizeExtensions on Size {
 
 extension ScanExtension on Scan {
   String toShelf(String prefix) => this.replaceAll(prefix, "");
+}
+
+extension IteratorExtension<T> on Iterator<T> {
+  List<T> toList() {
+    List<T> items = [];
+    while (this.moveNext()) {
+      items.add(this.current);
+    }
+    return items;
+  }
+}
+
+extension DatabaseExtension on IResultSet {
+  Model toModel() {
+    var rows = this.rows.toList();
+    if (rows.length > 1) {
+      throw Exception(
+          "DatabaseExtension can't convert ResultSet to Model. It contains more than one row and can't thus turned into a map with distinct key value pairs");
+    }
+
+    var cols = this.cols.toList();
+
+    Model map = {};
+    for (var i = 0; i < this.numOfColumns; i++) {
+      var name = cols[i].name;
+      //print("column name: " + name);
+      map[name] = rows[0].colAt(i);
+    }
+
+    /*
+    print("map model became...: " + map.length.toString());
+    map.keys.forEach((e) {
+      print(e + " " + map[e].toString());
+    });
+    */
+    return map;
+  }
 }

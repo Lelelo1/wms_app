@@ -1,9 +1,6 @@
-import 'package:wms_app/models/product.dart';
 import 'package:wms_app/stores/workStore.dart';
-import 'package:wms_app/utils/default.dart';
 import 'package:wms_app/warehouseSystem/wsInteract.dart';
 import 'package:collection/collection.dart';
-import 'package:wms_app/warehouseSystem/wsSqlQuery.dart';
 
 class CustomerOrder {
   final int id;
@@ -99,9 +96,11 @@ class CustomerOrder {
   }
 
   Future<int?> _getQtyPicked(int productId) async {
+    /*
     var r = await WSInteract.remoteSql<int?>(WorkStore
         .instance.queries.customerOrders
         .getQtyPicked(id.toString(), productId.toString()));
+        */
     return 0; //Default.firstNullableIntDefaultTo(r);
   }
 

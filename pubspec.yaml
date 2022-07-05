@@ -54,7 +54,9 @@ dependencies:
   synchronized: ^3.0.0+2
   printing: ^5.8.0
   pdf: ^3.7.4
-  mysql_client: ^0.0.19
+  mysql_client:
+   git:
+    url: https://github.com/zim32/mysql.dart.git
 
 dev_dependencies:
   
