@@ -3,73 +3,34 @@ import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:wms_app/models/product.dart';
 import 'package:wms_app/views/extended/stacked.dart';
-import 'package:wms_app/widgets/wmsAsyncWidget.dart';
 import 'package:wms_app/widgets/wmsEmptyWidget.dart';
 import 'package:wms_app/widgets/wmsLabel.dart';
 
 // mobx needs stateful widget to work
-class ProductRoute extends StatefulWidget {
+class ProductRoute extends StatelessWidget {
   final Product product;
-  Widget eanAddButton = WMSEmptyWidget();
+  final Widget eanAddButton;
   ProductRoute(this.product, [this.eanAddButton = const WMSEmptyWidget()]);
 
   @override
-  State<StatefulWidget> createState() => _State();
-}
+  Widget build(BuildContext context) => Row(children: [
+        Spacer(flex: 1),
+        Expanded(child: safeArea(), flex: 12),
+        Spacer(flex: 1)
+      ]);
 
-class _State extends State<ProductRoute> {
-  //Size size() =>
-  //this.widget.size == Size.zero ? this.screenSize() : this.widget.size;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(children: [
-      Spacer(flex: 1),
-      Expanded(child: asyncProductRoute(), flex: 12),
-      Spacer(flex: 1)
-    ]);
-  }
-
-  SafeArea asyncProductRoute() {
-    /*
-    var fetchSKU = this.widget.product.getSKU();
-    var fetchEAN = this.widget.product.getEAN();
-    var fetchImages = this.widget.product.getImages();
-    var fetchShelf = this.widget.product.getShelf();
-    var fetchQuantity = this.widget.product.getQuanity();
-    var fetchName = this.widget.product.getName();
-
-    return WMSAsyncWidget(
-        Future.wait([fetchSKU, fetchEAN, fetchImages, fetchShelf, fetchName]),
-        (_) => SafeArea(
-                child: Column(children: [
-              Expanded(child: titleArea(fetchSKU), flex: 3),
-              Expanded(child: subtitleArea(fetchEAN), flex: 4),
-              Expanded(child: imageArea(fetchImages), flex: 34),
-              Spacer(flex: 2),
-              Expanded(child: bottomArea(fetchShelf, fetchQuantity), flex: 4),
-              // Spacer(flex: 3),
-              Expanded(child: nameWidget(fetchName), flex: 4),
-              //Spacer(flex: 4),
-              ...eanAddButtonView(this.widget.eanAddButton)
-            ])));
-            */
-    return SafeArea(
-        child: Column(children: [
-      Expanded(child: titleArea(this.widget.product.sku), flex: 3),
-      Expanded(
-          child: subtitleArea(this.widget.product.ean.toString()), flex: 4),
-      Expanded(
-          child: imageArea(
-              [this.widget.product.frontImage, this.widget.product.backImage]),
-          flex: 34),
-      Spacer(flex: 2),
-      Expanded(
-          child: bottomArea(widget.product.shelf, widget.product.qty), flex: 4),
-      Expanded(child: nameWidget(widget.product.name), flex: 4),
-      ...eanAddButtonView(this.widget.eanAddButton)
-    ]));
-  }
+  Widget safeArea() => SafeArea(
+          child: Column(children: [
+        Expanded(child: titleArea(this.product.sku), flex: 3),
+        Expanded(child: subtitleArea(this.product.ean.toString()), flex: 4),
+        Expanded(
+            child: imageArea([this.product.frontImage, this.product.backImage]),
+            flex: 34),
+        Spacer(flex: 2),
+        Expanded(child: bottomArea(product.shelf, product.qty), flex: 4),
+        Expanded(child: nameWidget(product.name), flex: 4),
+        ...eanAddButtonView(eanAddButton)
+      ]));
 
   List<Widget> eanAddButtonView(Widget eanAddButton) =>
       eanAddButton is WMSEmptyWidget
@@ -79,49 +40,6 @@ class _State extends State<ProductRoute> {
               Expanded(child: eanAddButton, flex: 5),
               Spacer(flex: 3)
             ];
-  // double skuPadding() => this.size().height * 0.02;
-/*
-  
-
-  Widget subtitleArea(Future<String> subtitle) => Row(children: [
-        WMSAsyncWidget(subtitle,
-            (String subtitle) => WMSLabel(subtitle, LineIcons.barcode)),
-        WMSAsyncWidget(Future.sync(() => this.widget.product.id.toString()),
-            (String id) => WMSLabel(id, Icons.desktop_windows))
-      ], mainAxisAlignment: MainAxisAlignment.center);
-
-  Widget imageArea(Future<List<String>> images) =>
-      WMSAsyncWidget(images, (List<String> images) {
-        if (images.isEmpty) {
-          return Image.asset("assets/images/product_placeholder.png",
-              width: double.infinity, fit: BoxFit.fitWidth);
-        }
-        return flipImage(images);
-      });
-
-  Widget flipImage(List<String> imgs) {
-    print("imgs..");
-
-    imgs.forEach((element) {
-      print(element);
-    });
-
-    var frontImage = Image.network(imgs[0]);
-    if (imgs.length == 1) {
-      return frontImage;
-    }
-
-    var backImage = Image.network(imgs[1]);
-    return FlipCard(
-      fill: Fill
-          .fillBack, // Fill the back side of the card to make in the same size as the front.
-      direction: FlipDirection.HORIZONTAL, // default
-      front: frontImage,
-      back: backImage,
-    );
-  }
-
-*/
 
   Widget titleArea(String title) => FittedBox(
       child: Text(title,
@@ -146,7 +64,7 @@ class _State extends State<ProductRoute> {
 
   Widget subtitleArea(String subtitle) => Row(children: [
         WMSLabel(subtitle, LineIcons.barcode),
-        WMSLabel(this.widget.product.id.toString(), Icons.desktop_windows)
+        WMSLabel(this.product.id.toString(), Icons.desktop_windows)
       ], mainAxisAlignment: MainAxisAlignment.center);
 
   Widget imageArea(List<String> images) {
@@ -158,12 +76,6 @@ class _State extends State<ProductRoute> {
   }
 
   Widget flipImage(List<String> imgs) {
-    print("imgs..");
-
-    imgs.forEach((element) {
-      print(element);
-    });
-
     var frontImage = Image.network(imgs[0]);
     if (imgs.length == 1) {
       return frontImage;
