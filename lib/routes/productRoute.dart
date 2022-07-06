@@ -56,13 +56,17 @@ class _State extends State<ProductRoute> {
             */
     return SafeArea(
         child: Column(children: [
-      //Expanded(child: titleArea(fetchSKU), flex: 3),
+      Expanded(child: titleArea(this.widget.product.sku), flex: 3),
       Expanded(
           child: subtitleArea(this.widget.product.ean.toString()), flex: 4),
-      Expanded(child: imageArea(this.widget.product.images), flex: 34),
+      Expanded(
+          child: imageArea(
+              [this.widget.product.frontImage, this.widget.product.backImage]),
+          flex: 34),
       Spacer(flex: 2),
-      //Expanded(child: bottomArea(fetchShelf, fetchQuantity), flex: 4),
-      //Expanded(child: nameWidget(fetchName), flex: 4),
+      Expanded(
+          child: bottomArea(widget.product.shelf, widget.product.qty), flex: 4),
+      Expanded(child: nameWidget(widget.product.name), flex: 4),
       ...eanAddButtonView(this.widget.eanAddButton)
     ]));
   }
@@ -77,11 +81,7 @@ class _State extends State<ProductRoute> {
             ];
   // double skuPadding() => this.size().height * 0.02;
 /*
-  Widget titleArea(Future<String> title) => WMSAsyncWidget(
-      title,
-      (String sku) => FittedBox(
-          child: Text(sku,
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.w400))));
+  
 
   Widget subtitleArea(Future<String> subtitle) => Row(children: [
         WMSAsyncWidget(subtitle,
@@ -121,27 +121,28 @@ class _State extends State<ProductRoute> {
     );
   }
 
-  Widget bottomArea(Future<String> shelf, Future<double> quantity) =>
-      WMSStacked(
-          Row(
-              children: [shelfWidget(shelf)],
-              mainAxisAlignment: MainAxisAlignment.center),
-          Row(
-              children: [quantityWidget(quantity)],
-              mainAxisAlignment: MainAxisAlignment.end));
-
-  Widget shelfWidget(Future<String> shelf) => WMSAsyncWidget(
-      shelf, (String shelf) => Text(shelf, style: TextStyle(fontSize: 18)));
-
-  Widget quantityWidget(Future<double> quantity) => WMSAsyncWidget<double>(
-      quantity,
-      (double quantity) => Text((quantity.round().toString() + "st")));
-
-  Widget nameWidget(Future<String> name) => WMSAsyncWidget(
-      name,
-      (String name) => Text(name,
-          style: TextStyle(fontSize: 15), textAlign: TextAlign.center));
 */
+
+  Widget titleArea(String title) => FittedBox(
+      child: Text(title,
+          style: TextStyle(fontSize: 25, fontWeight: FontWeight.w400)));
+
+  Widget nameWidget(String name) =>
+      Text(name, style: TextStyle(fontSize: 15), textAlign: TextAlign.center);
+
+  Widget bottomArea(String shelf, double quantity) => WMSStacked(
+      Row(
+          children: [shelfWidget(shelf)],
+          mainAxisAlignment: MainAxisAlignment.center),
+      Row(
+          children: [quantityWidget(quantity)],
+          mainAxisAlignment: MainAxisAlignment.end));
+
+  Widget shelfWidget(String shelf) =>
+      Text(shelf, style: TextStyle(fontSize: 18));
+
+  Widget quantityWidget(double quantity) =>
+      Text((quantity.round().toString() + "st"));
 
   Widget subtitleArea(String subtitle) => Row(children: [
         WMSLabel(subtitle, LineIcons.barcode),

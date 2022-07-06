@@ -52,7 +52,11 @@ class _State extends State<ScanPage> {
               flex: 6,
               child: EventSubscriber(
                   event: WorkStore.instance.scanDataEvent,
-                  handler: (_, __) => ScanView()))
+                  handler: (_, __) {
+                    var scanPage = ScanView();
+                    print("rerender scan page");
+                    return scanPage;
+                  }))
         ] // camera view part of page and recontructed on 'scannedProducts' state change
             ),
         extendBodyBehindAppBar: true,

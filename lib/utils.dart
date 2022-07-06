@@ -64,6 +64,12 @@ class Utils {
 
     return s;
   }
+
+  static T getAndDefaultAs<T>(Object? obj, T defaultTo) {
+    //print(obj.toString() + " type: " + obj.runtimeType.toString());
+    return obj == null ? defaultTo : obj as T;
+  }
+
   /*
   static String toString<T>(T t) {
     if (isNullOrEmpty(t)) {

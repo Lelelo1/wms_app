@@ -1,1 +1,1 @@
-typedef Model = Map<String, dynamic>;
+typedef Model = Map<String, Object?>;

@@ -1,147 +1,44 @@
-// having objects tied directly to warehousesystem/database
-/*
-import 'package:flutter_test/flutter_test.dart';
-import 'package:wms_app/models/attributes.dart';
-import 'package:wms_app/stores/workStore.dart';
-import '../utils.dart';
-
-import '../utils/default.dart';
-import '../warehouseSystem/wsSqlQuery.dart';
-import '../warehouseSystem/wsInteract.dart';
-import 'abstractProduct.dart';
-
-// potentially remove the '?' operator so default values can used. Which I guess
-// is the reason for the null safety anyway
-
-class Product extends AbstractProduct {
-  @override
-  int id = 0;
-
-  Product(this.id);
-
-  Product.empty() {
-    id = 0;
-  }
-
-  bool exists() => id > 0;
-
-  @override
-  Future<String> getEAN() async {
-    var eanHits = await WSInteract.remoteSql<String>(WorkStore.instance.queries
-        .fetchAttribute(id.toString(), KatsumiAttributes.ean));
-    return Default.firstStringDefaultTo(eanHits);
-  }
-
-  static String katsumiImages = "https://www.katsumi.se/media/catalog/product/";
-
-  @override
-  Future<List<String>> getImages() async {
-    var imgs = await WSInteract.remoteSql<String>(WorkStore.instance.queries
-        .fetchAttribute(id.toString(), KatsumiAttributes.images));
-    // potentially specify a fallback image, error image eg.
-    return imgs.map((e) => katsumiImages + e).toList();
-  }
-
-  @override
-  Future<String> getName() async {
-    var nameHits = await WSInteract.remoteSql<String>(WorkStore.instance.queries
-        .fetchAttribute(id.toString(), KatsumiAttributes.name));
-
-    return Default.firstStringDefaultTo(nameHits, "-");
-  }
-
-  @override
-  Future<String> getSKU() async {
-    var skuHits = await WSInteract.remoteSql<String>(WorkStore.instance.queries
-        .fetchAttribute(id.toString(), KatsumiAttributes.sku));
-    return Default.firstStringDefaultTo(skuHits, "-");
-  }
-
-  @override
-  Future<String> getShelf() async {
-    var shelfHits = await WSInteract.remoteSql<String>(WorkStore
-        .instance.queries
-        .fetchAttribute(id.toString(), KatsumiAttributes.shelf));
-
-    return Default.firstStringDefaultTo(shelfHits, "-");
-  }
-
-  @override
-  Future<double> getQuanity() async {
-    var quantityHits = await WSInteract.remoteSql<double>(
-        WorkStore.instance.queries.quantity(id.toString()));
-    return Default.firstDoubleDefaultTo(quantityHits);
-  }
-
-  Future<String> futureToString() async {
-    var id = this.id.toString();
-    var ean = await this.getEAN();
-    var images = await this.getImages();
-    var name = await this.getName();
-    var sku = await this.getSKU();
-    var shelf = await this.getShelf();
-
-    return "id: " +
-        id.toString() +
-        ", ean: " +
-        ean.toString() +
-        ", images: " +
-        Utils.listToString(images) +
-        ", name: " +
-        name +
-        ", sku: " +
-        sku +
-        ", shelf: " +
-        shelf;
-  }
-
-  @override
-  String toString() {
-    throw "not supported. use futureToString instead";
-  }
-
-  static Product oneFromIds(List<int> ids) {
-    if (ids.isEmpty) {
-      return Product.empty();
-    }
-
-    return Product(ids.last);
-  }
-
-  static List<Product> manyFromIds(List<int> ids) {
-    return ids.map((e) => Product(e)).toList();
-  }
-}
-*/
-
+import 'package:flutter/widgets.dart';
 import 'package:wms_app/warehouseSystem/wsInteract.dart';
-
+import 'package:wms_app/utils.dart';
 import '../types.dart';
 
 class Product {
-  Map<String, dynamic> _attributes;
+  Map<String, dynamic> _attributes = _emptyAttributes;
   Product._(this._attributes);
 
-  int get id => _attributes["id"];
+  int get id => int.parse(Utils.getAndDefaultAs(_attributes["@id"], "0"));
 
-  int get ean => _attributes["ean"];
+  int get ean => int.parse(Utils.getAndDefaultAs(_attributes["@ean"], "0"));
 
-  static String katsumiProductImagesBaseUrl =
-      "https://www.katsumi.se/media/catalog/product/";
-  List<String> get images => (_attributes["image"] as List<String>)
-      .map((e) => katsumiProductImagesBaseUrl + e)
-      .toList();
+  String get name => Utils.getAndDefaultAs(_attributes["@name"], "");
 
-  // not int sql yet
+  String get shelf => Utils.getAndDefaultAs(_attributes["@shelf"], "");
 
-  String get name => _attributes["name"];
+  String get sku => Utils.getAndDefaultAs(_attributes["@sku"], "");
 
-  String get sku => _attributes["sku"];
+// SELECT @id, @ean, @name, @shelf, @sku, @image_front, @image_back, @qty;
+  String get frontImage =>
+      toKatsumiImage(Utils.getAndDefaultAs(_attributes["@image_front"], ""));
+
+  String get backImage =>
+      toKatsumiImage(Utils.getAndDefaultAs(_attributes["@image_back"], ""));
+
+  String toKatsumiImage(String? image) {
+    if (Utils.isNullOrEmpty(image)) {
+      return "";
+    }
+
+    return "https://www.katsumi.se/media/catalog/product/" + (image as String);
+  }
+
+  double get qty =>
+      double.parse(Utils.getAndDefaultAs(_attributes["@qty"], "0"));
 
   bool get exists => id != 0;
 
   static String query() =>
-      "SELECT @id := v.entity_id FROM catalog_product_entity_varchar v JOIN catalog_product_entity p ON v.entity_id = p.entity_id WHERE v.attribute_id = '283' AND v.value = '889501092529' LIMIT 1; SELECT @ean := v.value FROM catalog_product_entity_varchar v WHERE v.entity_id = @id AND v.attribute_id = '283' LIMIT 1; (SELECT @image_front := g.value FROM catalog_product_entity_media_gallery g, catalog_product_entity_media_gallery_value gv WHERE g.entity_id IN (SELECT r.parent_id FROM catalog_product_relation r WHERE r.child_id = @id) AND g.value_id = gv.`value_id` AND (gv.position = '1') ORDER BY gv.position ASC) LIMIT 1; (SELECT @image_back := g.value FROM catalog_product_entity_media_gallery g, catalog_product_entity_media_gallery_value gv WHERE g.entity_id IN (SELECT r.parent_id FROM catalog_product_relation r WHERE r.child_id = @id) AND g.value_id = gv.`value_id` AND (gv.position = '2') ORDER BY gv.position ASC) LIMIT 1; SELECT @id, @ean, @image_front, @image_back;";
+      "SELECT @id := v.entity_id FROM catalog_product_entity_varchar v JOIN catalog_product_entity p ON v.entity_id = p.entity_id WHERE v.attribute_id = '283' AND v.value = '889501092529' LIMIT 1;SELECT @ean := v.value FROM catalog_product_entity_varchar v WHERE v.entity_id = @id AND v.attribute_id = '283' LIMIT 1;SELECT @sku := p.sku FROM catalog_product_entity p WHERE p.entity_id = @id;SELECT @name := `catalog_product_entity_varchar`.`value` FROM `catalog_product_entity_varchar` WHERE `catalog_product_entity_varchar`.`attribute_id` IN (SELECT `eav_attribute`.`attribute_id` FROM `eav_attribute` WHERE `eav_attribute`.`attribute_code` = 'name') AND `catalog_product_entity_varchar`.`entity_id` = @id AND `catalog_product_entity_varchar`. `store_id` = '0';SELECT @shelf := `catalog_product_entity_varchar`.`value` FROM `catalog_product_entity_varchar` WHERE `catalog_product_entity_varchar`.`attribute_id` IN (SELECT `eav_attribute`.`attribute_id` FROM `eav_attribute` WHERE `eav_attribute`.`attribute_code` = 'c2c_hyllplats') AND `catalog_product_entity_varchar`.`entity_id` = @id AND `catalog_product_entity_varchar`. `store_id` = '0';(SELECT @image_front := g.value FROM catalog_product_entity_media_gallery g, catalog_product_entity_media_gallery_value gv WHERE g.entity_id IN (SELECT r.parent_id FROM catalog_product_relation r WHERE r.child_id = @id) AND g.value_id = gv.`value_id` AND (gv.position = '1') ORDER BY gv.position ASC) LIMIT 1;(SELECT @image_back := g.value FROM catalog_product_entity_media_gallery g, catalog_product_entity_media_gallery_value gv WHERE g.entity_id IN (SELECT r.parent_id FROM catalog_product_relation r WHERE r.child_id = @id) AND g.value_id = gv.`value_id` AND (gv.position = '2') ORDER BY gv.position ASC) LIMIT 1;SELECT @qty := i.qty FROM cataloginventory_stock_item i WHERE i.product_id = @id;SELECT @id, @ean, @name, @shelf, @sku, @image_front, @image_back, @qty;";
 
 /*
   static Future<List<Product>> fetch() async {
@@ -163,12 +60,21 @@ class Product {
     return models.map((attributes) => Product._(attributes)).first;
   }
 
-  static Model _emptyAttributes = {
-    "id": 0,
-    "ean": 0,
-    "image": [],
-    "name": "",
-    "sku: ": ""
-  };
+  // SELECT @id, @ean, @name, @shelf, @sku, @image_front, @image_back, @qty;
+  static Model get _emptyAttributes => {
+        "@id": null,
+        "@ean": null,
+        "@name": null,
+        "@shelf": null,
+        "@sku": null,
+        "@image_front": null,
+        "@image_back": null,
+        "@qty": null
+      };
   static Product get empty => Product._(_emptyAttributes);
+
+  @override
+  String toString() {
+    return _attributes.toString();
+  }
 }

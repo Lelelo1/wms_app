@@ -39,6 +39,7 @@ class ScanHandler {
     var lastProduct = WorkStore.instance.currentProduct;
 
     var product = await Product.fetchFromEAN(scanResult);
+    print("scan product: " + product.toString());
     if (product.exists) {
       WorkStore.instance.currentProduct = product;
       //print("currentProduct is : " + await product.getName());
