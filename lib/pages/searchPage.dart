@@ -25,21 +25,8 @@ class SearchPage extends StatefulWidget implements WMSPage {
 }
 
 class _State extends State<SearchPage> {
-  List<Product> productSuggestions = [];
-  /*
-  FutureBuilder futureBuilder() => FutureBuilder<List<String>>(
-      future: this.skuSuggestions,
-      builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          // https://stackoverflow.com/questions/52847534/flutter-futurebuilder-returning-null-error-triggered
-          return LoadingPage();
-        }
-
-        return content(snapshot.data);
-      });
-  */
+  List<Product> suggestedProducts = [];
   String selectedSKU = "";
-
   String text = "";
 
   @override
@@ -57,7 +44,7 @@ class _State extends State<SearchPage> {
           child: Container(
               child: (Column(children: [
                 renderTextField(),
-                Expanded(child: renderSuggestions(this.productSuggestions))
+                Expanded(child: renderSuggestions(this.suggestedProducts))
               ])),
               decoration:
                   BoxDecoration(color: Color.fromARGB(90, 255, 255, 255))),
@@ -100,14 +87,14 @@ class _State extends State<SearchPage> {
       );
 
   void setInputTextState(String text) async {
-    /*
-    var suggestedIds = await WSInteract.remoteSql<int>(
-        WorkStore.instance.queries.fetchProductSuggestions(text));
-        */
+    var suggestedProducts = await Product.fetchSuggestionsFromSkuText(text);
+    print("suggestedProducts...");
+    suggestedProducts.forEach((e) {
+      print(e.toString());
+    });
     setState(() {
       this.text = ""; //text;
-      this.productSuggestions = [];
-      /*Product.manyFromIds(suggestedIds.toList())*/;
+      this.suggestedProducts = suggestedProducts;
     });
   }
 
@@ -139,7 +126,7 @@ class _State extends State<SearchPage> {
 
             setState(() {
               selectedSKU = "";
-              this.productSuggestions = [];
+              this.suggestedProducts = [];
               this.text = "";
             });
 

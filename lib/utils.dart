@@ -172,28 +172,22 @@ extension IteratorExtension<T> on Iterator<T> {
 }
 
 extension DatabaseExtension on IResultSet {
-  Model toModel() {
-    var rows = this.rows.toList();
-    if (rows.length > 1) {
-      throw Exception(
-          "DatabaseExtension can't convert ResultSet to Model. It contains more than one row and can't thus turned into a map with distinct key value pairs");
-    }
-
+  List<Model> toModels() {
     var cols = this.cols.toList();
+    var rows = this.rows.toList();
 
-    Model map = {};
-    for (var i = 0; i < this.numOfColumns; i++) {
-      var name = cols[i].name;
-      //print("column name: " + name);
-      map[name] = rows[0].colAt(i);
+    List<Model> models = List.empty(growable: true);
+
+    for (var i = 0; i < this.numOfRows; i++) {
+      Model map = {};
+      for (var j = 0; j < this.numOfColumns; j++) {
+        var name = cols[j].name;
+        //print("column name: " + name);
+        map[name] = rows[i].colAt(j);
+      }
+      models.add(map);
     }
 
-    /*
-    print("map model became...: " + map.length.toString());
-    map.keys.forEach((e) {
-      print(e + " " + map[e].toString());
-    });
-    */
-    return map;
+    return models;
   }
 }

@@ -64,9 +64,7 @@ class WSInteract {
             return List.empty();
           }
           print("results length: " + results.length.toString());
-          Model model = results.last.toModel();
-
-          return [model];
+          return results.last.toModels();
         } catch (e) {
           print("failed query...");
           print(sql);

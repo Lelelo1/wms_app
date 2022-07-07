@@ -1,6 +1,8 @@
 import 'package:wms_app/models/attributes.dart';
 import 'package:wms_app/warehouseSystem/wsMapping.dart';
 
+import '../models/product.dart';
+
 class WSSQLQueries {
   Mapping mapping;
   WSSQLQueries(this.mapping);
@@ -26,29 +28,6 @@ class WSSQLQueries {
         "%' AND `entity_id` NOT IN (SELECT `entity_id` FROM `catalog_product_entity_varchar` WHERE `attribute_id` = '283') LIMIT 20";
   }
 
-  // see table in magento: https://www.katsumi.se/index.php/yuDuMinD/catalog_product_attribute/index/key/e036b264c18e46443f82569948fa575c/
-/*
-  String fetchAttribute(String entityId, KatsumiAttribute attribute) {
-    print("warehousesystem get " + attribute);
-
-    if (attribute == KatsumiAttributes.sku) {
-      return _skuQuery(entityId);
-    }
-
-    if (attribute == KatsumiAttributes.images) {
-      return _imagesQuery(entityId);
-    }
-    return _attributeQuery(entityId, attribute);
-  }
-
-  _attributeQuery(String entityId, String attributeCode) =>
-      "SELECT `catalog_product_entity_varchar`.`value` FROM `catalog_product_entity_varchar` WHERE `catalog_product_entity_varchar`.`attribute_id` IN (SELECT `eav_attribute`.`attribute_id` FROM `eav_attribute` WHERE `eav_attribute`.`attribute_code` = '$attributeCode') AND `catalog_product_entity_varchar`.`entity_id` = '$entityId' AND `catalog_product_entity_varchar`. `store_id` = '0';";
-  // 'sku' can't be used with the generic attribute query
-  _skuQuery(String entityId) =>
-      "SELECT `catalog_product_entity`.`sku`FROM `catalog_product_entity` WHERE `catalog_product_entity`.`entity_id` = '$entityId'";
-  _imagesQuery(String entityId) =>
-      "SELECT `catalog_product_entity_media_gallery`.`value` FROM `catalog_product_entity_media_gallery`, `catalog_product_entity_media_gallery_value` WHERE `catalog_product_entity_media_gallery`.`entity_id` IN (SELECT `catalog_product_relation`.`parent_id` FROM `catalog_product_relation` WHERE `catalog_product_relation`.`child_id` = '$entityId') AND `catalog_product_entity_media_gallery`.`value_id` = `catalog_product_entity_media_gallery_value`.`value_id` AND (`catalog_product_entity_media_gallery_value`.`position` = '1' OR `catalog_product_entity_media_gallery_value`.`position` = '2') ORDER BY `catalog_product_entity_media_gallery_value`.`position` ASC;";
-*/
   setEAN(String entityId, String ean) =>
       "INSERT INTO `catalog_product_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES ('4', '283', '0', '$entityId', '$ean');";
 
@@ -94,6 +73,15 @@ class WSCustomerOrderQueries {
     }
     return "UPDATE `sales_flat_order_item` SET `qty_picked` = '$qtyPicked' WHERE order_id = '$orderId' AND product_id = '$productId'";
   }
+}
+
+class ProductQueries {
+  static String fromId(String id) =>
+      "SET @id = $id;SELECT @ean := v.value FROM catalog_product_entity_varchar v WHERE v.entity_id = @id AND v.attribute_id = '283' LIMIT 1;SELECT @sku := p.sku FROM catalog_product_entity p WHERE p.entity_id = @id;SELECT @name := `catalog_product_entity_varchar`.`value` FROM `catalog_product_entity_varchar` WHERE `catalog_product_entity_varchar`.`attribute_id` IN (SELECT `eav_attribute`.`attribute_id` FROM `eav_attribute` WHERE `eav_attribute`.`attribute_code` = 'name') AND `catalog_product_entity_varchar`.`entity_id` = @id AND `catalog_product_entity_varchar`. `store_id` = '0';SELECT @shelf := `catalog_product_entity_varchar`.`value` FROM `catalog_product_entity_varchar` WHERE `catalog_product_entity_varchar`.`attribute_id` IN (SELECT `eav_attribute`.`attribute_id` FROM `eav_attribute` WHERE `eav_attribute`.`attribute_code` = 'c2c_hyllplats') AND `catalog_product_entity_varchar`.`entity_id` = @id AND `catalog_product_entity_varchar`. `store_id` = '0';(SELECT @image_front := g.value FROM catalog_product_entity_media_gallery g, catalog_product_entity_media_gallery_value gv WHERE g.entity_id IN (SELECT r.parent_id FROM catalog_product_relation r WHERE r.child_id = @id) AND g.value_id = gv.`value_id` AND (gv.position = '1') ORDER BY gv.position ASC) LIMIT 1;(SELECT @image_back := g.value FROM catalog_product_entity_media_gallery g, catalog_product_entity_media_gallery_value gv WHERE g.entity_id IN (SELECT r.parent_id FROM catalog_product_relation r WHERE r.child_id = @id) AND g.value_id = gv.`value_id` AND (gv.position = '2') ORDER BY gv.position ASC) LIMIT 1;SELECT @qty := i.qty FROM cataloginventory_stock_item i WHERE i.product_id = @id;SELECT @id, @ean, @name, @shelf, @sku, @image_front, @image_back, @qty;";
+  static String fromEAN(String ean) =>
+      "SELECT @id := v.entity_id FROM catalog_product_entity_varchar v JOIN catalog_product_entity p ON v.entity_id = p.entity_id WHERE v.attribute_id = '283' AND v.value = $ean LIMIT 1;SELECT @ean := v.value FROM catalog_product_entity_varchar v WHERE v.entity_id = @id AND v.attribute_id = '283' LIMIT 1;SELECT @sku := p.sku FROM catalog_product_entity p WHERE p.entity_id = @id;SELECT @name := `catalog_product_entity_varchar`.`value` FROM `catalog_product_entity_varchar` WHERE `catalog_product_entity_varchar`.`attribute_id` IN (SELECT `eav_attribute`.`attribute_id` FROM `eav_attribute` WHERE `eav_attribute`.`attribute_code` = 'name') AND `catalog_product_entity_varchar`.`entity_id` = @id AND `catalog_product_entity_varchar`. `store_id` = '0';SELECT @shelf := `catalog_product_entity_varchar`.`value` FROM `catalog_product_entity_varchar` WHERE `catalog_product_entity_varchar`.`attribute_id` IN (SELECT `eav_attribute`.`attribute_id` FROM `eav_attribute` WHERE `eav_attribute`.`attribute_code` = 'c2c_hyllplats') AND `catalog_product_entity_varchar`.`entity_id` = @id AND `catalog_product_entity_varchar`. `store_id` = '0';(SELECT @image_front := g.value FROM catalog_product_entity_media_gallery g, catalog_product_entity_media_gallery_value gv WHERE g.entity_id IN (SELECT r.parent_id FROM catalog_product_relation r WHERE r.child_id = @id) AND g.value_id = gv.`value_id` AND (gv.position = '1') ORDER BY gv.position ASC) LIMIT 1;(SELECT @image_back := g.value FROM catalog_product_entity_media_gallery g, catalog_product_entity_media_gallery_value gv WHERE g.entity_id IN (SELECT r.parent_id FROM catalog_product_relation r WHERE r.child_id = @id) AND g.value_id = gv.`value_id` AND (gv.position = '2') ORDER BY gv.position ASC) LIMIT 1;SELECT @qty := i.qty FROM cataloginventory_stock_item i WHERE i.product_id = @id;SELECT @id, @ean, @name, @shelf, @sku, @image_front, @image_back, @qty;";
+  static String fromSkuText(String skuText) =>
+      "SELECT `entity_id` FROM `catalog_product_entity` WHERE `sku` LIKE '%$skuText%' AND `entity_id` NOT IN (SELECT `entity_id` FROM `catalog_product_entity_varchar` WHERE `attribute_id` = '283') LIMIT 20";
 }
 
   /*

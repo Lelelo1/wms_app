@@ -3,7 +3,6 @@ import 'package:wms_app/models/product.dart';
 import 'package:wms_app/services/visionService.dart';
 import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/views/cameraView.dart';
-import 'package:wms_app/warehouseSystem/wsSqlQuery.dart';
 import 'package:wms_app/warehouseSystem/wsInteract.dart';
 
 typedef ProductResultHandler = void Function(Product product, String scanData);
@@ -55,17 +54,16 @@ class ScanHandler {
     var shelf = removeShelfPrefix(scanResult);
     WorkStore.instance.currentShelf = shelf;
 
-/*
     // hanlding case when product scanned pevisouly needs shelf assigned to it
-    print("lastProduct: " + await lastProduct.futureToString());
+    print("lastProduct: " + lastProduct.toString());
     if (lastProduct.exists) {
-      var lastProductShelf = await lastProduct.getShelf();
+      var lastProductShelf = lastProduct.shelf;
       if (lastProductShelf.contains(AbstractProduct.assignShelf)) {
         WorkStore.instance.assignShelfEvent.broadcast();
         return;
       }
     }
-*/
+
     var match = await WorkStore.instance.isMatchingShelf(shelf);
     print("is matching shelf: " + match.toString());
     if (!match) {
