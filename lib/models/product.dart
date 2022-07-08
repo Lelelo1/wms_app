@@ -9,6 +9,11 @@ class Product {
   Product._(this._attributes);
 
   int get id => int.parse(Utils.getAndDefaultAs(_attributes["@id"], "0"));
+  Future<Product> setEAN(String ean) async {
+    await WSInteract.remoteSql(
+        ProductQueries.setEAN(id.toString(), ean.toString()));
+    return fetchFromId(id.toString());
+  }
 
   int get ean => int.parse(Utils.getAndDefaultAs(_attributes["@ean"], "0"));
 

@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:wms_app/models/product.dart';
 import 'package:wms_app/routes/productRoute.dart';
-import 'package:wms_app/stores/workStore.dart';
-import 'package:wms_app/warehouseSystem/wsInteract.dart';
 import 'package:wms_app/widgets/wmsPage.dart';
 import 'package:wms_app/widgets/wmsAppBar.dart';
-import 'package:wms_app/widgets/wmsAsyncWidget.dart';
 
 class SearchPage extends StatefulWidget implements WMSPage {
   final String name = "Lägg in streckoder i systemet";
@@ -117,8 +114,7 @@ class _State extends State<SearchPage> {
         child: MaterialButton(
           child: Text("Lägg till", style: TextStyle(color: Colors.white)),
           onPressed: () async {
-            WSInteract.remoteSql(WorkStore.instance.queries
-                .setEAN(selectedProduct.id.toString(), this.widget.ean));
+            selectedProduct.setEAN(this.widget.ean);
             print("product with sku: " +
                 selectedSKU +
                 " was updated with ean: " +

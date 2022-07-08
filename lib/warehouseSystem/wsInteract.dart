@@ -39,7 +39,7 @@ class WSInteract {
             return List.empty();
           }
 
-          var results = extractResults(rawResults);
+          var results = _extractResults(rawResults);
 
           var models = results.last.toModels();
           await remote.close();
@@ -53,7 +53,8 @@ class WSInteract {
           return data;
         }
       });
-  static List<IResultSet> extractResults(IResultSet resultSet) {
+  // there iterator is used when multi statement is used getting multiple results
+  static List<IResultSet> _extractResults(IResultSet resultSet) {
     var multiStatementQueryResult = resultSet.iterator.toList();
     if (multiStatementQueryResult.length > 0) {
       return multiStatementQueryResult.last.toList();
