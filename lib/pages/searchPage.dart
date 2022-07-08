@@ -129,7 +129,7 @@ class _State extends State<SearchPage> {
               this.suggestedProducts = [];
               this.text = "";
             });
-
+            // why two times?
             Navigator.pop(context);
             Navigator.pop(context);
           },
@@ -162,16 +162,12 @@ class _State extends State<SearchPage> {
             */
   // padding: EdgeInsets.only(left: 10, right: 10)
   Widget renderSuggestion(Product suggestion) {
-    //var sku = await suggestion.getSKU();
-
-    var sku = "add sku";
     return Container(
         child: MaterialButton(
           child: Align(
-              child: Text(sku, style: TextStyle(fontSize: 17)),
+              child: Text(suggestion.sku, style: TextStyle(fontSize: 17)),
               alignment: Alignment.centerLeft),
           onPressed: () {
-            print("pressed " + sku);
             Navigator.push(
                 this.context,
                 MaterialPageRoute(

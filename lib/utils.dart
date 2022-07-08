@@ -176,14 +176,18 @@ extension DatabaseExtension on IResultSet {
     var cols = this.cols.toList();
     var rows = this.rows.toList();
 
+    if (cols.length == 0 || rows.length == 0) {
+      return List.empty();
+    }
+
     List<Model> models = List.empty(growable: true);
 
     for (var i = 0; i < this.numOfRows; i++) {
       Model map = {};
       for (var j = 0; j < this.numOfColumns; j++) {
         var name = cols[j].name;
-        //print("column name: " + name);
-        map[name] = rows[i].colAt(j);
+        var value = rows[i].colAt(j);
+        map[name] = value;
       }
       models.add(map);
     }

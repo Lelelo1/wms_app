@@ -17,31 +17,6 @@ class WSInteract {
     db: VersionStore.instance.getDatabase(),
   );
 
-/*
-  static Lock _lock = Lock();
-  
-  static Future<Iterable<Model>> remoteSql<Model>(String sql) =>
-      _lock.synchronized(() async {
-        var remote = await MySqlConnection.connect(_connectionSettings);
-        print(sql);
-
-        Iterable<Model> data = Iterable.empty();
-        try {
-          var results = await remote.query(sql);
-
-          data = results.map((row) => row.fields).cast<Model>();
-          remote.close();
-          return data;
-        } catch (e) {
-          print("failed query...");
-          print(sql);
-          print(e);
-          print("---------------");
-          remote.close();
-          return data;
-        }
-      });
-*/
   // local sql for emebedded test sample mock database...
 
   static Lock _lock = Lock();
@@ -58,22 +33,34 @@ class WSInteract {
         await remote.connect();
         Iterable<Model> data = Iterable.empty();
         try {
-          var results = (await remote.execute(sql)).iterator.toList();
-
-          if (results.isEmpty) {
+          var rawResults = await remote.execute(sql);
+          // shy do some queries reslts in no results?
+          if (rawResults.isEmpty) {
             return List.empty();
           }
-          print("results length: " + results.length.toString());
-          return results.last.toModels();
+
+          var results = extractResults(rawResults);
+
+          var models = results.last.toModels();
+          await remote.close();
+          return models;
         } catch (e) {
           print("failed query...");
           print(sql);
           print(e);
           print("---------------");
-          remote.close();
+          await remote.close();
           return data;
         }
       });
+  static List<IResultSet> extractResults(IResultSet resultSet) {
+    var multiStatementQueryResult = resultSet.iterator.toList();
+    if (multiStatementQueryResult.length > 0) {
+      return multiStatementQueryResult.last.toList();
+    }
+
+    return [resultSet];
+  }
 }
 
 enum ConnectionType { remote, local }
