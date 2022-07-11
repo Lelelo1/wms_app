@@ -43,7 +43,7 @@ class _State extends State<CollectPage> {
               onPressed: () async {
                 await WSInteract.remoteSql(WorkStore.instance.queries
                     .setShelf(product.id.toString(), shelf));
-                ScanHandler.handleScanResult(ScanHandler.shelfPrefix + shelf);
+
                 Navigator.pop(context);
               },
               child: Text("Ja"),

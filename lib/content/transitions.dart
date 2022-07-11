@@ -15,7 +15,7 @@ class Transitions {
     var p = WorkStore.instance.currentProduct;
 
     if (p.exists) {
-      return _cameraContent(_shelfWidget("add shelf attribute"),
+      return _cameraContent(_shelfWidget(p.shelf),
           _scanSymbol(MaterialCommunityIcons.qrcode_scan));
     }
 

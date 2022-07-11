@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wms_app/content/transitions.dart';
+import 'package:wms_app/models/abstractProduct.dart';
+import 'package:wms_app/models/product.dart';
 import 'package:wms_app/pages/scanPage.dart';
 import 'package:wms_app/pages/searchPage.dart';
 import 'package:wms_app/routes/productRoute.dart';
@@ -32,29 +34,33 @@ class _State extends State<ReturnPage> {
   void initState() {
     WorkStore.instance.assignShelfEvent.subscribe((args) async {
       var product = WorkStore.instance.currentProduct;
-      var productName = "notsupperted"; //await product.getName();
+      var productName = product.name;
       var shelf = WorkStore.instance.currentShelf;
-      Alert(
-          context: this.context,
-          desc:
-              "Vill du lägga till hyllplatsen $shelf till produkten $productName",
-          buttons: [
-            DialogButton(
-              onPressed: () async {
-                await WSInteract.remoteSql(WorkStore.instance.queries
-                    .setShelf(product.id.toString(), shelf));
-                ScanHandler.handleScanResult(ScanHandler.shelfPrefix + shelf);
-                Navigator.pop(context);
-              },
-              child: Text("Ja"),
-            ),
-            DialogButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text("Nej"),
-            )
-          ]).show();
+
+      if (product.shelf == AbstractProduct.assignShelf) {
+        Alert(
+            context: this.context,
+            desc:
+                "Vill du lägga till hyllplatsen $shelf till produkten $productName",
+            buttons: [
+              DialogButton(
+                onPressed: () async {
+                  await WSInteract.remoteSql(WorkStore.instance.queries
+                      .setShelf(product.id.toString(), shelf));
+                  await WorkStore.instance.currentProduct.update();
+                  WorkStore.instance.assignShelfEvent.broadcast();
+                  Navigator.pop(context);
+                },
+                child: Text("Ja"),
+              ),
+              DialogButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text("Nej"),
+              )
+            ]).show();
+      }
     });
     super.initState();
   }

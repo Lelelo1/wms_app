@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/warehouseSystem/wsInteract.dart';
 import 'package:wms_app/utils.dart';
 import 'package:wms_app/warehouseSystem/wsSqlQuery.dart';
@@ -83,6 +84,11 @@ class Product {
     }
 
     return models.map((attributes) => Product._(attributes)).first;
+  }
+
+  Future<void> update() async {
+    WorkStore.instance.currentProduct =
+        await Product.fetchFromId(id.toString());
   }
 
   @override

@@ -90,7 +90,6 @@ class _State extends State<SearchPage> {
       this.suggestedProducts = suggestedProducts;
     });
   }
-
 /* floatingLabelBehavior: FloatingLabelBehavior
           .always, // show hintext when having textfield selected, (and when after having cleared text)*/
 

@@ -30,18 +30,16 @@ class ScanHandler {
 
     CameraViewController.scanningSuccessfull();
 
-    handleScanResult(scanResult);
+    _handleScanResult(scanResult);
   }
 
-  static void handleScanResult(String scanResult) async {
+  static void _handleScanResult(String scanResult) async {
     WorkStore.instance.addScanData(scanResult);
     var lastProduct = WorkStore.instance.currentProduct;
 
     var product = await Product.fetchFromEAN(scanResult);
-    print("scan product: " + product.toString());
     if (product.exists) {
       WorkStore.instance.currentProduct = product;
-      //print("currentProduct is : " + await product.getName());
       return;
     }
 
