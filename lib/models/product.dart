@@ -10,17 +10,20 @@ class Product {
   Product._(this._attributes);
 
   int get id => int.parse(Utils.getAndDefaultAs(_attributes["@id"], "0"));
+
+  int get ean => int.parse(Utils.getAndDefaultAs(_attributes["@ean"], "0"));
   Future<Product> setEAN(String ean) async {
     await WSInteract.remoteSql(
         ProductQueries.setEAN(id.toString(), ean.toString()));
     return fetchFromId(id.toString());
   }
 
-  int get ean => int.parse(Utils.getAndDefaultAs(_attributes["@ean"], "0"));
-
   String get name => Utils.getAndDefaultAs(_attributes["@name"], "");
 
   String get shelf => Utils.getAndDefaultAs(_attributes["@shelf"], "");
+  Future<void> setShelf(String shelf) async {
+    await WSInteract.remoteSql(ProductQueries.setShelf(id.toString(), shelf));
+  }
 
   String get sku => Utils.getAndDefaultAs(_attributes["@sku"], "");
 

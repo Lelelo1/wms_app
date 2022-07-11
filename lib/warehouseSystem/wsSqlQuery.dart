@@ -43,9 +43,6 @@ class WSSQLQueries {
   quantity(String entityId) =>
       "SELECT `qty` FROM `cataloginventory_stock_item` WHERE `cataloginventory_stock_item`.`product_id` = '$entityId';";
 
-  setShelf(String entityId, String shelf) =>
-      "UPDATE `catalog_product_entity_varchar` SET `value` = '$shelf' WHERE `catalog_product_entity_varchar`.`entity_id` = '$entityId' AND `catalog_product_entity_varchar`.`attribute_id` = 198;";
-
   // customer orders..
 
   WSCustomerOrderQueries customerOrders = WSCustomerOrderQueries();
@@ -82,6 +79,8 @@ class ProductQueries {
 
   static setEAN(String entityId, String ean) =>
       "INSERT INTO `catalog_product_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES ('4', '283', '0', '$entityId', '$ean');";
+  static setShelf(String entityId, String shelf) =>
+      "UPDATE `catalog_product_entity_varchar` SET `value` = '$shelf' WHERE `catalog_product_entity_varchar`.`entity_id` = '$entityId' AND `catalog_product_entity_varchar`.`attribute_id` = 198;";
 }
 
   /*

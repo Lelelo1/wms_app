@@ -45,9 +45,8 @@ class _State extends State<ReturnPage> {
             buttons: [
               DialogButton(
                 onPressed: () async {
-                  await WSInteract.remoteSql(WorkStore.instance.queries
-                      .setShelf(product.id.toString(), shelf));
-                  await WorkStore.instance.currentProduct.update();
+                  await product.setShelf(shelf);
+                  await product.update();
                   WorkStore.instance.assignShelfEvent.broadcast();
                   Navigator.pop(context);
                 },

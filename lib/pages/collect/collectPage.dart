@@ -41,9 +41,10 @@ class _State extends State<CollectPage> {
           buttons: [
             DialogButton(
               onPressed: () async {
+                /*
                 await WSInteract.remoteSql(WorkStore.instance.queries
                     .setShelf(product.id.toString(), shelf));
-
+*/
                 Navigator.pop(context);
               },
               child: Text("Ja"),
