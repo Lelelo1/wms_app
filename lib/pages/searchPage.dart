@@ -85,10 +85,6 @@ class _State extends State<SearchPage> {
 
   void setInputTextState(String text) async {
     var suggestedProducts = await Product.fetchSuggestionsFromSkuText(text);
-    print("suggestedProducts...");
-    suggestedProducts.forEach((e) {
-      print(e.toString());
-    });
     setState(() {
       this.text = ""; //text;
       this.suggestedProducts = suggestedProducts;
