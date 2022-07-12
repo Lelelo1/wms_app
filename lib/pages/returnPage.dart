@@ -46,7 +46,8 @@ class _State extends State<ReturnPage> {
               DialogButton(
                 onPressed: () async {
                   await product.setShelf(shelf);
-                  await product.update();
+                  await product.increaseQty();
+                  WorkStore.instance.clearAll();
                   WorkStore.instance.assignShelfEvent.broadcast();
                   Navigator.pop(context);
                 },

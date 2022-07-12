@@ -31,13 +31,6 @@ class WSSQLQueries {
   //static _updateEAN(String entityId, String ean) =>
   //    "UPDATE `catalog_product_entity_varchar` SET `value` = '$ean' WHERE `catalog_product_entity_varchar`.`attribute_id` = '283' AND `catalog_product_entity_varchar`.`entity_id` = '$entityId'";
 
-  List<String> increaseAmountOfProduct(String entityId) => [
-        "UPDATE `cataloginventory_stock_item` SET `qty` = CASE WHEN `qty` > '9000' THEN '1' ELSE `qty` + '1' END WHERE `product_id` = '$entityId';",
-        "UPDATE `cataloginventory_stock_status` SET `stock_status` = '1' WHERE `product_id` = '$entityId';",
-        "UPDATE `cataloginventory_stock_status_idx` SET `stock_status` = '1' WHERE `product_id` = '$entityId';",
-        "UPDATE `cataloginventory_stock_item` SET `is_in_stock` = '1' WHERE `product_id` = '$entityId';"
-      ];
-
   findShelf(String scanData) =>
       "SELECT `value` FROM `catalog_product_entity_varchar` WHERE `value` LIKE '%$scanData%' AND `attribute_id` = '198';";
   quantity(String entityId) =>
@@ -76,7 +69,8 @@ class ProductQueries {
       "SELECT @id := v.entity_id FROM catalog_product_entity_varchar v JOIN catalog_product_entity p ON v.entity_id = p.entity_id WHERE v.attribute_id = '283' AND v.value = $ean LIMIT 1;SELECT @ean := v.value FROM catalog_product_entity_varchar v WHERE v.entity_id = @id AND v.attribute_id = '283' LIMIT 1;SELECT @sku := p.sku FROM catalog_product_entity p WHERE p.entity_id = @id;SELECT @name := `catalog_product_entity_varchar`.`value` FROM `catalog_product_entity_varchar` WHERE `catalog_product_entity_varchar`.`attribute_id` IN (SELECT `eav_attribute`.`attribute_id` FROM `eav_attribute` WHERE `eav_attribute`.`attribute_code` = 'name') AND `catalog_product_entity_varchar`.`entity_id` = @id AND `catalog_product_entity_varchar`. `store_id` = '0';SELECT @shelf := `catalog_product_entity_varchar`.`value` FROM `catalog_product_entity_varchar` WHERE `catalog_product_entity_varchar`.`attribute_id` IN (SELECT `eav_attribute`.`attribute_id` FROM `eav_attribute` WHERE `eav_attribute`.`attribute_code` = 'c2c_hyllplats') AND `catalog_product_entity_varchar`.`entity_id` = @id AND `catalog_product_entity_varchar`. `store_id` = '0';(SELECT @image_front := g.value FROM catalog_product_entity_media_gallery g, catalog_product_entity_media_gallery_value gv WHERE g.entity_id IN (SELECT r.parent_id FROM catalog_product_relation r WHERE r.child_id = @id) AND g.value_id = gv.`value_id` AND (gv.position = '1') ORDER BY gv.position ASC) LIMIT 1;(SELECT @image_back := g.value FROM catalog_product_entity_media_gallery g, catalog_product_entity_media_gallery_value gv WHERE g.entity_id IN (SELECT r.parent_id FROM catalog_product_relation r WHERE r.child_id = @id) AND g.value_id = gv.`value_id` AND (gv.position = '2') ORDER BY gv.position ASC) LIMIT 1;SELECT @qty := i.qty FROM cataloginventory_stock_item i WHERE i.product_id = @id;SELECT @id, @ean, @name, @shelf, @sku, @image_front, @image_back, @qty;";
   static String fromSkuText(String skuText) =>
       "SELECT `entity_id` FROM `catalog_product_entity` WHERE `sku` LIKE '%$skuText%' AND `entity_id` NOT IN (SELECT `entity_id` FROM `catalog_product_entity_varchar` WHERE `attribute_id` = '283') LIMIT 20";
-
+  static String increaseQty(String entityId) =>
+      "UPDATE `cataloginventory_stock_item` SET `qty` = CASE WHEN `qty` > '9000' THEN '1' ELSE `qty` + '1' END WHERE `product_id` = '$entityId'; UPDATE `cataloginventory_stock_status` SET `stock_status` = '1' WHERE `product_id` = '$entityId'; UPDATE `cataloginventory_stock_status_idx` SET `stock_status` = '1' WHERE `product_id` = '$entityId'; UPDATE `cataloginventory_stock_item` SET `is_in_stock` = '1' WHERE `product_id` = '$entityId';";
   static setEAN(String entityId, String ean) =>
       "INSERT INTO `catalog_product_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES ('4', '283', '0', '$entityId', '$ean');";
   static setShelf(String entityId, String shelf) =>

@@ -35,11 +35,8 @@ class WorkStore {
       return false;
     }
 
-/*
-    var productShelf = await currentProduct.getShelf();
+    var productShelf = currentProduct.shelf;
     return shelf == productShelf;
-    */
-    return false;
   }
 
   List<String> _scanData = [];

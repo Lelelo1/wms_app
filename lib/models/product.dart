@@ -44,6 +44,10 @@ class Product {
 
   double get qty =>
       double.parse(Utils.getAndDefaultAs(_attributes["@qty"], "0"));
+  Future<void> increaseQty() async {
+    var empty =
+        await WSInteract.remoteSql(ProductQueries.increaseQty(id.toString()));
+  }
 
   bool get exists => id != 0;
 
