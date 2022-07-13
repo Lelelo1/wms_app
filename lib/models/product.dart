@@ -1,4 +1,3 @@
-import 'package:flutter/widgets.dart';
 import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/warehouseSystem/wsInteract.dart';
 import 'package:wms_app/utils.dart';
@@ -9,30 +8,30 @@ class Product {
   Map<String, dynamic> _attributes = _empty;
   Product._(this._attributes);
 
-  int get id => int.parse(Utils.getAndDefaultAs(_attributes["@id"], "0"));
+  int get id => int.parse(Utils.getAndDefaultAs(_attributes["id"], "0"));
 
-  int get ean => int.parse(Utils.getAndDefaultAs(_attributes["@ean"], "0"));
+  int get ean => int.parse(Utils.getAndDefaultAs(_attributes["ean"], "0"));
   Future<Product> setEAN(String ean) async {
     await WSInteract.remoteSql(
         ProductQueries.setEAN(id.toString(), ean.toString()));
     return fetchFromId(id.toString());
   }
 
-  String get name => Utils.getAndDefaultAs(_attributes["@name"], "");
+  String get name => Utils.getAndDefaultAs(_attributes["name"], "");
 
-  String get shelf => Utils.getAndDefaultAs(_attributes["@shelf"], "");
+  String get shelf => Utils.getAndDefaultAs(_attributes["shelf"], "");
   Future<void> setShelf(String shelf) async {
     await WSInteract.remoteSql(ProductQueries.setShelf(id.toString(), shelf));
   }
 
-  String get sku => Utils.getAndDefaultAs(_attributes["@sku"], "");
+  String get sku => Utils.getAndDefaultAs(_attributes["sku"], "");
 
 // SELECT @id, @ean, @name, @shelf, @sku, @image_front, @image_back, @qty;
   String get frontImage =>
-      toKatsumiImage(Utils.getAndDefaultAs(_attributes["@image_front"], ""));
+      toKatsumiImage(Utils.getAndDefaultAs(_attributes["image_front"], ""));
 
   String get backImage =>
-      toKatsumiImage(Utils.getAndDefaultAs(_attributes["@image_back"], ""));
+      toKatsumiImage(Utils.getAndDefaultAs(_attributes["image_back"], ""));
 
   String toKatsumiImage(String? image) {
     if (Utils.isNullOrEmpty(image)) {
@@ -43,10 +42,9 @@ class Product {
   }
 
   double get qty =>
-      double.parse(Utils.getAndDefaultAs(_attributes["@qty"], "0"));
+      double.parse(Utils.getAndDefaultAs(_attributes["qty"], "0"));
   Future<void> increaseQty() async {
-    var empty =
-        await WSInteract.remoteSql(ProductQueries.increaseQty(id.toString()));
+    await WSInteract.remoteSql(ProductQueries.increaseQty(id.toString()));
   }
 
   bool get exists => id != 0;
@@ -75,14 +73,14 @@ class Product {
 
   // SELECT @id, @ean, @name, @shelf, @sku, @image_front, @image_back, @qty;
   static Model get _empty => {
-        "@id": null,
-        "@ean": null,
-        "@name": null,
-        "@shelf": null,
-        "@sku": null,
-        "@image_front": null,
-        "@image_back": null,
-        "@qty": null
+        "id": null,
+        "ean": null,
+        "name": null,
+        "shelf": null,
+        "sku": null,
+        "image_front": null,
+        "image_back": null,
+        "qty": null
       };
 
   static Product _firstOrEmpty(Iterable<Model> models) {
