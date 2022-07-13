@@ -41,8 +41,8 @@ class WSSQLQueries {
 }
 
 class CustomerOrderQueries {
-  String many(int limit) =>
-      "SELECT entity_id, customer_firstname, customer_lastname, increment_id FROM `sales_flat_order`, WHERE status = 'pending' OR status = 'pendingpreorder' OR status = 'processing' OR status = 'processingpreorder' ORDER BY created_at DESC LIMIT $limit";
+  String many() =>
+      "SELECT entity_id as id, concat(customer_firstname, ' ', customer_lastname) as name , increment_id as displayId FROM `sales_flat_order` WHERE status = 'pending' OR status = 'pendingpreorder' OR status = 'processing' OR status = 'processingpreorder' ORDER BY created_at DESC LIMIT 10";
 
   String getProductQuantity(String orderId, String productId) =>
       "SELECT qty_ordered FROM `sales_flat_order_item` WHERE order_id = '$orderId' AND product_id = '$productId'";

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
-import 'package:wms_app/models/customerOrder.dart';
+import 'package:wms_app/models/oldcustomerOrder.dart';
 import 'package:wms_app/models/product.dart';
 import 'package:event/event.dart';
 import 'package:wms_app/warehouseSystem/wsMapping.dart';

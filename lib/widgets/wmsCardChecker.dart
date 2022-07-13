@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wms_app/models/customerOrder.dart';
+import 'package:wms_app/models/oldcustomerOrder.dart';
 import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/utils/default.dart';
 import 'package:wms_app/widgets/wmsAsyncWidget.dart';
