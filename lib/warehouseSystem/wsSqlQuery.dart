@@ -42,13 +42,7 @@ class WSSQLQueries {
 
 class CustomerOrderQueries {
   String many() =>
-      "SELECT entity_id as id, concat(customer_firstname, ' ', customer_lastname) as name , increment_id as displayId FROM `sales_flat_order` WHERE status = 'pending' OR status = 'pendingpreorder' OR status = 'processing' OR status = 'processingpreorder' ORDER BY created_at DESC LIMIT 10";
-
-  String getProductQuantity(String orderId, String productId) =>
-      "SELECT qty_ordered FROM `sales_flat_order_item` WHERE order_id = '$orderId' AND product_id = '$productId'";
-
-  String getQtyPicked(String orderId, String productId) =>
-      "SELECT `qty_picked` FROM `sales_flat_order_item` WHERE order_id = '$orderId' AND product_id = '$productId' ";
+      "SELECT o.entity_id as id, concat(o.customer_firstname, ' ', o.customer_lastname) as name , o.increment_id as displayId, i.product_id as productId, i.qty_ordered as qtyOrdered, i.qty_picked as qtyPicked FROM sales_flat_order o JOIN sales_flat_order_item i ON i.order_id = o.entity_id WHERE status = 'pending' OR status = 'pendingpreorder' OR status = 'processing' OR status = 'processingpreorder' AND i.product_type = 'simple' ORDER BY o.created_at DESC LIMIT 10";
 
   String setQtyPicked(String orderId, String productId, int? qtyPicked) {
     if (qtyPicked == null) {
