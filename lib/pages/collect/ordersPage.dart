@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:wms_app/models/customerOrderProduct.dart';
 import 'package:wms_app/pages/collect/collectPage.dart';
 import 'package:wms_app/stores/workStore.dart';
-import 'package:wms_app/utils/default.dart';
-import 'package:wms_app/warehouseSystem/customerOrder.dart';
-import 'package:wms_app/warehouseSystem/wsInteract.dart';
 import 'package:wms_app/widgets/wmsPage.dart';
 import 'package:wms_app/widgets/wmsAppBar.dart';
 import 'package:wms_app/widgets/wmsAsyncWidget.dart';
 import 'package:wms_app/widgets/wmsCardChecker.dart';
-import 'package:wms_app/widgets/wmsEmptyWidget.dart';
 
 class OrdersPage extends WMSPage {
   @override
@@ -36,17 +33,26 @@ class _State extends State<OrdersPage> {
                 "Välj beställningar", Colors.black, Colors.white, Colors.black)
             .get(),
         body: Column(children: [
-          Expanded(child: asyncCustomerOrdersList(CustomerOrder.fetch())),
+          Expanded(
+              child: asyncCustomerOrdersList(
+                  CustomerOrderProduct.fetchCustomerOrders())),
           confirmCustomerOrdersButton(context)
         ]));
   }
 
   WMSAsyncWidget asyncCustomerOrdersList(
-          Future<List<CustomerOrder>> futureCustomerOrder) =>
-      WMSAsyncWidget<List<CustomerOrder>>(
+          Future<List<CustomerOrderProduct>> futureCustomerOrder) =>
+      WMSAsyncWidget<List<CustomerOrderProduct>>(
           futureCustomerOrder,
-          (customerOrders) => ListView(
-              children: [...customerOrders.map(WMSCardChecker.create)]));
+          (customerOrders) => ListView(children: [
+                ...customerOrders.map((c) => WMSCardChecker.create(
+                    WMSCardCheckerProps(
+                        c.name.toString(),
+                        c.displayId.toString(),
+                        c.qtyOrdered.toString() + "st",
+                        false,
+                        (bool b) {})))
+              ]));
 
   Widget confirmCustomerOrdersButton(BuildContext context) => ElevatedButton(
       child: Text("Bekräfta"),

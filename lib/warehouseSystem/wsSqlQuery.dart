@@ -41,10 +41,10 @@ class WSSQLQueries {
 }
 
 class CustomerOrderQueries {
-  String many() =>
+  static String many() =>
       "SELECT o.entity_id as id, concat(o.customer_firstname, ' ', o.customer_lastname) as name , o.increment_id as displayId, i.product_id as productId, i.qty_ordered as qtyOrdered, i.qty_picked as qtyPicked FROM sales_flat_order o JOIN sales_flat_order_item i ON i.order_id = o.entity_id WHERE status = 'pending' OR status = 'pendingpreorder' OR status = 'processing' OR status = 'processingpreorder' AND i.product_type = 'simple' ORDER BY o.created_at DESC LIMIT 10";
 
-  String setQtyPicked(String orderId, String productId, int? qtyPicked) {
+  static String setQtyPicked(String orderId, String productId, int? qtyPicked) {
     if (qtyPicked == null) {
       return "UPDATE `sales_flat_order_item` SET `qty_picked` = NULL WHERE order_id = '$orderId' AND product_id = '$productId'";
     }

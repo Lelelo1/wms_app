@@ -1,7 +1,7 @@
 import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/warehouseSystem/wsInteract.dart';
 import 'package:collection/collection.dart';
-
+/*
 class CustomerOrder {
   final int id;
   CustomerOrder(this.id);
@@ -121,7 +121,7 @@ class CustomerOrder {
 
     if (currentQtyPicked == null || currentQtyPicked == 0) {
       var setQty = isChecked ? 0 : null;
-      WSInteract.remoteSql(WorkStore.instance.queries.customerOrders
+      WSInteract.remoteSql(WorkStore.instance.queries
       //.setQtyPicked(id.toString(), productId.toString(), setQty));
       return true;
     }
@@ -135,3 +135,4 @@ class CustomerOrder {
     return false;
   }
 }
+*/

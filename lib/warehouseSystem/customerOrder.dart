@@ -1,6 +1,6 @@
 import 'package:wms_app/warehouseSystem/wsInteract.dart';
 import 'package:wms_app/widgets/wmsCardChecker.dart';
-
+/*
 class CustomerOrder implements WMSCardCheckerProps {
   Map<String, dynamic> _attributes;
   CustomerOrder._(this._attributes);
@@ -52,14 +52,16 @@ class CustomerOrder implements WMSCardCheckerProps {
     return models.map((attributes) => CustomerOrder._(attributes)).toList();
   }
 
+/*
   @override
   void onChecked(bool checked) {
     // TODO: implement onChecked
   }
-
+*/
   @override
   Future<WMSCardCheckerProps> update() {
     // TODO: implement update
     throw UnimplementedError();
   }
 }
+*/
