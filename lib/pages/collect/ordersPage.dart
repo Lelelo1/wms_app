@@ -43,7 +43,7 @@ class _State extends State<OrdersPage> {
 
   WMSAsyncWidget asyncCustomerOrdersList(
           Future<List<CustomerOrder>> futureCustomerOrder) =>
-      WMSAsyncWidget<List<CustomerOrderProduct>>(
+      WMSAsyncWidget<List<CustomerOrder>>(
           futureCustomerOrder,
           (customerOrders) => ListView(children: [
                 ...customerOrders.map((c) => WMSCardChecker.create(
