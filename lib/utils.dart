@@ -89,21 +89,18 @@ class Utils {
 
 }
 
-/*
-// needed beacuse of null safeety strings
-// I actually don't think is needed, if I make sure 'String' is used everywhere instead of 'String?'
-extension StringNullSafetyExtensions on String? {
-  String append(String string) => Utils.defaultString(this) + string;
-
-  String prepend(String string) => string + Utils.defaultString(this);
-
-  String appendSafe(String? string) =>
-      Utils.defaultString(this) + Utils.defaultString(string);
-
-  String prependSafe(String? string) =>
-      Utils.defaultString(string) + Utils.defaultString(this);
+// the import 'package:collection/collection.dart';
+// is supposed to have sum method on newer version: https://stackoverflow.com/questions/10405348/what-is-the-cleanest-way-to-get-the-sum-of-numbers-in-a-collection-list-in-dart
+extension UtilsExtensions on Iterable<double> {
+  double sum() {
+    double sum = 0;
+    this.toList().forEach((e) {
+      sum += e;
+    });
+    return sum;
+  }
 }
-*/
+
 extension StringExtensions on String {
   String append(String string) => this + string;
 
