@@ -1,3 +1,4 @@
+import 'package:wms_app/models/customerOrder.dart';
 import 'package:wms_app/types.dart';
 import 'package:wms_app/warehouseSystem/customerOrder.dart';
 import 'package:wms_app/warehouseSystem/wsInteract.dart';
@@ -24,10 +25,13 @@ class CustomerOrderProduct {
         "qtyPicked": null
       };
 
-  static Future<List<CustomerOrderProduct>> fetchCustomerOrders() async {
+  static Future<List<CustomerOrder>> fetchCustomerOrders() async {
     var models = await WSInteract.remoteSql(CustomerOrderQueries.many());
-    var customerOrders = models.groupListsBy((c) => c["id"]).values;
-    customerOrders.forEach((element) {element.})
-    return models.map((e) => CustomerOrderProduct._(e)).toList();
+    var customerProductOrders = models.map((e) => CustomerOrderProduct._(e));
+    return customerProductOrders
+        .groupListsBy((e) => e.id)
+        .values
+        .map((e) => CustomerOrder(e))
+        .toList();
   }
 }

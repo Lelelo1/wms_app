@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wms_app/models/customerOrder.dart';
 import 'package:wms_app/models/customerOrderProduct.dart';
 import 'package:wms_app/pages/collect/collectPage.dart';
 import 'package:wms_app/stores/workStore.dart';
@@ -41,7 +42,7 @@ class _State extends State<OrdersPage> {
   }
 
   WMSAsyncWidget asyncCustomerOrdersList(
-          Future<List<CustomerOrderProduct>> futureCustomerOrder) =>
+          Future<List<CustomerOrder>> futureCustomerOrder) =>
       WMSAsyncWidget<List<CustomerOrderProduct>>(
           futureCustomerOrder,
           (customerOrders) => ListView(children: [
