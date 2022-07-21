@@ -5,7 +5,6 @@ import 'package:wms_app/utils.dart';
 class CustomerOrder {
   List<CustomerOrderProduct> customerOrderProducts = List.empty();
   CustomerOrder(List<CustomerOrderProduct> customerOrderList) {
-    print("list: " + customerOrderProducts.toString());
     this.customerOrderProducts = customerOrderList;
   }
 

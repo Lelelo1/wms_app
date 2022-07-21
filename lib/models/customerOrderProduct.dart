@@ -27,19 +27,12 @@ class CustomerOrderProduct {
 
   static Future<List<CustomerOrder>> fetchCustomerOrders() async {
     var models = await WSInteract.remoteSql(CustomerOrderQueries.many());
-    print(models.toString());
-    var customerProductOrders = models.map((e) => CustomerOrderProduct._(e));
-    print("orders: " + customerProductOrders.length.toString());
-    customerProductOrders.forEach((element) {
-      print(element._attribute["id"]);
-    });
-    var lists = customerProductOrders.groupListsBy((e) {
-      var id = e.id;
-      print(id.toString());
-      return id;
-    });
 
-    print("lists: " + lists.length.toString());
-    return lists.values.map((e) => CustomerOrder(e)).toList();
+    return models
+        .map((e) => CustomerOrderProduct._(e))
+        .groupListsBy((e) => e.id)
+        .values
+        .map((e) => CustomerOrder(e))
+        .toList();
   }
 }
