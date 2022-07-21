@@ -14,7 +14,7 @@ class CustomerOrderProduct {
   String get displayId => _attribute["displayId"];
   String get productId => _attribute["productId"];
   String get qtyOrdered => _attribute["qtyOrdered"];
-  String get qtyPicked => _attribute["qtyPicked"];
+  String? get qtyPicked => _attribute["qtyPicked"];
 
   static Model get _empty => {
         "id": null,

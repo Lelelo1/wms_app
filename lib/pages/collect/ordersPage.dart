@@ -51,8 +51,8 @@ class _State extends State<OrdersPage> {
                         c.name.toString(),
                         c.displayId.toString(),
                         c.qtyOrdered.toString() + "st",
-                        false,
-                        (bool b) {})))
+                        c.isPicked,
+                        (bool b) {c.})))
               ]));
 
   Widget confirmCustomerOrdersButton(BuildContext context) => ElevatedButton(

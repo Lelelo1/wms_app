@@ -87,6 +87,12 @@ class Utils {
   }
   */
 
+  static int? toNullableInt(String? s) {
+    if (s == null) {
+      return null;
+    }
+    return int.parse(s);
+  }
 }
 
 // the import 'package:collection/collection.dart';
@@ -105,12 +111,10 @@ extension StringExtensions on String {
   String append(String string) => this + string;
 
   String prepend(String string) => string + this;
+}
 
-/*
-  String appendSafe(String? string) => this + Utils.defaultString(string);
-
-  String prependSafe(String? string) => Utils.defaultString(string) + this;
-  */
+extension NullableStringExtensions on String? {
+  bool isNullOrEmpty() => this == null || this == "";
 }
 
 class ImageUtils {
