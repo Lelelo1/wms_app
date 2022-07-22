@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:wms_app/utils/default.dart';
 
-class WMSCardCheckerProps /* extends WMSProps<WMSCardCheckerProps>*/ {
-  final String title;
-  final String subtitle;
-  final String trailing;
-  final bool isChecked;
-  final void Function(bool checked) onChecked;
-
-  WMSCardCheckerProps(
-      this.title, this.subtitle, this.trailing, this.isChecked, this.onChecked);
+abstract class WMSCardCheckerProps /* extends WMSProps<WMSCardCheckerProps>*/ {
+  abstract final String title;
+  abstract final String subtitle;
+  abstract final String trailing;
+  abstract final bool isChecked;
+  abstract final Future<void> Function(bool checked) onChecked;
+  abstract final Future<WMSCardCheckerProps> Function() update;
+  /*
+  WMSCardCheckerProps(this.title, this.subtitle, this.trailing, this.isChecked,
+      this.onChecked, this.update);
+      */
 }
 
 class WMSCardChecker<P extends WMSCardCheckerProps> {
@@ -24,12 +26,11 @@ class WMSCardChecker<P extends WMSCardCheckerProps> {
                   value: p.isChecked,
                   onChanged: (bool? b) async {
                     var checked = Default.nullSafe<bool>(b);
-                    /*
+                    await p.onChecked(checked);
                     var newProps = await p.update();
                     setState(() {
                       p = newProps;
                     });
-                    */
                   }),
               title: Text(p.title),
               subtitle: Text(p.subtitle),

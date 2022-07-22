@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:camera/camera.dart';
@@ -70,23 +71,6 @@ class Utils {
     return obj == null ? defaultTo : obj as T;
   }
 
-  /*
-  static String toString<T>(T t) {
-    if (isNullOrEmpty(t)) {
-      return "";
-    }
-
-    if (t is List) {
-      // should catch all type of elements
-      String s = "";
-      t.forEach((e) => s += ", " + e);
-      return s;
-    }
-
-    return s;
-  }
-  */
-
   static int? toNullableInt(String? s) {
     if (s == null) {
       return null;
@@ -95,16 +79,9 @@ class Utils {
   }
 }
 
-// the import 'package:collection/collection.dart';
-// is supposed to have sum method on newer version: https://stackoverflow.com/questions/10405348/what-is-the-cleanest-way-to-get-the-sum-of-numbers-in-a-collection-list-in-dart
-extension UtilsExtensions on Iterable<double> {
-  double sum() {
-    double sum = 0;
-    this.toList().forEach((e) {
-      sum += e;
-    });
-    return sum;
-  }
+extension IterableExtensions<T> on Iterable<T> {
+  T find(bool Function(T t) comparer, T t) =>
+      this.firstWhere(comparer, orElse: () => t);
 }
 
 extension StringExtensions on String {
@@ -138,17 +115,6 @@ class ImageUtils {
     return allBytes.done().buffer.asUint8List();
   }
 }
-/*
-extension WidgetExtensions on Widget {
-  void exists(void Function(Widget) exists) {
-    if (Widget is WMSEmptyWidget) {
-      return;
-    }
-
-    exists(this);
-  }
-}
-*/
 
 extension StatefulWidgetExtensions on State {
   Size screenSize() => MediaQuery.of(this.context).size;

@@ -1,38 +1,26 @@
-import 'package:wms_app/models/customerOrder.dart';
 import 'package:wms_app/types.dart';
-import 'package:wms_app/warehouseSystem/customerOrder.dart';
-import 'package:wms_app/warehouseSystem/wsInteract.dart';
-import 'package:wms_app/warehouseSystem/wsSqlQuery.dart';
-import "package:collection/collection.dart";
+import 'package:wms_app/utils.dart';
 
 class CustomerOrderProduct {
-  Map<String, dynamic> _attribute = _empty;
-  CustomerOrderProduct._(this._attribute);
+  Map<String, dynamic> _attributes = _empty;
+  CustomerOrderProduct(this._attributes);
+  CustomerOrderProduct.empty();
 
-  String get id => _attribute["id"];
-  String get name => _attribute["name"];
-  String get displayId => _attribute["displayId"];
-  String get productId => _attribute["productId"];
-  String get qtyOrdered => _attribute["qtyOrdered"];
-  String? get qtyPicked => _attribute["qtyPicked"];
+  String get id => _attributes["id"];
+  String get name => _attributes["name"];
+  String get displayId => _attributes["displayId"];
+  String get productId => _attributes["productId"];
+  String get qtyOrdered => _attributes["qtyOrdered"];
+  int? get qtyPicked => Utils.toNullableInt(_attributes["qtyPicked"]);
 
   static Model get _empty => {
-        "id": null,
-        "name": null,
-        "displayId": null,
-        "productId": null,
-        "qtyOrdered": null,
-        "qtyPicked": null
+        "id": "",
+        "name": "",
+        "displayId": "",
+        "productId": "",
+        "qtyOrdered": "",
+        "qtyPicked": ""
       };
 
-  static Future<List<CustomerOrder>> fetchCustomerOrders() async {
-    var models = await WSInteract.remoteSql(CustomerOrderQueries.many());
-
-    return models
-        .map((e) => CustomerOrderProduct._(e))
-        .groupListsBy((e) => e.id)
-        .values
-        .map((e) => CustomerOrder(e))
-        .toList();
-  }
+  bool get isEmpty => Utils.isNullOrEmpty(_attributes[id]);
 }

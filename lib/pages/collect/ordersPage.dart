@@ -34,9 +34,7 @@ class _State extends State<OrdersPage> {
                 "Välj beställningar", Colors.black, Colors.white, Colors.black)
             .get(),
         body: Column(children: [
-          Expanded(
-              child: asyncCustomerOrdersList(
-                  CustomerOrderProduct.fetchCustomerOrders())),
+          Expanded(child: asyncCustomerOrdersList(CustomerOrder.many())),
           confirmCustomerOrdersButton(context)
         ]));
   }
@@ -46,13 +44,7 @@ class _State extends State<OrdersPage> {
       WMSAsyncWidget<List<CustomerOrder>>(
           futureCustomerOrder,
           (customerOrders) => ListView(children: [
-                ...customerOrders.map((c) => WMSCardChecker.create(
-                    WMSCardCheckerProps(
-                        c.name.toString(),
-                        c.displayId.toString(),
-                        c.qtyOrdered.toString() + "st",
-                        c.isPicked,
-                        (bool b) {c.})))
+                ...customerOrders.map((c) => WMSCardChecker.create(c))
               ]));
 
   Widget confirmCustomerOrdersButton(BuildContext context) => ElevatedButton(
