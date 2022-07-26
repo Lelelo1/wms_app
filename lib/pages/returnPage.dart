@@ -72,20 +72,11 @@ class _State extends State<ReturnPage> {
                 Colors.transparent, Colors.white)
             .get(),
         extendBodyBehindAppBar: true,
-        body: Transitions.pageContent(Transitions.imageContent));
-  }
-
-  void fadeContent() async {
-    var product = WorkStore.instance.currentProduct;
-    var ean = WorkStore.instance.currentEAN;
-    if (product.exists || Utils.isNullOrEmpty(ean)) {
-      return;
-    }
-    Navigator.push(
-        context,
-        PageRouteBuilder(
-            pageBuilder: (_, __, ___) =>
-                SearchRoute(SearchPage(product, ean))));
+        body: EventSubscriber(
+            event: WorkStore.instance.productEvent,
+            handler: (context, __) => WMSScrollable(
+                ScanPage(Transitions.imageContent(context)),
+                ProductRoute(WorkStore.instance.currentProduct))));
   }
 }
 
