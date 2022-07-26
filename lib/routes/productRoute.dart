@@ -2,6 +2,7 @@ import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:wms_app/models/product.dart';
+import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/views/extended/stacked.dart';
 import 'package:wms_app/widgets/wmsEmptyWidget.dart';
 import 'package:wms_app/widgets/wmsLabel.dart';
@@ -13,11 +14,13 @@ class ProductRoute extends StatelessWidget {
   ProductRoute(this.product, [this.eanAddButton = const WMSEmptyWidget()]);
 
   @override
-  Widget build(BuildContext context) => Row(children: [
-        Spacer(flex: 1),
-        Expanded(child: safeArea(), flex: 12),
-        Spacer(flex: 1)
-      ]);
+  Widget build(BuildContext context) => product == Product.empty
+      ? WMSEmptyWidget()
+      : Row(children: [
+          Spacer(flex: 1),
+          Expanded(child: safeArea(), flex: 12),
+          Spacer(flex: 1)
+        ]);
 
   Widget safeArea() => SafeArea(
           child: Column(children: [

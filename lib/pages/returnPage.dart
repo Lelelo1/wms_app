@@ -72,18 +72,7 @@ class _State extends State<ReturnPage> {
                 Colors.transparent, Colors.white)
             .get(),
         extendBodyBehindAppBar: true,
-        body: EventSubscriber(
-            event: WorkStore.instance.productEvent,
-            handler: (_, __) {
-              var product = WorkStore.instance.currentProduct;
-              var productView =
-                  product.exists ? ProductRoute(product) : WMSEmptyWidget();
-              var imageContent = Transitions.imageContent(fadeContent);
-              var scrollable =
-                  WMSScrollable(ScanPage(imageContent), productView);
-
-              return scrollable;
-            }));
+        body: Transitions.pageContent(Transitions.imageContent));
   }
 
   void fadeContent() async {

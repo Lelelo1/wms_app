@@ -67,31 +67,7 @@ class _State extends State<CollectPage> {
                 Colors.transparent, Colors.white)
             .get(),
         extendBodyBehindAppBar: true,
-        body: EventSubscriber(
-            event: WorkStore.instance.productEvent,
-            handler: (_, __) {
-              var product = WorkStore.instance.currentProduct;
-              var productView =
-                  product.exists ? ProductRoute(product) : WMSEmptyWidget();
-              var imageContent = Transitions.imageContent(fadeContent);
-              var scrollable =
-                  WMSScrollable(ScanPage(imageContent), productView);
-
-              return scrollable;
-            }));
-  }
-
-  void fadeContent() async {
-    var product = WorkStore.instance.currentProduct;
-    var ean = WorkStore.instance.currentEAN;
-    if (product.exists || Utils.isNullOrEmpty(ean)) {
-      return;
-    }
-    Navigator.push(
-        context,
-        PageRouteBuilder(
-            pageBuilder: (_, __, ___) =>
-                SearchRoute(SearchPage(product, ean))));
+        body: Transitions.pageContent(Transitions.imageContent));
   }
 }
 

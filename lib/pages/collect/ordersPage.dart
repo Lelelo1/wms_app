@@ -50,7 +50,7 @@ class _State extends State<OrdersPage> {
   Widget confirmCustomerOrdersButton(BuildContext context) => ElevatedButton(
       child: Text("Bekräfta"),
       onPressed: () async {
-        var printed = await WorkStore.instance.printPage(context);
+        //var printed = await WorkStore.instance.printPage(context);
         // if(printed)
         Navigator.push(context,
             PageRouteBuilder(pageBuilder: (_, __, ___) => CollectPage()));

@@ -12,6 +12,9 @@ class WorkStore {
   static late WorkStore instance = WorkStore._();
   WorkStore._();
 
+  // global build context: https://stackoverflow.com/questions/66139776/get-the-global-context-in-flutter
+  GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
   // can use 'EventArgs' since it required nullable object
   Event _productEvent = Event();
   Event get productEvent => _productEvent;

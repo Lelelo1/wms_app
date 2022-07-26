@@ -4,6 +4,7 @@ import 'package:wms_app/services/navigationService.dart';
 import 'package:wms_app/stores/versionStore.dart';
 import 'package:wakelock/wakelock.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:wms_app/stores/workStore.dart';
 
 void main() async {
   print("configuration is: " + VersionStore.instance.getConfiguration().value);
@@ -53,7 +54,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        navigatorKey: NavigationService.navigatorKey,
+        navigatorKey: WorkStore.instance.navigatorKey,
         title: this.widget.appName, // does not do anything inside the app
         theme: ThemeData(
           // This is the theme of your application.

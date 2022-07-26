@@ -325,10 +325,10 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "47d5d85fd86fa1f3544eca7b22fb7f4d4b3c7a0c"
+      resolved-ref: "3ecfc76b048dc5272a53d105e31d11e627b3eff6"
       url: "https://github.com/zim32/mysql.dart.git"
     source: git
-    version: "0.0.22"
+    version: "0.0.24"
   path:
     dependency: transitive
     description:
