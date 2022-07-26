@@ -1,132 +1,115 @@
-import 'package:wms_app/models/product.dart';
-import 'package:wms_app/stores/workStore.dart';
-import 'package:wms_app/utils/default.dart';
+import 'package:wms_app/models/customerOrderProduct.dart';
+import 'package:wms_app/utils.dart';
 import 'package:wms_app/warehouseSystem/wsInteract.dart';
-import 'package:collection/collection.dart';
 import 'package:wms_app/warehouseSystem/wsSqlQuery.dart';
+import "package:collection/collection.dart";
+import 'package:wms_app/widgets/wmsCardChecker.dart';
 
-class CustomerOrder {
-  final int id;
-  CustomerOrder(this.id);
+class CustomerOrder implements WMSCardCheckerProps {
+  List<CustomerOrderProduct> customerOrderProducts = List.empty();
+  CustomerOrder(this.customerOrderProducts);
 
-  Future<String> _getCustomerFirstName() async {
-    var r = await WSInteract.remoteSql<String>(WorkStore
-        .instance.queries.customerOrders
-        .getCustomerFirstName(id.toString()));
+  int get id => int.parse(customerOrderProducts.first.id);
+  String get name => customerOrderProducts.first.name;
+  String get displayId => customerOrderProducts.first.displayId;
+  List<String> get productId =>
+      customerOrderProducts.map((e) => e.productId).toList();
+  double get qtyOrdered => customerOrderProducts
+      .map((e) =>
+          double.parse(Utils.getAndDefaultAs(e.qtyOrdered, 0.toString())))
+      .sum;
 
-    if (r.isEmpty) {
-      return "-";
+  double get qtyPicked => customerOrderProducts
+      .map(
+          (e) => double.parse(Utils.getAndDefaultAs(e.productId, 0.toString())))
+      .sum;
+
+  bool get hasStarted =>
+      customerOrderProducts
+          .where((e) => Utils.defaultInt(e.qtyPicked) > 0)
+          .length >=
+      1;
+
+  bool hasStartedPicking(CustomerOrderProduct c) =>
+      c.qtyPicked != null && Utils.defaultInt(c.qtyPicked) > 0;
+
+  Future<void> setPicked(bool isPicked) async {
+    if (hasStarted) {
+      return;
     }
 
-    return Default.firstStringDefaultTo(r);
+    print("set qtyPicked: " + isPicked.toString());
+
+    await _setQtyPicked(isPicked);
   }
 
-  Future<String> _getCustomerLastName() async {
-    var r = await WSInteract.remoteSql<String>(WorkStore
-        .instance.queries.customerOrders
-        .getCustomerLastName(id.toString()));
+  Future<void> _setQtyPicked(bool isPicked) async {
+    int? qtyPicked = isPicked ? 0 : null;
 
-    return Default.firstStringDefaultTo(r, "-");
-  }
-
-  Future<String> getCustomerName() {
-    return Future.sync(() async {
-      var firstName = await _getCustomerFirstName();
-      var lastName = await _getCustomerLastName();
-
-      return firstName + " " + lastName;
-    });
-  }
-
-  Future<List<int>> getProducts() async {
-    var r = await WSInteract.remoteSql<int>(
-        WorkStore.instance.queries.customerOrders.getProducts(id.toString()));
-
-    return r;
-  }
-
-  Future<double> getTotalProductsQuantity() async {
-    var ids = await getProducts();
-    var quantities = await Future.wait(ids.map((e) => getProductQuantity(e)));
-
-    return quantities.sum;
-  }
-
-  Future<double> getProductQuantity(int productId) async {
-    var r = await WSInteract.remoteSql<double>(WorkStore
-        .instance.queries.customerOrders
-        .getProductQuantity(id.toString(), productId.toString()));
-    var rp = Default.firstDoubleDefaultTo(r);
-    return rp;
-  }
-
-  Future<String> getIncrementId() async {
-    var r = await WSInteract.remoteSql<String>(WorkStore
-        .instance.queries.customerOrders
-        .getIncrementId(id.toString()));
-    return Default.firstStringDefaultTo(r);
-  }
-
-  String formatCustomerOrderProductsQuantity(dynamic f) {
-    return (f as double).round().toString() + "st";
-  }
-
-  Future<bool> getIsSelected() async {
-    var productIds = await getProducts();
-    var quantitiesPicked =
-        await Future.wait(productIds.map((p) => _getQtyPicked(p)));
-    var isAvailable = quantitiesPicked.any((e) => e == null);
-
-    return !isAvailable;
-  }
-
-  Future<bool> getIsBeingCollected() async {
-    var productIds = await getProducts();
-    var quantitiesPicked =
-        await Future.wait(productIds.map((p) => _getQtyPicked(p)));
-    var isBeingCollected = quantitiesPicked.any((e) {
-      var qtyPicked = e ?? 0;
-      return qtyPicked > 0;
-    });
-
-    return isBeingCollected;
-  }
-
-  Future<int?> _getQtyPicked(int productId) async {
-    var r = await WSInteract.remoteSql<int?>(WorkStore
-        .instance.queries.customerOrders
-        .getQtyPicked(id.toString(), productId.toString()));
-    return Default.firstNullableIntDefaultTo(r);
-  }
-
-  void setQtyPicked(String productId, int? qty) {
-    WSInteract.remoteSql(WorkStore.instance.queries.customerOrders
-        .setQtyPicked(id.toString(), productId, qty));
-  }
-
-  Future<bool> setQtyPickedFromChecked(bool isChecked) async {
-    var productIds = await getProducts();
-    var checked = await Future.wait(
-        productIds.map((p) => _setQtyPickedFromChecked(p, isChecked)));
-    return checked.contains(true);
-  }
-
-  Future<bool> _setQtyPickedFromChecked(int productId, bool isChecked) async {
-    var currentQtyPicked = await _getQtyPicked(productId);
-
-    if (currentQtyPicked == null || currentQtyPicked == 0) {
-      var setQty = isChecked ? 0 : null;
-      WSInteract.remoteSql(WorkStore.instance.queries.customerOrders
-          .setQtyPicked(id.toString(), productId.toString(), setQty));
-      return true;
+/*
+    // can't set qtyPicked in db to null
+    if (qtyPicked == null) {
+      print("seeeet 10 !!");
+      qtyPicked = 10;
     }
+*/
+    var futures = customerOrderProducts.map((e) => WSInteract.remoteSql(
+        CustomerOrderQueries.setQtyPicked(
+            id.toString(), e.productId, qtyPicked)));
 
-    print("A picking for order with order_id: " +
-        id.toString() +
-        " incriment_id: " +
-        await getIncrementId() +
-        " was already started. It should not appear in the list of available picking orders");
-
-    return false;
+    await Future.wait(futures);
   }
+
+  Future<CustomerOrder> single() async {
+    var model = await WSInteract.remoteSql(CustomerOrderQueries.single(id));
+    if (model.isEmpty) {
+      return CustomerOrder([]);
+    }
+    return CustomerOrder([CustomerOrderProduct(model.first)]);
+  }
+
+  static Future<List<CustomerOrder>> many() async {
+    var models = await WSInteract.remoteSql(CustomerOrderQueries.many());
+
+    return models
+        .map((e) => CustomerOrderProduct(e))
+        .groupListsBy((e) => e.id)
+        .values
+        .map((e) => CustomerOrder(e))
+        .toList();
+  }
+
+  @override
+  // TODO: implement isChecked
+  bool get isChecked => hasStarted || isChosen;
+
+  bool get isChosen =>
+      customerOrderProducts
+          .where((e) => nullableIntCompare(e.qtyPicked) == 0)
+          .length ==
+      customerOrderProducts.length;
+
+  int nullableIntCompare(int? i) {
+    return i ?? -1;
+  }
+
+  @override
+  // TODO: implement onChecked
+  Future<void> Function(bool checked) get onChecked => setPicked;
+
+  @override
+  // TODO: implement subtitle
+  String get subtitle => displayId;
+
+  @override
+  // TODO: implement title
+  String get title => name;
+
+  @override
+  // TODO: implement trailing
+  String get trailing => qtyOrdered.toString() + "st";
+
+  @override
+  // TODO: implement update
+  Future<WMSCardCheckerProps> Function() get update => single;
 }

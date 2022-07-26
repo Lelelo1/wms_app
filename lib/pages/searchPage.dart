@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:wms_app/models/product.dart';
 import 'package:wms_app/routes/productRoute.dart';
-import 'package:wms_app/stores/workStore.dart';
-import 'package:wms_app/warehouseSystem/wsInteract.dart';
 import 'package:wms_app/widgets/wmsPage.dart';
 import 'package:wms_app/widgets/wmsAppBar.dart';
-import 'package:wms_app/widgets/wmsAsyncWidget.dart';
 
 class SearchPage extends StatefulWidget implements WMSPage {
   final String name = "Lägg in streckoder i systemet";
@@ -25,21 +22,8 @@ class SearchPage extends StatefulWidget implements WMSPage {
 }
 
 class _State extends State<SearchPage> {
-  List<Product> productSuggestions = [];
-  /*
-  FutureBuilder futureBuilder() => FutureBuilder<List<String>>(
-      future: this.skuSuggestions,
-      builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          // https://stackoverflow.com/questions/52847534/flutter-futurebuilder-returning-null-error-triggered
-          return LoadingPage();
-        }
-
-        return content(snapshot.data);
-      });
-  */
+  List<Product> suggestedProducts = [];
   String selectedSKU = "";
-
   String text = "";
 
   @override
@@ -57,7 +41,7 @@ class _State extends State<SearchPage> {
           child: Container(
               child: (Column(children: [
                 renderTextField(),
-                Expanded(child: renderSuggestions(this.productSuggestions))
+                Expanded(child: renderSuggestions(this.suggestedProducts))
               ])),
               decoration:
                   BoxDecoration(color: Color.fromARGB(90, 255, 255, 255))),
@@ -100,14 +84,12 @@ class _State extends State<SearchPage> {
       );
 
   void setInputTextState(String text) async {
-    var suggestedIds = await WSInteract.remoteSql<int>(
-        WorkStore.instance.queries.fetchProductSuggestions(text));
+    var suggestedProducts = await Product.fetchSuggestionsFromSkuText(text);
     setState(() {
-      this.text = text;
-      this.productSuggestions = Product.manyFromIds(suggestedIds);
+      this.text = ""; //text;
+      this.suggestedProducts = suggestedProducts;
     });
   }
-
 /* floatingLabelBehavior: FloatingLabelBehavior
           .always, // show hintext when having textfield selected, (and when after having cleared text)*/
 
@@ -120,15 +102,6 @@ class _State extends State<SearchPage> {
       enabledBorder: inputBorder(),
       focusedBorder: inputBorder());
 
-/*
-  AbstractProduct _mockProduct = MockProduct(
-      111111111,
-      "eaneaneanean",
-      ["assets/images/product_placeholder.png"],
-      "1productnameproduct",
-      "1skuskuskusku",
-      "1Shelf-11-2");
-*/
   Color confirmButtonBodyColor = Color.fromARGB(180, 90, 57, 173);
 
   Widget confirmButton(Product selectedProduct) {
@@ -136,8 +109,7 @@ class _State extends State<SearchPage> {
         child: MaterialButton(
           child: Text("Lägg till", style: TextStyle(color: Colors.white)),
           onPressed: () async {
-            WSInteract.remoteSql(WorkStore.instance.queries
-                .setEAN(selectedProduct.id.toString(), this.widget.ean));
+            selectedProduct.setEAN(this.widget.ean);
             print("product with sku: " +
                 selectedSKU +
                 " was updated with ean: " +
@@ -145,10 +117,10 @@ class _State extends State<SearchPage> {
 
             setState(() {
               selectedSKU = "";
-              this.productSuggestions = [];
+              this.suggestedProducts = [];
               this.text = "";
             });
-
+            // why two times?
             Navigator.pop(context);
             Navigator.pop(context);
           },
@@ -181,28 +153,22 @@ class _State extends State<SearchPage> {
             */
   // padding: EdgeInsets.only(left: 10, right: 10)
   Widget renderSuggestion(Product suggestion) {
-    //var sku = await suggestion.getSKU();
-
     return Container(
-        child: WMSAsyncWidget<String>(
-            suggestion.getSKU(),
-            (sku) => MaterialButton(
-                  child: Align(
-                      child: Text(sku, style: TextStyle(fontSize: 17)),
-                      alignment: Alignment.centerLeft),
-                  onPressed: () {
-                    print("pressed " + sku);
-                    Navigator.push(
-                        this.context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                searchProductRoute(suggestion)));
-                    return;
-                  },
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15)),
-                  padding: EdgeInsets.only(left: this.textLeftPadding),
-                )),
+        child: MaterialButton(
+          child: Align(
+              child: Text(suggestion.sku, style: TextStyle(fontSize: 17)),
+              alignment: Alignment.centerLeft),
+          onPressed: () {
+            Navigator.push(
+                this.context,
+                MaterialPageRoute(
+                    builder: (context) => searchProductRoute(suggestion)));
+            return;
+          },
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          padding: EdgeInsets.only(left: this.textLeftPadding),
+        ),
         height: 50,
         color: Color.fromARGB(40, 120, 120, 120));
   }

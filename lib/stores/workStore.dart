@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
-import 'package:wms_app/models/customerOrder.dart';
+import 'package:wms_app/models/oldcustomerOrder.dart';
 import 'package:wms_app/models/product.dart';
 import 'package:event/event.dart';
 import 'package:wms_app/warehouseSystem/wsMapping.dart';
@@ -16,7 +16,7 @@ class WorkStore {
   Event _productEvent = Event();
   Event get productEvent => _productEvent;
 
-  Product _currentProduct = Product.empty();
+  Product _currentProduct = Product.empty;
   Product get currentProduct => _currentProduct;
   set currentProduct(Product product) {
     _currentProduct = product;
@@ -30,12 +30,12 @@ class WorkStore {
   Future<bool> isMatchingShelf(String shelf) async {
     var currentProduct = WorkStore.instance.currentProduct;
 
-    if (!currentProduct.exists()) {
-      WorkStore.instance.currentProduct = Product.empty();
+    if (!currentProduct.exists) {
+      WorkStore.instance.currentProduct = Product.empty;
       return false;
     }
 
-    var productShelf = await currentProduct.getShelf();
+    var productShelf = currentProduct.shelf;
     return shelf == productShelf;
   }
 
@@ -56,7 +56,7 @@ class WorkStore {
   String currentShelf = "";
 
   void clearAll() {
-    this.currentProduct = Product.empty();
+    this.currentProduct = Product.empty;
     this.currentEAN = "";
     this._scanData = [];
     this.currentShelf = "";

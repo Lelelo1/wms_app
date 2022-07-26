@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_font_icons/flutter_font_icons.dart';
 import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/views/extended/stacked.dart';
-import 'package:wms_app/widgets/wmsAsyncWidget.dart';
 import 'package:wms_app/widgets/wmsEmptyWidget.dart';
 import 'package:touchable_opacity/touchable_opacity.dart';
 
@@ -15,11 +14,9 @@ class Transitions {
     var ean = WorkStore.instance.currentEAN;
     var p = WorkStore.instance.currentProduct;
 
-    if (p.exists()) {
-      return WMSAsyncWidget<String>(
-          p.getShelf(),
-          (shelf) => _cameraContent(_shelfWidget(shelf),
-              _scanSymbol(MaterialCommunityIcons.qrcode_scan)));
+    if (p.exists) {
+      return _cameraContent(_shelfWidget(p.shelf),
+          _scanSymbol(MaterialCommunityIcons.qrcode_scan));
     }
 
     if (ean.isNotEmpty) {

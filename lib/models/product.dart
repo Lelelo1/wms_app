@@ -1,117 +1,103 @@
-// having objects tied directly to warehousesystem/database
-
-import 'package:flutter_test/flutter_test.dart';
-import 'package:wms_app/models/attributes.dart';
 import 'package:wms_app/stores/workStore.dart';
-import '../utils.dart';
+import 'package:wms_app/warehouseSystem/wsInteract.dart';
+import 'package:wms_app/utils.dart';
+import 'package:wms_app/warehouseSystem/wsSqlQuery.dart';
+import '../types.dart';
 
-import '../utils/default.dart';
-import '../warehouseSystem/wsSqlQuery.dart';
-import '../warehouseSystem/wsInteract.dart';
-import 'abstractProduct.dart';
+class Product {
+  Map<String, dynamic> _attributes = _empty;
+  Product._(this._attributes);
 
-// potentially remove the '?' operator so default values can used. Which I guess
-// is the reason for the null safety anyway
+  int get id => int.parse(Utils.getAndDefaultAs(_attributes["id"], "0"));
 
-class Product extends AbstractProduct {
-  @override
-  int id = 0;
-
-  Product(this.id);
-
-  Product.empty() {
-    id = 0;
+  int get ean => int.parse(Utils.getAndDefaultAs(_attributes["ean"], "0"));
+  Future<Product> setEAN(String ean) async {
+    await WSInteract.remoteSql(
+        ProductQueries.setEAN(id.toString(), ean.toString()));
+    return fetchFromId(id.toString());
   }
 
-  bool exists() => id > 0;
+  String get name => Utils.getAndDefaultAs(_attributes["name"], "");
 
-  @override
-  Future<String> getEAN() async {
-    var eanHits = await WSInteract.remoteSql<String>(WorkStore.instance.queries
-        .fetchAttribute(id.toString(), KatsumiAttributes.ean));
-    return Default.firstStringDefaultTo(eanHits);
+  String get shelf => Utils.getAndDefaultAs(_attributes["shelf"], "");
+  Future<void> setShelf(String shelf) async {
+    await WSInteract.remoteSql(ProductQueries.setShelf(id.toString(), shelf));
   }
 
-  static String katsumiImages = "https://www.katsumi.se/media/catalog/product/";
+  String get sku => Utils.getAndDefaultAs(_attributes["sku"], "");
 
-  @override
-  Future<List<String>> getImages() async {
-    var imgs = await WSInteract.remoteSql<String>(WorkStore.instance.queries
-        .fetchAttribute(id.toString(), KatsumiAttributes.images));
-    // potentially specify a fallback image, error image eg.
-    return imgs.map((e) => katsumiImages + e).toList();
+// SELECT @id, @ean, @name, @shelf, @sku, @image_front, @image_back, @qty;
+  String get frontImage =>
+      toKatsumiImage(Utils.getAndDefaultAs(_attributes["image_front"], ""));
+
+  String get backImage =>
+      toKatsumiImage(Utils.getAndDefaultAs(_attributes["image_back"], ""));
+
+  String toKatsumiImage(String? image) {
+    if (Utils.isNullOrEmpty(image)) {
+      return "";
+    }
+
+    return "https://www.katsumi.se/media/catalog/product/" + (image as String);
   }
 
-  @override
-  Future<String> getName() async {
-    var nameHits = await WSInteract.remoteSql<String>(WorkStore.instance.queries
-        .fetchAttribute(id.toString(), KatsumiAttributes.name));
-
-    return Default.firstStringDefaultTo(nameHits, "-");
+  double get qty =>
+      double.parse(Utils.getAndDefaultAs(_attributes["qty"], "0"));
+  Future<void> increaseQty() async {
+    await WSInteract.remoteSql(ProductQueries.increaseQty(id.toString()));
   }
 
-  @override
-  Future<String> getSKU() async {
-    var skuHits = await WSInteract.remoteSql<String>(WorkStore.instance.queries
-        .fetchAttribute(id.toString(), KatsumiAttributes.sku));
-    return Default.firstStringDefaultTo(skuHits, "-");
+  bool get exists => id != 0;
+
+  static Future<Product> fetchFromId(String id) async {
+    var models = await WSInteract.remoteSql(ProductQueries.fromId(id));
+    return _firstOrEmpty(models);
   }
 
-  @override
-  Future<String> getShelf() async {
-    var shelfHits = await WSInteract.remoteSql<String>(WorkStore
-        .instance.queries
-        .fetchAttribute(id.toString(), KatsumiAttributes.shelf));
-
-    return Default.firstStringDefaultTo(shelfHits, "-");
+  static Future<Product> fetchFromEAN(String ean) async {
+    var eanQuery = ProductQueries.fromEAN(ean);
+    var models = await WSInteract.remoteSql(eanQuery);
+    return _firstOrEmpty(models);
   }
 
-  @override
-  Future<double> getQuanity() async {
-    var quantityHits = await WSInteract.remoteSql<double>(
-        WorkStore.instance.queries.quantity(id.toString()));
-    return Default.firstDoubleDefaultTo(quantityHits);
+  static Future<List<Product>> fetchSuggestionsFromSkuText(
+      String skuText) async {
+    var models =
+        await WSInteract.remoteSql(ProductQueries.fromSkuText(skuText));
+
+    return await Future.wait(
+        models.map((e) => Product.fetchFromId(e.values.first as String)));
   }
 
-  Future<String> futureToString() async {
-    var id = this.id.toString();
-    var ean = await this.getEAN();
-    var images = await this.getImages();
-    var name = await this.getName();
-    var sku = await this.getSKU();
-    var shelf = await this.getShelf();
+  static Product get empty => Product._(_empty);
 
-    return "id: " +
-        id.toString() +
-        ", ean: " +
-        ean.toString() +
-        ", images: " +
-        Utils.listToString(images) +
-        ", name: " +
-        name +
-        ", sku: " +
-        sku +
-        ", shelf: " +
-        shelf;
+  // SELECT @id, @ean, @name, @shelf, @sku, @image_front, @image_back, @qty;
+  static Model get _empty => {
+        "id": null,
+        "ean": null,
+        "name": null,
+        "shelf": null,
+        "sku": null,
+        "image_front": null,
+        "image_back": null,
+        "qty": null
+      };
+
+  static Product _firstOrEmpty(Iterable<Model> models) {
+    if (models.isEmpty) {
+      return empty;
+    }
+
+    return models.map((attributes) => Product._(attributes)).first;
+  }
+
+  Future<void> update() async {
+    WorkStore.instance.currentProduct =
+        await Product.fetchFromId(id.toString());
   }
 
   @override
   String toString() {
-    throw "not supported. use futureToString instead";
-  }
-
-  static Product oneFromIds(List<int> ids) {
-    if (ids.isEmpty) {
-      return Product.empty();
-    }
-
-    return Product(ids.last);
-  }
-
-  static List<Product> manyFromIds(List<int> ids) {
-    return ids.map((e) => Product(e)).toList();
+    return _attributes.toString();
   }
 }
-
-
-// create mock abstract source

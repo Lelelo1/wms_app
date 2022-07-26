@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wms_app/content/transitions.dart';
+import 'package:wms_app/models/abstractProduct.dart';
+import 'package:wms_app/models/product.dart';
 import 'package:wms_app/pages/scanPage.dart';
 import 'package:wms_app/pages/searchPage.dart';
 import 'package:wms_app/routes/productRoute.dart';
@@ -9,7 +11,7 @@ import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/utils.dart';
 import 'package:wms_app/views/extended/scrollable.dart';
 import 'package:wms_app/warehouseSystem/wsInteract.dart';
-import 'package:wms_app/widgets/WMSPage.dart';
+import 'package:wms_app/widgets/wmsPage.dart';
 import 'package:wms_app/widgets/wmsAppBar.dart';
 import 'package:wms_app/widgets/wmsEmptyWidget.dart';
 import 'package:eventsubscriber/eventsubscriber.dart';
@@ -32,29 +34,33 @@ class _State extends State<ReturnPage> {
   void initState() {
     WorkStore.instance.assignShelfEvent.subscribe((args) async {
       var product = WorkStore.instance.currentProduct;
-      var productName = await product.getName();
+      var productName = product.name;
       var shelf = WorkStore.instance.currentShelf;
-      Alert(
-          context: this.context,
-          desc:
-              "Vill du lägga till hyllplatsen $shelf till produkten $productName",
-          buttons: [
-            DialogButton(
-              onPressed: () async {
-                await WSInteract.remoteSql(WorkStore.instance.queries
-                    .setShelf(product.id.toString(), shelf));
-                ScanHandler.handleScanResult(ScanHandler.shelfPrefix + shelf);
-                Navigator.pop(context);
-              },
-              child: Text("Ja"),
-            ),
-            DialogButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text("Nej"),
-            )
-          ]).show();
+
+      if (product.shelf == AbstractProduct.assignShelf) {
+        Alert(
+            context: this.context,
+            desc:
+                "Vill du lägga till hyllplatsen $shelf till produkten $productName",
+            buttons: [
+              DialogButton(
+                onPressed: () async {
+                  await product.setShelf(shelf);
+                  await product.increaseQty();
+                  WorkStore.instance.clearAll();
+                  WorkStore.instance.assignShelfEvent.broadcast();
+                  Navigator.pop(context);
+                },
+                child: Text("Ja"),
+              ),
+              DialogButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text("Nej"),
+              )
+            ]).show();
+      }
     });
     super.initState();
   }
@@ -71,7 +77,7 @@ class _State extends State<ReturnPage> {
             handler: (_, __) {
               var product = WorkStore.instance.currentProduct;
               var productView =
-                  product.exists() ? ProductRoute(product) : WMSEmptyWidget();
+                  product.exists ? ProductRoute(product) : WMSEmptyWidget();
               var imageContent = Transitions.imageContent(fadeContent);
               var scrollable =
                   WMSScrollable(ScanPage(imageContent), productView);
@@ -83,7 +89,7 @@ class _State extends State<ReturnPage> {
   void fadeContent() async {
     var product = WorkStore.instance.currentProduct;
     var ean = WorkStore.instance.currentEAN;
-    if (product.exists() || Utils.isNullOrEmpty(ean)) {
+    if (product.exists || Utils.isNullOrEmpty(ean)) {
       return;
     }
     Navigator.push(

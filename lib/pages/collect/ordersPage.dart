@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:wms_app/models/customerOrder.dart';
+import 'package:wms_app/models/customerOrderProduct.dart';
 import 'package:wms_app/pages/collect/collectPage.dart';
 import 'package:wms_app/stores/workStore.dart';
-import 'package:wms_app/utils/default.dart';
-import 'package:wms_app/warehouseSystem/wsInteract.dart';
-import 'package:wms_app/widgets/WMSPage.dart';
+import 'package:wms_app/widgets/wmsPage.dart';
 import 'package:wms_app/widgets/wmsAppBar.dart';
 import 'package:wms_app/widgets/wmsAsyncWidget.dart';
 import 'package:wms_app/widgets/wmsCardChecker.dart';
-import 'package:wms_app/widgets/wmsEmptyWidget.dart';
 
 class OrdersPage extends WMSPage {
   @override
@@ -36,28 +34,9 @@ class _State extends State<OrdersPage> {
                 "Välj beställningar", Colors.black, Colors.white, Colors.black)
             .get(),
         body: Column(children: [
-          Expanded(child: asyncCustomerOrdersList(futureCustomerOrdersList())),
+          Expanded(child: asyncCustomerOrdersList(CustomerOrder.many())),
           confirmCustomerOrdersButton(context)
         ]));
-  }
-
-  Future<List<CustomerOrder>> futureCustomerOrdersList() async {
-    var query =
-        WorkStore.instance.queries.customerOrders.getPossibleCustomerOrders();
-    var customerOrders = await WSInteract.remoteSql<int>(query)
-        .then((ids) => ids.map((id) => CustomerOrder(id)));
-
-    var allCustomerOrders = await Future.wait(customerOrders.map((e) async {
-      var isSelected = await e.getIsBeingCollected();
-      return isSelected ? null : e;
-    }));
-
-    var availableCustomerOrders = allCustomerOrders
-        .where((e) => e != null)
-        .cast<CustomerOrder>()
-        .toList();
-
-    return Future.sync(() => availableCustomerOrders);
   }
 
   WMSAsyncWidget asyncCustomerOrdersList(
@@ -65,18 +44,7 @@ class _State extends State<OrdersPage> {
       WMSAsyncWidget<List<CustomerOrder>>(
           futureCustomerOrder,
           (customerOrders) => ListView(children: [
-                ...customerOrders.map((e) => WMSAsyncWidget<List<dynamic>>(
-                    Future.wait([
-                      e.getCustomerName(),
-                      e.getTotalProductsQuantity(),
-                      e.getIncrementId(),
-                    ]),
-                    (f) => WMSCardChecker(
-                        f[0],
-                        e.formatCustomerOrderProductsQuantity(f[1]),
-                        f[2],
-                        e.getIsSelected,
-                        e.setQtyPickedFromChecked)))
+                ...customerOrders.map((c) => WMSCardChecker.create(c))
               ]));
 
   Widget confirmCustomerOrdersButton(BuildContext context) => ElevatedButton(
