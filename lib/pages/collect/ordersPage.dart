@@ -17,14 +17,6 @@ class OrdersPage extends WMSPage {
 }
 
 class _State extends State<OrdersPage> {
-  List<String> testOrders = [
-    "Håkan Johannson",
-    "Lis-Karin Blomqvist",
-    "Linn Bladh",
-    "Emma Hanssom",
-    "Marcus Olsson",
-  ];
-
   WorkStore workStore = WorkStore.instance;
 
   @override
@@ -52,6 +44,12 @@ class _State extends State<OrdersPage> {
       onPressed: () async {
         //var printed = await WorkStore.instance.printPage(context);
         // if(printed)
+
+        WorkStore.instance.chosenCustomerOrders = (await CustomerOrder.many())
+            .where((c) => c.isChosen)
+            .take(6)
+            .toList();
+
         Navigator.push(context,
             PageRouteBuilder(pageBuilder: (_, __, ___) => CollectPage()));
       });

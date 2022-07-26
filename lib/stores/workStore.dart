@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
+import 'package:wms_app/models/customerOrder.dart';
 import 'package:wms_app/models/oldcustomerOrder.dart';
 import 'package:wms_app/models/product.dart';
 import 'package:event/event.dart';
@@ -58,13 +59,6 @@ class WorkStore {
 
   String currentShelf = "";
 
-  void clearAll() {
-    this.currentProduct = Product.empty;
-    this.currentEAN = "";
-    this._scanData = [];
-    this.currentShelf = "";
-  }
-
   WSSQLQueries queries = WSSQLQueries(Mapping());
 
   Future<bool> printPage(BuildContext context) {
@@ -80,6 +74,29 @@ class WorkStore {
 
     return Printing.layoutPdf(
         onLayout: (PdfPageFormat format) async => doc.save());
+  }
+
+  List<CustomerOrder> chosenCustomerOrders = [];
+
+  void setReturn() {
+    this.currentProduct = Product.empty;
+    this.currentEAN = "";
+    this._scanData = [];
+    this.currentShelf = "";
+  }
+
+  void setCollect() async {
+    if (chosenCustomerOrders.length == 0) {
+      print(
+          "wms warning you entered collect without having any customer orderders chosen");
+    }
+
+    this.currentProduct = await Product.fetchFromId(
+        chosenCustomerOrders.first.productId.toString());
+
+    this.currentEAN = "";
+    this._scanData = [];
+    this.currentShelf = "";
   }
 
 /*

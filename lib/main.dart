@@ -1,6 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:wms_app/services/navigationService.dart';
 import 'package:wms_app/stores/versionStore.dart';
 import 'package:wakelock/wakelock.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';

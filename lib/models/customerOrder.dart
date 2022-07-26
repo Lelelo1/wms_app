@@ -53,19 +53,16 @@ class CustomerOrder implements WMSCardCheckerProps {
       qtyPicked = 10;
     }
 */
-    var futures = customerOrderProducts.map((e) => WSInteract.remoteSql(
-        CustomerOrderQueries.setQtyPicked(
-            id.toString(), e.productId, qtyPicked)));
+    var futures = customerOrderProducts.map((e) {
+      print("id: " +
+          e.productId.toString() +
+          "length: " +
+          customerOrderProducts.length.toString());
+      return WSInteract.remoteSql(CustomerOrderQueries.setQtyPicked(
+          id.toString(), e.productId, qtyPicked));
+    });
 
     await Future.wait(futures);
-  }
-
-  Future<CustomerOrder> single() async {
-    var model = await WSInteract.remoteSql(CustomerOrderQueries.single(id));
-    if (model.isEmpty) {
-      return CustomerOrder([]);
-    }
-    return CustomerOrder([CustomerOrderProduct(model.first)]);
   }
 
   static Future<List<CustomerOrder>> many() async {
@@ -80,7 +77,6 @@ class CustomerOrder implements WMSCardCheckerProps {
   }
 
   @override
-  // TODO: implement isChecked
   bool get isChecked => hasStarted || isChosen;
 
   bool get isChosen =>
@@ -94,22 +90,21 @@ class CustomerOrder implements WMSCardCheckerProps {
   }
 
   @override
-  // TODO: implement onChecked
   Future<void> Function(bool checked) get onChecked => setPicked;
 
   @override
-  // TODO: implement subtitle
   String get subtitle => displayId;
 
   @override
-  // TODO: implement title
   String get title => name;
 
   @override
-  // TODO: implement trailing
   String get trailing => qtyOrdered.toString() + "st";
 
   @override
-  // TODO: implement update
-  Future<WMSCardCheckerProps> Function() get update => single;
+  Future<CustomerOrder> update() async {
+    var models = await WSInteract.remoteSql(CustomerOrderQueries.single(id));
+
+    return CustomerOrder(models.map((e) => CustomerOrderProduct(e)).toList());
+  }
 }

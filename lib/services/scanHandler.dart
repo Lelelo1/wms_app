@@ -69,7 +69,9 @@ class ScanHandler {
 
     // scanned shelf with a product
     WorkStore.instance.currentProduct.increaseQty();
-    WorkStore.instance.clearAll();
+
+    // should be defined by the module what happens after a scan shelf with product
+    //WorkStore.instance.clearAll();
   }
 
   static bool _isShelf(String scanData) {

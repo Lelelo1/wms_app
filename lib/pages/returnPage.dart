@@ -47,7 +47,7 @@ class _State extends State<ReturnPage> {
                 onPressed: () async {
                   await product.setShelf(shelf);
                   await product.increaseQty();
-                  WorkStore.instance.clearAll();
+                  WorkStore.instance.setReturn();
                   WorkStore.instance.assignShelfEvent.broadcast();
                   Navigator.pop(context);
                 },
@@ -62,6 +62,9 @@ class _State extends State<ReturnPage> {
             ]).show();
       }
     });
+
+    WorkStore.instance.setReturn();
+
     super.initState();
   }
 

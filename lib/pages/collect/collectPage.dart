@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wms_app/content/transitions.dart';
+import 'package:wms_app/models/product.dart';
 import 'package:wms_app/pages/scanPage.dart';
 import 'package:wms_app/pages/searchPage.dart';
 import 'package:wms_app/routes/productRoute.dart';
@@ -57,6 +58,9 @@ class _State extends State<CollectPage> {
             )
           ]).show();
     });
+
+    WorkStore.instance.setCollect();
+
     super.initState();
   }
 

@@ -51,7 +51,6 @@ class _State extends State<FeaturesPage> {
   }
 
   void tapFeature(Widget to) async {
-    WorkStore.instance.clearAll();
     Navigator.push(this.context, MaterialPageRoute(builder: (context) => to));
   }
 }
