@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
 import 'package:wms_app/models/customerOrder.dart';
-import 'package:wms_app/models/oldcustomerOrder.dart';
 import 'package:wms_app/models/product.dart';
 import 'package:event/event.dart';
 import 'package:wms_app/warehouseSystem/wsMapping.dart';
@@ -23,6 +22,7 @@ class WorkStore {
   Product _currentProduct = Product.empty;
   Product get currentProduct => _currentProduct;
   set currentProduct(Product product) {
+    print("setProduct: " + product.name);
     _currentProduct = product;
     productEvent.broadcast();
   }
@@ -90,10 +90,8 @@ class WorkStore {
       print(
           "wms warning you entered collect without having any customer orderders chosen");
     }
-
-    this.currentProduct = await Product.fetchFromId(
-        chosenCustomerOrders.first.productId.toString());
-
+    var id = chosenCustomerOrders.first.productId.first.toString();
+    this.currentProduct = await Product.fetchFromId(id);
     this.currentEAN = "";
     this._scanData = [];
     this.currentShelf = "";
