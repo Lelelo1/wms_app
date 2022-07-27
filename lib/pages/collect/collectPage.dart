@@ -74,11 +74,9 @@ class _State extends State<CollectPage> {
         body: EventSubscriber(
             event: WorkStore.instance.productEvent,
             handler: (context, __) => WMSScrollable(
-                ScanPage(Transitions.imageContent(context)),
+                ScanPage(Transitions.imageContentFromWarehouse(context)),
                 ProductRoute(WorkStore.instance.currentProduct))));
   }
-
-  //Widget imageContext(BuildContext context) {}
 }
 
 // previously have tried SwitchTranstion to change widget inside with when doing view transition

@@ -15,7 +15,7 @@ import 'package:touchable_opacity/touchable_opacity.dart';
 typedef Transition = Widget Function(BuildContext context);
 
 class Transitions {
-  static Transition imageContent = (BuildContext context) {
+  static Transition imageContentToWarehouse = (BuildContext context) {
     var ean = WorkStore.instance.currentEAN;
     var p = WorkStore.instance.currentProduct;
 
@@ -26,6 +26,21 @@ class Transitions {
         : MaterialCommunityIcons.barcode_scan;
 
     return _cameraContent(content, _scanSymbol(icon));
+  };
+
+  static Transition imageContentFromWarehouse = (BuildContext context) {
+    var ean = WorkStore.instance.currentEAN;
+    var p = WorkStore.instance.currentProduct;
+
+    Widget content =
+        p.exists ? _shelfWidget(p.shelf) : _eanWidget(ean, context);
+    /*
+    IconData icon = p.exists
+        ? MaterialCommunityIcons.qrcode_scan
+        : MaterialCommunityIcons.barcode_scan;
+*/
+    return _cameraContent(
+        content, _scanSymbol(MaterialCommunityIcons.barcode_scan));
   };
 
   static Widget _cameraContent(Widget cameraContent, Widget scanSymbol) {

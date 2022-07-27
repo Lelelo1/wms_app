@@ -78,7 +78,7 @@ class _State extends State<ReturnPage> {
         body: EventSubscriber(
             event: WorkStore.instance.productEvent,
             handler: (context, __) => WMSScrollable(
-                ScanPage(Transitions.imageContent(context)),
+                ScanPage(Transitions.imageContentToWarehouse(context)),
                 ProductRoute(WorkStore.instance.currentProduct))));
   }
 }
