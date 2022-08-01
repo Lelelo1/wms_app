@@ -12,50 +12,34 @@ import 'package:wms_app/views/extended/stacked.dart';
 import 'package:wms_app/widgets/wmsEmptyWidget.dart';
 import 'package:touchable_opacity/touchable_opacity.dart';
 
-typedef Transition = Widget Function(BuildContext context);
+//typedef Transition = Widget Function(BuildContext context);
 
-class Transitions {
-  static Transition imageContentToWarehouse = (BuildContext context) {
+mixin Transitions {
+  imageContent(BuildContext context) {
     var ean = WorkStore.instance.currentEAN;
     var p = WorkStore.instance.currentProduct;
 
-    Widget content =
-        p.exists ? _shelfWidget(p.shelf) : _eanWidget(ean, context);
+    Widget content = p.exists ? shelfWidget(p.shelf) : eanWidget(ean, context);
     IconData icon = p.exists
         ? MaterialCommunityIcons.qrcode_scan
         : MaterialCommunityIcons.barcode_scan;
 
-    return _cameraContent(content, _scanSymbol(icon));
-  };
+    return cameraContent(content, scanSymbol(icon));
+  }
 
-  static Transition imageContentFromWarehouse = (BuildContext context) {
-    var ean = WorkStore.instance.currentEAN;
-    var p = WorkStore.instance.currentProduct;
-
-    Widget content =
-        p.exists ? _shelfWidget(p.shelf) : _eanWidget(ean, context);
-    /*
-    IconData icon = p.exists
-        ? MaterialCommunityIcons.qrcode_scan
-        : MaterialCommunityIcons.barcode_scan;
-*/
-    return _cameraContent(
-        content, _scanSymbol(MaterialCommunityIcons.barcode_scan));
-  };
-
-  static Widget _cameraContent(Widget cameraContent, Widget scanSymbol) {
+  Widget cameraContent(Widget cameraContent, Widget scanSymbol) {
     return Column(children: [
       Spacer(flex: 12),
       Expanded(flex: 3, child: WMSStacked(cameraContent, scanSymbol))
     ]);
   }
 
-  static Widget _shelfWidget(String shelf) => Align(
+  Widget shelfWidget(String shelf) => Align(
       child: Text(shelf, style: TextStyle(color: Colors.pink, fontSize: 32)));
 
-  static String plusEmoji = "\u{2795}";
+  String plusEmoji = "\u{2795}";
 
-  static Widget _eanWidget(String ean, BuildContext context) {
+  Widget eanWidget(String ean, BuildContext context) {
     if (ean.isEmpty) {
       return WMSEmptyWidget();
     }
@@ -79,7 +63,7 @@ class Transitions {
             }));
   }
 
-  static Widget _scanSymbol(IconData symbol) {
+  Widget scanSymbol(IconData symbol) {
     return Align(
         child: Row(children: [
       Spacer(flex: 20),
@@ -88,5 +72,5 @@ class Transitions {
     ]));
   }
 
-  static Transition empty = (BuildContext context) => WMSEmptyWidget();
+  empty(BuildContext context) => WMSEmptyWidget();
 }

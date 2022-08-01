@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_font_icons/flutter_font_icons.dart';
 import 'package:wms_app/content/transitions.dart';
 import 'package:wms_app/models/product.dart';
 import 'package:wms_app/pages/scanPage.dart';
@@ -26,7 +27,7 @@ class CollectPage extends WMSPage {
   State<StatefulWidget> createState() => _State();
 }
 
-class _State extends State<CollectPage> {
+class _State extends State<CollectPage> with Transitions {
   // note that can't rerender color in app bar without rerender the rest of the app...
 
   @override
@@ -74,8 +75,20 @@ class _State extends State<CollectPage> {
         body: EventSubscriber(
             event: WorkStore.instance.productEvent,
             handler: (context, __) => WMSScrollable(
-                ScanPage(Transitions.imageContentFromWarehouse(context)),
+                ScanPage(this.imageContent(context)),
                 ProductRoute(WorkStore.instance.currentProduct))));
+  }
+
+  @override
+  Widget imageContent(BuildContext context) {
+    var ean = WorkStore.instance.currentEAN;
+    var p = WorkStore.instance.currentProduct;
+
+    Widget content =
+        p.exists ? this.shelfWidget(p.shelf) : eanWidget(ean, context);
+
+    return cameraContent(
+        content, scanSymbol(MaterialCommunityIcons.barcode_scan));
   }
 }
 

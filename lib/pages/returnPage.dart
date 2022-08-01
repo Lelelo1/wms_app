@@ -1,19 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:wms_app/content/transitions.dart';
 import 'package:wms_app/models/abstractProduct.dart';
-import 'package:wms_app/models/product.dart';
 import 'package:wms_app/pages/scanPage.dart';
-import 'package:wms_app/pages/searchPage.dart';
 import 'package:wms_app/routes/productRoute.dart';
-import 'package:wms_app/routes/searchRoute.dart';
-import 'package:wms_app/services/scanHandler.dart';
 import 'package:wms_app/stores/workStore.dart';
-import 'package:wms_app/utils.dart';
 import 'package:wms_app/views/extended/scrollable.dart';
-import 'package:wms_app/warehouseSystem/wsInteract.dart';
 import 'package:wms_app/widgets/wmsPage.dart';
 import 'package:wms_app/widgets/wmsAppBar.dart';
-import 'package:wms_app/widgets/wmsEmptyWidget.dart';
 import 'package:eventsubscriber/eventsubscriber.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
@@ -27,7 +20,7 @@ class ReturnPage extends WMSPage {
   State<StatefulWidget> createState() => _State();
 }
 
-class _State extends State<ReturnPage> {
+class _State extends State<ReturnPage> with Transitions {
   // note that can't rerender color in app bar without rerender the rest of the app...
 
   @override
@@ -78,7 +71,7 @@ class _State extends State<ReturnPage> {
         body: EventSubscriber(
             event: WorkStore.instance.productEvent,
             handler: (context, __) => WMSScrollable(
-                ScanPage(Transitions.imageContentToWarehouse(context)),
+                ScanPage(this.imageContent(context)),
                 ProductRoute(WorkStore.instance.currentProduct))));
   }
 }
