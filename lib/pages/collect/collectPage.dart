@@ -30,6 +30,8 @@ class CollectPage extends WMSPage {
 class _State extends State<CollectPage> with Transitions {
   // note that can't rerender color in app bar without rerender the rest of the app...
 
+  bool collectedProduct = false;
+
   @override
   void initState() {
     WorkStore.instance.assignShelfEvent.subscribe((args) {
@@ -84,12 +86,29 @@ class _State extends State<CollectPage> with Transitions {
     var ean = WorkStore.instance.currentEAN;
     var p = WorkStore.instance.currentProduct;
 
-    Widget content =
-        p.exists ? this.shelfWidget(p.shelf) : eanWidget(ean, context);
+    Widget content = p.exists
+        ? mainContent(this.shelfWidget(p.shelf))
+        : mainContent(this.eanWidget(ean, context));
 
     return cameraContent(
-        content, scanSymbol(MaterialCommunityIcons.barcode_scan));
+        content, scanSymbol(MaterialCommunityIcons.barcode_scan), 10);
   }
+
+  Widget mainContent(Widget info) {
+    return Column(children: [info, boxWidget("B")]);
+  }
+
+  String checkEmoji = "\u{2714}";
+  Widget boxWidget(String box) => ElevatedButton(
+      onPressed: () {},
+      child:
+          Text(box + "   " + this.checkEmoji, style: TextStyle(fontSize: 25)),
+      style: ButtonStyle(
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18.0))),
+          backgroundColor:
+              MaterialStateProperty.all(Color.fromARGB(200, 216, 230, 96))));
 }
 
 // previously have tried SwitchTranstion to change widget inside with when doing view transition

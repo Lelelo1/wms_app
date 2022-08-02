@@ -24,12 +24,13 @@ mixin Transitions {
         ? MaterialCommunityIcons.qrcode_scan
         : MaterialCommunityIcons.barcode_scan;
 
-    return cameraContent(content, scanSymbol(icon));
+    return cameraContent(content, scanSymbol(icon), 12);
   }
 
-  Widget cameraContent(Widget cameraContent, Widget scanSymbol) {
+  Widget cameraContent(
+      Widget cameraContent, Widget scanSymbol, int topAreaFlex) {
     return Column(children: [
-      Spacer(flex: 12),
+      Spacer(flex: topAreaFlex),
       Expanded(flex: 3, child: WMSStacked(cameraContent, scanSymbol))
     ]);
   }
