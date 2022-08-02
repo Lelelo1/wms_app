@@ -1,19 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_font_icons/flutter_font_icons.dart';
 import 'package:wms_app/content/transitions.dart';
-import 'package:wms_app/models/product.dart';
 import 'package:wms_app/pages/scanPage.dart';
-import 'package:wms_app/pages/searchPage.dart';
 import 'package:wms_app/routes/productRoute.dart';
-import 'package:wms_app/routes/searchRoute.dart';
-import 'package:wms_app/services/scanHandler.dart';
 import 'package:wms_app/stores/workStore.dart';
-import 'package:wms_app/utils.dart';
 import 'package:wms_app/views/extended/scrollable.dart';
-import 'package:wms_app/warehouseSystem/wsInteract.dart';
 import 'package:wms_app/widgets/wmsPage.dart';
 import 'package:wms_app/widgets/wmsAppBar.dart';
-import 'package:wms_app/widgets/wmsEmptyWidget.dart';
 import 'package:eventsubscriber/eventsubscriber.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
@@ -30,7 +23,7 @@ class CollectPage extends WMSPage {
 class _State extends State<CollectPage> with Transitions {
   // note that can't rerender color in app bar without rerender the rest of the app...
 
-  bool collectedProduct = false;
+  bool collectProduct = true;
 
   @override
   void initState() {
@@ -99,10 +92,25 @@ class _State extends State<CollectPage> with Transitions {
   }
 
   String checkEmoji = "\u{2714}";
-  Widget boxWidget(String box) => ElevatedButton(
-      onPressed: () {},
-      child:
-          Text(box + "   " + this.checkEmoji, style: TextStyle(fontSize: 25)),
+  Widget boxWidget(String box) {
+    var textWidget = Text(
+        this.collectProduct ? box + "   " + this.checkEmoji : box,
+        style: TextStyle(fontSize: 25));
+
+    if (collectProduct) {
+      return boxButton(textWidget);
+    }
+
+    return textWidget;
+  }
+
+  Widget boxButton(Widget text) => ElevatedButton(
+      onPressed: () {
+        setState(() {
+          this.collectProduct = false;
+        });
+      },
+      child: text,
       style: ButtonStyle(
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
