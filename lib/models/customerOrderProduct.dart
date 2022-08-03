@@ -22,5 +22,5 @@ class CustomerOrderProduct {
         "qtyPicked": ""
       };
 
-  bool get isEmpty => Utils.isNullOrEmpty(_attributes[id]);
+  bool get isEmpty => Utils.isNullOrEmpty(_attributes["id"]);
 }

@@ -10,33 +10,35 @@ class CollectStore {
 
   CollectRoute _route = CollectRoute.empty();
 
-  CustomerOrderProduct currentCustomerOrderProduct =
-      CustomerOrderProduct.empty();
-
   static WorkStore _workStore = WorkStore.instance;
 
   void collect() async {
     _workStore.clearAll();
-
+/*
     if (_route.isBeingCollected) {
+      print("collect route is being collected. resuming");
       setCurrentProduct(_route.currentCustomerProduct);
     }
-
+*/
+    print("makeing new collect route. starting");
     var customerOrders =
         (await CustomerOrder.many()).where((c) => c.isChosen).take(6).toList();
     _route = CollectRoute(customerOrders);
+
     setCurrentProduct(_route.take());
     return;
   }
 
   void setCurrentProduct(CustomerOrderProduct customerOrderProduct) async {
+    print("sssss: " + customerOrderProduct.id.toString());
     if (customerOrderProduct.isEmpty) {
       WorkStore.instance.currentProduct = Product.empty;
       return;
     }
-
+    print("seeeet: " + customerOrderProduct.id.toString());
     WorkStore.instance.currentProduct =
-        await Product.fetchFromId(currentCustomerOrderProduct.id.toString());
+        await Product.fetchFromId(customerOrderProduct.id.toString());
+    WorkStore.instance.productEvent.broadcast();
   }
 
   bool get isBeingCollected => _route.isBeingCollected;

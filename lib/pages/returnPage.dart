@@ -40,7 +40,7 @@ class _State extends State<ReturnPage> with Transitions {
                 onPressed: () async {
                   await product.setShelf(shelf);
                   await product.increaseQty();
-                  WorkStore.instance.setReturn();
+                  WorkStore.instance.clearAll();
                   WorkStore.instance.assignShelfEvent.broadcast();
                   Navigator.pop(context);
                 },
