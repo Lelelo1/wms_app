@@ -3,6 +3,7 @@ import 'package:flutter_font_icons/flutter_font_icons.dart';
 import 'package:wms_app/content/transitions.dart';
 import 'package:wms_app/pages/scanPage.dart';
 import 'package:wms_app/routes/productRoute.dart';
+import 'package:wms_app/stores/collectStore.dart';
 import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/views/extended/scrollable.dart';
 import 'package:wms_app/widgets/wmsPage.dart';
@@ -53,8 +54,6 @@ class _State extends State<CollectPage> with Transitions {
           ]).show();
     });
 
-    WorkStore.instance.setCollect();
-
     super.initState();
   }
 
@@ -88,11 +87,10 @@ class _State extends State<CollectPage> with Transitions {
   Widget mainContent(Widget info) {
     return Column(children: [
       info,
-      Text("B" + "   " + this.checkEmoji, style: TextStyle(fontSize: 25))
     ]);
   }
 
-  String checkEmoji = "\u{2714}";
+  //Widget boxWidget(String box) => if;
 
   Widget boxButton(Widget text) => ElevatedButton(
       onPressed: () {

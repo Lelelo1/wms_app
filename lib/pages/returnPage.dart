@@ -56,7 +56,7 @@ class _State extends State<ReturnPage> with Transitions {
       }
     });
 
-    WorkStore.instance.setReturn();
+    WorkStore.instance.clearAll();
 
     super.initState();
   }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wms_app/models/customerOrder.dart';
 import 'package:wms_app/models/customerOrderProduct.dart';
 import 'package:wms_app/pages/collect/collectPage.dart';
+import 'package:wms_app/stores/collectStore.dart';
 import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/widgets/wmsPage.dart';
 import 'package:wms_app/widgets/wmsAppBar.dart';
@@ -45,10 +46,7 @@ class _State extends State<OrdersPage> {
         //var printed = await WorkStore.instance.printPage(context);
         // if(printed)
 
-        WorkStore.instance.chosenCustomerOrders = (await CustomerOrder.many())
-            .where((c) => c.isChosen)
-            .take(6)
-            .toList();
+        CollectStore.instance.collect();
 
         Navigator.push(context,
             PageRouteBuilder(pageBuilder: (_, __, ___) => CollectPage()));

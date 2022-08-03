@@ -2,7 +2,7 @@ import 'package:wms_app/models/customerOrder.dart';
 import 'package:wms_app/models/customerOrderProduct.dart';
 
 class CollectRoute {
-  List<CustomerOrder> _customerOrders = List.empty(growable: false);
+  List<CustomerOrder> _customerOrders = List.empty(growable: true);
 
   List<CustomerOrderProduct> _route = List.empty(growable: true);
   CollectRoute(this._customerOrders) {
@@ -12,5 +12,19 @@ class CollectRoute {
         .toList();
   }
 
-  CollectRoute.empty() 
+  CollectRoute.empty();
+
+  bool get isEmpty => _customerOrders.isEmpty && _route.isEmpty;
+
+  CustomerOrderProduct take() {
+    var hasNext = _route.iterator.moveNext();
+
+    isBeingCollected = hasNext;
+
+    return hasNext ? _route.iterator.current : CustomerOrderProduct.empty();
+  }
+
+  CustomerOrderProduct get currentCustomerProduct => _route.iterator.current;
+
+  bool isBeingCollected = false;
 }
