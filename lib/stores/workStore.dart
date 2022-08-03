@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
 import 'package:wms_app/models/customerOrder.dart';
+import 'package:wms_app/models/customerOrderProduct.dart';
 import 'package:wms_app/models/product.dart';
 import 'package:event/event.dart';
 import 'package:wms_app/warehouseSystem/wsMapping.dart';
@@ -76,22 +77,8 @@ class WorkStore {
         onLayout: (PdfPageFormat format) async => doc.save());
   }
 
-  List<CustomerOrder> chosenCustomerOrders = [];
-
-  void setReturn() {
+  void clearAll() {
     this.currentProduct = Product.empty;
-    this.currentEAN = "";
-    this._scanData = [];
-    this.currentShelf = "";
-  }
-
-  void setCollect() async {
-    if (chosenCustomerOrders.length == 0) {
-      print(
-          "wms warning you entered collect without having any customer orderders chosen");
-    }
-    var id = chosenCustomerOrders.first.productId.first.toString();
-    this.currentProduct = await Product.fetchFromId(id);
     this.currentEAN = "";
     this._scanData = [];
     this.currentShelf = "";

@@ -23,8 +23,6 @@ class CollectPage extends WMSPage {
 class _State extends State<CollectPage> with Transitions {
   // note that can't rerender color in app bar without rerender the rest of the app...
 
-  bool collectProduct = true;
-
   @override
   void initState() {
     WorkStore.instance.assignShelfEvent.subscribe((args) {
@@ -88,27 +86,17 @@ class _State extends State<CollectPage> with Transitions {
   }
 
   Widget mainContent(Widget info) {
-    return Column(children: [info, boxWidget("B")]);
+    return Column(children: [
+      info,
+      Text("B" + "   " + this.checkEmoji, style: TextStyle(fontSize: 25))
+    ]);
   }
 
   String checkEmoji = "\u{2714}";
-  Widget boxWidget(String box) {
-    var textWidget = Text(
-        this.collectProduct ? box + "   " + this.checkEmoji : box,
-        style: TextStyle(fontSize: 25));
-
-    if (collectProduct) {
-      return boxButton(textWidget);
-    }
-
-    return textWidget;
-  }
 
   Widget boxButton(Widget text) => ElevatedButton(
       onPressed: () {
-        setState(() {
-          this.collectProduct = false;
-        });
+        setState(() {});
       },
       child: text,
       style: ButtonStyle(
