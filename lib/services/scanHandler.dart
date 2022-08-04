@@ -27,12 +27,12 @@ class ScanHandler {
       return;
     }
 
-    CameraViewController.scanningSuccessfull();
-
-    _handleScanResult(scanResult);
+    handleScanResult(scanResult);
   }
 
-  static void _handleScanResult(String scanResult) async {
+  static void handleScanResult(String scanResult) async {
+    CameraViewController.scanningSuccessfull();
+
     WorkStore.instance.addScanData(scanResult);
     var lastProduct = WorkStore.instance.currentProduct;
 

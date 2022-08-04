@@ -46,12 +46,10 @@ class _State extends State<OrdersPage> {
         //var printed = await WorkStore.instance.printPage(context);
         // if(printed)
 
-        var collectRoute = await CollectStore.instance.collect();
+        //await CollectStore.instance.collect();
 
-        Navigator.push(
-            context,
-            PageRouteBuilder(
-                pageBuilder: (_, __, ___) => CollectPage(collectRoute)));
+        Navigator.push(context,
+            PageRouteBuilder(pageBuilder: (_, __, ___) => CollectPage()));
       });
 }
 

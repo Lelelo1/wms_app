@@ -3,7 +3,9 @@ import 'package:wms_app/content/transitions.dart';
 import 'package:wms_app/models/abstractProduct.dart';
 import 'package:wms_app/pages/scanPage.dart';
 import 'package:wms_app/routes/productRoute.dart';
+import 'package:wms_app/services/scanHandler.dart';
 import 'package:wms_app/stores/workStore.dart';
+import 'package:wms_app/views/cameraView.dart';
 import 'package:wms_app/views/extended/scrollable.dart';
 import 'package:wms_app/widgets/wmsPage.dart';
 import 'package:wms_app/widgets/wmsAppBar.dart';
@@ -71,8 +73,13 @@ class _State extends State<ReturnPage> with Transitions {
         body: EventSubscriber(
             event: WorkStore.instance.productEvent,
             handler: (context, __) => WMSScrollable(
-                ScanPage(this.imageContent(context)),
+                ScanPage(this.imageContent(context), scan),
                 ProductRoute(WorkStore.instance.currentProduct))));
+  }
+
+  void scan() async {
+    var path = (await CameraViewController.takePhoto()).path;
+    ScanHandler.scan(path);
   }
 }
 

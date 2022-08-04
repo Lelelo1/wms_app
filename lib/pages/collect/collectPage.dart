@@ -4,6 +4,7 @@ import 'package:wms_app/content/transitions.dart';
 import 'package:wms_app/models/collectRoute.dart';
 import 'package:wms_app/pages/scanPage.dart';
 import 'package:wms_app/routes/productRoute.dart';
+import 'package:wms_app/services/scanHandler.dart';
 import 'package:wms_app/stores/collectStore.dart';
 import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/views/extended/scrollable.dart';
@@ -18,12 +19,8 @@ class CollectPage extends WMSPage {
   @override
   final String name = "Plock";
 
-  final CollectRoute collectRoute;
-
   @override
   State<StatefulWidget> createState() => _State();
-
-  CollectPage(this.collectRoute);
 }
 
 class _State extends State<CollectPage> with Transitions {
@@ -72,27 +69,26 @@ class _State extends State<CollectPage> with Transitions {
         body: EventSubscriber(
             event: WorkStore.instance.productEvent,
             handler: (context, __) => WMSScrollable(
-                ScanPage(this.imageContent(context)),
+                ScanPage(this.imageContent(context), scan),
                 ProductRoute(WorkStore.instance.currentProduct))));
+  }
+
+  void scan() {
+    ScanHandler.handleScanResult(
+        WorkStore.instance.currentProduct.ean.toString());
+    CollectStore.instance.next();
   }
 
   @override
   Widget imageContent(BuildContext context) {
     var ean = WorkStore.instance.currentEAN;
     var p = WorkStore.instance.currentProduct;
-
-    Widget content = p.exists
-        ? mainContent(this.shelfWidget(p.shelf))
-        : mainContent(this.eanWidget(ean, context));
+    print("ppp: " + p.toString());
+    Widget content =
+        p.exists ? this.shelfWidget(p.shelf) : this.eanWidget(ean, context);
 
     return cameraContent(
         content, scanSymbol(MaterialCommunityIcons.barcode_scan), 10);
-  }
-
-  Widget mainContent(Widget info) {
-    return Column(children: [
-      info,
-    ]);
   }
 
   //Widget boxWidget(String box) => if;
