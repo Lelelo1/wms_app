@@ -44,10 +44,10 @@ class _State extends State<OrdersPage> {
       child: Text("Bekräfta"),
       onPressed: () async {
         //var printed = await WorkStore.instance.printPage(context);
-        // if(printed)
 
-        //await CollectStore.instance.collect();
+        await CollectStore.instance.collect();
 
+        print("navgigating p: " + WorkStore.instance.currentProduct.toString());
         Navigator.push(context,
             PageRouteBuilder(pageBuilder: (_, __, ___) => CollectPage()));
       });

@@ -18,7 +18,6 @@ mixin Transitions {
   imageContent(BuildContext context) {
     var ean = WorkStore.instance.currentEAN;
     var p = WorkStore.instance.currentProduct;
-
     Widget content = p.exists ? shelfWidget(p.shelf) : eanWidget(ean, context);
     IconData icon = p.exists
         ? MaterialCommunityIcons.qrcode_scan

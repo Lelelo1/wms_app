@@ -78,7 +78,7 @@ class _State extends State<CollectPage> with Transitions {
         WorkStore.instance.currentProduct.ean.toString());
     CollectStore.instance.next();
   }
-
+/*
   @override
   Widget imageContent(BuildContext context) {
     var ean = WorkStore.instance.currentEAN;
@@ -90,7 +90,7 @@ class _State extends State<CollectPage> with Transitions {
     return cameraContent(
         content, scanSymbol(MaterialCommunityIcons.barcode_scan), 10);
   }
-
+*/
   //Widget boxWidget(String box) => if;
 
   Widget boxButton(Widget text) => ElevatedButton(

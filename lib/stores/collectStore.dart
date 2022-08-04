@@ -17,7 +17,8 @@ class CollectStore {
 
     print("making new collect route. starting");
     _route = await _createRoute();
-    _setCurrentProduct(_route.take());
+    print("create route completed");
+    await _setCurrentProduct(_route.take());
 /*
     if (_route.isEmpty) {
       
@@ -38,8 +39,9 @@ class CollectStore {
     return CollectRoute(customerOrders);
   }
 
-  void _setCurrentProduct(CustomerOrderProduct customerOrderProduct) async {
-    print("setCurrentProduct: " + customerOrderProduct.toString());
+  Future<void> _setCurrentProduct(
+      CustomerOrderProduct customerOrderProduct) async {
+    print("setCurrentProduct: " + customerOrderProduct.productId);
     if (customerOrderProduct.isEmpty) {
       WorkStore.instance.currentProduct = Product.empty;
       return;
