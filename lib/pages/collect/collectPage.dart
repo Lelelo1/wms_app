@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_font_icons/flutter_font_icons.dart';
 import 'package:wms_app/content/transitions.dart';
+import 'package:wms_app/models/collectRoute.dart';
 import 'package:wms_app/pages/scanPage.dart';
 import 'package:wms_app/routes/productRoute.dart';
 import 'package:wms_app/stores/collectStore.dart';
@@ -17,8 +18,12 @@ class CollectPage extends WMSPage {
   @override
   final String name = "Plock";
 
+  final CollectRoute collectRoute;
+
   @override
   State<StatefulWidget> createState() => _State();
+
+  CollectPage(this.collectRoute);
 }
 
 class _State extends State<CollectPage> with Transitions {
