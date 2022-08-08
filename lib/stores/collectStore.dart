@@ -44,10 +44,11 @@ class CollectStore {
     print("setCurrentProduct: " + customerOrderProduct.productId);
     if (customerOrderProduct.isEmpty) {
       WorkStore.instance.currentProduct = Product.empty;
-      return;
     }
     WorkStore.instance.currentProduct =
-        await Product.fetchFromId(customerOrderProduct.id.toString());
+        await Product.fetchFromId(customerOrderProduct.productId.toString());
+    print("broadcast currentProduct: " +
+        WorkStore.instance.currentProduct.toString());
     WorkStore.instance.productEvent.broadcast();
   }
 

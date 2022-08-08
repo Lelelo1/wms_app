@@ -8,6 +8,8 @@ class Product {
   Map<String, dynamic> _attributes = _empty;
   Product._(this._attributes);
 
+  bool get isEmpty => id == 0;
+
   int get id => int.parse(Utils.getAndDefaultAs(_attributes["id"], "0"));
 
   int get ean => int.parse(Utils.getAndDefaultAs(_attributes["ean"], "0"));

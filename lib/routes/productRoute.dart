@@ -14,7 +14,7 @@ class ProductRoute extends StatelessWidget {
   ProductRoute(this.product, [this.eanAddButton = const WMSEmptyWidget()]);
 
   @override
-  Widget build(BuildContext context) => product == Product.empty
+  Widget build(BuildContext context) => product.isEmpty
       ? WMSEmptyWidget()
       : Row(children: [
           Spacer(flex: 1),

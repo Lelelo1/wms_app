@@ -8,10 +8,15 @@ class CollectRoute {
       List<CustomerOrderProduct>.empty().iterator;
 
   CollectRoute(this._customerOrders) {
-    _route = _customerOrders
-        .map((e) => e.customerOrderProducts)
-        .expand((e) => e)
-        .iterator;
+    var customerProducts =
+        _customerOrders.map((e) => e.customerOrderProducts).expand((e) => e);
+
+    print("products to be collected: ");
+    customerProducts.forEach((e) {
+      print(e.productId.toString());
+    });
+
+    _route = customerProducts.iterator;
   }
 
   CollectRoute.empty();
@@ -21,7 +26,10 @@ class CollectRoute {
   CustomerOrderProduct take() {
     var hasNext = _route.moveNext();
     isBeingCollected = hasNext;
-    return hasNext ? _route.current : CustomerOrderProduct.empty();
+    if (!hasNext) {
+      return CustomerOrderProduct.empty();
+    }
+    return _route.current;
   }
 
   CustomerOrderProduct get currentCustomerProduct => _route.current;

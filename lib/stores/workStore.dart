@@ -23,7 +23,6 @@ class WorkStore {
   Product _currentProduct = Product.empty;
   Product get currentProduct => _currentProduct;
   set currentProduct(Product product) {
-    print("setProduct: " + product.name);
     _currentProduct = product;
     productEvent.broadcast();
   }
