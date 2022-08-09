@@ -43,7 +43,9 @@ class CollectStore {
       CustomerOrderProduct customerOrderProduct) async {
     print("setCurrentProduct: " + customerOrderProduct.productId);
     if (customerOrderProduct.isEmpty) {
-      WorkStore.instance.currentProduct = Product.empty;
+      WorkStore.instance.currentProduct = Product.createEmpty;
+      WorkStore.instance.productEvent.broadcast();
+      return WorkStore.instance.productEvent.broadcast();
     }
     WorkStore.instance.currentProduct =
         await Product.fetchFromId(customerOrderProduct.productId.toString());

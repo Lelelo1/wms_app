@@ -22,7 +22,7 @@ class WSInteract {
   static Lock _lock = Lock();
   static Future<Iterable<Model>> remoteSql(String sql) =>
       _lock.synchronized(() async {
-        print(sql);
+        // print(sql);
         var remote = await MySQLConnection.createConnection(
             host: WMSKatsumiDatabaseSettings.host,
             port: WMSKatsumiDatabaseSettings.port,

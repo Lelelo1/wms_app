@@ -20,7 +20,7 @@ class WorkStore {
   Event _productEvent = Event();
   Event get productEvent => _productEvent;
 
-  Product _currentProduct = Product.empty;
+  Product _currentProduct = Product.createEmpty;
   Product get currentProduct => _currentProduct;
   set currentProduct(Product product) {
     _currentProduct = product;
@@ -34,8 +34,8 @@ class WorkStore {
   Future<bool> isMatchingShelf(String shelf) async {
     var currentProduct = WorkStore.instance.currentProduct;
 
-    if (!currentProduct.exists) {
-      WorkStore.instance.currentProduct = Product.empty;
+    if (currentProduct.isEmpty) {
+      WorkStore.instance.currentProduct = Product.createEmpty;
       return false;
     }
 
@@ -77,7 +77,7 @@ class WorkStore {
   }
 
   void clearAll() {
-    this.currentProduct = Product.empty;
+    this.currentProduct = Product.createEmpty;
     this.currentEAN = "";
     this._scanData = [];
     this.currentShelf = "";

@@ -37,14 +37,14 @@ class ScanHandler {
     var lastProduct = WorkStore.instance.currentProduct;
 
     var product = await Product.fetchFromEAN(scanResult);
-    if (product.exists) {
+    if (!product.isEmpty) {
       WorkStore.instance.currentProduct = product;
       return;
     }
 
     if (!_isShelf(scanResult)) {
       WorkStore.instance.currentEAN = scanResult;
-      WorkStore.instance.currentProduct = Product.empty;
+      WorkStore.instance.currentProduct = Product.createEmpty;
       return;
     }
 
@@ -53,7 +53,7 @@ class ScanHandler {
 
     // hanlding case when product scanned pevisouly needs shelf assigned to it
     print("lastProduct: " + lastProduct.toString());
-    if (lastProduct.exists) {
+    if (!lastProduct.isEmpty) {
       var lastProductShelf = lastProduct.shelf;
       if (lastProductShelf.contains(AbstractProduct.assignShelf)) {
         WorkStore.instance.assignShelfEvent.broadcast();

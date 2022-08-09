@@ -76,8 +76,9 @@ class _State extends State<CollectPage> with Transitions {
   void scan() {
     if (WorkStore.instance.currentProduct.ean != 0) {
       // has ean code
-      ScanHandler.handleScanResult(
-          WorkStore.instance.currentProduct.ean.toString());
+      var ean = WorkStore.instance.currentProduct.ean;
+      print("scan ean: " + ean.toString());
+      ScanHandler.handleScanResult(ean.toString());
     }
 
     // if match

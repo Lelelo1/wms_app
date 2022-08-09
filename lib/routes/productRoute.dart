@@ -6,21 +6,28 @@ import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/views/extended/stacked.dart';
 import 'package:wms_app/widgets/wmsEmptyWidget.dart';
 import 'package:wms_app/widgets/wmsLabel.dart';
+import 'package:wms_app/widgets/wmsWidget.dart';
 
 // mobx needs stateful widget to work
-class ProductRoute extends StatelessWidget {
+class ProductRoute extends StatelessWidget implements WMSWidget {
   final Product product;
   final Widget eanAddButton;
   ProductRoute(this.product, [this.eanAddButton = const WMSEmptyWidget()]);
 
   @override
-  Widget build(BuildContext context) => product.isEmpty
-      ? WMSEmptyWidget()
-      : Row(children: [
-          Spacer(flex: 1),
-          Expanded(child: safeArea(), flex: 12),
-          Spacer(flex: 1)
-        ]);
+  Widget build(BuildContext context) {
+    print("producRoute: " +
+        product.toString() +
+        "isEmpty: " +
+        product.isEmpty.toString());
+    return product.isEmpty
+        ? WMSEmptyWidget()
+        : Row(children: [
+            Spacer(flex: 1),
+            Expanded(child: safeArea(), flex: 12),
+            Spacer(flex: 1)
+          ]);
+  }
 
   Widget safeArea() => SafeArea(
           child: Column(children: [
@@ -93,4 +100,8 @@ class ProductRoute extends StatelessWidget {
       back: backImage,
     );
   }
+
+  @override
+  // TODO: implement empty
+  bool get empty => this.product.isEmpty;
 }

@@ -18,10 +18,10 @@ mixin Transitions {
   imageContent(BuildContext context) {
     var ean = WorkStore.instance.currentEAN;
     var p = WorkStore.instance.currentProduct;
-    Widget content = p.exists ? shelfWidget(p.shelf) : eanWidget(ean, context);
-    IconData icon = p.exists
-        ? MaterialCommunityIcons.qrcode_scan
-        : MaterialCommunityIcons.barcode_scan;
+    Widget content = p.isEmpty ? eanWidget(ean, context) : shelfWidget(p.shelf);
+    IconData icon = p.isEmpty
+        ? MaterialCommunityIcons.barcode_scan
+        : MaterialCommunityIcons.qrcode_scan;
 
     return cameraContent(content, scanSymbol(icon), 12);
   }
@@ -52,14 +52,14 @@ mixin Transitions {
             onTap: () {
               var product = WorkStore.instance.currentProduct;
               var ean = WorkStore.instance.currentEAN;
-              if (product.exists || Utils.isNullOrEmpty(ean)) {
-                return;
+
+              if (ean.isNotEmpty) {
+                Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                        pageBuilder: (_, __, ___) =>
+                            SearchRoute(SearchPage(product, ean))));
               }
-              Navigator.push(
-                  context,
-                  PageRouteBuilder(
-                      pageBuilder: (_, __, ___) =>
-                          SearchRoute(SearchPage(product, ean))));
             }));
   }
 

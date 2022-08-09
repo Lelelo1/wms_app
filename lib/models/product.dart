@@ -49,8 +49,6 @@ class Product {
     await WSInteract.remoteSql(ProductQueries.increaseQty(id.toString()));
   }
 
-  bool get exists => id != 0;
-
   static Future<Product> fetchFromId(String id) async {
     var models = await WSInteract.remoteSql(ProductQueries.fromId(id));
     return _firstOrEmpty(models);
@@ -71,7 +69,7 @@ class Product {
         models.map((e) => Product.fetchFromId(e.values.first as String)));
   }
 
-  static Product get empty => Product._(_empty);
+  static Product get createEmpty => Product._(_empty);
 
   // SELECT @id, @ean, @name, @shelf, @sku, @image_front, @image_back, @qty;
   static Model get _empty => {
@@ -87,7 +85,7 @@ class Product {
 
   static Product _firstOrEmpty(Iterable<Model> models) {
     if (models.isEmpty) {
-      return empty;
+      return createEmpty;
     }
 
     return models.map((attributes) => Product._(attributes)).first;
