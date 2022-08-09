@@ -12,7 +12,7 @@ class CustomerOrder implements WMSCardCheckerProps {
   int get id => int.parse(customerOrderProducts.first.id);
   String get name => customerOrderProducts.first.name;
   String get displayId => customerOrderProducts.first.displayId;
-  List<String> get productId =>
+  List<int> get productId =>
       customerOrderProducts.map((e) => e.productId).toList();
   double get qtyOrdered => customerOrderProducts
       .map((e) =>
@@ -46,20 +46,13 @@ class CustomerOrder implements WMSCardCheckerProps {
   Future<void> _setQtyPicked(bool isPicked) async {
     int? qtyPicked = isPicked ? 0 : null;
 
-/*
-    // can't set qtyPicked in db to null
-    if (qtyPicked == null) {
-      print("seeeet 10 !!");
-      qtyPicked = 10;
-    }
-*/
     var futures = customerOrderProducts.map((e) {
       print("id: " +
           e.productId.toString() +
           "length: " +
           customerOrderProducts.length.toString());
       return WSInteract.remoteSql(CustomerOrderQueries.setQtyPicked(
-          id.toString(), e.productId, qtyPicked));
+          id.toString(), e.productId.toString(), qtyPicked));
     });
 
     await Future.wait(futures);

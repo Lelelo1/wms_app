@@ -39,18 +39,18 @@ class CollectStore {
     return CollectRoute(customerOrders);
   }
 
+// broadcast could always be in th esetter property in workstore currentproduct?
   Future<void> _setCurrentProduct(
       CustomerOrderProduct customerOrderProduct) async {
-    print("setCurrentProduct: " + customerOrderProduct.productId);
-    if (customerOrderProduct.isEmpty) {
-      WorkStore.instance.currentProduct = Product.createEmpty;
-      WorkStore.instance.productEvent.broadcast();
-      return WorkStore.instance.productEvent.broadcast();
-    }
+    //print("setCurrentProduct: " + customerOrderProduct.productId.toString());
     WorkStore.instance.currentProduct =
-        await Product.fetchFromId(customerOrderProduct.productId.toString());
-    print("broadcast currentProduct: " +
-        WorkStore.instance.currentProduct.toString());
+        await Product.fetchFromId(customerOrderProduct.productId);
+    // if is mock testing collect:
+    if (WorkStore.instance.currentProduct.ean.isEmpty) {
+      var mockEAN = "mock ean: " + _route.index.toString();
+      WorkStore.instance.currentProduct.mockSetEAN(mockEAN);
+      print("mock ean was set: " + mockEAN);
+    }
     WorkStore.instance.productEvent.broadcast();
   }
 

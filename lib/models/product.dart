@@ -12,11 +12,15 @@ class Product {
 
   int get id => int.parse(Utils.getAndDefaultAs(_attributes["id"], "0"));
 
-  int get ean => int.parse(Utils.getAndDefaultAs(_attributes["ean"], "0"));
+  String get ean => Utils.getAndDefaultAs(_attributes["ean"], "");
+  void mockSetEAN(String mockEAN) {
+    _attributes["ean"] = mockEAN;
+  }
+
   Future<Product> setEAN(String ean) async {
     await WSInteract.remoteSql(
         ProductQueries.setEAN(id.toString(), ean.toString()));
-    return fetchFromId(id.toString());
+    return fetchFromId(id);
   }
 
   String get name => Utils.getAndDefaultAs(_attributes["name"], "");
@@ -49,8 +53,12 @@ class Product {
     await WSInteract.remoteSql(ProductQueries.increaseQty(id.toString()));
   }
 
-  static Future<Product> fetchFromId(String id) async {
-    var models = await WSInteract.remoteSql(ProductQueries.fromId(id));
+  static Future<Product> fetchFromId(int id) async {
+    if (id == 0) {
+      return Product.createEmpty;
+    }
+    var models =
+        await WSInteract.remoteSql(ProductQueries.fromId(id.toString()));
     return _firstOrEmpty(models);
   }
 
@@ -66,7 +74,7 @@ class Product {
         await WSInteract.remoteSql(ProductQueries.fromSkuText(skuText));
 
     return await Future.wait(
-        models.map((e) => Product.fetchFromId(e.values.first as String)));
+        models.map((e) => Product.fetchFromId(e.values.first as int)));
   }
 
   static Product get createEmpty => Product._(_empty);
@@ -92,8 +100,7 @@ class Product {
   }
 
   Future<void> update() async {
-    WorkStore.instance.currentProduct =
-        await Product.fetchFromId(id.toString());
+    WorkStore.instance.currentProduct = await Product.fetchFromId(id);
   }
 
   @override

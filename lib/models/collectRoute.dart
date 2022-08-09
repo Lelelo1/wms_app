@@ -23,12 +23,15 @@ class CollectRoute {
 
   bool get isEmpty => _customerOrders.isEmpty;
 
+  int index = 0;
+
   CustomerOrderProduct take() {
     var hasNext = _route.moveNext();
     isBeingCollected = hasNext;
     if (!hasNext) {
       return CustomerOrderProduct.empty();
     }
+    index++;
     return _route.current;
   }
 
