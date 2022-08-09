@@ -72,9 +72,8 @@ class Product {
       String skuText) async {
     var models =
         await WSInteract.remoteSql(ProductQueries.fromSkuText(skuText));
-
-    return await Future.wait(
-        models.map((e) => Product.fetchFromId(e.values.first as int)));
+    return await Future.wait(models
+        .map((e) => Product.fetchFromId(int.parse(e.values.first as String))));
   }
 
   static Product get createEmpty => Product._(_empty);
