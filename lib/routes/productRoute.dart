@@ -12,7 +12,10 @@ import 'package:wms_app/widgets/wmsWidget.dart';
 class ProductRoute extends StatelessWidget implements WMSWidget {
   final Product product;
   final Widget eanAddButton;
-  ProductRoute(this.product, [this.eanAddButton = const WMSEmptyWidget()]);
+  final Size constraintSize;
+  ProductRoute(this.product,
+      [this.eanAddButton = const WMSEmptyWidget(),
+      this.constraintSize = Size.zero]);
 
   @override
   Widget build(BuildContext context) {
@@ -20,13 +23,23 @@ class ProductRoute extends StatelessWidget implements WMSWidget {
         product.toString() +
         "isEmpty: " +
         product.isEmpty.toString());
-    return product.isEmpty
-        ? WMSEmptyWidget()
-        : Row(children: [
+    return product.isEmpty ? WMSEmptyWidget() : content(constraintSize);
+  }
+
+  Widget content(Size size) {
+    return size.isEmpty
+        ? Row(children: [
             Spacer(flex: 1),
             Expanded(child: safeArea(), flex: 12),
             Spacer(flex: 1)
-          ]);
+          ])
+        : ConstrainedBox(
+            constraints: BoxConstraints.loose(size),
+            child: Row(children: [
+              Spacer(flex: 1),
+              Expanded(child: safeArea(), flex: 12),
+              Spacer(flex: 1)
+            ]));
   }
 
   Widget safeArea() => SafeArea(

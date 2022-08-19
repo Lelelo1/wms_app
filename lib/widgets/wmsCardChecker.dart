@@ -17,9 +17,16 @@ abstract class WMSCardCheckerProps /* extends WMSProps<WMSCardCheckerProps>*/ {
 
 class WMSCardChecker<P extends WMSCardCheckerProps> {
   final WMSCardCheckerProps props;
+
   WMSCardChecker(this.props);
 
-  static StatefulBuilder create(WMSCardCheckerProps props) {
+  // 'listener'
+  // since card checker props is implemented on model. orderpags list can't have its
+  // state updated, unless event subscriber and use of stores
+  // So it might be better just use this listener (shorterm)
+
+  static StatefulBuilder create(
+      WMSCardCheckerProps props, void Function() listener) {
     var p = props;
     return StatefulBuilder(
         builder: (_, setState) => ListTile(
@@ -41,6 +48,7 @@ class WMSCardChecker<P extends WMSCardCheckerProps> {
                             .toString());
                     setState(() {
                       p = newProps;
+                      listener();
                     });
                   }),
               title: Text(p.title),
