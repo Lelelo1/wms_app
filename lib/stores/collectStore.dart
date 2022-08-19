@@ -45,12 +45,7 @@ class CollectStore {
     //print("setCurrentProduct: " + customerOrderProduct.productId.toString());
     WorkStore.instance.currentProduct =
         await Product.fetchFromId(customerOrderProduct.productId);
-    // if is mock testing collect:
-    if (WorkStore.instance.currentProduct.ean.isEmpty) {
-      var mockEAN = "mock ean: " + _route.index.toString();
-      WorkStore.instance.currentProduct.mockSetEAN(mockEAN);
-      print("mock ean was set: " + mockEAN);
-    }
+
     WorkStore.instance.productEvent.broadcast();
   }
 

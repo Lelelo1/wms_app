@@ -7,6 +7,7 @@ import 'package:wms_app/routes/productRoute.dart';
 import 'package:wms_app/services/scanHandler.dart';
 import 'package:wms_app/stores/collectStore.dart';
 import 'package:wms_app/stores/workStore.dart';
+import 'package:wms_app/views/cameraView.dart';
 import 'package:wms_app/views/extended/scrollable.dart';
 import 'package:wms_app/widgets/wmsPage.dart';
 import 'package:wms_app/widgets/wmsAppBar.dart';
@@ -73,13 +74,12 @@ class _State extends State<CollectPage> with Transitions {
                 ProductRoute(WorkStore.instance.currentProduct))));
   }
 
-  void scan() {
-    var ean = WorkStore.instance.currentProduct.ean;
-    print("scan ean: " + ean.toString());
-    ScanHandler.handleScanResult(ean.toString());
-
-    // is correct
-    //CollectStore.instance.next();
+  void scan() async {
+    var path = (await CameraViewController.takePhoto()).path;
+    var scanResult = await ScanHandler.scan(path);
+    if (scanResult == WorkStore.instance.currentProduct.ean) {
+      CollectStore.instance.next();
+    }
   }
 /*
   @override

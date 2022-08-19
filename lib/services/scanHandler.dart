@@ -13,21 +13,16 @@ class ScanHandler {
 
   static late VisionService visionService = VisionService.instance;
 
-  static void scan(String filePath) async {
+  static Future<String> scan(String filePath) async {
     // can also use ...
 /*     barcode = await visionSevice.analyzeBarcodeFromBytes(
           ImageUtils.concatenatePlanes(streamImage.planes),
           ImageUtils.imageData(streamImage)); */
     if (filePath.isEmpty) {
-      return;
+      return "";
     }
 
-    var scanResult = await visionService.analyzeBarcodeFromFilePath(filePath);
-    if (scanResult.isEmpty) {
-      return;
-    }
-
-    handleScanResult(scanResult);
+    return await visionService.analyzeBarcodeFromFilePath(filePath);
   }
 
   static void handleScanResult(String scanResult) async {

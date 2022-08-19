@@ -13,9 +13,6 @@ class Product {
   int get id => int.parse(Utils.getAndDefaultAs(_attributes["id"], "0"));
 
   String get ean => Utils.getAndDefaultAs(_attributes["ean"], "");
-  void mockSetEAN(String mockEAN) {
-    _attributes["ean"] = mockEAN;
-  }
 
   Future<Product> setEAN(String ean) async {
     await WSInteract.remoteSql(
