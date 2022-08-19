@@ -27,19 +27,11 @@ class ProductRoute extends StatelessWidget implements WMSWidget {
   }
 
   Widget content(Size size) {
-    return size.isEmpty
-        ? Row(children: [
-            Spacer(flex: 1),
-            Expanded(child: safeArea(), flex: 12),
-            Spacer(flex: 1)
-          ])
-        : ConstrainedBox(
-            constraints: BoxConstraints.loose(size),
-            child: Row(children: [
-              Spacer(flex: 1),
-              Expanded(child: safeArea(), flex: 12),
-              Spacer(flex: 1)
-            ]));
+    return Row(children: [
+      Spacer(flex: 1),
+      Expanded(child: safeArea(), flex: 12),
+      Spacer(flex: 1)
+    ]);
   }
 
   Widget safeArea() => SafeArea(
