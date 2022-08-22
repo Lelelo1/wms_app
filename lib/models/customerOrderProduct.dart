@@ -16,7 +16,7 @@ class CustomerOrderProduct {
   int? get qtyPicked => Utils.toNullableInt(_attributes["qtyPicked"]);
 
   static Model get _empty => {
-        "id": "",
+        "id": "0",
         "name": "",
         "displayId": "",
         "productId": "",

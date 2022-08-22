@@ -16,8 +16,10 @@ class WMSCustomerOrderView extends StatelessWidget {
       Text(customerName,
           style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
       Column(children: [
-        ...products
-            .map((p) => ProductRoute(p, WMSEmptyWidget(), Size(360, 360)))
+        ...products.map((p) => Container(
+            child: ProductRoute(p, WMSEmptyWidget()),
+            width: MediaQuery.of(context).size.width * 0.85,
+            height: MediaQuery.of(context).size.height * 0.85))
       ])
     ]));
   }
