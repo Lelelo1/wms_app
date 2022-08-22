@@ -1,3 +1,4 @@
+import 'package:eventsubscriber/eventsubscriber.dart';
 import 'package:flutter/material.dart';
 import 'package:wms_app/models/customerOrder.dart';
 import 'package:wms_app/models/customerOrderProduct.dart';
@@ -5,6 +6,7 @@ import 'package:wms_app/models/product.dart';
 import 'package:wms_app/pages/collect/collectPage.dart';
 import 'package:wms_app/stores/collectStore.dart';
 import 'package:wms_app/stores/workStore.dart';
+import 'package:wms_app/widgets/widgets.dart';
 import 'package:wms_app/widgets/wmsCustomerOrderView.dart';
 import 'package:wms_app/widgets/wmsEmptyWidget.dart';
 import 'package:wms_app/widgets/wmsPage.dart';
@@ -38,28 +40,26 @@ class _State extends State<OrdersPage> {
           futureCustomerOrder,
           (co) => ListView(children: [
                 ...co.map((c) => WMSCardChecker.create(c, updateState)),
-                Container(
-                    margin: const EdgeInsets.all(15.0),
-                    padding: const EdgeInsets.all(1.0),
-                    height: 20,
-                    decoration: BoxDecoration(
-                        color: Color.fromARGB(102, 138, 66, 245),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            spreadRadius: 5,
-                            blurRadius: 7,
-                            offset: Offset(0, 3), // changes position of shadow
-                          )
-                        ]),
-                    child: WMSEmptyWidget()),
-                ...co.where((co) => co.isChosen).map((c) =>
-                    asyncCustomerOrderView(
-                        c.name,
-                        Future.wait([
-                          ...c.productId.map((id) => Product.fetchFromId(id))
-                        ])))
+                Widgets.seperator(Color.fromARGB(102, 138, 66, 245)),
+                EventSubscriber(
+                    event: CollectStore.instance.selectCustomerOrderEvent,
+                    handler: (_, __) {
+                      return Column(children: [...productViews(co)]);
+                    })
               ]));
+
+  List<Widget> productViews(List<CustomerOrder> co) {
+    return co
+        .where((co) => co.isChosen)
+        .map((c) => Column(children: [
+              asyncCustomerOrderView(
+                  c.name,
+                  Future.wait(
+                      [...c.productId.map((id) => Product.fetchFromId(id))])),
+              Widgets.seperator(Colors.black)
+            ]))
+        .toList();
+  }
 
   WMSAsyncWidget asyncCustomerOrderView(
           String customerName, Future<List<Product>> futureProducts) =>
@@ -67,7 +67,7 @@ class _State extends State<OrdersPage> {
           (products) => WMSCustomerOrderView(customerName, products));
 
   void updateState() {
-    setState(() {});
+    //setState(() {});
   }
 /*
   Widget confirmCustomerOrdersButton(BuildContext context) => ElevatedButton(

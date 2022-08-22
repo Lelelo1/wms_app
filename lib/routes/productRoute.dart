@@ -36,18 +36,34 @@ class ProductRoute extends StatelessWidget implements WMSWidget {
 
   Widget safeArea() => SafeArea(
           child: Column(children: [
-        Expanded(child: titleArea(this.product.sku), flex: 3),
-        Expanded(child: subtitleArea(this.product.ean.toString()), flex: 4),
         Expanded(
-            child: imageArea([this.product.frontImage, this.product.backImage]),
+            child: ProductInformationWidgets.titleArea(this.product.sku),
+            flex: 3),
+        Expanded(
+            child: ProductInformationWidgets.subtitleArea(
+                this.product.id.toString(), this.product.ean.toString()),
+            flex: 4),
+        Expanded(
+            child: ProductInformationWidgets.imageArea(
+                [this.product.frontImage, this.product.backImage]),
             flex: 34),
         Spacer(flex: 2),
-        Expanded(child: bottomArea(product.shelf, product.qty), flex: 4),
-        Expanded(child: nameWidget(product.name), flex: 4),
-        ...eanAddButtonView(eanAddButton)
+        Expanded(
+            child: ProductInformationWidgets.bottomArea(
+                product.shelf, product.qty),
+            flex: 4),
+        Expanded(
+            child: ProductInformationWidgets.nameWidget(product.name), flex: 4),
+        ...ProductInformationWidgets.eanAddButtonView(eanAddButton)
       ]));
 
-  List<Widget> eanAddButtonView(Widget eanAddButton) =>
+  @override
+  // TODO: implement empty
+  bool get empty => this.product.isEmpty;
+}
+
+class ProductInformationWidgets {
+  static List<Widget> eanAddButtonView(Widget eanAddButton) =>
       eanAddButton is WMSEmptyWidget
           ? [eanAddButton]
           : [
@@ -56,41 +72,41 @@ class ProductRoute extends StatelessWidget implements WMSWidget {
               Spacer(flex: 3)
             ];
 
-  Widget titleArea(String title) => FittedBox(
+  static Widget titleArea(String title) => FittedBox(
       child: Text(title,
           style: TextStyle(fontSize: 25, fontWeight: FontWeight.w400)));
 
-  Widget nameWidget(String name) =>
+  static Widget nameWidget(String name) =>
       Text(name, style: TextStyle(fontSize: 15), textAlign: TextAlign.center);
 
-  Widget bottomArea(String shelf, double quantity) => WMSStacked(
+  static Widget bottomArea(String shelf, double quantity) => WMSStacked(
       Row(
-          children: [shelfWidget(shelf)],
+          children: [_shelfWidget(shelf)],
           mainAxisAlignment: MainAxisAlignment.center),
       Row(
-          children: [quantityWidget(quantity)],
+          children: [_quantityWidget(quantity)],
           mainAxisAlignment: MainAxisAlignment.end));
 
-  Widget shelfWidget(String shelf) =>
+  static Widget _shelfWidget(String shelf) =>
       Text(shelf, style: TextStyle(fontSize: 18));
 
-  Widget quantityWidget(double quantity) =>
+  static Widget _quantityWidget(double quantity) =>
       Text((quantity.round().toString() + "st"));
 
-  Widget subtitleArea(String subtitle) => Row(children: [
+  static Widget subtitleArea(String id, String subtitle) => Row(children: [
         WMSLabel(subtitle, LineIcons.barcode),
-        WMSLabel(this.product.id.toString(), Icons.desktop_windows)
+        WMSLabel(id, Icons.desktop_windows)
       ], mainAxisAlignment: MainAxisAlignment.center);
 
-  Widget imageArea(List<String> images) {
+  static Widget imageArea(List<String> images) {
     if (images.isEmpty) {
       return Image.asset("assets/images/product_placeholder.png",
           width: double.infinity, fit: BoxFit.fitWidth);
     }
-    return flipImage(images);
+    return _flipImage(images);
   }
 
-  Widget flipImage(List<String> imgs) {
+  static Widget _flipImage(List<String> imgs) {
     var frontImage = Image.network(imgs[0]);
     if (imgs.length == 1) {
       return frontImage;
@@ -105,8 +121,4 @@ class ProductRoute extends StatelessWidget implements WMSWidget {
       back: backImage,
     );
   }
-
-  @override
-  // TODO: implement empty
-  bool get empty => this.product.isEmpty;
 }

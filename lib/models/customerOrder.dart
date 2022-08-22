@@ -59,6 +59,7 @@ class CustomerOrder implements WMSCardCheckerProps {
     await Future.wait(futures);
 
     CollectStore.instance.collect();
+    CollectStore.instance.selectCustomerOrderEvent.broadcast();
   }
 
   static Future<List<CustomerOrder>> many() async {

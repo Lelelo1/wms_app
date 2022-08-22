@@ -1,3 +1,4 @@
+import 'package:event/event.dart';
 import 'package:wms_app/models/collectRoute.dart';
 import 'package:wms_app/models/customerOrder.dart';
 import 'package:wms_app/models/customerOrderProduct.dart';
@@ -19,18 +20,6 @@ class CollectStore {
     _route = await _createRoute();
     print("create route completed");
     await _setCurrentProduct(_route.take());
-/*
-    if (_route.isEmpty) {
-      
-      return;
-    }
-
-    print("collect route is being collected. resuming");
-
-    var customerProduct =
-        _route.isBeingCollected ? _route.currentCustomerProduct : _route.take();
-    _setCurrentProduct(customerProduct);
-    */
   }
 
   Future<CollectRoute> _createRoute() async {
@@ -54,4 +43,7 @@ class CollectStore {
   void next() {
     _setCurrentProduct(_route.take());
   }
+
+  Event _selectCustomerOrderEvent = Event();
+  Event get selectCustomerOrderEvent => _selectCustomerOrderEvent;
 }
