@@ -53,11 +53,14 @@ class _State extends State<OrdersPage> {
                           )
                         ]),
                     child: WMSEmptyWidget()),
-                ...co.map((c) => asyncCustomerOrderView(
-                    c.name,
-                    Future.wait(
-                        [...c.productId.map((id) => Product.fetchFromId(id))])))
+                ...co.where((co) => co.isChosen).map((c) =>
+                    asyncCustomerOrderView(
+                        c.name,
+                        Future.wait([
+                          ...c.productId.map((id) => Product.fetchFromId(id))
+                        ])))
               ]));
+
   WMSAsyncWidget asyncCustomerOrderView(
           String customerName, Future<List<Product>> futureProducts) =>
       WMSAsyncWidget<List<Product>>(futureProducts,

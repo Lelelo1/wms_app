@@ -1,4 +1,5 @@
 import 'package:wms_app/models/customerOrderProduct.dart';
+import 'package:wms_app/stores/collectStore.dart';
 import 'package:wms_app/utils.dart';
 import 'package:wms_app/warehouseSystem/wsInteract.dart';
 import 'package:wms_app/warehouseSystem/wsSqlQuery.dart';
@@ -56,6 +57,8 @@ class CustomerOrder implements WMSCardCheckerProps {
     });
 
     await Future.wait(futures);
+
+    CollectStore.instance.collect();
   }
 
   static Future<List<CustomerOrder>> many() async {
