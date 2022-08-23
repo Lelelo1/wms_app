@@ -1,14 +1,11 @@
 import 'package:eventsubscriber/eventsubscriber.dart';
 import 'package:flutter/material.dart';
 import 'package:wms_app/models/customerOrder.dart';
-import 'package:wms_app/models/customerOrderProduct.dart';
 import 'package:wms_app/models/product.dart';
-import 'package:wms_app/pages/collect/collectPage.dart';
 import 'package:wms_app/stores/collectStore.dart';
 import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/widgets/widgets.dart';
 import 'package:wms_app/widgets/wmsCustomerOrderView.dart';
-import 'package:wms_app/widgets/wmsEmptyWidget.dart';
 import 'package:wms_app/widgets/wmsPage.dart';
 import 'package:wms_app/widgets/wmsAppBar.dart';
 import 'package:wms_app/widgets/wmsAsyncWidget.dart';
@@ -31,7 +28,9 @@ class _State extends State<OrdersPage> {
         appBar: WMSAppBar(
                 "Välj beställningar", Colors.black, Colors.white, Colors.black)
             .get(),
-        body: asyncCustomerOrdersList(CustomerOrder.many()));
+        body: EventSubscriber(
+            event: CollectStore.instance.selectCustomerOrderEvent,
+            handler: (_, __) => asyncCustomerOrdersList(CustomerOrder.many())));
   }
 
   WMSAsyncWidget asyncCustomerOrdersList(
@@ -41,11 +40,7 @@ class _State extends State<OrdersPage> {
           (co) => ListView(children: [
                 ...co.map((c) => WMSCardChecker.create(c, updateState)),
                 Widgets.seperator(Color.fromARGB(102, 138, 66, 245)),
-                EventSubscriber(
-                    event: CollectStore.instance.selectCustomerOrderEvent,
-                    handler: (_, __) {
-                      return Column(children: [...productViews(co)]);
-                    })
+                Column(children: [...productViews(co)])
               ]));
 
   List<Widget> productViews(List<CustomerOrder> co) {
