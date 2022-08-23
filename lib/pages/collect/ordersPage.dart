@@ -2,6 +2,7 @@ import 'package:eventsubscriber/eventsubscriber.dart';
 import 'package:flutter/material.dart';
 import 'package:wms_app/models/customerOrder.dart';
 import 'package:wms_app/models/product.dart';
+import 'package:wms_app/pages/collect/collectPage.dart';
 import 'package:wms_app/stores/collectStore.dart';
 import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/widgets/widgets.dart';
@@ -72,15 +73,14 @@ class _State extends State<OrdersPage> {
       child: ElevatedButton(
           child: Text("Skriv ut följesedlar"), // singlular plural
           onPressed: () async {
-            var printed = await WorkStore.instance.printPage(context);
+            //var printed = await WorkStore.instance.printPage(context);
 
-            //await CollectStore.instance.collect();
+            await CollectStore.instance.collect();
 
-            /*
-        print("navgigating p: " + WorkStore.instance.currentProduct.toString());
-        Navigator.push(context,
-            PageRouteBuilder(pageBuilder: (_, __, ___) => CollectPage()));
-            */
+            print("navgigating p: " +
+                WorkStore.instance.currentProduct.toString());
+            Navigator.push(context,
+                PageRouteBuilder(pageBuilder: (_, __, ___) => CollectPage()));
           }),
       padding: EdgeInsets.only(left: 20, right: 20, bottom: 15));
 }
