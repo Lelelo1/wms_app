@@ -77,11 +77,13 @@ class _State extends State<CollectPage> with Transitions {
   void scan() async {
     var path = (await CameraViewController.takePhoto()).path;
     var scanResult = await ScanHandler.scan(path);
-
+    ScanHandler.handleScanResult(scanResult);
+/*
     print("scanresult: " + scanResult);
     if (scanResult == WorkStore.instance.currentProduct.ean) {
       CollectStore.instance.next();
     }
+    */
   }
 /*
   @override

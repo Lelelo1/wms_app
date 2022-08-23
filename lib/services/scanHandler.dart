@@ -26,6 +26,10 @@ class ScanHandler {
   }
 
   static void handleScanResult(String scanResult) async {
+    if (scanResult.isEmpty) {
+      return;
+    }
+
     CameraViewController.scanningSuccessfull();
 
     WorkStore.instance.addScanData(scanResult);
