@@ -30,15 +30,18 @@ class _State extends State<OrdersPage> {
             .get(),
         body: EventSubscriber(
             event: CollectStore.instance.selectCustomerOrderEvent,
-            handler: (_, __) => asyncCustomerOrdersList(CustomerOrder.many())));
+            handler: (_, __) =>
+                asyncCustomerOrdersList(CustomerOrder.many(), context)));
   }
 
   WMSAsyncWidget asyncCustomerOrdersList(
-          Future<List<CustomerOrder>> futureCustomerOrder) =>
+          Future<List<CustomerOrder>> futureCustomerOrder,
+          BuildContext context) =>
       WMSAsyncWidget<List<CustomerOrder>>(
           futureCustomerOrder,
           (co) => ListView(children: [
                 ...co.map((c) => WMSCardChecker.create(c, updateState)),
+                confirmCustomerOrdersButton(context),
                 Widgets.seperator(Color.fromARGB(102, 138, 66, 245)),
                 Column(children: [...productViews(co)])
               ]));
@@ -64,20 +67,22 @@ class _State extends State<OrdersPage> {
   void updateState() {
     //setState(() {});
   }
-/*
-  Widget confirmCustomerOrdersButton(BuildContext context) => ElevatedButton(
-      child: Text("Bekräfta"),
-      onPressed: () async {
-        //var printed = await WorkStore.instance.printPage(context);
 
-        await CollectStore.instance.collect();
+  Widget confirmCustomerOrdersButton(BuildContext context) => Padding(
+      child: ElevatedButton(
+          child: Text("Skriv ut följesedlar"), // singlular plural
+          onPressed: () async {
+            var printed = await WorkStore.instance.printPage(context);
 
+            //await CollectStore.instance.collect();
+
+            /*
         print("navgigating p: " + WorkStore.instance.currentProduct.toString());
         Navigator.push(context,
             PageRouteBuilder(pageBuilder: (_, __, ___) => CollectPage()));
-      });
-
-      */
+            */
+          }),
+      padding: EdgeInsets.only(left: 20, right: 20, bottom: 15));
 }
 
 

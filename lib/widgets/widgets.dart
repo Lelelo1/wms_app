@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 class Widgets {
   static Widget seperator(Color color) {
     return Container(
-        margin: const EdgeInsets.all(15.0),
-        padding: const EdgeInsets.all(1.0),
-        height: 20,
+        height: 8,
         decoration: BoxDecoration(color: color, boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.5),
