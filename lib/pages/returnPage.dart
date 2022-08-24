@@ -80,7 +80,11 @@ class _State extends State<ReturnPage> with Transitions {
   void scan() async {
     var path = (await CameraViewController.takePhoto()).path;
     var scanResult = await ScanHandler.scan(path);
-    ScanHandler.handleScanResult(scanResult);
+    if (ScanHandler.isShelf(scanResult)) {
+      ScanHandler.handleAsShelf(scanResult);
+      return;
+    }
+    ScanHandler.handleAsBarcode(scanResult);
   }
 }
 

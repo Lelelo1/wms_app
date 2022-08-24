@@ -25,11 +25,7 @@ class ScanHandler {
     return await visionService.analyzeBarcodeFromFilePath(filePath);
   }
 
-  static void handleScanResult(String scanResult) async {
-    if (scanResult.isEmpty) {
-      return;
-    }
-
+  static void handleAsBarcode(String scanResult) async {
     CameraViewController.scanningSuccessfull();
 
     WorkStore.instance.addScanData(scanResult);
@@ -41,11 +37,8 @@ class ScanHandler {
       return;
     }
 
-    if (!_isShelf(scanResult)) {
-      WorkStore.instance.currentEAN = scanResult;
-      WorkStore.instance.currentProduct = Product.createEmpty;
-      return;
-    }
+    WorkStore.instance.currentEAN = scanResult;
+    WorkStore.instance.currentProduct = Product.createEmpty;
 
     var shelf = removeShelfPrefix(scanResult);
     WorkStore.instance.currentShelf = shelf;
@@ -59,21 +52,22 @@ class ScanHandler {
         return;
       }
     }
+    // should be defined by the module what happens after a scan shelf with product
+    //WorkStore.instance.clearAll();
+  }
 
-    var match = await WorkStore.instance.isMatchingShelf(shelf);
-    print("is matching shelf: " + match.toString());
+  static Future<void> handleAsShelf(String scanResult) async {
+    var match = await WorkStore.instance.isMatchingShelf(scanResult);
+    //print("is matching shelf: " + match.toString());
     if (!match) {
       return;
     }
 
     // scanned shelf with a product
     WorkStore.instance.currentProduct.increaseQty();
-
-    // should be defined by the module what happens after a scan shelf with product
-    //WorkStore.instance.clearAll();
   }
 
-  static bool _isShelf(String scanData) {
+  static bool isShelf(String scanData) {
     return scanData.contains(shelfPrefix);
   }
 
