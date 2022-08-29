@@ -44,7 +44,9 @@ class _State extends State<OrdersPage> {
                 ...co.map((c) => WMSCardChecker.create(c, updateState)),
                 confirmCustomerOrdersButton(context),
                 Widgets.seperator(Color.fromARGB(102, 138, 66, 245)),
-                Column(children: [...productViews(co)])
+                Card(
+                    child: Column(children: [...productViews(co)]),
+                    color: Colors.brown)
               ]));
 
   List<Widget> productViews(List<CustomerOrder> co) {

@@ -52,6 +52,7 @@ class CustomerOrderQueries {
     }
     return "UPDATE `sales_flat_order_item` SET `qty_picked` = '$qtyPicked' WHERE order_id = '$orderId' AND product_id = '$productId'";
   }
+  // getQtyPicked
 }
 
 class ProductQueries {
