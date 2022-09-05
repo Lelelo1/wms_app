@@ -1,32 +1,22 @@
 import 'package:event/event.dart';
-import 'package:wms_app/models/collectRoute.dart';
-import 'package:wms_app/models/customerOrder.dart';
-import 'package:wms_app/models/customerOrderProduct.dart';
-import 'package:wms_app/models/product.dart';
-import 'package:wms_app/stores/workStore.dart';
 
 class CollectStore {
   static late CollectStore instance = CollectStore._();
   CollectStore._();
-
-  CollectRoute _route = CollectRoute.empty();
+/*
+  
 
   static WorkStore _workStore = WorkStore.instance;
 
-  Future<void> collect() async {
+  CollectRoute _route = CollectRoute.empty();
+
+  Future<void> collect(CustomerOrder customerOrder) async {
     _workStore.clearAll();
 
-    print("making new collect route. starting");
-    _route = await _createRoute();
-    print("create route completed");
+
     await _setCurrentProduct(_route.take());
   }
 
-  Future<CollectRoute> _createRoute() async {
-    var customerOrders =
-        (await CustomerOrder.many()).where((c) => c.isChosen).take(6).toList();
-    return CollectRoute(customerOrders);
-  }
 
 // broadcast could always be in th esetter property in workstore currentproduct?
   Future<void> _setCurrentProduct(
@@ -43,7 +33,11 @@ class CollectStore {
   void next() {
     _setCurrentProduct(_route.take());
   }
-
+*/
   Event _selectCustomerOrderEvent = Event();
   Event get selectCustomerOrderEvent => _selectCustomerOrderEvent;
+
+  Event _selectCustomerOrderBeingCollectedEvent = Event();
+  Event get selectCustomerOrderBeingCollectedEvent =>
+      _selectCustomerOrderBeingCollectedEvent;
 }

@@ -1,8 +1,11 @@
 import 'package:wms_app/models/customerOrder.dart';
 import 'package:wms_app/models/customerOrderProduct.dart';
 
-class CollectRoute {
-  List<CustomerOrder> _customerOrders = List.empty(growable: true);
+
+// code for scanning in collect
+
+/*class CollectRoute {
+  CustomerOrder _customerOrder = CustomerOrder.createEmpty();
 
   Iterator<CustomerOrderProduct> _route =
       List<CustomerOrderProduct>.empty().iterator;
@@ -39,3 +42,4 @@ class CollectRoute {
 
   bool isBeingCollected = false;
 }
+*/

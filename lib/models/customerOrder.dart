@@ -36,6 +36,8 @@ class CustomerOrder implements WMSCardCheckerProps {
 
   Future<void> setPicked(bool isPicked) async {
     if (hasStarted) {
+      // pop up to cancel abort route
+      CollectStore.instance.selectCustomerOrderBeingCollectedEvent.broadcast();
       return;
     }
 
@@ -102,5 +104,9 @@ class CustomerOrder implements WMSCardCheckerProps {
     var models = await WSInteract.remoteSql(CustomerOrderQueries.single(id));
 
     return CustomerOrder(models.map((e) => CustomerOrderProduct(e)).toList());
+  }
+
+  static CustomerOrder createEmpty() {
+    return CustomerOrder([]);
   }
 }

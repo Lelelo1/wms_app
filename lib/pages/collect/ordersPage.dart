@@ -1,5 +1,6 @@
 import 'package:eventsubscriber/eventsubscriber.dart';
 import 'package:flutter/material.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:wms_app/models/customerOrder.dart';
 import 'package:wms_app/models/product.dart';
 import 'package:wms_app/pages/collect/collectPage.dart';
@@ -21,6 +22,39 @@ class OrdersPage extends WMSPage {
 }
 
 class _State extends State<OrdersPage> {
+  @override
+  void initState() {
+    WorkStore.instance.assignShelfEvent.subscribe((args) {
+      var product = WorkStore.instance.currentProduct;
+
+      var shelf = WorkStore.instance.currentShelf;
+      Alert(
+          context: this.context,
+          desc: "Vill du lägga till hyllplatsen $shelf till produkten" +
+              product.name,
+          buttons: [
+            DialogButton(
+              onPressed: () async {
+                /*
+                await WSInteract.remoteSql(WorkStore.instance.queries
+                    .setShelf(product.id.toString(), shelf));
+*/
+                Navigator.pop(context);
+              },
+              child: Text("Ja"),
+            ),
+            DialogButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text("Nej"),
+            )
+          ]).show();
+    });
+
+    super.initState();
+  }
+
   WorkStore workStore = WorkStore.instance;
 
   @override
@@ -77,7 +111,7 @@ class _State extends State<OrdersPage> {
           onPressed: () async {
             //var printed = await WorkStore.instance.printPage(context);
 
-            await CollectStore.instance.collect();
+            //await CollectStore.instance.collect();
 
             print("navgigating p: " +
                 WorkStore.instance.currentProduct.toString());
