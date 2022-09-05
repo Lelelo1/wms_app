@@ -1,4 +1,6 @@
 import 'package:event/event.dart';
+import 'package:wms_app/models/customerOrder.dart';
+import 'package:wms_app/utils/arg.dart';
 
 class CollectStore {
   static late CollectStore instance = CollectStore._();
@@ -34,10 +36,14 @@ class CollectStore {
     _setCurrentProduct(_route.take());
   }
 */
+
   Event _selectCustomerOrderEvent = Event();
   Event get selectCustomerOrderEvent => _selectCustomerOrderEvent;
 
-  Event _selectCustomerOrderBeingCollectedEvent = Event();
-  Event get selectCustomerOrderBeingCollectedEvent =>
+  Event<Arg<CustomerOrder>> _selectCustomerOrderBeingCollectedEvent =
+      Event<Arg<CustomerOrder>>();
+  Event<Arg<CustomerOrder>> get selectCustomerOrderBeingCollectedEvent =>
       _selectCustomerOrderBeingCollectedEvent;
 }
+
+class MyValue extends EventArgs {}

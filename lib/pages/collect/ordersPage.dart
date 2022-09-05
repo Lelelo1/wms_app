@@ -24,32 +24,36 @@ class OrdersPage extends WMSPage {
 class _State extends State<OrdersPage> {
   @override
   void initState() {
-    WorkStore.instance.assignShelfEvent.subscribe((args) {
-      var product = WorkStore.instance.currentProduct;
+    //CollectStore.instance.selectCustomerOrderBeingCollectedEvent.
 
-      var shelf = WorkStore.instance.currentShelf;
-      Alert(
-          context: this.context,
-          desc: "Vill du lägga till hyllplatsen $shelf till produkten" +
-              product.name,
-          buttons: [
-            DialogButton(
-              onPressed: () async {
-                /*
-                await WSInteract.remoteSql(WorkStore.instance.queries
-                    .setShelf(product.id.toString(), shelf));
-*/
-                Navigator.pop(context);
-              },
-              child: Text("Ja"),
-            ),
-            DialogButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text("Nej"),
-            )
-          ]).show();
+    CollectStore.instance.selectCustomerOrderBeingCollectedEvent
+        .subscribe((args) async {
+      // bad lost typing in EventArgs pub package
+      if (args != null) {
+        var selectedCustomerOrder = args.t;
+        Alert(
+            context: this.context,
+            desc: "Plockning pågår på order " +
+                selectedCustomerOrder.displayId +
+                " kund " +
+                selectedCustomerOrder.name +
+                ". Vill du avbryta?",
+            buttons: [
+              DialogButton(
+                onPressed: () async {
+                  await selectedCustomerOrder.setPicked(false);
+                  Navigator.pop(context);
+                },
+                child: Text("Ja"),
+              ),
+              DialogButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text("Nej"),
+              )
+            ]).show();
+      }
     });
 
     super.initState();

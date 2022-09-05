@@ -1,6 +1,7 @@
 import 'package:wms_app/models/customerOrderProduct.dart';
 import 'package:wms_app/stores/collectStore.dart';
 import 'package:wms_app/utils.dart';
+import 'package:wms_app/utils/arg.dart';
 import 'package:wms_app/warehouseSystem/wsInteract.dart';
 import 'package:wms_app/warehouseSystem/wsSqlQuery.dart';
 import "package:collection/collection.dart";
@@ -37,7 +38,8 @@ class CustomerOrder implements WMSCardCheckerProps {
   Future<void> setPicked(bool isPicked) async {
     if (hasStarted) {
       // pop up to cancel abort route
-      CollectStore.instance.selectCustomerOrderBeingCollectedEvent.broadcast();
+      CollectStore.instance.selectCustomerOrderBeingCollectedEvent
+          .broadcast(Arg(this));
       return;
     }
 
