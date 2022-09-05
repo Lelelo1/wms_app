@@ -1,30 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:wms_app/models/customerOrder.dart';
 import 'package:wms_app/models/product.dart';
 import 'package:wms_app/routes/productRoute.dart';
 import 'package:wms_app/views/extended/stacked.dart';
+import 'package:wms_app/widgets/wmsAsyncWidget.dart';
 import 'package:wms_app/widgets/wmsEmptyWidget.dart';
 
 class WMSCustomerOrderView extends StatelessWidget {
-  final String customerName;
-  final List<Product> products;
+  final CustomerOrder customerOrder;
 
-  WMSCustomerOrderView(this.customerName, this.products);
+  WMSCustomerOrderView(this.customerOrder);
 
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      Text(customerName,
+      Text(customerOrder.name,
           style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
-      Column(children: [
-        ...products.map((p) => Card(
-            child: Container(
-                child: productInformation(p),
-                width: MediaQuery.of(context).size.width * 0.85,
-                height: MediaQuery.of(context).size.height * 0.85),
-            margin: EdgeInsets.all(10)))
-      ])
+      asyncCustomerOrderView(
+          Future.wait([
+            ...customerOrder.productId.map((id) => Product.fetchFromId(id))
+          ]),
+          context)
     ]);
   }
+
+  WMSAsyncWidget asyncCustomerOrderView(
+          Future<List<Product>> futureProducts, BuildContext context) =>
+      WMSAsyncWidget<List<Product>>(
+          futureProducts,
+          (products) => Column(children: [
+                ...products.map((p) => Card(
+                    child: Container(
+                        child: productInformation(p),
+                        width: MediaQuery.of(context).size.width * 0.85,
+                        height: MediaQuery.of(context).size.height * 0.85),
+                    margin: EdgeInsets.all(10)))
+              ]));
 
   Widget productInformation(Product product) {
     return Column(children: [

@@ -80,7 +80,7 @@ class _State extends State<OrdersPage> {
           futureCustomerOrder,
           (co) => ListView(children: [
                 ...co.map((c) => WMSCardChecker.create(c, updateState)),
-                confirmCustomerOrdersButton(context),
+                //confirmCustomerOrdersButton(context),
                 Widgets.seperator(Color.fromARGB(102, 138, 66, 245)),
                 Card(
                     child: Column(children: [...productViews(co)]),
@@ -91,19 +91,11 @@ class _State extends State<OrdersPage> {
     return co
         .where((co) => co.isChosen)
         .map((c) => Column(children: [
-              asyncCustomerOrderView(
-                  c.name,
-                  Future.wait(
-                      [...c.productId.map((id) => Product.fetchFromId(id))])),
+              WMSCustomerOrderView(c),
               Widgets.seperator(Colors.black)
             ]))
         .toList();
   }
-
-  WMSAsyncWidget asyncCustomerOrderView(
-          String customerName, Future<List<Product>> futureProducts) =>
-      WMSAsyncWidget<List<Product>>(futureProducts,
-          (products) => WMSCustomerOrderView(customerName, products));
 
   void updateState() {
     //setState(() {});
