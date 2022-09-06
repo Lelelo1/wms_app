@@ -37,13 +37,10 @@ class CollectStore {
   }
 */
 
-  Event _selectCustomerOrderEvent = Event();
-  Event get selectCustomerOrderEvent => _selectCustomerOrderEvent;
-
-  Event<Arg<CustomerOrder>> _selectCustomerOrderBeingCollectedEvent =
-      Event<Arg<CustomerOrder>>();
-  Event<Arg<CustomerOrder>> get selectCustomerOrderBeingCollectedEvent =>
-      _selectCustomerOrderBeingCollectedEvent;
+  Event<Arg<CustomerOrderSelectedEvent>> _selectCustomerOrderEvent =
+      Event<Arg<CustomerOrderSelectedEvent>>();
+  Event<Arg<CustomerOrderSelectedEvent>> get selectCustomerOrderEvent =>
+      _selectCustomerOrderEvent;
 }
 
 class MyValue extends EventArgs {}

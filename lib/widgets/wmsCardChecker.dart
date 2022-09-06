@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wms_app/models/customerOrder.dart';
+import 'package:wms_app/stores/collectStore.dart';
+import 'package:wms_app/utils/arg.dart';
 import 'package:wms_app/utils/default.dart';
 
 abstract class WMSCardCheckerProps /* extends WMSProps<WMSCardCheckerProps>*/ {
@@ -7,12 +9,9 @@ abstract class WMSCardCheckerProps /* extends WMSProps<WMSCardCheckerProps>*/ {
   abstract final String subtitle;
   abstract final String trailing;
   abstract final bool isChecked;
-  abstract final Future<void> Function(bool checked) onChecked;
-  Future<WMSCardCheckerProps> update();
-  /*
-  WMSCardCheckerProps(this.title, this.subtitle, this.trailing, this.isChecked,
-      this.onChecked, this.update);
-      */
+  //abstract final Future<void> Function(bool checked) onChecked;
+  // update single customer order
+  //Future<WMSCardCheckerProps> update();
 }
 
 class WMSCardChecker<P extends WMSCardCheckerProps> {
@@ -25,31 +24,15 @@ class WMSCardChecker<P extends WMSCardCheckerProps> {
   // state updated, unless event subscriber and use of stores
   // So it might be better just use this listener (shorterm)
 
-  static StatefulBuilder create(
-      WMSCardCheckerProps props, void Function() listener) {
+  static StatefulBuilder create(WMSCardCheckerProps props) {
     var p = props;
     return StatefulBuilder(
         builder: (_, setState) => ListTile(
               leading: Checkbox(
                   value: p.isChecked,
-                  onChanged: (bool? b) async {
-                    var checked = Default.nullSafe<bool>(b);
-                    print("pre c products: " +
-                        (props as CustomerOrder)
-                            .customerOrderProducts
-                            .length
-                            .toString());
-                    await p.onChecked(checked);
-                    var newProps = await p.update();
-                    print("new c products: " +
-                        (newProps as CustomerOrder)
-                            .customerOrderProducts
-                            .length
-                            .toString());
-                    setState(() {
-                      p = newProps;
-                      listener();
-                    });
+                  onChanged: (bool? b) {
+                    (props as CustomerOrder)
+                        .setPicked(Default.nullSafe<bool>(b));
                   }),
               title: Text(p.title),
               subtitle: Text(p.subtitle),

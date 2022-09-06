@@ -2,12 +2,13 @@ import 'package:eventsubscriber/eventsubscriber.dart';
 import 'package:flutter/material.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:wms_app/models/customerOrder.dart';
-import 'package:wms_app/models/product.dart';
 import 'package:wms_app/pages/collect/collectPage.dart';
 import 'package:wms_app/stores/collectStore.dart';
 import 'package:wms_app/stores/workStore.dart';
+import 'package:wms_app/utils/arg.dart';
 import 'package:wms_app/widgets/widgets.dart';
 import 'package:wms_app/widgets/wmsCustomerOrderView.dart';
+import 'package:wms_app/widgets/wmsEmptyWidget.dart';
 import 'package:wms_app/widgets/wmsPage.dart';
 import 'package:wms_app/widgets/wmsAppBar.dart';
 import 'package:wms_app/widgets/wmsAsyncWidget.dart';
@@ -24,13 +25,10 @@ class OrdersPage extends WMSPage {
 class _State extends State<OrdersPage> {
   @override
   void initState() {
-    //CollectStore.instance.selectCustomerOrderBeingCollectedEvent.
-
-    CollectStore.instance.selectCustomerOrderBeingCollectedEvent
-        .subscribe((args) async {
-      // bad lost typing in EventArgs pub package
-      if (args != null) {
-        var selectedCustomerOrder = args.t;
+    CollectStore.instance.selectCustomerOrderEvent.subscribe((args) async {
+      // on deselect and
+      if (args != null && !args.t.selected && args.t.customerOrder.hasStarted) {
+        var selectedCustomerOrder = args.t.customerOrder;
         Alert(
             context: this.context,
             desc: "Plockning pågår på order " +
@@ -69,9 +67,12 @@ class _State extends State<OrdersPage> {
             .get(),
         body: EventSubscriber(
             event: CollectStore.instance.selectCustomerOrderEvent,
-            handler: (_, __) =>
-                asyncCustomerOrdersList(CustomerOrder.many(), context)));
+            handler: typedHandler));
   }
+
+  Widget typedHandler(
+          BuildContext context, Arg<CustomerOrderSelectedEvent>? a) =>
+      asyncCustomerOrdersList(CustomerOrder.many(), context);
 
   WMSAsyncWidget asyncCustomerOrdersList(
           Future<List<CustomerOrder>> futureCustomerOrder,
@@ -79,7 +80,7 @@ class _State extends State<OrdersPage> {
       WMSAsyncWidget<List<CustomerOrder>>(
           futureCustomerOrder,
           (co) => ListView(children: [
-                ...co.map((c) => WMSCardChecker.create(c, updateState)),
+                ...co.map((c) => WMSCardChecker.create(c)),
                 //confirmCustomerOrdersButton(context),
                 Widgets.seperator(Color.fromARGB(102, 138, 66, 245)),
                 Card(
@@ -95,10 +96,6 @@ class _State extends State<OrdersPage> {
               Widgets.seperator(Colors.black)
             ]))
         .toList();
-  }
-
-  void updateState() {
-    //setState(() {});
   }
 
   Widget confirmCustomerOrdersButton(BuildContext context) => Padding(
@@ -117,11 +114,8 @@ class _State extends State<OrdersPage> {
       padding: EdgeInsets.only(left: 20, right: 20, bottom: 15));
 }
 
-
-
-
 //WMSAsyncWidget<String>(
- //           customerOrder.getCustomerName(), (name) => Text(name))
+//           customerOrder.getCustomerName(), (name) => Text(name))
 
 //WMSAsyncWidget<List<int>>(customerOrder.getProducts(),
-            //  (ps) => Text(ps.length.toString() + "st"))
+//  (ps) => Text(ps.length.toString() + "st"))

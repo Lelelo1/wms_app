@@ -36,14 +36,9 @@ class CustomerOrder implements WMSCardCheckerProps {
       c.qtyPicked != null && Utils.defaultInt(c.qtyPicked) > 0;
 
   Future<void> setPicked(bool isPicked) async {
-    if (hasStarted) {
-      // pop up to cancel abort route
-      CollectStore.instance.selectCustomerOrderBeingCollectedEvent
-          .broadcast(Arg(this));
-      return;
-    }
-
-    print("set qtyPicked: " + isPicked.toString());
+    // signal ui before database change is completed
+    CollectStore.instance.selectCustomerOrderEvent
+        .broadcast(Arg(CustomerOrderSelectedEvent(this, isPicked)));
 
     await _setQtyPicked(isPicked);
   }
@@ -61,8 +56,6 @@ class CustomerOrder implements WMSCardCheckerProps {
     });
 
     await Future.wait(futures);
-
-    CollectStore.instance.selectCustomerOrderEvent.broadcast();
   }
 
   static Future<List<CustomerOrder>> many() async {
@@ -89,9 +82,10 @@ class CustomerOrder implements WMSCardCheckerProps {
     return i ?? -1;
   }
 
+/*
   @override
   Future<void> Function(bool checked) get onChecked => setPicked;
-
+*/
   @override
   String get subtitle => displayId;
 
@@ -101,13 +95,14 @@ class CustomerOrder implements WMSCardCheckerProps {
   @override
   String get trailing => qtyOrdered.toString() + "st";
 
+/* // update single custoemr order
   @override
   Future<CustomerOrder> update() async {
     var models = await WSInteract.remoteSql(CustomerOrderQueries.single(id));
 
     return CustomerOrder(models.map((e) => CustomerOrderProduct(e)).toList());
   }
-
+*/
   static CustomerOrder createEmpty() {
     return CustomerOrder([]);
   }

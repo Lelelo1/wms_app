@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_font_icons/flutter_font_icons.dart';
 import 'package:wms_app/content/transitions.dart';
-import 'package:wms_app/models/collectRoute.dart';
 import 'package:wms_app/pages/scanPage.dart';
 import 'package:wms_app/routes/productRoute.dart';
 import 'package:wms_app/services/scanHandler.dart';
-import 'package:wms_app/stores/collectStore.dart';
 import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/views/cameraView.dart';
 import 'package:wms_app/views/extended/scrollable.dart';
