@@ -35,27 +35,23 @@ class CustomerOrder implements WMSCardCheckerProps {
   bool hasStartedPicking(CustomerOrderProduct c) =>
       c.qtyPicked != null && Utils.defaultInt(c.qtyPicked) > 0;
 
-  Future<void> setPicked(bool isPicked) async {
-    // signal ui before database change is completed
-    CollectStore.instance.selectCustomerOrderEvent
-        .broadcast(Arg(CustomerOrderSelectedEvent(this, isPicked)));
-
-    await _setQtyPicked(isPicked);
-  }
-
-  Future<void> _setQtyPicked(bool isPicked) async {
-    int? qtyPicked = isPicked ? 0 : null;
+  Future<void> setQtyPickedAll(bool picked) async {
+    int? qtyPicked = picked ? 0 : null;
 
     var futures = customerOrderProducts.map((e) {
-      print("id: " +
-          e.productId.toString() +
-          "length: " +
-          customerOrderProducts.length.toString());
+      ;
       return WSInteract.remoteSql(CustomerOrderQueries.setQtyPicked(
           id.toString(), e.productId.toString(), qtyPicked));
     });
 
     await Future.wait(futures);
+  }
+
+  Future<void> setQtyPicked(CustomerOrderProduct c, bool isPicked) async {
+    int? qtyPicked = isPicked ? 1 : 0;
+
+    await WSInteract.remoteSql(CustomerOrderQueries.setQtyPicked(
+        id.toString(), c.productId.toString(), qtyPicked));
   }
 
   static Future<List<CustomerOrder>> many() async {
@@ -106,4 +102,6 @@ class CustomerOrder implements WMSCardCheckerProps {
   static CustomerOrder createEmpty() {
     return CustomerOrder([]);
   }
+
+  bool get isEmpty => customerOrderProducts.isEmpty;
 }

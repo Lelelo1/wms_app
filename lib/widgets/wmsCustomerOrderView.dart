@@ -3,6 +3,9 @@ import 'package:wms_app/models/customerOrder.dart';
 import 'package:wms_app/models/customerOrderProduct.dart';
 import 'package:wms_app/models/product.dart';
 import 'package:wms_app/routes/productRoute.dart';
+import 'package:wms_app/stores/collectStore.dart';
+import 'package:wms_app/utils/arg.dart';
+import 'package:wms_app/utils/default.dart';
 import 'package:wms_app/views/extended/stacked.dart';
 import 'package:wms_app/widgets/wmsAsyncWidget.dart';
 import 'package:wms_app/widgets/wmsEmptyWidget.dart';
@@ -45,7 +48,16 @@ class WMSCustomerOrderView extends StatelessWidget {
                     product.shelf, product.qty),
                 ProductInformationWidgets.nameWidget(product.name)
               ])),
-      Checkbox(value: true, onChanged: (value) {})
+      Checkbox(
+          value: Default.boolType.fromInt(
+              Default.intType.fromNullable(customerOrderProduct.qtyPicked)),
+          onChanged: (value) async {
+            await customerOrder.setQtyPicked(
+                customerOrderProduct, Default.boolType.fromNullable(value));
+            // just to trigger a rerender
+            CollectStore.instance.selectCustomerOrderEvent.broadcast(Arg(
+                CustomerOrderSelectedEvent(CustomerOrder.createEmpty(), true)));
+          })
     ]);
   }
 }

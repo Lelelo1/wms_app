@@ -82,4 +82,43 @@ class Default {
 
     return nullableInt.toString();
   }
+
+  static int? toNullableInt(bool? value) {
+    if (value == null) {
+      return null;
+    }
+
+    if (value == true) {
+      return 1;
+    }
+
+    return 0;
+  }
+
+  static _Bool boolType = _Bool();
+  static _Int intType = _Int();
+}
+
+class _Bool {
+  bool fromNullable(bool? value) {
+    return value ?? false;
+  }
+
+  bool fromInt(int value) {
+    if (value == 0) {
+      return false;
+    }
+
+    if (value == 1) {
+      return true;
+    }
+
+    throw new Exception("wms exeption _Bool.fromInt");
+  }
+}
+
+class _Int {
+  int fromNullable(int? value) {
+    return value ?? 0;
+  }
 }

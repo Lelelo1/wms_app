@@ -30,9 +30,16 @@ class WMSCardChecker<P extends WMSCardCheckerProps> {
         builder: (_, setState) => ListTile(
               leading: Checkbox(
                   value: p.isChecked,
-                  onChanged: (bool? b) {
-                    (props as CustomerOrder)
-                        .setPicked(Default.nullSafe<bool>(b));
+                  onChanged: (bool? b) async {
+                    var picked = Default.boolType.fromNullable(b);
+                    var customerOrder = props as CustomerOrder;
+
+                    if (!customerOrder.hasStarted) {
+                      await customerOrder.setQtyPickedAll(picked);
+                    }
+
+                    CollectStore.instance.selectCustomerOrderEvent.broadcast(
+                        Arg(CustomerOrderSelectedEvent(customerOrder, picked)));
                   }),
               title: Text(p.title),
               subtitle: Text(p.subtitle),

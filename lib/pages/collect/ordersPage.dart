@@ -27,7 +27,10 @@ class _State extends State<OrdersPage> {
   void initState() {
     CollectStore.instance.selectCustomerOrderEvent.subscribe((args) async {
       // on deselect and
-      if (args != null && !args.t.selected && args.t.customerOrder.hasStarted) {
+      if (args != null &&
+          !args.t.selected &&
+          args.t.customerOrder.hasStarted &&
+          !args.t.customerOrder.isEmpty) {
         var selectedCustomerOrder = args.t.customerOrder;
         Alert(
             context: this.context,
@@ -39,8 +42,14 @@ class _State extends State<OrdersPage> {
             buttons: [
               DialogButton(
                 onPressed: () async {
-                  await selectedCustomerOrder.setPicked(false);
+                  if (selectedCustomerOrder.hasStarted) {
+                    await selectedCustomerOrder.setQtyPickedAll(false);
+                  }
+
                   Navigator.pop(context);
+                  CollectStore.instance.selectCustomerOrderEvent.broadcast(Arg(
+                      CustomerOrderSelectedEvent(
+                          CustomerOrder.createEmpty(), false)));
                 },
                 child: Text("Ja"),
               ),
