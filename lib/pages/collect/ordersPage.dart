@@ -99,7 +99,7 @@ class _State extends State<OrdersPage> {
 
   List<Widget> productViews(List<CustomerOrder> co) {
     return co
-        .where((co) => co.isChosen)
+        .where((co) => co.isChecked)
         .map((c) => Column(children: [
               WMSCustomerOrderView(c),
               Widgets.seperator(Colors.black)

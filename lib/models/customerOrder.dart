@@ -69,14 +69,8 @@ class CustomerOrder implements WMSCardCheckerProps {
   bool get isChecked => hasStarted || isChosen;
 
   bool get isChosen =>
-      customerOrderProducts
-          .where((e) => nullableIntCompare(e.qtyPicked) == 0)
-          .length ==
+      customerOrderProducts.where((e) => e.qtyPicked == 0).length ==
       customerOrderProducts.length;
-
-  int nullableIntCompare(int? i) {
-    return i ?? -1;
-  }
 
 /*
   @override
