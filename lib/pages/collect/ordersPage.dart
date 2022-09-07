@@ -95,7 +95,7 @@ class _State extends State<OrdersPage> {
                 Card(
                     child: Column(children: [...productViews(co)]),
                     color: Colors.brown)
-              ]));
+              ], key: PageStorageKey<String>('customerOrders listview')));
 
   List<Widget> productViews(List<CustomerOrder> co) {
     return co
