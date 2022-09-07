@@ -2,6 +2,7 @@ import 'package:wms_app/models/customerOrderProduct.dart';
 import 'package:wms_app/stores/collectStore.dart';
 import 'package:wms_app/utils.dart';
 import 'package:wms_app/utils/arg.dart';
+import 'package:wms_app/utils/default.dart';
 import 'package:wms_app/warehouseSystem/wsInteract.dart';
 import 'package:wms_app/warehouseSystem/wsSqlQuery.dart';
 import "package:collection/collection.dart";
@@ -21,9 +22,8 @@ class CustomerOrder implements WMSCardCheckerProps {
           double.parse(Utils.getAndDefaultAs(e.qtyOrdered, 0.toString())))
       .sum;
 
-  double get qtyPicked => customerOrderProducts
-      .map(
-          (e) => double.parse(Utils.getAndDefaultAs(e.productId, 0.toString())))
+  int? get qtyPicked => customerOrderProducts
+      .map((e) => Default.intType.fromNullable(e.qtyPicked))
       .sum;
 
   bool get hasStarted =>
@@ -61,8 +61,11 @@ class CustomerOrder implements WMSCardCheckerProps {
         .map((e) => CustomerOrderProduct(e))
         .groupListsBy((e) => e.id)
         .values
-        .map((e) => CustomerOrder(e))
-        .toList();
+        .map((e) {
+      var co = CustomerOrder(e);
+      var s = co.qtyPicked;
+      return co;
+    }).toList();
   }
 
   @override
