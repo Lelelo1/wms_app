@@ -61,11 +61,9 @@ class CustomerOrder implements WMSCardCheckerProps {
         .map((e) => CustomerOrderProduct(e))
         .groupListsBy((e) => e.id)
         .values
-        .map((e) {
-      var co = CustomerOrder(e);
-      var s = co.qtyPicked;
-      return co;
-    }).toList();
+        .map((e) => CustomerOrder(e))
+        .where((e) => Default.intType.fromNullable(e.qtyPicked) < e.qtyOrdered)
+        .toList();
   }
 
   @override
