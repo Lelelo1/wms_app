@@ -1,5 +1,6 @@
 import 'package:wms_app/types.dart';
 import 'package:wms_app/utils.dart';
+import 'package:wms_app/utils/default.dart';
 
 class CustomerOrderProduct {
   Map<String, dynamic> _attributes = _empty;
@@ -9,7 +10,8 @@ class CustomerOrderProduct {
   String get id => _attributes["id"];
   String get name => _attributes["name"];
   String get displayId => _attributes["displayId"];
-  String get productId => _attributes["productId"];
+  int get productId =>
+      int.parse(Default.firstStringDefaultTo([_attributes["productId"], "0"]));
   String get qtyOrdered => _attributes["qtyOrdered"];
   int? get qtyPicked => Utils.toNullableInt(_attributes["qtyPicked"]);
 
@@ -17,10 +19,10 @@ class CustomerOrderProduct {
         "id": "",
         "name": "",
         "displayId": "",
-        "productId": "",
+        "productId": "0",
         "qtyOrdered": "",
         "qtyPicked": ""
       };
 
-  bool get isEmpty => Utils.isNullOrEmpty(_attributes[id]);
+  bool get isEmpty => Utils.isNullOrEmpty(_attributes["id"]);
 }

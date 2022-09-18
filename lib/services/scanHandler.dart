@@ -13,68 +13,61 @@ class ScanHandler {
 
   static late VisionService visionService = VisionService.instance;
 
-  static void scan(String filePath) async {
+  static Future<String> scan(String filePath) async {
     // can also use ...
 /*     barcode = await visionSevice.analyzeBarcodeFromBytes(
           ImageUtils.concatenatePlanes(streamImage.planes),
           ImageUtils.imageData(streamImage)); */
     if (filePath.isEmpty) {
-      return;
+      return "";
     }
 
-    var scanResult = await visionService.analyzeBarcodeFromFilePath(filePath);
-    if (scanResult.isEmpty) {
-      return;
-    }
-
-    CameraViewController.scanningSuccessfull();
-
-    _handleScanResult(scanResult);
+    return await visionService.analyzeBarcodeFromFilePath(filePath);
   }
 
-  static void _handleScanResult(String scanResult) async {
+  static void handleAsBarcode(String scanResult) async {
+    CameraViewController.scanningSuccessfull();
+
     WorkStore.instance.addScanData(scanResult);
     var lastProduct = WorkStore.instance.currentProduct;
 
     var product = await Product.fetchFromEAN(scanResult);
-    if (product.exists) {
+    if (!product.isEmpty) {
       WorkStore.instance.currentProduct = product;
       return;
     }
 
-    if (!_isShelf(scanResult)) {
-      WorkStore.instance.currentEAN = scanResult;
-      WorkStore.instance.currentProduct = Product.empty;
-      return;
-    }
+    WorkStore.instance.currentEAN = scanResult;
+    WorkStore.instance.currentProduct = Product.createEmpty;
 
     var shelf = removeShelfPrefix(scanResult);
     WorkStore.instance.currentShelf = shelf;
 
     // hanlding case when product scanned pevisouly needs shelf assigned to it
     print("lastProduct: " + lastProduct.toString());
-    if (lastProduct.exists) {
+    if (!lastProduct.isEmpty) {
       var lastProductShelf = lastProduct.shelf;
       if (lastProductShelf.contains(AbstractProduct.assignShelf)) {
         WorkStore.instance.assignShelfEvent.broadcast();
         return;
       }
     }
+    // should be defined by the module what happens after a scan shelf with product
+    //WorkStore.instance.clearAll();
+  }
 
-    var match = await WorkStore.instance.isMatchingShelf(shelf);
-    print("is matching shelf: " + match.toString());
+  static Future<void> handleAsShelf(String scanResult) async {
+    var match = await WorkStore.instance.isMatchingShelf(scanResult);
+    //print("is matching shelf: " + match.toString());
     if (!match) {
       return;
     }
 
     // scanned shelf with a product
     WorkStore.instance.currentProduct.increaseQty();
-
-    // should be defined by the module what happens after a scan shelf with product
-    //WorkStore.instance.clearAll();
   }
 
-  static bool _isShelf(String scanData) {
+  static bool isShelf(String scanData) {
     return scanData.contains(shelfPrefix);
   }
 

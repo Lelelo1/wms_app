@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_font_icons/flutter_font_icons.dart';
 import 'package:wms_app/content/transitions.dart';
 import 'package:wms_app/pages/scanPage.dart';
 import 'package:wms_app/routes/productRoute.dart';
+import 'package:wms_app/services/scanHandler.dart';
 import 'package:wms_app/stores/workStore.dart';
+import 'package:wms_app/views/cameraView.dart';
 import 'package:wms_app/views/extended/scrollable.dart';
 import 'package:wms_app/widgets/wmsPage.dart';
 import 'package:wms_app/widgets/wmsAppBar.dart';
@@ -22,8 +23,6 @@ class CollectPage extends WMSPage {
 
 class _State extends State<CollectPage> with Transitions {
   // note that can't rerender color in app bar without rerender the rest of the app...
-
-  bool collectProduct = true;
 
   @override
   void initState() {
@@ -55,8 +54,6 @@ class _State extends State<CollectPage> with Transitions {
           ]).show();
     });
 
-    WorkStore.instance.setCollect();
-
     super.initState();
   }
 
@@ -70,45 +67,39 @@ class _State extends State<CollectPage> with Transitions {
         body: EventSubscriber(
             event: WorkStore.instance.productEvent,
             handler: (context, __) => WMSScrollable(
-                ScanPage(this.imageContent(context)),
+                ScanPage(this.imageContent(context), scan),
                 ProductRoute(WorkStore.instance.currentProduct))));
   }
 
+  void scan() async {
+    var path = (await CameraViewController.takePhoto()).path;
+    var scanResult = await ScanHandler.scan(path);
+    ScanHandler.handleAsBarcode(scanResult);
+/*
+    // feed to next product
+    if (scanResult == WorkStore.instance.currentProduct.ean) {
+      CollectStore.instance.next();
+    }
+    */
+  }
+/*
   @override
   Widget imageContent(BuildContext context) {
     var ean = WorkStore.instance.currentEAN;
     var p = WorkStore.instance.currentProduct;
-
-    Widget content = p.exists
-        ? mainContent(this.shelfWidget(p.shelf))
-        : mainContent(this.eanWidget(ean, context));
+    print("ppp: " + p.toString());
+    Widget content =
+        p.exists ? this.shelfWidget(p.shelf) : this.eanWidget(ean, context);
 
     return cameraContent(
         content, scanSymbol(MaterialCommunityIcons.barcode_scan), 10);
   }
-
-  Widget mainContent(Widget info) {
-    return Column(children: [info, boxWidget("B")]);
-  }
-
-  String checkEmoji = "\u{2714}";
-  Widget boxWidget(String box) {
-    var textWidget = Text(
-        this.collectProduct ? box + "   " + this.checkEmoji : box,
-        style: TextStyle(fontSize: 25));
-
-    if (collectProduct) {
-      return boxButton(textWidget);
-    }
-
-    return textWidget;
-  }
+*/
+  //Widget boxWidget(String box) => if;
 
   Widget boxButton(Widget text) => ElevatedButton(
       onPressed: () {
-        setState(() {
-          this.collectProduct = false;
-        });
+        setState(() {});
       },
       child: text,
       style: ButtonStyle(

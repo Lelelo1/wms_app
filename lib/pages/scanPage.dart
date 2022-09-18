@@ -10,8 +10,8 @@ import 'package:wms_app/views/scanView.dart';
 class ScanPage extends StatefulWidget {
   //final AsyncMemoizer<CameraView> _memoizer = AsyncMemoizer();
   final Widget imageContent;
-
-  ScanPage(this.imageContent);
+  final void Function() scan;
+  ScanPage(this.imageContent, this.scan);
 
   @override
   _State createState() => _State();
@@ -53,7 +53,7 @@ class _State extends State<ScanPage> {
               child: EventSubscriber(
                   event: WorkStore.instance.scanDataEvent,
                   handler: (_, __) {
-                    var scanPage = ScanView();
+                    var scanPage = ScanView(this.widget.scan);
                     print("rerender scan page");
                     return scanPage;
                   }))

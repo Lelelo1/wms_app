@@ -8,13 +8,16 @@ class Product {
   Map<String, dynamic> _attributes = _empty;
   Product._(this._attributes);
 
+  bool get isEmpty => id == 0;
+
   int get id => int.parse(Utils.getAndDefaultAs(_attributes["id"], "0"));
 
-  int get ean => int.parse(Utils.getAndDefaultAs(_attributes["ean"], "0"));
+  String get ean => Utils.getAndDefaultAs(_attributes["ean"], "");
+
   Future<Product> setEAN(String ean) async {
     await WSInteract.remoteSql(
         ProductQueries.setEAN(id.toString(), ean.toString()));
-    return fetchFromId(id.toString());
+    return fetchFromId(id);
   }
 
   String get name => Utils.getAndDefaultAs(_attributes["name"], "");
@@ -47,10 +50,12 @@ class Product {
     await WSInteract.remoteSql(ProductQueries.increaseQty(id.toString()));
   }
 
-  bool get exists => id != 0;
-
-  static Future<Product> fetchFromId(String id) async {
-    var models = await WSInteract.remoteSql(ProductQueries.fromId(id));
+  static Future<Product> fetchFromId(int id) async {
+    if (id == 0) {
+      return Product.createEmpty;
+    }
+    var models =
+        await WSInteract.remoteSql(ProductQueries.fromId(id.toString()));
     return _firstOrEmpty(models);
   }
 
@@ -64,12 +69,11 @@ class Product {
       String skuText) async {
     var models =
         await WSInteract.remoteSql(ProductQueries.fromSkuText(skuText));
-
-    return await Future.wait(
-        models.map((e) => Product.fetchFromId(e.values.first as String)));
+    return await Future.wait(models
+        .map((e) => Product.fetchFromId(int.parse(e.values.first as String))));
   }
 
-  static Product get empty => Product._(_empty);
+  static Product get createEmpty => Product._(_empty);
 
   // SELECT @id, @ean, @name, @shelf, @sku, @image_front, @image_back, @qty;
   static Model get _empty => {
@@ -85,15 +89,14 @@ class Product {
 
   static Product _firstOrEmpty(Iterable<Model> models) {
     if (models.isEmpty) {
-      return empty;
+      return createEmpty;
     }
 
     return models.map((attributes) => Product._(attributes)).first;
   }
 
   Future<void> update() async {
-    WorkStore.instance.currentProduct =
-        await Product.fetchFromId(id.toString());
+    WorkStore.instance.currentProduct = await Product.fetchFromId(id);
   }
 
   @override

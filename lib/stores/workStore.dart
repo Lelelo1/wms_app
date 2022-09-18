@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
 import 'package:wms_app/models/customerOrder.dart';
+import 'package:wms_app/models/customerOrderProduct.dart';
 import 'package:wms_app/models/product.dart';
 import 'package:event/event.dart';
 import 'package:wms_app/warehouseSystem/wsMapping.dart';
@@ -19,10 +20,9 @@ class WorkStore {
   Event _productEvent = Event();
   Event get productEvent => _productEvent;
 
-  Product _currentProduct = Product.empty;
+  Product _currentProduct = Product.createEmpty;
   Product get currentProduct => _currentProduct;
   set currentProduct(Product product) {
-    print("setProduct: " + product.name);
     _currentProduct = product;
     productEvent.broadcast();
   }
@@ -34,8 +34,8 @@ class WorkStore {
   Future<bool> isMatchingShelf(String shelf) async {
     var currentProduct = WorkStore.instance.currentProduct;
 
-    if (!currentProduct.exists) {
-      WorkStore.instance.currentProduct = Product.empty;
+    if (currentProduct.isEmpty) {
+      WorkStore.instance.currentProduct = Product.createEmpty;
       return false;
     }
 
@@ -76,22 +76,8 @@ class WorkStore {
         onLayout: (PdfPageFormat format) async => doc.save());
   }
 
-  List<CustomerOrder> chosenCustomerOrders = [];
-
-  void setReturn() {
-    this.currentProduct = Product.empty;
-    this.currentEAN = "";
-    this._scanData = [];
-    this.currentShelf = "";
-  }
-
-  void setCollect() async {
-    if (chosenCustomerOrders.length == 0) {
-      print(
-          "wms warning you entered collect without having any customer orderders chosen");
-    }
-    var id = chosenCustomerOrders.first.productId.first.toString();
-    this.currentProduct = await Product.fetchFromId(id);
+  void clearAll() {
+    this.currentProduct = Product.createEmpty;
     this.currentEAN = "";
     this._scanData = [];
     this.currentShelf = "";

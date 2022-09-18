@@ -1,14 +1,18 @@
 // partially made for debugging scanning
 import 'package:flutter/material.dart';
+import 'package:wms_app/pages/collect/collectPage.dart';
 import 'package:wms_app/services/scanHandler.dart';
 import 'package:wms_app/services/visionService.dart';
+import 'package:wms_app/stores/collectStore.dart';
 import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/views/cameraView.dart';
 import '../utils.dart';
 //import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 class ScanView extends StatefulWidget {
-  ScanView();
+  final void Function() scan;
+
+  ScanView(this.scan);
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -34,7 +38,7 @@ class _State extends State<ScanView> {
                           borderRadius: BorderRadius.circular(18.0))),
                 ),
                 child: Text('Skanna'),
-                onPressed: scan,
+                onPressed: this.widget.scan,
               ),
               width: 170,
               height: 65)
@@ -53,9 +57,14 @@ class _State extends State<ScanView> {
         .map((b) => Text(b + ": " + occurrences[b].toString()))
         .toList();
   }
-
+/*
   void scan() async {
+    /*
     var path = (await CameraViewController.takePhoto()).path;
     ScanHandler.scan(path);
+    */
+
+    if(CollectStore.instance.)
   }
+  */
 }
