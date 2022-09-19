@@ -140,8 +140,6 @@ PODS:
   - GoogleUtilitiesComponents (1.1.0):
     - GoogleUtilities/Logger
   - GTMSessionFetcher/Core (1.7.0)
-  - integration_test (0.0.1):
-    - Flutter
   - MLImage (1.0.0-beta1)
   - MLKitBarcodeScanning (1.3.0):
     - MLKitCommon (~> 3.0)
@@ -191,6 +189,8 @@ PODS:
   - nanopb/encode (2.30908.0)
   - path_provider (0.0.1):
     - Flutter
+  - printing (1.0.0):
+    - Flutter
   - PromisesObjC (2.0.0)
   - Protobuf (3.19.1)
   - wakelock (0.0.1):
@@ -205,8 +205,8 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_beep (from `.symlinks/plugins/flutter_beep/ios`)
   - google_ml_vision (from `.symlinks/plugins/google_ml_vision/ios`)
-  - integration_test (from `.symlinks/plugins/integration_test/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
+  - printing (from `.symlinks/plugins/printing/ios`)
   - wakelock (from `.symlinks/plugins/wakelock/ios`)
 
 SPEC REPOS:
@@ -253,10 +253,10 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_beep/ios"
   google_ml_vision:
     :path: ".symlinks/plugins/google_ml_vision/ios"
-  integration_test:
-    :path: ".symlinks/plugins/integration_test/ios"
   path_provider:
     :path: ".symlinks/plugins/path_provider/ios"
+  printing:
+    :path: ".symlinks/plugins/printing/ios"
   wakelock:
     :path: ".symlinks/plugins/wakelock/ios"
 
@@ -281,7 +281,6 @@ SPEC CHECKSUMS:
   GoogleUtilities: 684ee790a24f73ebb2d1d966e9711c203f2a4237
   GoogleUtilitiesComponents: 679b2c881db3b615a2777504623df6122dd20afe
   GTMSessionFetcher: 43748f93435c2aa068b1cbe39655aaf600652e91
-  integration_test: 7db6d89f336f671dcbc7563ee27a5b08f6f8aee1
   MLImage: 647f3d580c10b3c9a3f6154f5d7baead60c42a0c
   MLKitBarcodeScanning: 6b998bd1cfe471ae407a7f647d649494617787c0
   MLKitCommon: 6d6be0a2e9a6340aad1c1f2b9449c11dee8af70f
@@ -294,10 +293,11 @@ SPEC CHECKSUMS:
   MLKitVisionKit: 226bac429eda1d84285409e31ce9da72606850fb
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
+  printing: eafa00acb682c0ca029d4d98d0798f55a1e27102
   PromisesObjC: 68159ce6952d93e17b2dfe273b8c40907db5ba58
   Protobuf: 3724efa50cb2846d7ccebc8691c574e85fd74471
   wakelock: d0fc7c864128eac40eba1617cb5264d9c940b46f
 
 PODFILE CHECKSUM: 82728df6937c37998dd5b725bd129e7e9b260b54
 
-COCOAPODS: 1.11.2
+COCOAPODS: 1.11.3
