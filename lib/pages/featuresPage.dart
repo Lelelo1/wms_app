@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wms_app/pages/collect/ordersPage.dart';
 import 'package:wms_app/pages/returnPage.dart';
+import 'package:wms_app/pages/searchReturnPage.dart';
 import 'package:wms_app/stores/workStore.dart';
 import 'package:wms_app/widgets/wmsPage.dart';
 
@@ -29,7 +30,10 @@ class _State extends State<FeaturesPage> {
       // horizontal, this produces 2 rows.
       crossAxisCount: 2,
       // Generate 100 widgets that display their index in the List.
-      children: [renderFeature(ReturnPage()), renderFeature(OrdersPage())],
+      children: [
+        renderFeature(SearchReturnPage()),
+        renderFeature(OrdersPage())
+      ],
     );
   }
 
